@@ -22,6 +22,7 @@ check-java-available:
 	java -version
 	javac -version
 check-java-installed: check-java-available
+install-check-java: install-java check-java-installed
 
 
 #* Python

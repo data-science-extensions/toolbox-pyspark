@@ -13,20 +13,33 @@ jobs:
     steps:
 
       - name: Checkout repository
+        id: checkout-repository
         uses: actions/checkout@v4
 
       - name: Set up Python
+        id: setup-python
         uses: actions/setup-python@v5
         with:
           python-version: '3.13'
 
+      - name: Install Java
+        id: install-java
+        run: make install-check-java
+
+      - name: Install Pip
+        id: install-pip
+        run: make install-pip
+
       - name: Install Poetry
+        id: install-poetry
         run: make install-poetry
 
       - name: Install dependencies
+        id: install-dependencies
         run: make install-all
 
       - name: Run checks
+        id: run-checks
         run: make check
 
   ci:
@@ -45,21 +58,31 @@ jobs:
     steps:
 
       - name: Checkout repository
+        id: checkout-repository
         uses: actions/checkout@v4
 
       - name: Set up Python
+        id: setup-python
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
 
+      - name: Install Java
+        id: install-java
+        run: make install-check-java
+
       - name: Install Pip
+        id: install-pip
         run: make install-pip
 
       - name: Install Poetry
+        id: install-poetry
         run: make install-poetry
 
       - name: Install dependencies
+        id: install-dependencies
         run: make install-all
 
       - name: Run checks
+        id: run-checks
         run: make check
