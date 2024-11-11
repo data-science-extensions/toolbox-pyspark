@@ -1,0 +1,7 @@
+typeguard==4.*
+toolbox-python==1.*
+pyspark==3.*
+delta-spark==3.*
+numpy==2.*
+pandas==2.*
+stamina==24.*

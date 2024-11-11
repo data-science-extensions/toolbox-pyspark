@@ -1,0 +1,97 @@
+[tool.poetry]
+name = "toolbox-pyspark"
+version = "0.1.0"
+description = "Helper files/functions/classes for generic PySpark processes"
+readme = "README.md"
+license = "MIT"
+authors = [
+    "Admin <toolbox-python@data-science-extensions.com>",
+]
+maintainers = [
+    "Admin <toolbox-python@data-science-extensions.com>",
+]
+packages = [
+    { include = "toolbox_pyspark", from = "src" },
+]
+classifiers = [
+    "Topic :: Software Development :: Build Tools",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Testing :: Unit",
+    "Topic :: Utilities",
+]
+
+[tool.poetry.urls]
+Homepage = "https://data-science-extensions.com/python-toolbox"
+Documentation = "https://data-science-extensions.com/python-toolbox"
+Repository = "https://github.com/data-science-extensions/toolbox-python"
+Changelog = "https://github.com/data-science-extensions/toolbox-python/releases"
+Issues = "https://github.com/data-science-extensions/toolbox-python/issues"
+
+
+[tool.poetry.dependencies]
+python = ">3.9,<4.0"
+typeguard = "4.*"
+toolbox-python = "1.*"
+pyspark = "3.*"
+delta-spark = "3.*"
+numpy = "2.*"
+pandas = "2.*"
+stamina = "24.*"
+
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.dev.dependencies]
+black = "24.*"
+blacken-docs = "1.*"
+pre-commit = "4.*"
+isort = "5.*"
+codespell = "2.*"
+pyupgrade = "3.*"
+pylint = "3.*"
+pycln = "2.*"
+ipykernel = "6.*"
+
+[tool.poetry.group.docs]
+optional = true
+
+[tool.poetry.group.docs.dependencies]
+mkdocs = "1.*"
+mkdocs-material = "9.*"
+mkdocstrings = "0.*"
+mkdocstrings-python = "1.*"
+mkdocs-coverage = "1.*"
+mkdocs-autorefs = "1.*"
+livereload = "2.*"
+mike = "2.*"
+black = "24.*"
+
+[tool.poetry.group.test]
+optional = true
+
+[tool.poetry.group.test.dependencies]
+requests = "2.*"
+pytest = "8.*"
+pytest-clarity = "1.*"
+pytest-cov = "6.*"
+pytest-sugar = "1.*"
+pytest-icdiff = "0.*"
+pytest-xdist = "3.*"
+mypy = "1.*"
+parameterized = "0.*"
+chispa = "0.*"
+types-protobuf = "5.*"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
