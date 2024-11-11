@@ -10,21 +10,21 @@
 # ---------------------------------------------------------------------------- #
 
 
-# Python StdLib Imports
+# ## Python StdLib Imports ----
 import os
 import shutil
 from pathlib import Path
 from typing import LiteralString
 
-# Python Open Source Imports
+# ## Python Third Party Imports ----
 import pytest
 from chispa.dataframe_comparer import assert_df_equality
-from pyspark.sql import DataFrame as psDataFrame
-from pyspark.sql import functions as F
+from pyspark.sql import DataFrame as psDataFrame, functions as F
 
+# ## Local First Party Imports ----
 from tests.setup import PySparkSetup
-# Local Module Imports
 from toolbox_pyspark.io import read_from_path, transfer_table, write_to_path
+
 
 # ---------------------------------------------------------------------------- #
 #                                                                              #

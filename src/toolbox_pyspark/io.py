@@ -36,15 +36,15 @@
 # ---------------------------------------------------------------------------- #
 
 
-# Python StdLib Imports
+# ## Python StdLib Imports ----
 from typing import Optional
 
-# Python Open Source Imports
-from pyspark.sql import DataFrame as psDataFrame
-from pyspark.sql import SparkSession
+# ## Python Third Party Imports ----
+from pyspark.sql import DataFrame as psDataFrame, SparkSession
 from pyspark.sql.readwriter import DataFrameWriter
 from toolbox_python.collection_types import str_collection, str_dict
 from typeguard import typechecked
+
 
 # ---------------------------------------------------------------------------- #
 #  Exports                                                                  ####
