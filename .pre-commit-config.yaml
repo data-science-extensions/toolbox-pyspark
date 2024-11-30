@@ -40,18 +40,18 @@ repos:
           - "--branch=main"
 
   # Linter
-  - repo: https://github.com/psf/black
-    rev: "24.10.0"
-    hooks:
-      - id: black
-        args:
-          - "--config=pyproject.toml"
-  - repo: https://github.com/adamchainz/blacken-docs
-    rev: "1.19.1"
-    hooks:
-      - id: blacken-docs
-        additional_dependencies:
-          - "black>=23.3"
+  # - repo: https://github.com/psf/black
+  #   rev: "24.10.0"
+  #   hooks:
+  #     - id: black
+  #       args:
+  #         - "--config=pyproject.toml"
+  # - repo: https://github.com/adamchainz/blacken-docs
+  #   rev: "1.19.1"
+  #   hooks:
+  #     - id: blacken-docs
+  #       additional_dependencies:
+  #         - "black>=23.3"
 
   # Run MyPy type checks
   - repo: https://github.com/pre-commit/mirrors-mypy
