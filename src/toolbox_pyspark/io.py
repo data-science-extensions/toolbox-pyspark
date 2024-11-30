@@ -43,7 +43,13 @@ from typing import Optional
 from pyspark.sql import DataFrame as psDataFrame, SparkSession
 from pyspark.sql.readwriter import DataFrameReader, DataFrameWriter
 from toolbox_python.checkers import is_type
-from toolbox_python.collection_types import str_collection, str_dict
+from toolbox_python.collection_types import (
+    str_collection,
+    str_dict,
+    str_list,
+    str_set,
+    str_tuple,
+)
 from typeguard import typechecked
 
 
@@ -183,7 +189,7 @@ def read_from_path(
         ```
         </div>
     """
-    data_format = "parquet" or data_format
+    data_format: str = data_format or "parquet"
     reader: DataFrameReader = spark_session.read.format(data_format)
     if read_options:
         reader.options(**read_options)
@@ -316,8 +322,8 @@ def write_to_path(
         ```
         </div>
     """
-    write_options = dict() or write_options
-    data_format = "parquet" or data_format
+    write_options: str_dict = write_options or dict()
+    data_format: str = data_format or "parquet"
     writer: DataFrameWriter = table.write.mode(mode).format(data_format)
     if write_options:
         writer.options(**write_options)
@@ -470,8 +476,8 @@ def transfer_table(
         ```
         </div>
     """
-    from_table_options = dict() or from_table_options
-    to_table_options = dict() or to_table_options
+    from_table_options: str_dict = from_table_options or dict()
+    to_table_options: str_dict = to_table_options or dict()
     from_table: psDataFrame = read_from_path(
         name=from_table_name,
         path=from_table_path,
