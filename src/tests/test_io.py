@@ -39,6 +39,7 @@ from toolbox_pyspark.io import read_from_path, transfer_table, write_to_path
 
 
 class TestReadingAndWriting(PySparkSetup):
+
     @classmethod
     def setUpClass(cls) -> None:
         super().setUpClass()
@@ -61,7 +62,7 @@ class TestReadingAndWriting(PySparkSetup):
             path=self.write_path,
             data_format="parquet",
             mode="overwrite",
-            options={
+            write_options={
                 "overwriteSchema": "true",
             },
         )
@@ -75,7 +76,7 @@ class TestReadingAndWriting(PySparkSetup):
             path=self.write_path,
             data_format="delta",
             mode="overwrite",
-            options={
+            write_options={
                 "overwriteSchema": "true",
             },
         )
@@ -88,7 +89,7 @@ class TestReadingAndWriting(PySparkSetup):
             path=self.write_path,
             data_format="csv",
             mode="overwrite",
-            options={
+            write_options={
                 "overwriteSchema": "true",
                 "header": "true",
             },
@@ -139,9 +140,9 @@ class TestReadingAndWriting(PySparkSetup):
             path=self.write_path,
             spark_session=self.spark,
             data_format="csv",
-            options={"header": "true"},
+            read_options={"header": "true"},
         )
-        expected: psDataFrame = self.ps_df.withColumn("a", F.col("a").cast("string"))
+        expected: psDataFrame = self.ps_df.withColumn("a", F.col("a").cast("long"))
         assert_df_equality(result, expected)
 
     def test_2_read_from_path_4(self) -> None:
@@ -165,6 +166,7 @@ class TestReadingAndWriting(PySparkSetup):
         assert len([obj for obj in partitions if "=" in obj]) > 0
 
     def test_3_transfer_table_1(self) -> None:
+
         # Write new table
         write_to_path(
             table=self.ps_df_extended,
@@ -172,11 +174,12 @@ class TestReadingAndWriting(PySparkSetup):
             path=self.write_path,
             data_format="parquet",
             mode="overwrite",
-            options={
+            write_options={
                 "mapreduce.fileoutputcommitter.marksuccessfuljobs": "false",
                 "overwriteSchema": "true",
             },
         )
+
         # Transfer new table
         transfer_table(
             spark_session=self.spark,
@@ -188,6 +191,7 @@ class TestReadingAndWriting(PySparkSetup):
             to_table_format="parquet",
             to_table_mode="overwrite",
         )
+
         # Read transferred table
         table: psDataFrame = read_from_path(
             name="ps_df_extended_transferred",
@@ -195,13 +199,15 @@ class TestReadingAndWriting(PySparkSetup):
             spark_session=self.spark,
             data_format="parquet",
         )
+
         # Test
         assert isinstance(table, psDataFrame)
-        result = table
-        expected = self.ps_df_extended
+        result: psDataFrame = table
+        expected: psDataFrame = self.ps_df_extended
         assert_df_equality(result, expected, ignore_nullable=True)
 
     def test_3_transfer_table_2(self) -> None:
+
         # Transfer new table
         transfer_table(
             spark_session=self.spark,
@@ -214,6 +220,7 @@ class TestReadingAndWriting(PySparkSetup):
             to_table_mode="overwrite",
             to_table_partition_cols=["a", "b"],
         )
+
         # Read transferred table
         table: psDataFrame = read_from_path(
             name="ps_df_extended_transferred",
@@ -221,6 +228,7 @@ class TestReadingAndWriting(PySparkSetup):
             spark_session=self.spark,
             data_format="parquet",
         )
+
         # Test
         assert isinstance(table, psDataFrame)
         result: psDataFrame = table

@@ -41,7 +41,8 @@ from typing import Optional
 
 # ## Python Third Party Imports ----
 from pyspark.sql import DataFrame as psDataFrame, SparkSession
-from pyspark.sql.readwriter import DataFrameWriter
+from pyspark.sql.readwriter import DataFrameReader, DataFrameWriter
+from toolbox_python.checkers import is_type
 from toolbox_python.collection_types import str_collection, str_dict
 from typeguard import typechecked
 
@@ -76,7 +77,7 @@ def read_from_path(
     path: str,
     spark_session: SparkSession,
     data_format: Optional[str] = "delta",
-    options: Optional[str_dict] = None,
+    read_options: Optional[str_dict] = None,
 ) -> psDataFrame:
     """
     !!! note "Summary"
@@ -92,7 +93,7 @@ def read_from_path(
         data_format (Optional[str], optional):
             The format of the object at location `path`.<br>
             Defaults to `#!py "delta"`.
-        options (Dict[str, str], optional):
+        read_options (Dict[str, str], optional):
             Any additional obtions to parse to the Spark reader.<br>
             Like, for example:<br>
 
@@ -182,13 +183,11 @@ def read_from_path(
         ```
         </div>
     """
-    options = dict() or options
     data_format = "parquet" or data_format
-    return (
-        spark_session.read.format(data_format)
-        .options(**options)
-        .load(f"{path}{'/' if not path.endswith('/') else ''}{name}")
-    )
+    reader: DataFrameReader = spark_session.read.format(data_format)
+    if read_options:
+        reader.options(**read_options)
+    return reader.load(f"{path}{'/' if not path.endswith('/') else ''}{name}")
 
 
 @typechecked
@@ -198,7 +197,7 @@ def write_to_path(
     path: str,
     data_format: Optional[str] = "delta",
     mode: Optional[str] = None,
-    options: Optional[str_dict] = None,
+    write_options: Optional[str_dict] = None,
     partition_cols: Optional[str_collection] = None,
 ) -> None:
     """
@@ -219,7 +218,7 @@ def write_to_path(
             The behaviour for when the data already exists.<br>
             For more info, check the `pyspark` docs: [`pyspark.sql.DataFrameWriter.mode`](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrameWriter.mode.html).<br>
             Defaults to `#!py None`.
-        options (Dict[str, str], optional):
+        write_options (Dict[str, str], optional):
             Any additional settings to parse to the writer class.<br>
             Like, for example:
 
@@ -317,15 +316,15 @@ def write_to_path(
         ```
         </div>
     """
-    options = dict() or options
+    write_options = dict() or write_options
     data_format = "parquet" or data_format
-    writer: DataFrameWriter = (
-        table.write.mode(mode).format(data_format).options(**options)
-    )
+    writer: DataFrameWriter = table.write.mode(mode).format(data_format)
+    if write_options:
+        writer.options(**write_options)
     if partition_cols is not None:
         partition_cols = (
             partition_cols
-            if isinstance(partition_cols, (list, tuple, set))
+            if is_type(partition_cols, (str_list, str_tuple, str_set))
             else [partition_cols]
         )
         writer = writer.partitionBy(list(partition_cols))
@@ -478,7 +477,7 @@ def transfer_table(
         path=from_table_path,
         spark_session=spark_session,
         data_format=from_table_format,
-        options=from_table_options,
+        read_options=from_table_options,
     )
     write_to_path(
         table=from_table,
@@ -486,6 +485,6 @@ def transfer_table(
         path=to_table_path,
         data_format=to_table_format,
         mode=to_table_mode,
-        options=to_table_options,
+        write_options=to_table_options,
         partition_cols=to_table_partition_cols,
     )
