@@ -91,6 +91,7 @@ mypy = "1.*"
 parameterized = "0.*"
 chispa = "0.*"
 types-protobuf = "5.*"
+setuptools = "75.*"
 
 [tool.black]
 color = true
