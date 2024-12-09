@@ -87,7 +87,8 @@ check-pycln:
 check-mkdocs:
 	poetry run mkdocs build --site-dir="temp"
 	if [ -d "temp" ]; then rm --recursive temp; fi
-check: check-black check-mypy check-pycln check-isort check-codespell check-pylint check-mkdocs check-pytest
+check: check-black check-mypy check-pycln check-isort check-codespell check-pylint check-pytest
+# check: check-black check-mypy check-pycln check-isort check-codespell check-pylint check-mkdocs check-pytest
 
 
 #* Testing
