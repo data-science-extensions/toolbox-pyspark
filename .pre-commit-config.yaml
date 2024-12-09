@@ -58,7 +58,7 @@ repos:
     rev: "v1.13.0"
     hooks:
       - id: mypy
-        files: src/pyspark_helpers
+        files: src/toolbox_pyspark
         args:
           - "--config-file=pyproject.toml"
 

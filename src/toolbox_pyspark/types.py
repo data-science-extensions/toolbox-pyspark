@@ -173,7 +173,7 @@ def get_column_types(
         ```{.py .python linenums="1" title="Set up"}
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
-        >>> from pyspark_helpers.types import get_column_types
+        >>> from toolbox_pyspark.types import get_column_types
         >>> spark = SparkSession.builder.getOrCreate()
         >>> df = spark.createDataFrame(
         ...     pd.DataFrame({
@@ -298,7 +298,7 @@ def cast_column_to_type(
         ```{.py .python linenums="1" title="Set up"}
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
-        >>> from pyspark_helpers.types import cast_column_to_type, get_column_types
+        >>> from toolbox_pyspark.types import cast_column_to_type, get_column_types
         >>> spark = SparkSession.builder.getOrCreate()
         >>> df = spark.createDataFrame(
         ...     pd.DataFrame({
@@ -343,9 +343,9 @@ def cast_column_to_type(
         </div>
 
     ??? tip "See Also"
-        - [`assert_column_exists()`][pyspark_helpers.checks.column_exists]
-        - [`is_vaid_spark_type()`][pyspark_helpers.checks.is_vaid_spark_type]
-        - [`get_column_types()`][pyspark_helpers.types.get_column_types]
+        - [`assert_column_exists()`][toolbox_pyspark.checks.column_exists]
+        - [`is_vaid_spark_type()`][toolbox_pyspark.checks.is_vaid_spark_type]
+        - [`get_column_types()`][toolbox_pyspark.types.get_column_types]
     """
     assert_column_exists(dataframe, column)
     datatype = _validate_pyspark_datatype(datatype=datatype)
@@ -363,7 +363,7 @@ def cast_columns_to_type(
         Cast multiple columns to a given type.
 
     ???+ abstract "Details"
-        An extension of [`cast_column_to_type()`][pyspark_helpers.types.cast_column_to_type].
+        An extension of [`cast_column_to_type()`][toolbox_pyspark.types.cast_column_to_type].
 
     Params:
         dataframe (psDataFrame):
@@ -407,7 +407,7 @@ def cast_columns_to_type(
         ```{.py .python linenums="1" title="Set up"}
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
-        >>> from pyspark_helpers.types import cast_columns_to_type, get_column_types
+        >>> from toolbox_pyspark.types import cast_columns_to_type, get_column_types
         >>> spark = SparkSession.builder.getOrCreate()
         >>> df = spark.createDataFrame(
         ...     pd.DataFrame({
@@ -470,13 +470,13 @@ def cast_columns_to_type(
         </div>
 
     ??? info "Notes"
-        The reason why this function will call the [`cast_column_to_type()`][pyspark_helpers.types.cast_column_to_type] function under the hood, instead of directly parse'ing to the `pyspark` DataFrame method `.withColumns()` is because the [`cast_column_to_type()`][pyspark_helpers.types.cast_column_to_type] contains some additional validation steps on the `datatype` parameter (like converting `#!py str` to `string`), which is not logical to re-write here in this wrapper function.
+        The reason why this function will call the [`cast_column_to_type()`][toolbox_pyspark.types.cast_column_to_type] function under the hood, instead of directly parse'ing to the `pyspark` DataFrame method `.withColumns()` is because the [`cast_column_to_type()`][toolbox_pyspark.types.cast_column_to_type] contains some additional validation steps on the `datatype` parameter (like converting `#!py str` to `string`), which is not logical to re-write here in this wrapper function.
 
     ??? tip "See Also"
-        - [`cast_column_to_type()`][pyspark_helpers.types.cast_column_to_type]
-        - [`assert_columns_exists()`][pyspark_helpers.checks.assert_columns_exists]
-        - [`is_vaid_spark_type()`][pyspark_helpers.checks.is_vaid_spark_type]
-        - [`get_column_types()`][pyspark_helpers.types.get_column_types]
+        - [`cast_column_to_type()`][toolbox_pyspark.types.cast_column_to_type]
+        - [`assert_columns_exists()`][toolbox_pyspark.checks.assert_columns_exists]
+        - [`is_vaid_spark_type()`][toolbox_pyspark.checks.is_vaid_spark_type]
+        - [`get_column_types()`][toolbox_pyspark.types.get_column_types]
     """
     columns = [columns] if isinstance(columns, str) else columns
     assert_columns_exists(dataframe, columns)
@@ -497,7 +497,7 @@ def map_cast_columns_to_type(
         Take a dictionary mapping of where the keys is the type and the values are the column(s), and apply that to the given dataframe.
 
     ???+ abstract "Details"
-        Applies [`cast_columns_to_type()`][pyspark_helpers.types.cast_columns_to_type] and [`cast_column_to_type()`][pyspark_helpers.types.cast_column_to_type] under the hood.
+        Applies [`cast_columns_to_type()`][toolbox_pyspark.types.cast_columns_to_type] and [`cast_column_to_type()`][toolbox_pyspark.types.cast_column_to_type] under the hood.
 
     Params:
         dataframe (psDataFrame):
@@ -516,7 +516,7 @@ def map_cast_columns_to_type(
         ```{.py .python linenums="1" title="Set up"}
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
-        >>> from pyspark_helpers.types import map_cast_columns_to_type, get_column_types
+        >>> from toolbox_pyspark.types import map_cast_columns_to_type, get_column_types
         >>> spark = SparkSession.builder.getOrCreate()
         >>> df = spark.createDataFrame(
         ...     pd.DataFrame({
@@ -596,11 +596,11 @@ def map_cast_columns_to_type(
         </div>
 
     ??? tip "See Also"
-        - [`cast_column_to_type()`][pyspark_helpers.types.cast_column_to_type]
-        - [`cast_columns_to_type()`][pyspark_helpers.types.cast_columns_to_type]
-        - [`assert_columns_exists()`][pyspark_helpers.checks.assert_columns_exists]
-        - [`is_vaid_spark_type()`][pyspark_helpers.checks.is_vaid_spark_type]
-        - [`get_column_types()`][pyspark_helpers.types.get_column_types]
+        - [`cast_column_to_type()`][toolbox_pyspark.types.cast_column_to_type]
+        - [`cast_columns_to_type()`][toolbox_pyspark.types.cast_columns_to_type]
+        - [`assert_columns_exists()`][toolbox_pyspark.checks.assert_columns_exists]
+        - [`is_vaid_spark_type()`][toolbox_pyspark.checks.is_vaid_spark_type]
+        - [`get_column_types()`][toolbox_pyspark.types.get_column_types]
     """
 
     # Ensure all keys are `str`

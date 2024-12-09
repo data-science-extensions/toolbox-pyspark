@@ -116,7 +116,7 @@ def read_from_path(
         ```{.py .python linenums="1" title="Set up"}
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
-        >>> from pyspark_helpers.io import read_from_path
+        >>> from toolbox_pyspark.io import read_from_path
         >>> spark = SparkSession.builder.getOrCreate()
         >>> df = pd.DataFrame({
         ...     'a': [1,2,3,4],
@@ -244,8 +244,8 @@ def write_to_path(
         ```{.py .python linenums="1" title="Set up"}
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
-        >>> from pyspark_helpers.io import write_to_path
-        >>> from pyspark_helpers.checks import table_exists
+        >>> from toolbox_pyspark.io import write_to_path
+        >>> from toolbox_pyspark.checks import table_exists
         >>> spark = SparkSession.builder.getOrCreate()
         >>> df = spark.createDataFrame(
         ...     pd.DataFrame({
@@ -394,8 +394,8 @@ def transfer_table(
         ```{.py .python linenums="1" title="Set up"}
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
-        >>> from pyspark_helpers.io import transfer_table
-        >>> from pyspark_helpers.checks import table_exists
+        >>> from toolbox_pyspark.io import transfer_table
+        >>> from toolbox_pyspark.checks import table_exists
         >>> spark = SparkSession.builder.getOrCreate()
         >>> df = pd.DataFrame({
         ...     'a': [1,2,3,4],
