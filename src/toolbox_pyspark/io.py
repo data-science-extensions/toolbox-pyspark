@@ -43,13 +43,7 @@ from typing import Optional
 from pyspark.sql import DataFrame as psDataFrame, SparkSession
 from pyspark.sql.readwriter import DataFrameReader, DataFrameWriter
 from toolbox_python.checkers import is_type
-from toolbox_python.collection_types import (
-    str_collection,
-    str_dict,
-    str_list,
-    str_set,
-    str_tuple,
-)
+from toolbox_python.collection_types import str_collection, str_dict
 from typeguard import typechecked
 
 
@@ -329,9 +323,7 @@ def write_to_path(
         writer.options(**write_options)
     if partition_cols is not None:
         partition_cols = (
-            partition_cols
-            if is_type(partition_cols, (str_list, str_tuple, str_set))
-            else [partition_cols]
+            [partition_cols] if is_type(partition_cols, str) else partition_cols
         )
         writer = writer.partitionBy(list(partition_cols))
     writer.save(f"{path}{'/' if not path.endswith('/') else ''}{name}")
