@@ -15,8 +15,8 @@ watch:
 
 theme:
   name: material
-  favicon: ./assets/images/python.svg
-  coverpage_icon: ./assets/images/python.svg
+  favicon: ./assets/images/spark.svg
+  coverpage_icon: ./assets/images/spark.svg
   custom_dir: docs/overrides
   palette:
     # primary: teal
@@ -35,10 +35,10 @@ theme:
     - toc.follow
     - content.action.edit
     - content.action.view
-  logo: ./assets/images/python.svg
+  logo: ./assets/images/spark.svg
   icon:
     repo: material/gitlab
-    # logo: fontawesome/brands/python
+    # logo: fontawesome/brands/spark
     edit: material/file-edit-outline
     view: material/file-eye-outline
 
