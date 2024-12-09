@@ -48,15 +48,7 @@ nav:
       - Overview: usage/overview.md
   - Modules:
       - code/index.md
-      - Classes: code/classes.md
-      - Bools: code/bools.md
-      - Lists: code/lists.md
-      - Strings: code/strings.md
-      - Dictionaries: code/dictionaries.md
-      - Checkers: code/checkers.md
-      - Output: code/output.md
-      - Retry: code/retry.md
-      - Defaults: code/defaults.md
+      - IO: code/io.md
 
 
 markdown_extensions:
