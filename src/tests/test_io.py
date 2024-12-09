@@ -142,8 +142,8 @@ class TestReadingAndWriting(PySparkSetup):
             data_format="csv",
             read_options={"header": "true"},
         )
+        result = result.withColumn("a", F.col("a").cast("long"))
         expected: psDataFrame = self.ps_df
-        # expected: psDataFrame = self.ps_df.withColumn("a", F.col("a").cast("long"))
         assert_df_equality(result, expected)
 
     def test_2_read_from_path_4(self) -> None:
