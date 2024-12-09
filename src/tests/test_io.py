@@ -14,7 +14,6 @@
 import os
 import shutil
 from pathlib import Path
-from typing import LiteralString
 
 # ## Python Third Party Imports ----
 import pytest
@@ -44,7 +43,7 @@ class TestReadingAndWriting(PySparkSetup):
     def setUpClass(cls) -> None:
         super().setUpClass()
         cls.write_dir_name = "io"
-        cls.write_path: LiteralString = f"./src/tests/{cls.write_dir_name}"
+        cls.write_path: str = f"./src/tests/{cls.write_dir_name}"
         cls.clean_up = True
 
     @classmethod
