@@ -71,7 +71,7 @@ lint: run-black run-isort run-safety
 check-black:
 	poetry run black --diff --check --config pyproject.toml ./
 check-mypy:
-	poetry run mypy --install-types --config-file pyproject.toml src/$(PACKAGE_NAME)
+	poetry run mypy --install-types --non-interactive --config-file pyproject.toml src/$(PACKAGE_NAME)
 check-isort:
 	poetry run isort --settings-file pyproject.toml ./
 check-codespell:
