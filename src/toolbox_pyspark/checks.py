@@ -37,7 +37,8 @@
 # ---------------------------------------------------------------------------- #
 
 # ## Python StdLib Imports ----
-from typing import Tuple, Union
+from dataclasses import dataclass, fields
+from typing import Union
 
 # ## Python Third Party Imports ----
 from pyspark.sql import DataFrame as psDataFrame, SparkSession
@@ -76,12 +77,22 @@ __all__: str_list = [
 # ---------------------------------------------------------------------------- #
 
 
+@dataclass
+class ColumnExistsResult:
+    result: bool
+    missing_cols: str_list
+
+    def __iter__(self):
+        for field in fields(self):
+            yield getattr(self, field.name)
+
+
 @typechecked
 def _columns_exists(
     dataframe: psDataFrame,
     columns: Union[str_list, str_tuple, str_set],
     match_case: bool = False,
-) -> Tuple[bool, str_list]:
+) -> ColumnExistsResult:
     cols: Union[str_list, str_tuple, str_set] = (
         columns if match_case else [col.upper() for col in columns]
     )
@@ -91,7 +102,7 @@ def _columns_exists(
         else [df_col.upper() for df_col in dataframe.columns]
     )
     missing_cols: str_list = [col for col in cols if col not in df_cols]
-    return len(missing_cols) == 0, missing_cols
+    return ColumnExistsResult(len(missing_cols) == 0, missing_cols)
 
 
 @typechecked
@@ -164,7 +175,7 @@ def column_exists(
         ```
         </div>
     """
-    return _columns_exists(dataframe, [column], match_case)[0]
+    return _columns_exists(dataframe, [column], match_case).result
 
 
 @typechecked
@@ -254,7 +265,7 @@ def columns_exists(
         ```
         </div>
     """
-    return _columns_exists(dataframe, columns, match_case)[0]
+    return _columns_exists(dataframe, columns, match_case).result
 
 
 @typechecked
