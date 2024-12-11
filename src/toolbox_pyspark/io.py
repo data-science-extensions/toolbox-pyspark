@@ -114,16 +114,25 @@ def read_from_path(
     ???+ example "Examples"
 
         ```{.py .python linenums="1" title="Set up"}
+        >>> # Imports
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
         >>> from toolbox_pyspark.io import read_from_path
+        >>>
+        >>> # Instantiate Spark
         >>> spark = SparkSession.builder.getOrCreate()
-        >>> df = pd.DataFrame({
-        ...     'a': [1,2,3,4],
-        ...     'b': ['a','b','c','d'],
-        ...     'c': [1,1,1,1],
-        ...     'd': ['2','2','2','2'],
-        ... })
+        >>>
+        >>> # Create data
+        >>> df = pd.DataFrame(
+        ...     {
+        ...         "a": [1, 2, 3, 4],
+        ...         "b": ["a", "b", "c", "d"],
+        ...         "c": [1, 1, 1, 1],
+        ...         "d": ["2", "2", "2", "2"],
+        ...     }
+        ... )
+        >>>
+        >>> # Write data
         >>> df.to_csv("./test/table.csv")
         >>> df.to_parquet("./test/table.parquet")
         ```
@@ -133,12 +142,12 @@ def read_from_path(
         >>> print(os.listdir("./test"))
         ```
         <div class="result" markdown>
-        ```{.py .python}
-        ['table.csv', 'table.parquet']
+        ```{.sh .shell title="Terminal"}
+        ["table.csv", "table.parquet"]
         ```
         </div>
 
-        ```{.py .python linenums="1" title="Read CSV"}
+        ```{.py .python linenums="1" title="Example 1: Read CSV"}
         >>> df_csv = read_from_path(
         ...     name="table.csv",
         ...     path="./test",
@@ -146,10 +155,11 @@ def read_from_path(
         ...     data_format="csv",
         ...     options={"header": "true"},
         ... )
+        >>>
         >>> df_csv.show()
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+---+---+---+
         | a | b | c | d |
         +---+---+---+---+
@@ -159,19 +169,21 @@ def read_from_path(
         | 4 | d | 1 | 2 |
         +---+---+---+---+
         ```
+        !!! success "Conclusion: Successfully read CSV."
         </div>
 
-        ```{.py .python linenums="1" title="Read Parquet"}
+        ```{.py .python linenums="1" title="Example 2: Read Parquet"}
         >>> df_parquet = read_from_path(
-        ...     name="table.csv",
+        ...     name="table.parquet",
         ...     path="./test",
         ...     spark_session=spark,
         ...     data_format="parquet",
         ... )
+        >>>
         >>> df_parquet.show()
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+---+---+---+
         | a | b | c | d |
         +---+---+---+---+
@@ -181,6 +193,7 @@ def read_from_path(
         | 4 | d | 1 | 2 |
         +---+---+---+---+
         ```
+        !!! success "Conclusion: Successfully read Parquet."
         </div>
     """
     data_format: str = data_format or "parquet"
@@ -223,7 +236,7 @@ def write_to_path(
             Like, for example:
 
             - If you are writing to a Delta object, and wanted to overwrite the schema: `#!py {"overwriteSchema": "true"}`.
-            - If you're writing to a CSV file, and wanted to specify the header row: `#!py {"header": "true"}`.
+            - If you"re writing to a CSV file, and wanted to specify the header row: `#!py {"header": "true"}`.
 
             For more info, check the `pyspark` docs: [`pyspark.sql.DataFrameWriter.options`](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrameWriter.options.html).<br>
             Defaults to `#!py dict()`.
@@ -239,21 +252,31 @@ def write_to_path(
         (type(None)):
             Nothing is returned.
 
+    ???+ tip "Note"
+        You know that this function is successful if the table exists at the specified location, and there are no errors thrown.
+
     ???+ example "Examples"
 
         ```{.py .python linenums="1" title="Set up"}
+        >>> # Imports
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
         >>> from toolbox_pyspark.io import write_to_path
         >>> from toolbox_pyspark.checks import table_exists
+        >>>
+        >>> # Instantiate Spark
         >>> spark = SparkSession.builder.getOrCreate()
+        >>>
+        >>> # Create data
         >>> df = spark.createDataFrame(
-        ...     pd.DataFrame({
-        ...         'a': [1,2,3,4],
-        ...         'b': ['a','b','c','d'],
-        ...         'c': [1,1,1,1],
-        ...         'd': ['2','2','2','2'],
-        ...     })
+        ...     pd.DataFrame(
+        ...         {
+        ...             "a": [1, 2, 3, 4],
+        ...             "b": ["a", "b", "c", "d"],
+        ...             "c": [1, 1, 1, 1],
+        ...             "d": ["2", "2", "2", "2"],
+        ...         }
+        ...     )
         ... )
         ```
 
@@ -261,7 +284,7 @@ def write_to_path(
         >>> df.show()
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+---+---+---+
         | a | b | c | d |
         +---+---+---+---+
@@ -273,7 +296,7 @@ def write_to_path(
         ```
         </div>
 
-        ```{.py .python linenums="1" title="Write to CSV"}
+        ```{.py .python linenums="1" title="Example 1: Write to CSV"}
         >>> write_to_path(
         ...     table=df,
         ...     name="df.csv",
@@ -282,6 +305,7 @@ def write_to_path(
         ...     mode="overwrite",
         ...     options={"header": "true"},
         ... )
+        >>>
         >>> table_exists(
         ...     name="df.csv",
         ...     path="./test",
@@ -290,12 +314,13 @@ def write_to_path(
         ... )
         ```
         <div class="result" markdown>
-        ```{.py .python}
+        ```{.sh .shell title="Terminal"}
         True
         ```
+        !!! success "Conclusion: Successfully written to CSV."
         </div>
 
-        ```{.py .python linenums="1" title="Write to Parquet"}
+        ```{.py .python linenums="1" title="Example 2: Write to Parquet"}
         >>> write_to_path(
         ...     table=df,
         ...     name="df.parquet",
@@ -303,6 +328,7 @@ def write_to_path(
         ...     data_format="parquet",
         ...     mode="overwrite",
         ... )
+        >>>
         >>> table_exists(
         ...     name="df.parquet",
         ...     path="./test",
@@ -311,9 +337,10 @@ def write_to_path(
         ... )
         ```
         <div class="result" markdown>
-        ```{.py .python}
+        ```{.sh .shell title="Terminal"}
         True
         ```
+        !!! success "Conclusion: Successfully written to Parquet."
         </div>
     """
     write_options: str_dict = write_options or dict()
@@ -389,20 +416,30 @@ def transfer_table(
         (type(None)):
             Nothing is returned.
 
+    ???+ tip "Note"
+        You know that this function is successful if the table exists at the specified location, and there are no errors thrown.
+
     ???+ example "Examples"
 
         ```{.py .python linenums="1" title="Set up"}
+        >>> # Imports
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
         >>> from toolbox_pyspark.io import transfer_table
         >>> from toolbox_pyspark.checks import table_exists
+        >>>
+        >>> # Instantiate Spark
         >>> spark = SparkSession.builder.getOrCreate()
-        >>> df = pd.DataFrame({
-        ...     'a': [1,2,3,4],
-        ...     'b': ['a','b','c','d'],
-        ...     'c': [1,1,1,1],
-        ...     'd': ['2','2','2','2'],
-        ... })
+        >>>
+        >>> # Create data
+        >>> df = pd.DataFrame(
+        ...     {
+        ...         "a": [1, 2, 3, 4],
+        ...         "b": ["a", "b", "c", "d"],
+        ...         "c": [1, 1, 1 1],
+        ...         "d": ["2", "2", "2", "2"],
+        ...     }
+        ... )
         >>> df.to_csv("./test/table.csv")
         >>> df.to_parquet("./test/table.parquet")
         ```
@@ -412,12 +449,12 @@ def transfer_table(
         >>> print(os.listdir("./test"))
         ```
         <div class="result" markdown>
-        ```{.py .python}
-        ['table.csv', 'table.parquet']
+        ```{.sh .shell title="Terminal"}
+        ["table.csv", "table.parquet"]
         ```
         </div>
 
-        ```{.py .python linenums="1" title="Move CSV"}
+        ```{.py .python linenums="1" title="Example 1: Transfer CSV"}
         >>> transfer_table(
         ...     spark_session=spark,
         ...     from_table_path="./test",
@@ -430,6 +467,7 @@ def transfer_table(
         ...     to_table_mode="overwrite",
         ...     to_table_options={"header": "true"},
         ... )
+        >>>
         >>> table_exists(
         ...     name="df.csv",
         ...     path="./other",
@@ -438,12 +476,13 @@ def transfer_table(
         ... )
         ```
         <div class="result" markdown>
-        ```{.py .python}
+        ```{.sh .shell title="Terminal"}
         True
         ```
+        !!! success "Conclusion: Successfully transferred CSV to CSV."
         </div>
 
-        ```{.py .python linenums="1" title="Move Parquet"}
+        ```{.py .python linenums="1" title="Example 2: Transfer Parquet"}
         >>> transfer_table(
         ...     spark_session=spark,
         ...     from_table_path="./test",
@@ -455,6 +494,7 @@ def transfer_table(
         ...     to_table_mode="overwrite",
         ...     to_table_options={"overwriteSchema": "true"},
         ... )
+        >>>
         >>> table_exists(
         ...     name="df.parquet",
         ...     path="./other",
@@ -463,9 +503,37 @@ def transfer_table(
         ... )
         ```
         <div class="result" markdown>
-        ```{.py .python}
+        ```{.sh .shell title="Terminal"}
         True
         ```
+        !!! success "Conclusion: Successfully transferred Parquet to Parquet."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 3: Transfer CSV to Parquet"}
+        >>> transfer_table(
+        ...     spark_session=spark,
+        ...     from_table_path="./test",
+        ...     from_table_name="table.csv",
+        ...     from_table_format="csv",
+        ...     to_table_path="./other",
+        ...     to_table_name="table.parquet",
+        ...     to_table_format="parquet",
+        ...     to_table_mode="overwrite",
+        ...     to_table_options={"overwriteSchema": "true"},
+        ... )
+        >>>
+        >>> table_exists(
+        ...     name="df.parquet",
+        ...     path="./other",
+        ...     data_format="parquet",
+        ...     spark_session=spark,
+        ... )
+        ```
+        <div class="result" markdown>
+        ```{.sh .shell title="Terminal"}
+        True
+        ```
+        !!! success "Conclusion: Successfully transferred CSV to Parquet."
         </div>
     """
     from_table_options: str_dict = from_table_options or dict()
