@@ -38,16 +38,15 @@
 
 
 # ## Python StdLib Imports ----
-# Python StdLib Imports
 from functools import partial
 from warnings import warn
 
 # ## Python Third Party Imports ----
-# Python Open Source Imports
 from pyspark.sql.types import _all_atomic_types as pyspark_atomic_types
+from toolbox_python.collection_types import str_list
 
-# ## Local Module Imports ----
-from .utils.whitespaces import WhitespaceCharacters, WhitespaceChatacter
+# ## Local First Party Imports ----
+from toolbox_pyspark.utils.whitespaces import WhitespaceCharacters, WhitespaceChatacter
 
 
 # ---------------------------------------------------------------------------- #
@@ -55,7 +54,7 @@ from .utils.whitespaces import WhitespaceCharacters, WhitespaceChatacter
 # ---------------------------------------------------------------------------- #
 
 
-__all__ = [
+__all__: str_list = [
     "ALL_WHITESPACE_CHARACTERS",
     "WHITESPACE_CHARACTERS",
     "VALID_PYSPARK_TYPES",
@@ -116,7 +115,6 @@ ALL_WHITESPACE_CHARACTERS = [
     ("zero width non-breaking space", "U+FEFF", 65279),
 ]
 
-
 WHITESPACE_CHARACTERS = WhitespaceCharacters(
     [
         WhitespaceChatacter(name, unicode, ascii)
@@ -129,9 +127,10 @@ WHITESPACE_CHARACTERS = WhitespaceCharacters(
 #  PySpark Types                                                            ####
 # ---------------------------------------------------------------------------- #
 
+
 # For a full list of valid types, see: https://spark.apache.org/docs/latest/sql-ref-datatypes.html
 VALID_PYSPARK_TYPES = list(pyspark_atomic_types.values())
-VALID_PYSPARK_TYPE_NAMES = sorted(
+VALID_PYSPARK_TYPE_NAMES: str_list = sorted(
     list(pyspark_atomic_types.keys()) + ["str", "int", "bool"]
 )
 
@@ -140,7 +139,8 @@ VALID_PYSPARK_TYPE_NAMES = sorted(
 #  DataFrames                                                               ####
 # ---------------------------------------------------------------------------- #
 
-VALID_PANDAS_DATAFRAME_NAMES = [
+
+VALID_PANDAS_DATAFRAME_NAMES: str_list = [
     "pandas.DataFrame",
     "pandas",
     "pd.DataFrame",
@@ -151,7 +151,7 @@ VALID_PANDAS_DATAFRAME_NAMES = [
     "pd",
 ]
 
-VALID_PYSPARK_DATAFRAME_NAMES = [
+VALID_PYSPARK_DATAFRAME_NAMES: str_list = [
     "spark.DataFrame",
     "pyspark.DataFrame",
     "pyspark",
@@ -164,7 +164,7 @@ VALID_PYSPARK_DATAFRAME_NAMES = [
     "ps",
 ]
 
-VALID_NUMPY_ARRAY_NAMES = [
+VALID_NUMPY_ARRAY_NAMES: str_list = [
     "numpy.array",
     "np.array",
     "np",
@@ -175,9 +175,11 @@ VALID_NUMPY_ARRAY_NAMES = [
     "np.a",
 ]
 
-VALID_LIST_OBJECT_NAMES = ["list", "lst", "l", "flat_list", "flatten_list"]
+VALID_LIST_OBJECT_NAMES: str_list = ["list", "lst", "l", "flat_list", "flatten_list"]
 
-VALID_DATAFRAME_NAMES = VALID_PANDAS_DATAFRAME_NAMES + VALID_PYSPARK_DATAFRAME_NAMES
+VALID_DATAFRAME_NAMES: str_list = (
+    VALID_PANDAS_DATAFRAME_NAMES + VALID_PYSPARK_DATAFRAME_NAMES
+)
 
 
 # ---------------------------------------------------------------------------- #
