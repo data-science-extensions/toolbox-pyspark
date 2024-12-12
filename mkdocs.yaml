@@ -46,9 +46,11 @@ nav:
   - Home: index.md
   - Usage:
       - Overview: usage/overview.md
+      - Roadmap: usage/roadmap.md
   - Modules:
       - code/index.md
       - IO: code/io.md
+      - Checks: code/checks.md
 
 
 markdown_extensions:

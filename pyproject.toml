@@ -156,6 +156,7 @@ exit-zero = false
 disable = [
     "C0103", # invalid-name
     "C0114", # missing-module-docstring
+    "C0115", # missing-class-docstring
     "C0116", # missing-function-docstring
     "C0121", # singleton-comparison
     "C0201", # consider-iterating-dictionary
