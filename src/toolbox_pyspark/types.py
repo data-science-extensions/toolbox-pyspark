@@ -94,8 +94,6 @@ def _validate_pyspark_datatype(datatype: Union[str, type, T.DataType]):
             datatype = eval(datatype)
         except NameError:
             datatype = T._parse_datatype_string(s=datatype)  # type:ignore
-        else:
-            pass
     if type(datatype).__name__ == "type":
         datatype = T._type_mappings.get(datatype)()  # type:ignore
     return datatype
@@ -620,7 +618,7 @@ def map_cast_columns_to_type(
                 for col, typ in reversed_mapping.items()
             }
         )
-    except Exception as e:
+    except Exception as e:  # pragma: no cover
         raise RuntimeError(f"Raised {e.__class__.__name__}: {e}") from e
 
     # Return
