@@ -58,10 +58,10 @@ from toolbox_pyspark.io import read_from_path
 __all__: str_list = [
     "column_exists",
     "columns_exists",
-    "is_vaid_spark_type",
-    "table_exists",
     "assert_column_exists",
     "assert_columns_exists",
+    "is_vaid_spark_type",
+    "table_exists",
 ]
 
 
@@ -113,7 +113,7 @@ def column_exists(
 ) -> bool:
     """
     !!! note "Summary"
-        Check whether a given `column` exists as a valid column within `dataframe.columns`.
+        Check whether a given `#!py column` exists as a valid column within `#!py dataframe.columns`.
 
     Params:
         dataframe (psDataFrame):
@@ -131,48 +131,45 @@ def column_exists(
 
     Returns:
         (bool):
-            True if exists or False.
+            `#!py True` if exists or `#!py False` otherwise.
 
     ???+ example "Examples"
 
-        ```{.py .python linenums="1" title="Column Exists"}
+        ```{.py .python linenums="1", title="Set Up"}
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
         >>> from toolbox_pyspark.checks import column_exists
         >>> spark = SparkSession.builder.getOrCreate()
         >>> df = spark.createDataFrame(
-        ...     pd.DataFrame({
-        ...         'a': [1,2,3,4],
-        ...         'b': ['a','b','c','d'],
-        ...     })
+        ...     pd.DataFrame(
+        ...         {
+        ...             "a": [1, 2, 3, 4],
+        ...             "b": ["a", "b", "c", "d"],
+        ...         }
+        ...     )
         ... )
-        >>> result = column_exists(df, 'a')
+        ```
+
+        ```{.py .python linenums="1" title="Example1: Column Exists"}
+        >>> result = column_exists(df, "a")
         >>> print(result)
         ```
         <div class="result" markdown>
-        ```{.py .python}
+        ```{.sh .shell title="Terminal"}
         True
         ```
+        !!! success "Conclusion: Column exists."
         </div>
 
-        ```{.py .python linenums="1" title="Column Missing"}
-        >>> import pandas as pd
-        >>> from pyspark.sql import SparkSession
-        >>> from toolbox_pyspark.checks import column_exists
-        >>> spark = SparkSession.builder.getOrCreate()
-        >>> df = spark.createDataFrame(
-        ...     pd.DataFrame({
-        ...         'a': [1,2,3,4],
-        ...         'b': ['a','b','c','d'],
-        ...     })
-        ... )
-        >>> result = column_exists(df, 'c')
+        ```{.py .python linenums="1" title="Example 2: Column Missing"}
+        >>> result = column_exists(df, "c")
         >>> print(result)
         ```
         <div class="result" markdown>
-        ```{.py .python}
+        ```{.sh .shell title="Terminal"}
         False
         ```
+        !!! failure "Conclusion: Column does not exist."
         </div>
     """
     return _columns_exists(dataframe, [column], match_case).result
@@ -186,12 +183,12 @@ def columns_exists(
 ) -> bool:
     """
     !!! note "Summary"
-        Check whether all of the values in `columns` exist in `dataframe.columns`.
+        Check whether all of the values in `#!py columns` exist in `#!py dataframe.columns`.
 
     Params:
         dataframe (psDataFrame):
             The DataFrame to check
-        columns (Union[List[str], Set[str], Tuple[str, ...]]):
+        columns (Union[str_list, str_tuple, str_set]):
             The columns to check
         match_case (bool, optional):
             Whether or not to match the string case for the columns.<br>
@@ -204,65 +201,53 @@ def columns_exists(
 
     Returns:
         (bool):
-            True if exists or False.
+            `#!py True` if all columns exist or `#!py False` otherwise.
 
     ???+ example "Examples"
 
-        ```{.py .python linenums="1" title="Columns exist"}
+        ```{.py .python linenums="1" title="Set Up"}
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
         >>> from toolbox_pyspark.checks import columns_exists
         >>> spark = SparkSession.builder.getOrCreate()
         >>> df = spark.createDataFrame(
-        ...     pd.DataFrame({
-        ...         'a': [1,2,3,4],
-        ...         'b': ['a','b','c','d'],
-        ...     })
+        ...     pd.DataFrame(
+        ...         {
+        ...             "a": [1, 2, 3, 4],
+        ...             "b": ["a", "b", "c", "d"],
+        ...         }
+        ...     )
         ... )
-        >>> columns_exists(df, ['a','b'])
+        ```
+
+        ```{.py .python linenums="1" title="Example 1: Columns exist"}
+        >>> columns_exists(df, ["a", "b"])
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         True
         ```
+        !!! success "Conclusion: All columns exist."
         </div>
 
-        ```{.py .python linenums="1" title="One column missing"}
-        >>> import pandas as pd
-        >>> from pyspark.sql import SparkSession
-        >>> from toolbox_pyspark.checks import columns_exists
-        >>> spark = SparkSession.builder.getOrCreate()
-        >>> df = spark.createDataFrame(
-        ...     pd.DataFrame({
-        ...         'a': [1,2,3,4],
-        ...         'b': ['a','b','c','d'],
-        ...     })
-        ... )
-        >>> columns_exists(df, ['b','d'])
+        ```{.py .python linenums="1" title="Example 2: One column missing"}
+        >>> columns_exists(df, ["b", "d"])
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         False
         ```
+        !!! failure "Conclusion: One column is missing."
         </div>
 
-        ```{.py .python linenums="1" title="All columns missing"}
-        >>> import pandas as pd
-        >>> from pyspark.sql import SparkSession
-        >>> from toolbox_pyspark.checks import columns_exists
-        >>> spark = SparkSession.builder.getOrCreate()
-        >>> df = spark.createDataFrame(
-        ...     pd.DataFrame({
-        ...         'a': [1,2,3,4],
-        ...         'b': ['a','b','c','d'],
-        ...     })
-        ... )
-        >>> columns_exists(df, ['c','d'])
+        ```{.py .python linenums="1" title="Example 3: All columns missing"}
+        >>> columns_exists(df, ["c", "d"])
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         False
         ```
+        !!! failure "Conclusion: All columns are missing."
         </div>
     """
     return _columns_exists(dataframe, columns, match_case).result
@@ -276,7 +261,7 @@ def assert_column_exists(
 ) -> None:
     """
     !!! note "Summary"
-        Check whether a given `column` exists as a valid column within `dataframe.columns`.
+        Check whether a given `#!py column` exists as a valid column within `#!py dataframe.columns`.
 
     Params:
         dataframe (psDataFrame):
@@ -292,51 +277,48 @@ def assert_column_exists(
         TypeError:
             If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
         AttributeError:
-            If `column` does not exist within `dataframe.columns`.
+            If `#!py column` does not exist within `#!py dataframe.columns`.
 
     Returns:
         (type(None)):
-            Nothing is returned. Either an `AttributeError` exception is raised, or nothing.
+            Nothing is returned. Either an `#!py AttributeError` exception is raised, or nothing.
 
     ???+ example "Examples"
 
-        ```{.py .python linenums="1" title="No error"}
+        ```{.py .python linenums="1" title="Set Up"}
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
         >>> from toolbox_pyspark.checks import assert_column_exists
         >>> spark = SparkSession.builder.getOrCreate()
         >>> df = spark.createDataFrame(
-        ...     pd.DataFrame({
-        ...         'a': [1,2,3,4],
-        ...         'b': ['a','b','c','d'],
-        ...     })
+        ...     pd.DataFrame(
+        ...         {
+        ...             "a": [1,2,3,4],
+        ...             "b": ["a", "b", "c", "d"],
+        ...         }
+        ...     )
         ... )
-        >>> assert_column_exists(df, 'a')
+        ```
+
+        ```{.py .python linenums="1" title="Example 1: No error"}
+        >>> assert_column_exists(df, "a")
         ```
         <div class="result" markdown>
-        ```{.py .python}
+        ```{.sh .shell title="Terminal"}
         None
         ```
+        !!! success "Conclusion: Column exists."
         </div>
 
-        ```{.py .python linenums="1" title="Error raised"}
-        >>> import pandas as pd
-        >>> from pyspark.sql import SparkSession
-        >>> from toolbox_pyspark.checks import assert_column_exists
-        >>> spark = SparkSession.builder.getOrCreate()
-        >>> df = spark.createDataFrame(
-        ...     pd.DataFrame({
-        ...         'a': [1,2,3,4],
-        ...         'b': ['a','b','c','d'],
-        ...     })
-        ... )
-        >>> assert_column_exists(df, 'c')
+        ```{.py .python linenums="1" title="Example 2: Error raised"}
+        >>> assert_column_exists(df, "c")
         ```
         <div class="result" markdown>
-        ```{.txt .text}
-        "Attribute Error: Column 'c' does not exist in 'dataframe'."
-        "Try one of: ['a','b']."
+        ```{.txt .text title="Terminal"}
+        Attribute Error: Column 'c' does not exist in 'dataframe'.
+        Try one of: ["a", "b"].
         ```
+        !!! failure "Conclusion: Column does not exist."
         </div>
     """
     if not column_exists(dataframe, column, match_case):
@@ -354,12 +336,12 @@ def assert_columns_exists(
 ) -> None:
     """
     !!! note "Summary"
-        Check whether all of the values in `columns` exist in `dataframe.columns`.
+        Check whether all of the values in `#!py columns` exist in `#!py dataframe.columns`.
 
     Params:
         dataframe (psDataFrame):
             The DataFrame to check
-        columns (Union[List[str], Set[str], Tuple[str, ...]]):
+        columns (Union[str_list, str_tuple, str_set]):
             The columns to check
         match_case (bool, optional):
             Whether or not to match the string case for the columns.<br>
@@ -370,71 +352,59 @@ def assert_columns_exists(
         TypeError:
             If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
         AttributeError:
-            If the `columns` do not exist within `dataframe.columns`.
+            If the `#!py columns` do not exist within `#!py dataframe.columns`.
 
     Returns:
         (type(None)):
-            Nothing is returned. Either an `AttributeError` exception is raised, or nothing.
+            Nothing is returned. Either an `#!py AttributeError` exception is raised, or nothing.
 
     ???+ example "Examples"
 
-        ```{.py .python linenums="1" title="No error"}
+        ```{.py .python linenums="1" title="Set Up"}
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
         >>> from toolbox_pyspark.checks import assert_columns_exists
         >>> spark = SparkSession.builder.getOrCreate()
         >>> df = spark.createDataFrame(
-        ...     pd.DataFrame({
-        ...         'a': [1,2,3,4],
-        ...         'b': ['a','b','c','d'],
-        ...     })
+        ...     pd.DataFrame(
+        ...         {
+        ...             "a": [1, 2, 3, 4],
+        ...             "b": ["a", "b", "c", "d"],
+        ...         }
+        ...     )
         ... )
-        >>> assert_columns_exists(df, ['a','b'])
+        ```
+
+        ```{.py .python linenums="1" title="Example 1: No error"}
+        >>> assert_columns_exists(df, ["a", "b"])
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         None
         ```
+        !!! success "Conclusion: Columns exist."
         </div>
 
-        ```{.py .python linenums="1" title="One column missing"}
-        >>> import pandas as pd
-        >>> from pyspark.sql import SparkSession
-        >>> from toolbox_pyspark.checks import assert_columns_exists
-        >>> spark = SparkSession.builder.getOrCreate()
-        >>> df = spark.createDataFrame(
-        ...     pd.DataFrame({
-        ...         'a': [1,2,3,4],
-        ...         'b': ['a','b','c','d'],
-        ...     })
-        ... )
-        >>> assert_columns_exists(df, ['b','c'])
+        ```{.py .python linenums="1" title="Example 2: One column missing"}
+        >>> assert_columns_exists(df, ["b", "c"])
         ```
         <div class="result" markdown>
-        ```{.txt .text}
-        "Attribute Error: Columns ['c'] do not exist in 'dataframe'."
-        "Try one of: ['a','b']."
+        ```{.txt .text title="Terminal"}
+        Attribute Error: Columns ["c"] do not exist in 'dataframe'.
+        Try one of: ["a", "b"].
         ```
+        !!! failure "Conclusion: Column 'c' does not exist."
         </div>
 
-        ```{.py .python linenums="1" title="Multiple columns missing"}
-        >>> import pandas as pd
-        >>> from pyspark.sql import SparkSession
-        >>> from toolbox_pyspark.checks import assert_columns_exists
-        >>> spark = SparkSession.builder.getOrCreate()
-        >>> df = spark.createDataFrame(
-        ...     pd.DataFrame({
-        ...         'a': [1,2,3,4],
-        ...         'b': ['a','b','c','d'],
-        ...     })
-        ... )
-        >>> assert_columns_exists(df, ['b','c','d'])
+        ```{.py .python linenums="1" title="Example 3: Multiple columns missing"}
+        >>> assert_columns_exists(df, ["b", "c", "d"])
         ```
         <div class="result" markdown>
-        ```{.txt .text}
-        "Attribute Error: Columns ['c','d'] do not exist in 'dataframe'."
-        "Try one of: ['a','b']."
+        ```{.txt .text title="Terminal"}
+        Attribute Error: Columns ["c", "d"] do not exist in 'dataframe'.
+        Try one of: ["a", "b"].
         ```
+        !!! failure "Conclusion: Columns 'c' and 'd' does not exist."
         </div>
     """
     (exist, missing_cols) = _columns_exists(dataframe, columns, match_case)
@@ -454,7 +424,7 @@ def assert_columns_exists(
 def is_vaid_spark_type(datatype: str) -> None:
     """
     !!! note "Summary"
-        Check whether a given `datatype` is a correct and valid `pyspark` data type.
+        Check whether a given `#!py datatype` is a correct and valid `#!py pyspark` data type.
 
     Params:
         datatype (str):
@@ -464,50 +434,52 @@ def is_vaid_spark_type(datatype: str) -> None:
         TypeError:
             If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
         AttributeError:
-            If the given `datatype` is not a valid `pyspark` data type.
+            If the given `#!py datatype` is not a valid `#!py pyspark` data type.
 
     Returns:
         (type(None)):
-            Nothing is returned. Either an `AttributeError` exception is raised, or nothing.
+            Nothing is returned. Either an `#!py AttributeError` exception is raised, or nothing.
 
     ???+ example "Examples"
 
-        ```{.py .python linenums="1" title="Loop through all valid types"}
+        ```{.py .python linenums="1" title="Set Up"}
         >>> from toolbox_pyspark.checks import is_vaid_spark_type
-        >>> type_names = ['string', 'char', 'varchar', 'binary', 'boolean', 'decimal', 'float', 'double', 'byte', 'short', 'integer', 'long', 'date', 'timestamp', 'timestamp_ntz', 'void']
+        ```
+
+        ```{.py .python linenums="1" title="Loop through all valid types"}
+        >>> type_names = ["string", "char", "varchar", "binary", "boolean", "decimal", "float", "double", "byte", "short", "integer", "long", "date", "timestamp", "timestamp_ntz", "void"]
         >>> for type_name in type_names:
         ...     is_vaid_spark_type(type_name)
         ```
         <div class="result" markdown>
         Nothing is returned each time. Because they're all valid.
+        !!! success "Conclusion: They're all valid."
         </div>
 
         ```{.py .python linenums="1" title="Check some invalid types"}
-        >>> from toolbox_pyspark.checks import is_vaid_spark_type
         >>> type_names = ["np.ndarray", "pd.DataFrame", "dict"]
         >>> for type_name in type_names:
         ...     is_vaid_spark_type(type_name)
         ```
         <div class="result" markdown>
-        ```{.txt .text}
-        AttributeError: DataType `np.ndarray` is not valid.
-        Must be one of: ['binary', 'bool', 'boolean', 'byte', 'char', 'date', 'decimal', 'double', 'float', 'int', 'integer', 'long', 'short', 'str', 'string', 'timestamp', 'timestamp_ntz', 'varchar', 'void']
+        ```{.txt .text title="Terminal"}
+        AttributeError: DataType 'np.ndarray' is not valid.
+        Must be one of: ["binary", "bool", "boolean", "byte", "char", "date", "decimal", "double", "float", "int", "integer", "long", "short", "str", "string", "timestamp", "timestamp_ntz", "varchar", "void"]
         ```
-
-        ```{.txt .text}
-        AttributeError: DataType `pd.DataFrame` is not valid.
-        Must be one of: ['binary', 'bool', 'boolean', 'byte', 'char', 'date', 'decimal', 'double', 'float', 'int', 'integer', 'long', 'short', 'str', 'string', 'timestamp', 'timestamp_ntz', 'varchar', 'void']
+        ```{.txt .text title="Terminal"}
+        AttributeError: DataType 'pd.DataFrame' is not valid.
+        Must be one of: ["binary", "bool", "boolean", "byte", "char", "date", "decimal", "double", "float", "int", "integer", "long", "short", "str", "string", "timestamp", "timestamp_ntz", "varchar", "void"]
         ```
-
-        ```{.txt .text}
-        AttributeError: DataType `dict` is not valid.
-        Must be one of: ['binary', 'bool', 'boolean', 'byte', 'char', 'date', 'decimal', 'double', 'float', 'int', 'integer', 'long', 'short', 'str', 'string', 'timestamp', 'timestamp_ntz', 'varchar', 'void']
+        ```{.txt .text title="Terminal"}
+        AttributeError: DataType 'dict' is not valid.
+        Must be one of: ["binary", "bool", "boolean", "byte", "char", "date", "decimal", "double", "float", "int", "integer", "long", "short", "str", "string", "timestamp", "timestamp_ntz", "varchar", "void"]
         ```
+        !!! failure "Conclusion: All of these types are invalid."
         </div>
     """
     if datatype not in VALID_PYSPARK_TYPE_NAMES:
         raise AttributeError(
-            f"DataType `{datatype}` is not valid.\n"
+            f"DataType '{datatype}' is not valid.\n"
             f"Must be one of: {VALID_PYSPARK_TYPE_NAMES}"
         )
 
@@ -526,7 +498,7 @@ def table_exists(
 ) -> bool:
     """
     !!! note "Summary"
-        Will try to read `table` from `path` using `format`, and if successful will return `True` otherwise `False`.
+        Will try to read `#!py table` from `#!py path` using `#!py format`, and if successful will return `#!py True` otherwise `#!py False`.
 
     Params:
         name (str):
@@ -536,7 +508,7 @@ def table_exists(
         data_format (str):
             The format of the table to try checking.
         spark_session (SparkSession):
-            The `spark` session to use for the importing.
+            The `#!py spark` session to use for the importing.
 
     Raises:
         TypeError:
@@ -544,50 +516,57 @@ def table_exists(
 
     Returns:
         (bool):
-            Returns `True` if the table exists, `False` otherwise.
+            Returns `#!py True` if the table exists, `False` otherwise.
 
     ???+ example "Examples"
 
         ```{.py .python linenums="1" title="Set up"}
+        >>> # Imports
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
+        >>> from toolbox_pyspark.io import write_to_path
+        >>> from toolbox_pyspark.checks import table_exists
+        >>>
+        >>> # Constants
         >>> write_name = "test_df"
         >>> write_path = f"./test"
         >>> write_format = "parquet"
+        >>>
+        >>> # Instantiate Spark
         >>> spark = SparkSession.builder.getOrCreate()
+        >>>
+        >>> # Create data
         >>> df = spark.createDataFrame(
-        ...     pd.DataFrame({
-        ...         'a': [1,2,3,4],
-        ...         'b': ['a','b','c','d'],
-        ...     })
+        ...     pd.DataFrame(
+        ...         {
+        ...             "a": [1, 2, 3, 4],
+        ...             "b": ["a", "b", "c", "d"],
+        ...         }
+        ...     )
         ... )
-        >>> (
-        ...    df
-        ...    .write
-        ...    .mode("overwrite")
-        ...    .format(write_format)
-        ...    .save(f"{write_path}/{write_name}.{write_format}")
-        ...)
+        >>>
+        >>> # Write data
+        >>> write_to_path(df, f"{write_name}.{write_format}", write_path)
         ```
 
-        ```{.py .python linenums="1" title="Table exists"}
-        >>> from toolbox_pyspark.checks import table_exists
+        ```{.py .python linenums="1" title="Example 1: Table exists"}
         >>> table_exists("test_df.parquet", "./test", "parquet", spark)
         ```
         <div class="result" markdown>
-        ```{.py .python}
+        ```{.sh .shell title="Terminal"}
         True
         ```
+        !!! success "Conclusion: Table exists."
         </div>
 
-        ```{.py .python linenums="1" title="Table does not exist"}
-        >>> from toolbox_pyspark.checks import table_exists
+        ```{.py .python linenums="1" title="Example 2: Table does not exist"}
         >>> table_exists("bad_table_name.parquet", "./test", "parquet", spark)
         ```
         <div class="result" markdown>
-        ```{.py .python}
+        ```{.sh .shell title="Terminal"}
         False
         ```
+        !!! failure "Conclusion: Table does not exist."
         </div>
 
     ???+ tip "See Also"
