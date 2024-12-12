@@ -49,6 +49,7 @@ nav:
   - Modules:
       - code/index.md
       - IO: code/io.md
+      - Checks: code/checks.md
 
 
 markdown_extensions:
