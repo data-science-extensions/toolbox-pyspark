@@ -94,8 +94,6 @@ def _validate_pyspark_datatype(datatype: Union[str, type, T.DataType]):
             datatype = eval(datatype)
         except NameError:
             datatype = T._parse_datatype_string(s=datatype)  # type:ignore
-        else:
-            pass
     if type(datatype).__name__ == "type":
         datatype = T._type_mappings.get(datatype)()  # type:ignore
     return datatype
