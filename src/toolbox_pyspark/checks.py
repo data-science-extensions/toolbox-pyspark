@@ -135,7 +135,7 @@ def column_exists(
 
     ???+ example "Examples"
 
-        ```{.py .python linenums="1", title="Set Up"}
+        ```{.py .python linenums="1" title="Set up"}
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
         >>> from toolbox_pyspark.checks import column_exists
@@ -205,7 +205,7 @@ def columns_exists(
 
     ???+ example "Examples"
 
-        ```{.py .python linenums="1" title="Set Up"}
+        ```{.py .python linenums="1" title="Set up"}
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
         >>> from toolbox_pyspark.checks import columns_exists
@@ -285,7 +285,7 @@ def assert_column_exists(
 
     ???+ example "Examples"
 
-        ```{.py .python linenums="1" title="Set Up"}
+        ```{.py .python linenums="1" title="Set up"}
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
         >>> from toolbox_pyspark.checks import assert_column_exists
@@ -360,7 +360,7 @@ def assert_columns_exists(
 
     ???+ example "Examples"
 
-        ```{.py .python linenums="1" title="Set Up"}
+        ```{.py .python linenums="1" title="Set up"}
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
         >>> from toolbox_pyspark.checks import assert_columns_exists
@@ -442,7 +442,7 @@ def is_vaid_spark_type(datatype: str) -> None:
 
     ???+ example "Examples"
 
-        ```{.py .python linenums="1" title="Set Up"}
+        ```{.py .python linenums="1" title="Set up"}
         >>> from toolbox_pyspark.checks import is_vaid_spark_type
         ```
 
