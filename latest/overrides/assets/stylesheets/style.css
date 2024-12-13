@@ -54,3 +54,25 @@ article div.doc-class {
 .md-typeset table:not([class]) td {
     padding: .2em .5em !important;
 }
+
+/* Two-column layout */
+.mdx-columns {
+    /* Column */
+    ol,
+    ul {
+      columns: 2;
+    }
+
+    /* Column item */
+    li {
+      break-inside: avoid;
+    }
+  }
+
+  /* Reset columns on mobile */
+  @media (max-width: 767px) {
+    .mdx-columns ol,
+    .mdx-columns ul {
+      columns: initial;
+    }
+  }

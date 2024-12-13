@@ -1,0 +1,3138 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Helper files/functions/classes for generic PySpark processes">
+      
+      
+        <meta name="author" content="[Chris Mahoney](mailto:chris@mahoneyconsultingservices.com)">
+      
+      
+      
+        <link rel="prev" href="../checks/">
+      
+      
+      
+      <link rel="icon" href="../../assets/images/spark.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.48">
+    
+    
+      
+        <title>Types - PySpark Toolbox</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6f8fc17f.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/style.css">
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/admonitions.css">
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/code_chunks.css">
+    
+      <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.4.2/css/all.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#toolbox_pyspark.types" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+          <aside class="md-banner md-banner--warning">
+            <div class="md-banner__inner md-grid md-typeset">
+              
+  You're not viewing the latest version.
+  <a href="../../..">
+    <strong>Click here to go to latest.</strong>
+  </a>
+
+            </div>
+            <script>var el=document.querySelector("[data-md-component=outdated]"),outdated=__md_get("__outdated",sessionStorage);!0===outdated&&el&&(el.hidden=!1)</script>
+          </aside>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="PySpark Toolbox" class="md-header__button md-logo" aria-label="PySpark Toolbox" data-md-component="logo">
+      
+  <img src="../../assets/images/spark.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            PySpark Toolbox
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Types
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/data-science-extensions/toolbox-pyspark" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m21.94 13.11-1.05-3.22c0-.03-.01-.06-.02-.09l-2.11-6.48a.86.86 0 0 0-.8-.57c-.36 0-.68.25-.79.58l-2 6.17H8.84L6.83 3.33a.85.85 0 0 0-.79-.58c-.37 0-.69.25-.8.58L3.13 9.82v.01l-1.07 3.28c-.16.5.01 1.04.44 1.34l9.22 6.71c.17.12.39.12.56-.01l9.22-6.7c.43-.3.6-.84.44-1.34M8.15 10.45l2.57 7.91-6.17-7.91m8.73 7.92 2.47-7.59.1-.33h3.61l-5.59 7.16m4.1-13.67 1.81 5.56h-3.62m-1.3.95-1.79 5.51L12 19.24l-2.86-8.79M6.03 3.94 7.84 9.5H4.23m-1.18 4.19c-.09-.07-.13-.19-.09-.29l.79-2.43 5.82 7.45m11.38-4.73-6.51 4.73.02-.03 5.79-7.42.79 2.43c.04.1 0 .22-.09.29"/></svg>
+  </div>
+  <div class="md-source__repository">
+    toolbox-pyspark
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../usage/overview/" class="md-tabs__link">
+          
+  
+    
+  
+  Usage
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+    
+  
+  Modules
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="PySpark Toolbox" class="md-nav__button md-logo" aria-label="PySpark Toolbox" data-md-component="logo">
+      
+  <img src="../../assets/images/spark.svg" alt="logo">
+
+    </a>
+    PySpark Toolbox
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/data-science-extensions/toolbox-pyspark" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m21.94 13.11-1.05-3.22c0-.03-.01-.06-.02-.09l-2.11-6.48a.86.86 0 0 0-.8-.57c-.36 0-.68.25-.79.58l-2 6.17H8.84L6.83 3.33a.85.85 0 0 0-.79-.58c-.37 0-.69.25-.8.58L3.13 9.82v.01l-1.07 3.28c-.16.5.01 1.04.44 1.34l9.22 6.71c.17.12.39.12.56-.01l9.22-6.7c.43-.3.6-.84.44-1.34M8.15 10.45l2.57 7.91-6.17-7.91m8.73 7.92 2.47-7.59.1-.33h3.61l-5.59 7.16m4.1-13.67 1.81 5.56h-3.62m-1.3.95-1.79 5.51L12 19.24l-2.86-8.79M6.03 3.94 7.84 9.5H4.23m-1.18 4.19c-.09-.07-.13-.19-.09-.29l.79-2.43 5.82 7.45m11.38-4.73-6.51 4.73.02-.03 5.79-7.42.79 2.43c.04.1 0 .22-.09.29"/></svg>
+  </div>
+  <div class="md-source__repository">
+    toolbox-pyspark
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Usage
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Usage
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/roadmap/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Roadmap
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Modules
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Modules
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../io/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    IO
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../checks/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Checks
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Types
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Types
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#toolbox_pyspark.types" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-module"></code>&nbsp;types
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#toolbox_pyspark.types.get_column_types" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;get_column_types
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toolbox_pyspark.types.cast_column_to_type" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;cast_column_to_type
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toolbox_pyspark.types.cast_columns_to_type" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;cast_columns_to_type
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toolbox_pyspark.types.map_cast_columns_to_type" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;map_cast_columns_to_type
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#toolbox_pyspark.types" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-module"></code>&nbsp;types
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#toolbox_pyspark.types.get_column_types" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;get_column_types
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toolbox_pyspark.types.cast_column_to_type" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;cast_column_to_type
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toolbox_pyspark.types.cast_columns_to_type" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;cast_columns_to_type
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toolbox_pyspark.types.map_cast_columns_to_type" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;map_cast_columns_to_type
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+    <a href="https://github.com/data-science-extensions/toolbox-pyspark/edit/main/docs/code/types.md" title="Edit this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/data-science-extensions/toolbox-pyspark/raw/main/docs/code/types.md" title="View source of this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
+    </a>
+  
+
+
+  <h1>Types</h1>
+
+<div class="doc doc-object doc-module">
+
+
+
+<h3 id="toolbox_pyspark.types" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-module"></code>            <span class="doc doc-object-name doc-module-name">toolbox_pyspark.types</span>
+
+
+<a href="#toolbox_pyspark.types" class="headerlink" title="Permanent link">🔗</a></h3>
+
+    <div class="doc doc-contents first">
+
+        <div class="admonition note">
+<p class="admonition-title">Summary</p>
+<p>The <code>types</code> module is used to get, check, and change a datafames column data types.</p>
+</div>
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="toolbox_pyspark.types.get_column_types" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <span class="doc doc-object-name doc-function-name">get_column_types</span>
+
+
+<a href="#toolbox_pyspark.types.get_column_types" class="headerlink" title="Permanent link">🔗</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">get_column_types</span><span class="p">(</span>
+    <span class="n">dataframe</span><span class="p">:</span> <span class="n">psDataFrame</span><span class="p">,</span> <span class="n">output_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;psDataFrame&quot;</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">psDataFrame</span><span class="p">,</span> <span class="n">pdDataFrame</span><span class="p">]</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <div class="admonition note">
+<p class="admonition-title">Summary</p>
+<p>This is a convenient function to return the data types from a given table as either a <code class="highlight"><span class="n">pyspark</span><span class="o">.</span><span class="n">sql</span><span class="o">.</span><span class="n">DataFrame</span></code> or <code class="highlight"><span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span></code>.</p>
+</div>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>dataframe</code>
+            </td>
+            <td>
+                  <code><span title="pyspark.sql.DataFrame">DataFrame</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The DataFrame to be checked.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>output_type</code>
+            </td>
+            <td>
+                  <code>str</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>How should the data be returned? As <code class="highlight"><span class="n">pdDataFrame</span></code> or <code class="highlight"><span class="n">psDataFrame</span></code>.</p>
+<p>For <code class="highlight"><span class="n">pandas</span></code>, use one of:</p>
+<div class="python highlight"><pre><span></span><code><span class="p">[</span>
+    <span class="s2">&quot;pandas&quot;</span><span class="p">,</span> <span class="s2">&quot;pandas.DataFrame&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;pd.df&quot;</span><span class="p">,</span>  <span class="s2">&quot;pd.DataFrame&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;pddf&quot;</span><span class="p">,</span>   <span class="s2">&quot;pdDataFrame&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;pd&quot;</span><span class="p">,</span>     <span class="s2">&quot;pdDF&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+</code></pre></div>
+</div>
+<p>For <code class="highlight"><span class="n">pyspark</span></code> use one of:</p>
+<div class="python highlight"><pre><span></span><code><span class="p">[</span>
+    <span class="s2">&quot;pyspark&quot;</span><span class="p">,</span> <span class="s2">&quot;spark.DataFrame&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;spark&quot;</span><span class="p">,</span>   <span class="s2">&quot;pyspark.DataFrame&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ps.df&quot;</span><span class="p">,</span>   <span class="s2">&quot;ps.DataFrame&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;psdf&quot;</span><span class="p">,</span>    <span class="s2">&quot;psDataFrame&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ps&quot;</span><span class="p">,</span>      <span class="s2">&quot;psDF&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+</code></pre></div>
+<p>Any other options are invalid.<br>
+Defaults to <code class="highlight"><span class="s2">&quot;psDataFrame&quot;</span></code>.</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;psDataFrame&#39;</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<p><span class="doc-section-title">Raises:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code>TypeError</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If any of the inputs parsed to the parameters of this function are not the correct type. Uses the <a href="https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked"><code>@typeguard.typechecked</code></a> decorator.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                  <code>AttributeError</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If the given value parsed to <code class="highlight"><span class="n">output_type</span></code> is not one of the given valid types.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="typing.Union">Union</span>[<span title="pyspark.sql.DataFrame">DataFrame</span>, <span title="pandas.DataFrame">DataFrame</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The DataFrame where each row represents a column on the original <code class="highlight"><span class="n">dataframe</span></code> object, and which has two columns:</p>
+<ol>
+<li>The column name from <code class="highlight"><span class="n">dataframe</span></code>; and</li>
+<li>The data type for that column in <code class="highlight"><span class="n">dataframe</span></code>.</li>
+</ol>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+        <details class="example" open="open">
+<summary>Examples</summary>
+<p><div class="python highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Set up</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="c1"># Imports</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">pyspark.sql</span> <span class="kn">import</span> <span class="n">SparkSession</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">toolbox_pyspark.types</span> <span class="kn">import</span> <span class="n">get_column_types</span>
+<span class="o">&gt;&gt;&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="c1"># Instantiate Spark</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">spark</span> <span class="o">=</span> <span class="n">SparkSession</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="c1"># Create data</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">createDataFrame</span><span class="p">(</span>
+<span class="o">...</span>     <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+<span class="o">...</span>         <span class="p">{</span>
+<span class="o">...</span>             <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+<span class="o">...</span>             <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="s2">&quot;d&quot;</span><span class="p">],</span>
+<span class="o">...</span>             <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+<span class="o">...</span>             <span class="s2">&quot;d&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">],</span>
+<span class="o">...</span>         <span class="p">}</span>
+<span class="o">...</span>     <span class="p">)</span>
+<span class="o">...</span> <span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="c1"># Check</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">dtypes</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+<div class="result" markdown>
+<div class="text highlight"><span class="filename">Terminal</span><pre><span></span><code>[
+    (&quot;a&quot;, &quot;bigint&quot;),
+    (&quot;b&quot;, &quot;string&quot;),
+    (&quot;c&quot;, &quot;bigint&quot;),
+    (&quot;d&quot;, &quot;string&quot;),
+]
+</code></pre></div>
+</div></p>
+<p><div class="python highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Example 1: Return PySpark</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">get_column_types</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+<div class="result" markdown>
+<div class="text highlight"><span class="filename">Terminal</span><pre><span></span><code>+----------+----------+
+| col_name | col_type |
++----------+----------+
+| a        | bigint   |
+| b        | string   |
+| c        | bigint   |
+| d        | string   |
++----------+----------+
+</code></pre></div></p>
+<div class="admonition success">
+<p class="admonition-title">Conclusion: Successfully print PySpark output.</p>
+</div>
+</div>
+<p><div class="python highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Example 2: Return Pandas</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">get_column_types</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="s2">&quot;pd&quot;</span><span class="p">))</span>
+</code></pre></div></td></tr></table></div>
+<div class="result" markdown>
+<div class="text highlight"><span class="filename">Terminal</span><pre><span></span><code>   col_name  col_type
+0         a    bigint
+1         b    string
+2         c    bigint
+3         d    string
+</code></pre></div></p>
+<div class="admonition success">
+<p class="admonition-title">Conclusion: Successfully print Pandas output.</p>
+</div>
+</div>
+<p><div class="python highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Example 3: Invalid output</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">get_column_types</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="s2">&quot;foo&quot;</span><span class="p">))</span>
+</code></pre></div></td></tr></table></div>
+<div class="result" markdown>
+<div class="text highlight"><span class="filename">Terminal</span><pre><span></span><code>AttributeError: Invalid value for `output_type`: &#39;foo&#39;.
+Must be one of: [&quot;pandas.DataFrame&quot;, &quot;pandas&quot;, &quot;pd.DataFrame&quot;, &quot;pd.df&quot;, &quot;pddf&quot;, &quot;pdDataFrame&quot;, &quot;pdDF&quot;, &quot;pd&quot;, &quot;spark.DataFrame&quot;, &quot;pyspark.DataFrame&quot;, &quot;pyspark&quot;, &quot;spark&quot;, &quot;ps.DataFrame&quot;, &quot;ps.df&quot;, &quot;psdf&quot;, &quot;psDataFrame&quot;, &quot;psDF&quot;, &quot;ps&quot;]
+</code></pre></div></p>
+<div class="admonition failure">
+<p class="admonition-title">Conclusion: Invalid input.</p>
+</div>
+</div>
+</details>
+
+            <details class="quote">
+              <summary>Source code in <code>src/toolbox_pyspark/types.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span>
+<span class="normal">240</span>
+<span class="normal">241</span>
+<span class="normal">242</span>
+<span class="normal">243</span>
+<span class="normal">244</span>
+<span class="normal">245</span>
+<span class="normal">246</span>
+<span class="normal">247</span>
+<span class="normal">248</span>
+<span class="normal">249</span>
+<span class="normal">250</span>
+<span class="normal">251</span>
+<span class="normal">252</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@typechecked</span>
+<span class="k">def</span> <span class="nf">get_column_types</span><span class="p">(</span>
+    <span class="n">dataframe</span><span class="p">:</span> <span class="n">psDataFrame</span><span class="p">,</span>
+    <span class="n">output_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;psDataFrame&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">psDataFrame</span><span class="p">,</span> <span class="n">pdDataFrame</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    !!! note &quot;Summary&quot;</span>
+<span class="sd">        This is a convenient function to return the data types from a given table as either a `#!py pyspark.sql.DataFrame` or `#!py pandas.DataFrame`.</span>
+
+<span class="sd">    Params:</span>
+<span class="sd">        dataframe (psDataFrame):</span>
+<span class="sd">            The DataFrame to be checked.</span>
+
+<span class="sd">        output_type (str, optional):</span>
+<span class="sd">            How should the data be returned? As `#!py pdDataFrame` or `#!py psDataFrame`.</span>
+
+<span class="sd">            For `#!py pandas`, use one of:</span>
+
+<span class="sd">            ```{.py .python}</span>
+<span class="sd">            [</span>
+<span class="sd">                &quot;pandas&quot;, &quot;pandas.DataFrame&quot;,</span>
+<span class="sd">                &quot;pd.df&quot;,  &quot;pd.DataFrame&quot;,</span>
+<span class="sd">                &quot;pddf&quot;,   &quot;pdDataFrame&quot;,</span>
+<span class="sd">                &quot;pd&quot;,     &quot;pdDF&quot;,</span>
+<span class="sd">            ]</span>
+<span class="sd">            ```</span>
+
+<span class="sd">            &lt;/div&gt;</span>
+
+<span class="sd">            For `#!py pyspark` use one of:</span>
+
+<span class="sd">            ```{.py .python}</span>
+<span class="sd">            [</span>
+<span class="sd">                &quot;pyspark&quot;, &quot;spark.DataFrame&quot;,</span>
+<span class="sd">                &quot;spark&quot;,   &quot;pyspark.DataFrame&quot;,</span>
+<span class="sd">                &quot;ps.df&quot;,   &quot;ps.DataFrame&quot;,</span>
+<span class="sd">                &quot;psdf&quot;,    &quot;psDataFrame&quot;,</span>
+<span class="sd">                &quot;ps&quot;,      &quot;psDF&quot;,</span>
+<span class="sd">            ]</span>
+<span class="sd">            ```</span>
+
+<span class="sd">            Any other options are invalid.&lt;br&gt;</span>
+<span class="sd">            Defaults to `#!py &quot;psDataFrame&quot;`.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        TypeError:</span>
+<span class="sd">            If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.</span>
+<span class="sd">        AttributeError:</span>
+<span class="sd">            If the given value parsed to `#!py output_type` is not one of the given valid types.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        (Union[psDataFrame, pdDataFrame]):</span>
+<span class="sd">            The DataFrame where each row represents a column on the original `#!py dataframe` object, and which has two columns:</span>
+
+<span class="sd">            1. The column name from `#!py dataframe`; and</span>
+<span class="sd">            2. The data type for that column in `#!py dataframe`.</span>
+
+<span class="sd">    ???+ example &quot;Examples&quot;</span>
+
+<span class="sd">        ```{.py .python linenums=&quot;1&quot; title=&quot;Set up&quot;}</span>
+<span class="sd">        &gt;&gt;&gt; # Imports</span>
+<span class="sd">        &gt;&gt;&gt; import pandas as pd</span>
+<span class="sd">        &gt;&gt;&gt; from pyspark.sql import SparkSession</span>
+<span class="sd">        &gt;&gt;&gt; from toolbox_pyspark.types import get_column_types</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; # Instantiate Spark</span>
+<span class="sd">        &gt;&gt;&gt; spark = SparkSession.builder.getOrCreate()</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; # Create data</span>
+<span class="sd">        &gt;&gt;&gt; df = spark.createDataFrame(</span>
+<span class="sd">        ...     pd.DataFrame(</span>
+<span class="sd">        ...         {</span>
+<span class="sd">        ...             &quot;a&quot;: [1, 2, 3, 4],</span>
+<span class="sd">        ...             &quot;b&quot;: [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;],</span>
+<span class="sd">        ...             &quot;c&quot;: [1, 1, 1, 1],</span>
+<span class="sd">        ...             &quot;d&quot;: [&quot;2&quot;, &quot;2&quot;, &quot;2&quot;, &quot;2&quot;],</span>
+<span class="sd">        ...         }</span>
+<span class="sd">        ...     )</span>
+<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; # Check</span>
+<span class="sd">        &gt;&gt;&gt; print(df.dtypes)</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;div class=&quot;result&quot; markdown&gt;</span>
+<span class="sd">        ```{.txt .text title=&quot;Terminal&quot;}</span>
+<span class="sd">        [</span>
+<span class="sd">            (&quot;a&quot;, &quot;bigint&quot;),</span>
+<span class="sd">            (&quot;b&quot;, &quot;string&quot;),</span>
+<span class="sd">            (&quot;c&quot;, &quot;bigint&quot;),</span>
+<span class="sd">            (&quot;d&quot;, &quot;string&quot;),</span>
+<span class="sd">        ]</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;/div&gt;</span>
+
+<span class="sd">        ```{.py .python linenums=&quot;1&quot; title=&quot;Example 1: Return PySpark&quot;}</span>
+<span class="sd">        &gt;&gt;&gt; get_column_types(df).show()</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;div class=&quot;result&quot; markdown&gt;</span>
+<span class="sd">        ```{.txt .text title=&quot;Terminal&quot;}</span>
+<span class="sd">        +----------+----------+</span>
+<span class="sd">        | col_name | col_type |</span>
+<span class="sd">        +----------+----------+</span>
+<span class="sd">        | a        | bigint   |</span>
+<span class="sd">        | b        | string   |</span>
+<span class="sd">        | c        | bigint   |</span>
+<span class="sd">        | d        | string   |</span>
+<span class="sd">        +----------+----------+</span>
+<span class="sd">        ```</span>
+<span class="sd">        !!! success &quot;Conclusion: Successfully print PySpark output.&quot;</span>
+<span class="sd">        &lt;/div&gt;</span>
+
+<span class="sd">        ```{.py .python linenums=&quot;1&quot; title=&quot;Example 2: Return Pandas&quot;}</span>
+<span class="sd">        &gt;&gt;&gt; print(get_column_types(df, &quot;pd&quot;))</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;div class=&quot;result&quot; markdown&gt;</span>
+<span class="sd">        ```{.txt .text title=&quot;Terminal&quot;}</span>
+<span class="sd">           col_name  col_type</span>
+<span class="sd">        0         a    bigint</span>
+<span class="sd">        1         b    string</span>
+<span class="sd">        2         c    bigint</span>
+<span class="sd">        3         d    string</span>
+<span class="sd">        ```</span>
+<span class="sd">        !!! success &quot;Conclusion: Successfully print Pandas output.&quot;</span>
+<span class="sd">        &lt;/div&gt;</span>
+
+<span class="sd">        ```{.py .python linenums=&quot;1&quot; title=&quot;Example 3: Invalid output&quot;}</span>
+<span class="sd">        &gt;&gt;&gt; print(get_column_types(df, &quot;foo&quot;))</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;div class=&quot;result&quot; markdown&gt;</span>
+<span class="sd">        ```{.txt .text title=&quot;Terminal&quot;}</span>
+<span class="sd">        AttributeError: Invalid value for `output_type`: &#39;foo&#39;.</span>
+<span class="sd">        Must be one of: [&quot;pandas.DataFrame&quot;, &quot;pandas&quot;, &quot;pd.DataFrame&quot;, &quot;pd.df&quot;, &quot;pddf&quot;, &quot;pdDataFrame&quot;, &quot;pdDF&quot;, &quot;pd&quot;, &quot;spark.DataFrame&quot;, &quot;pyspark.DataFrame&quot;, &quot;pyspark&quot;, &quot;spark&quot;, &quot;ps.DataFrame&quot;, &quot;ps.df&quot;, &quot;psdf&quot;, &quot;psDataFrame&quot;, &quot;psDF&quot;, &quot;ps&quot;]</span>
+<span class="sd">        ```</span>
+<span class="sd">        !!! failure &quot;Conclusion: Invalid input.&quot;</span>
+<span class="sd">        &lt;/div&gt;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">output_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">VALID_DATAFRAME_NAMES</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Invalid value for `output_type`: &#39;</span><span class="si">{</span><span class="n">output_type</span><span class="si">}</span><span class="s2">&#39;.</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Must be one of: </span><span class="si">{</span><span class="n">VALID_DATAFRAME_NAMES</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dataframe</span><span class="o">.</span><span class="n">dtypes</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;col_name&quot;</span><span class="p">,</span> <span class="s2">&quot;col_type&quot;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">output_type</span> <span class="ow">in</span> <span class="n">VALID_PYSPARK_DATAFRAME_NAMES</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">sparkSession</span><span class="o">.</span><span class="n">createDataFrame</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">output</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="toolbox_pyspark.types.cast_column_to_type" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <span class="doc doc-object-name doc-function-name">cast_column_to_type</span>
+
+
+<a href="#toolbox_pyspark.types.cast_column_to_type" class="headerlink" title="Permanent link">🔗</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">cast_column_to_type</span><span class="p">(</span>
+    <span class="n">dataframe</span><span class="p">:</span> <span class="n">psDataFrame</span><span class="p">,</span>
+    <span class="n">column</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">datatype</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">DataType</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">psDataFrame</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <div class="admonition note">
+<p class="admonition-title">Summary</p>
+<p>This is a convenience function for casting a single column on a given table to another data type.</p>
+</div>
+<details class="abstract" open="open">
+<summary>Details</summary>
+<p>At it's core, it will call the function like this:</p>
+<div class="python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">dataframe</span> <span class="o">=</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="n">column</span><span class="p">,</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">column</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">datatype</span><span class="p">))</span>
+</code></pre></div></td></tr></table></div>
+<p>The reason for wrapping it up in this function is for validation of a columns existence and convenient re-declaration of the same.</p>
+</details>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>dataframe</code>
+            </td>
+            <td>
+                  <code><span title="pyspark.sql.DataFrame">DataFrame</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The DataFrame to be updated.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>column</code>
+            </td>
+            <td>
+                  <code>str</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The column to be updated.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>datatype</code>
+            </td>
+            <td>
+                  <code><span title="typing.Union">Union</span>[str, type, <span title="pyspark.sql.types.DataType">DataType</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The datatype to be cast to.
+Must be a valid <code class="highlight"><span class="n">pyspark</span></code> DataType.</p>
+<p>Use one of the following:
+<div class="python highlight"><pre><span></span><code><span class="p">[</span>
+    <span class="s2">&quot;string&quot;</span><span class="p">,</span>  <span class="s2">&quot;char&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;varchar&quot;</span><span class="p">,</span> <span class="s2">&quot;binary&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;boolean&quot;</span><span class="p">,</span> <span class="s2">&quot;decimal&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;float&quot;</span><span class="p">,</span>   <span class="s2">&quot;double&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;byte&quot;</span><span class="p">,</span>    <span class="s2">&quot;short&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;integer&quot;</span><span class="p">,</span> <span class="s2">&quot;long&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;date&quot;</span><span class="p">,</span>    <span class="s2">&quot;timestamp&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;void&quot;</span><span class="p">,</span>    <span class="s2">&quot;timestamp_ntz&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+</code></pre></div></p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<p><span class="doc-section-title">Raises:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code>TypeError</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If any of the inputs parsed to the parameters of this function are not the correct type. Uses the <a href="https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked"><code>@typeguard.typechecked</code></a> decorator.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                  <code>AttributeError</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If <code class="highlight"><span class="n">column</span></code> does not exist within <code class="highlight"><span class="n">dataframe</span><span class="o">.</span><span class="n">columns</span></code>.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                  <code>ParseException</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If the given <code class="highlight"><span class="n">datatype</span></code> is not a valid PySpark DataType.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="pyspark.sql.DataFrame">DataFrame</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The updated DataFrame.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+        <details class="example" open="open">
+<summary>Examples</summary>
+<p><div class="python highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Set up</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="c1"># Imports</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">pyspark.sql</span> <span class="kn">import</span> <span class="n">SparkSession</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">toolbox_pyspark.types</span> <span class="kn">import</span> <span class="n">cast_column_to_type</span><span class="p">,</span> <span class="n">get_column_types</span>
+<span class="o">&gt;&gt;&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="c1"># Instantiate Spark</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">spark</span> <span class="o">=</span> <span class="n">SparkSession</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="c1"># Create data</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">createDataFrame</span><span class="p">(</span>
+<span class="o">...</span>     <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+<span class="o">...</span>         <span class="p">{</span>
+<span class="o">...</span>             <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+<span class="o">...</span>             <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="s2">&quot;d&quot;</span><span class="p">],</span>
+<span class="o">...</span>             <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+<span class="o">...</span>             <span class="s2">&quot;d&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">],</span>
+<span class="o">...</span>         <span class="p">}</span>
+<span class="o">...</span>     <span class="p">)</span>
+<span class="o">...</span> <span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="c1"># Check</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">get_column_types</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+<div class="result" markdown>
+<div class="text highlight"><span class="filename">Terminal</span><pre><span></span><code>+----------+----------+
+| col_name | col_type |
++----------+----------+
+| a        | bigint   |
+| b        | string   |
+| c        | bigint   |
+| d        | string   |
++----------+----------+
+</code></pre></div>
+</div></p>
+<p><div class="python highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Example 1: Valid casting</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">df</span> <span class="o">=</span> <span class="n">cast_column_to_type</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;string&#39;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">get_column_types</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+<div class="result" markdown>
+<div class="text highlight"><span class="filename">Terminal</span><pre><span></span><code>+----------+----------+
+| col_name | col_type |
++----------+----------+
+| a        | string   |
+| b        | string   |
+| c        | bigint   |
+| d        | string   |
++----------+----------+
+</code></pre></div></p>
+<div class="admonition success">
+<p class="admonition-title">Conclusion: Successfully cast column to type.</p>
+</div>
+</div>
+<p><div class="python highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Example 2: Invalid column</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">df</span> <span class="o">=</span> <span class="n">cast_column_to_type</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;string&#39;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+<div class="result" markdown>
+<div class="text highlight"><span class="filename">Terminal</span><pre><span></span><code>AttributeError: Column &#39;x&#39; does not exist in DataFrame.
+Try one of: [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;].
+</code></pre></div></p>
+<div class="admonition failure">
+<p class="admonition-title">Conclusion: Column <code>x</code> does not exist as a valid column.</p>
+</div>
+</div>
+<p><div class="python highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Example 3: Invalid datatype</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">df</span> <span class="o">=</span> <span class="n">cast_column_to_type</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+<div class="result" markdown>
+<div class="text highlight"><span class="filename">Terminal</span><pre><span></span><code>ParseException: DataType &#39;foo&#39; is not supported.
+</code></pre></div></p>
+<div class="admonition failure">
+<p class="admonition-title">Conclusion: Datatype <code>foo</code> is not valid.</p>
+</div>
+</div>
+</details>
+<details class="tip">
+<summary>See Also</summary>
+<ul>
+<li><a class="autorefs autorefs-internal" href="../checks/#toolbox_pyspark.checks.column_exists"><code>assert_column_exists()</code></a></li>
+<li><a class="autorefs autorefs-internal" href="../checks/#toolbox_pyspark.checks.is_vaid_spark_type"><code>is_vaid_spark_type()</code></a></li>
+<li><a class="autorefs autorefs-internal" href="#toolbox_pyspark.types.get_column_types"><code>get_column_types()</code></a></li>
+</ul>
+</details>
+
+            <details class="quote">
+              <summary>Source code in <code>src/toolbox_pyspark/types.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">255</span>
+<span class="normal">256</span>
+<span class="normal">257</span>
+<span class="normal">258</span>
+<span class="normal">259</span>
+<span class="normal">260</span>
+<span class="normal">261</span>
+<span class="normal">262</span>
+<span class="normal">263</span>
+<span class="normal">264</span>
+<span class="normal">265</span>
+<span class="normal">266</span>
+<span class="normal">267</span>
+<span class="normal">268</span>
+<span class="normal">269</span>
+<span class="normal">270</span>
+<span class="normal">271</span>
+<span class="normal">272</span>
+<span class="normal">273</span>
+<span class="normal">274</span>
+<span class="normal">275</span>
+<span class="normal">276</span>
+<span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span>
+<span class="normal">280</span>
+<span class="normal">281</span>
+<span class="normal">282</span>
+<span class="normal">283</span>
+<span class="normal">284</span>
+<span class="normal">285</span>
+<span class="normal">286</span>
+<span class="normal">287</span>
+<span class="normal">288</span>
+<span class="normal">289</span>
+<span class="normal">290</span>
+<span class="normal">291</span>
+<span class="normal">292</span>
+<span class="normal">293</span>
+<span class="normal">294</span>
+<span class="normal">295</span>
+<span class="normal">296</span>
+<span class="normal">297</span>
+<span class="normal">298</span>
+<span class="normal">299</span>
+<span class="normal">300</span>
+<span class="normal">301</span>
+<span class="normal">302</span>
+<span class="normal">303</span>
+<span class="normal">304</span>
+<span class="normal">305</span>
+<span class="normal">306</span>
+<span class="normal">307</span>
+<span class="normal">308</span>
+<span class="normal">309</span>
+<span class="normal">310</span>
+<span class="normal">311</span>
+<span class="normal">312</span>
+<span class="normal">313</span>
+<span class="normal">314</span>
+<span class="normal">315</span>
+<span class="normal">316</span>
+<span class="normal">317</span>
+<span class="normal">318</span>
+<span class="normal">319</span>
+<span class="normal">320</span>
+<span class="normal">321</span>
+<span class="normal">322</span>
+<span class="normal">323</span>
+<span class="normal">324</span>
+<span class="normal">325</span>
+<span class="normal">326</span>
+<span class="normal">327</span>
+<span class="normal">328</span>
+<span class="normal">329</span>
+<span class="normal">330</span>
+<span class="normal">331</span>
+<span class="normal">332</span>
+<span class="normal">333</span>
+<span class="normal">334</span>
+<span class="normal">335</span>
+<span class="normal">336</span>
+<span class="normal">337</span>
+<span class="normal">338</span>
+<span class="normal">339</span>
+<span class="normal">340</span>
+<span class="normal">341</span>
+<span class="normal">342</span>
+<span class="normal">343</span>
+<span class="normal">344</span>
+<span class="normal">345</span>
+<span class="normal">346</span>
+<span class="normal">347</span>
+<span class="normal">348</span>
+<span class="normal">349</span>
+<span class="normal">350</span>
+<span class="normal">351</span>
+<span class="normal">352</span>
+<span class="normal">353</span>
+<span class="normal">354</span>
+<span class="normal">355</span>
+<span class="normal">356</span>
+<span class="normal">357</span>
+<span class="normal">358</span>
+<span class="normal">359</span>
+<span class="normal">360</span>
+<span class="normal">361</span>
+<span class="normal">362</span>
+<span class="normal">363</span>
+<span class="normal">364</span>
+<span class="normal">365</span>
+<span class="normal">366</span>
+<span class="normal">367</span>
+<span class="normal">368</span>
+<span class="normal">369</span>
+<span class="normal">370</span>
+<span class="normal">371</span>
+<span class="normal">372</span>
+<span class="normal">373</span>
+<span class="normal">374</span>
+<span class="normal">375</span>
+<span class="normal">376</span>
+<span class="normal">377</span>
+<span class="normal">378</span>
+<span class="normal">379</span>
+<span class="normal">380</span>
+<span class="normal">381</span>
+<span class="normal">382</span>
+<span class="normal">383</span>
+<span class="normal">384</span>
+<span class="normal">385</span>
+<span class="normal">386</span>
+<span class="normal">387</span>
+<span class="normal">388</span>
+<span class="normal">389</span>
+<span class="normal">390</span>
+<span class="normal">391</span>
+<span class="normal">392</span>
+<span class="normal">393</span>
+<span class="normal">394</span>
+<span class="normal">395</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@typechecked</span>
+<span class="k">def</span> <span class="nf">cast_column_to_type</span><span class="p">(</span>
+    <span class="n">dataframe</span><span class="p">:</span> <span class="n">psDataFrame</span><span class="p">,</span>
+    <span class="n">column</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">datatype</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">DataType</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">psDataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    !!! note &quot;Summary&quot;</span>
+<span class="sd">        This is a convenience function for casting a single column on a given table to another data type.</span>
+
+<span class="sd">    ???+ abstract &quot;Details&quot;</span>
+
+<span class="sd">        At it&#39;s core, it will call the function like this:</span>
+
+<span class="sd">        ```{.py .python linenums=&quot;1&quot;}</span>
+<span class="sd">        dataframe = dataframe.withColumn(column, F.col(column).cast(datatype))</span>
+<span class="sd">        ```</span>
+
+<span class="sd">        The reason for wrapping it up in this function is for validation of a columns existence and convenient re-declaration of the same.</span>
+
+<span class="sd">    Params:</span>
+<span class="sd">        dataframe (psDataFrame):</span>
+<span class="sd">            The DataFrame to be updated.</span>
+<span class="sd">        column (str):</span>
+<span class="sd">            The column to be updated.</span>
+<span class="sd">        datatype (Union[str, type, T.DataType]):</span>
+<span class="sd">            The datatype to be cast to.</span>
+<span class="sd">            Must be a valid `#!py pyspark` DataType.</span>
+
+<span class="sd">            Use one of the following:</span>
+<span class="sd">            ```{.py .python}</span>
+<span class="sd">            [</span>
+<span class="sd">                &quot;string&quot;,  &quot;char&quot;,</span>
+<span class="sd">                &quot;varchar&quot;, &quot;binary&quot;,</span>
+<span class="sd">                &quot;boolean&quot;, &quot;decimal&quot;,</span>
+<span class="sd">                &quot;float&quot;,   &quot;double&quot;,</span>
+<span class="sd">                &quot;byte&quot;,    &quot;short&quot;,</span>
+<span class="sd">                &quot;integer&quot;, &quot;long&quot;,</span>
+<span class="sd">                &quot;date&quot;,    &quot;timestamp&quot;,</span>
+<span class="sd">                &quot;void&quot;,    &quot;timestamp_ntz&quot;,</span>
+<span class="sd">            ]</span>
+<span class="sd">            ```</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        TypeError:</span>
+<span class="sd">            If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.</span>
+<span class="sd">        AttributeError:</span>
+<span class="sd">            If `#!py column` does not exist within `#!py dataframe.columns`.</span>
+<span class="sd">        ParseException:</span>
+<span class="sd">            If the given `#!py datatype` is not a valid PySpark DataType.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        (psDataFrame):</span>
+<span class="sd">            The updated DataFrame.</span>
+
+<span class="sd">    ???+ example &quot;Examples&quot;</span>
+
+<span class="sd">        ```{.py .python linenums=&quot;1&quot; title=&quot;Set up&quot;}</span>
+<span class="sd">        &gt;&gt;&gt; # Imports</span>
+<span class="sd">        &gt;&gt;&gt; import pandas as pd</span>
+<span class="sd">        &gt;&gt;&gt; from pyspark.sql import SparkSession</span>
+<span class="sd">        &gt;&gt;&gt; from toolbox_pyspark.types import cast_column_to_type, get_column_types</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; # Instantiate Spark</span>
+<span class="sd">        &gt;&gt;&gt; spark = SparkSession.builder.getOrCreate()</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; # Create data</span>
+<span class="sd">        &gt;&gt;&gt; df = spark.createDataFrame(</span>
+<span class="sd">        ...     pd.DataFrame(</span>
+<span class="sd">        ...         {</span>
+<span class="sd">        ...             &quot;a&quot;: [1, 2, 3, 4],</span>
+<span class="sd">        ...             &quot;b&quot;: [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;],</span>
+<span class="sd">        ...             &quot;c&quot;: [1, 1, 1, 1],</span>
+<span class="sd">        ...             &quot;d&quot;: [&quot;2&quot;, &quot;2&quot;, &quot;2&quot;, &quot;2&quot;],</span>
+<span class="sd">        ...         }</span>
+<span class="sd">        ...     )</span>
+<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; # Check</span>
+<span class="sd">        &gt;&gt;&gt; get_column_types(df).show()</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;div class=&quot;result&quot; markdown&gt;</span>
+<span class="sd">        ```{.txt .text title=&quot;Terminal&quot;}</span>
+<span class="sd">        +----------+----------+</span>
+<span class="sd">        | col_name | col_type |</span>
+<span class="sd">        +----------+----------+</span>
+<span class="sd">        | a        | bigint   |</span>
+<span class="sd">        | b        | string   |</span>
+<span class="sd">        | c        | bigint   |</span>
+<span class="sd">        | d        | string   |</span>
+<span class="sd">        +----------+----------+</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;/div&gt;</span>
+
+<span class="sd">        ```{.py .python linenums=&quot;1&quot; title=&quot;Example 1: Valid casting&quot;}</span>
+<span class="sd">        &gt;&gt;&gt; df = cast_column_to_type(df, &#39;a&#39;, &#39;string&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; get_column_types(df).show()</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;div class=&quot;result&quot; markdown&gt;</span>
+<span class="sd">        ```{.txt .text title=&quot;Terminal&quot;}</span>
+<span class="sd">        +----------+----------+</span>
+<span class="sd">        | col_name | col_type |</span>
+<span class="sd">        +----------+----------+</span>
+<span class="sd">        | a        | string   |</span>
+<span class="sd">        | b        | string   |</span>
+<span class="sd">        | c        | bigint   |</span>
+<span class="sd">        | d        | string   |</span>
+<span class="sd">        +----------+----------+</span>
+<span class="sd">        ```</span>
+<span class="sd">        !!! success &quot;Conclusion: Successfully cast column to type.&quot;</span>
+<span class="sd">        &lt;/div&gt;</span>
+
+<span class="sd">        ```{.py .python linenums=&quot;1&quot; title=&quot;Example 2: Invalid column&quot;}</span>
+<span class="sd">        &gt;&gt;&gt; df = cast_column_to_type(df, &#39;x&#39;, &#39;string&#39;)</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;div class=&quot;result&quot; markdown&gt;</span>
+<span class="sd">        ```{.txt .text title=&quot;Terminal&quot;}</span>
+<span class="sd">        AttributeError: Column &#39;x&#39; does not exist in DataFrame.</span>
+<span class="sd">        Try one of: [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;].</span>
+<span class="sd">        ```</span>
+<span class="sd">        !!! failure &quot;Conclusion: Column `x` does not exist as a valid column.&quot;</span>
+<span class="sd">        &lt;/div&gt;</span>
+
+<span class="sd">        ```{.py .python linenums=&quot;1&quot; title=&quot;Example 3: Invalid datatype&quot;}</span>
+<span class="sd">        &gt;&gt;&gt; df = cast_column_to_type(df, &#39;b&#39;, &#39;foo&#39;)</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;div class=&quot;result&quot; markdown&gt;</span>
+<span class="sd">        ```{.txt .text title=&quot;Terminal&quot;}</span>
+<span class="sd">        ParseException: DataType &#39;foo&#39; is not supported.</span>
+<span class="sd">        ```</span>
+<span class="sd">        !!! failure &quot;Conclusion: Datatype `foo` is not valid.&quot;</span>
+<span class="sd">        &lt;/div&gt;</span>
+
+<span class="sd">    ??? tip &quot;See Also&quot;</span>
+<span class="sd">        - [`assert_column_exists()`][toolbox_pyspark.checks.column_exists]</span>
+<span class="sd">        - [`is_vaid_spark_type()`][toolbox_pyspark.checks.is_vaid_spark_type]</span>
+<span class="sd">        - [`get_column_types()`][toolbox_pyspark.types.get_column_types]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">assert_column_exists</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">column</span><span class="p">)</span>
+    <span class="n">datatype</span> <span class="o">=</span> <span class="n">_validate_pyspark_datatype</span><span class="p">(</span><span class="n">datatype</span><span class="o">=</span><span class="n">datatype</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="n">column</span><span class="p">,</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">column</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">datatype</span><span class="p">))</span>  <span class="c1"># type:ignore</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="toolbox_pyspark.types.cast_columns_to_type" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <span class="doc doc-object-name doc-function-name">cast_columns_to_type</span>
+
+
+<a href="#toolbox_pyspark.types.cast_columns_to_type" class="headerlink" title="Permanent link">🔗</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">cast_columns_to_type</span><span class="p">(</span>
+    <span class="n">dataframe</span><span class="p">:</span> <span class="n">psDataFrame</span><span class="p">,</span>
+    <span class="n">columns</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">str_list</span><span class="p">],</span>
+    <span class="n">datatype</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">DataType</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">psDataFrame</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <div class="admonition note">
+<p class="admonition-title">Summary</p>
+<p>Cast multiple columns to a given type.</p>
+</div>
+<details class="abstract" open="open">
+<summary>Details</summary>
+<p>An extension of <a class="autorefs autorefs-internal" href="#toolbox_pyspark.types.cast_column_to_type"><code class="highlight"><span class="n">cast_column_to_type</span><span class="p">()</span></code></a> to allow casting of multiple columns simultaneously.</p>
+</details>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>dataframe</code>
+            </td>
+            <td>
+                  <code><span title="pyspark.sql.DataFrame">DataFrame</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The DataFrame to be updated.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>columns</code>
+            </td>
+            <td>
+                  <code><span title="typing.Union">Union</span>[str, <span title="toolbox_python.collection_types.str_list">str_list</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The list of columns to be updated. They all must be valid columns existing on <code class="highlight"><span class="n">DataFrame</span></code>.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>datatype</code>
+            </td>
+            <td>
+                  <code><span title="typing.Union">Union</span>[str, type, <span title="pyspark.sql.types.DataType">DataType</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The datatype to be cast to.
+Must be a valid PySpark DataType.</p>
+<p>Use one of the following:
+    <div class="python highlight"><pre><span></span><code><span class="p">[</span>
+    <span class="s2">&quot;string&quot;</span><span class="p">,</span>  <span class="s2">&quot;char&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;varchar&quot;</span><span class="p">,</span> <span class="s2">&quot;binary&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;boolean&quot;</span><span class="p">,</span> <span class="s2">&quot;decimal&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;float&quot;</span><span class="p">,</span>   <span class="s2">&quot;double&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;byte&quot;</span><span class="p">,</span>    <span class="s2">&quot;short&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;integer&quot;</span><span class="p">,</span> <span class="s2">&quot;long&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;date&quot;</span><span class="p">,</span>    <span class="s2">&quot;timestamp&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;void&quot;</span><span class="p">,</span>    <span class="s2">&quot;timestamp_ntz&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+</code></pre></div></p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<p><span class="doc-section-title">Raises:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code>TypeError</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If any of the inputs parsed to the parameters of this function are not the correct type. Uses the <a href="https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked"><code>@typeguard.typechecked</code></a> decorator.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="pyspark.sql.DataFrame">DataFrame</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The updated DataFrame.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+        <details class="example" open="open">
+<summary>Examples</summary>
+<p><div class="python highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Set up</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="c1"># Imports</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">pyspark.sql</span> <span class="kn">import</span> <span class="n">SparkSession</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">toolbox_pyspark.types</span> <span class="kn">import</span> <span class="n">cast_column_to_type</span><span class="p">,</span> <span class="n">get_column_types</span>
+<span class="o">&gt;&gt;&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="c1"># Instantiate Spark</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">spark</span> <span class="o">=</span> <span class="n">SparkSession</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="c1"># Create data</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">createDataFrame</span><span class="p">(</span>
+<span class="o">...</span>     <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+<span class="o">...</span>         <span class="p">{</span>
+<span class="o">...</span>             <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+<span class="o">...</span>             <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="s2">&quot;d&quot;</span><span class="p">],</span>
+<span class="o">...</span>             <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+<span class="o">...</span>             <span class="s2">&quot;d&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">],</span>
+<span class="o">...</span>         <span class="p">}</span>
+<span class="o">...</span>     <span class="p">)</span>
+<span class="o">...</span> <span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="c1"># Check</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">get_column_types</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+<div class="result" markdown>
+<div class="text highlight"><span class="filename">Terminal</span><pre><span></span><code>+----------+----------+
+| col_name | col_type |
++----------+----------+
+| a        | bigint   |
+| b        | string   |
+| c        | bigint   |
+| d        | string   |
++----------+----------+
+</code></pre></div>
+</div></p>
+<p><div class="python highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Example 1: Basic usage</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">df</span> <span class="o">=</span> <span class="n">cast_column_to_type</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">],</span> <span class="s1">&#39;string&#39;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">get_column_types</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+<div class="result" markdown>
+<div class="text highlight"><span class="filename">Terminal</span><pre><span></span><code>+----------+----------+
+| col_name | col_type |
++----------+----------+
+| a        | string   |
+| b        | string   |
+| c        | bigint   |
+| d        | bigint   |
++----------+----------+
+</code></pre></div>
+</div></p>
+<p><div class="python highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Example 2: Multiple columns</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">df</span> <span class="o">=</span> <span class="n">cast_column_to_type</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">],</span> <span class="s1">&#39;string&#39;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">get_column_types</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+<div class="result" markdown>
+<div class="text highlight"><span class="filename">Terminal</span><pre><span></span><code>+----------+----------+
+| col_name | col_type |
++----------+----------+
+| a        | string   |
+| b        | string   |
+| c        | string   |
+| d        | string   |
++----------+----------+
+</code></pre></div>
+</div></p>
+<p><div class="python highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Example 3: Invalid column</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">df</span> <span class="o">=</span> <span class="n">cast_columns_to_type</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="s1">&#39;string&#39;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+<div class="result" markdown>
+<div class="text highlight"><span class="filename">Terminal</span><pre><span></span><code>AttributeError: Columns [&#39;x&#39;, &#39;y&#39;] do not exist in DataFrame.
+Try one of: [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;].
+</code></pre></div></p>
+<div class="admonition failure">
+<p class="admonition-title">Conclusion: Columns [<code>x</code>] does not exist as a valid column.</p>
+</div>
+</div>
+<p><div class="python highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Example 4: Invalid datatype</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">df</span> <span class="o">=</span> <span class="n">cast_columns_to_type</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">],</span> <span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+<div class="result" markdown>
+<div class="text highlight"><span class="filename">Terminal</span><pre><span></span><code>ParseException: DataType &#39;foo&#39; is not supported.
+</code></pre></div></p>
+<div class="admonition failure">
+<p class="admonition-title">Conclusion: Datatype <code>foo</code> is not valid.</p>
+</div>
+</div>
+</details>
+<details class="tip">
+<summary>See Also</summary>
+<ul>
+<li><a class="autorefs autorefs-internal" href="../checks/#toolbox_pyspark.checks.assert_columns_exists"><code>assert_columns_exists()</code></a></li>
+<li><a class="autorefs autorefs-internal" href="../checks/#toolbox_pyspark.checks.is_vaid_spark_type"><code>is_vaid_spark_type()</code></a></li>
+<li><a class="autorefs autorefs-internal" href="#toolbox_pyspark.types.get_column_types"><code>get_column_types()</code></a></li>
+</ul>
+</details>
+
+            <details class="quote">
+              <summary>Source code in <code>src/toolbox_pyspark/types.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">398</span>
+<span class="normal">399</span>
+<span class="normal">400</span>
+<span class="normal">401</span>
+<span class="normal">402</span>
+<span class="normal">403</span>
+<span class="normal">404</span>
+<span class="normal">405</span>
+<span class="normal">406</span>
+<span class="normal">407</span>
+<span class="normal">408</span>
+<span class="normal">409</span>
+<span class="normal">410</span>
+<span class="normal">411</span>
+<span class="normal">412</span>
+<span class="normal">413</span>
+<span class="normal">414</span>
+<span class="normal">415</span>
+<span class="normal">416</span>
+<span class="normal">417</span>
+<span class="normal">418</span>
+<span class="normal">419</span>
+<span class="normal">420</span>
+<span class="normal">421</span>
+<span class="normal">422</span>
+<span class="normal">423</span>
+<span class="normal">424</span>
+<span class="normal">425</span>
+<span class="normal">426</span>
+<span class="normal">427</span>
+<span class="normal">428</span>
+<span class="normal">429</span>
+<span class="normal">430</span>
+<span class="normal">431</span>
+<span class="normal">432</span>
+<span class="normal">433</span>
+<span class="normal">434</span>
+<span class="normal">435</span>
+<span class="normal">436</span>
+<span class="normal">437</span>
+<span class="normal">438</span>
+<span class="normal">439</span>
+<span class="normal">440</span>
+<span class="normal">441</span>
+<span class="normal">442</span>
+<span class="normal">443</span>
+<span class="normal">444</span>
+<span class="normal">445</span>
+<span class="normal">446</span>
+<span class="normal">447</span>
+<span class="normal">448</span>
+<span class="normal">449</span>
+<span class="normal">450</span>
+<span class="normal">451</span>
+<span class="normal">452</span>
+<span class="normal">453</span>
+<span class="normal">454</span>
+<span class="normal">455</span>
+<span class="normal">456</span>
+<span class="normal">457</span>
+<span class="normal">458</span>
+<span class="normal">459</span>
+<span class="normal">460</span>
+<span class="normal">461</span>
+<span class="normal">462</span>
+<span class="normal">463</span>
+<span class="normal">464</span>
+<span class="normal">465</span>
+<span class="normal">466</span>
+<span class="normal">467</span>
+<span class="normal">468</span>
+<span class="normal">469</span>
+<span class="normal">470</span>
+<span class="normal">471</span>
+<span class="normal">472</span>
+<span class="normal">473</span>
+<span class="normal">474</span>
+<span class="normal">475</span>
+<span class="normal">476</span>
+<span class="normal">477</span>
+<span class="normal">478</span>
+<span class="normal">479</span>
+<span class="normal">480</span>
+<span class="normal">481</span>
+<span class="normal">482</span>
+<span class="normal">483</span>
+<span class="normal">484</span>
+<span class="normal">485</span>
+<span class="normal">486</span>
+<span class="normal">487</span>
+<span class="normal">488</span>
+<span class="normal">489</span>
+<span class="normal">490</span>
+<span class="normal">491</span>
+<span class="normal">492</span>
+<span class="normal">493</span>
+<span class="normal">494</span>
+<span class="normal">495</span>
+<span class="normal">496</span>
+<span class="normal">497</span>
+<span class="normal">498</span>
+<span class="normal">499</span>
+<span class="normal">500</span>
+<span class="normal">501</span>
+<span class="normal">502</span>
+<span class="normal">503</span>
+<span class="normal">504</span>
+<span class="normal">505</span>
+<span class="normal">506</span>
+<span class="normal">507</span>
+<span class="normal">508</span>
+<span class="normal">509</span>
+<span class="normal">510</span>
+<span class="normal">511</span>
+<span class="normal">512</span>
+<span class="normal">513</span>
+<span class="normal">514</span>
+<span class="normal">515</span>
+<span class="normal">516</span>
+<span class="normal">517</span>
+<span class="normal">518</span>
+<span class="normal">519</span>
+<span class="normal">520</span>
+<span class="normal">521</span>
+<span class="normal">522</span>
+<span class="normal">523</span>
+<span class="normal">524</span>
+<span class="normal">525</span>
+<span class="normal">526</span>
+<span class="normal">527</span>
+<span class="normal">528</span>
+<span class="normal">529</span>
+<span class="normal">530</span>
+<span class="normal">531</span>
+<span class="normal">532</span>
+<span class="normal">533</span>
+<span class="normal">534</span>
+<span class="normal">535</span>
+<span class="normal">536</span>
+<span class="normal">537</span>
+<span class="normal">538</span>
+<span class="normal">539</span>
+<span class="normal">540</span>
+<span class="normal">541</span>
+<span class="normal">542</span>
+<span class="normal">543</span>
+<span class="normal">544</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@typechecked</span>
+<span class="k">def</span> <span class="nf">cast_columns_to_type</span><span class="p">(</span>
+    <span class="n">dataframe</span><span class="p">:</span> <span class="n">psDataFrame</span><span class="p">,</span>
+    <span class="n">columns</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">str_list</span><span class="p">],</span>
+    <span class="n">datatype</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">DataType</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">psDataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    !!! note &quot;Summary&quot;</span>
+<span class="sd">        Cast multiple columns to a given type.</span>
+
+<span class="sd">    ???+ abstract &quot;Details&quot;</span>
+<span class="sd">        An extension of [`#!py cast_column_to_type()`][toolbox_pyspark.types.cast_column_to_type] to allow casting of multiple columns simultaneously.</span>
+
+<span class="sd">    Params:</span>
+<span class="sd">        dataframe (psDataFrame):</span>
+<span class="sd">            The DataFrame to be updated.</span>
+<span class="sd">        columns (Union[str, str_list]):</span>
+<span class="sd">            The list of columns to be updated. They all must be valid columns existing on `#!py DataFrame`.</span>
+<span class="sd">        datatype (Union[str, type, T.DataType]):</span>
+<span class="sd">            The datatype to be cast to.</span>
+<span class="sd">            Must be a valid PySpark DataType.</span>
+
+<span class="sd">            Use one of the following:</span>
+<span class="sd">                ```{.py .python}</span>
+<span class="sd">                [</span>
+<span class="sd">                    &quot;string&quot;,  &quot;char&quot;,</span>
+<span class="sd">                    &quot;varchar&quot;, &quot;binary&quot;,</span>
+<span class="sd">                    &quot;boolean&quot;, &quot;decimal&quot;,</span>
+<span class="sd">                    &quot;float&quot;,   &quot;double&quot;,</span>
+<span class="sd">                    &quot;byte&quot;,    &quot;short&quot;,</span>
+<span class="sd">                    &quot;integer&quot;, &quot;long&quot;,</span>
+<span class="sd">                    &quot;date&quot;,    &quot;timestamp&quot;,</span>
+<span class="sd">                    &quot;void&quot;,    &quot;timestamp_ntz&quot;,</span>
+<span class="sd">                ]</span>
+<span class="sd">                ```</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        TypeError:</span>
+<span class="sd">            If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        (psDataFrame):</span>
+<span class="sd">            The updated DataFrame.</span>
+
+<span class="sd">    ???+ example &quot;Examples&quot;</span>
+
+<span class="sd">        ```{.py .python linenums=&quot;1&quot; title=&quot;Set up&quot;}</span>
+<span class="sd">        &gt;&gt;&gt; # Imports</span>
+<span class="sd">        &gt;&gt;&gt; import pandas as pd</span>
+<span class="sd">        &gt;&gt;&gt; from pyspark.sql import SparkSession</span>
+<span class="sd">        &gt;&gt;&gt; from toolbox_pyspark.types import cast_column_to_type, get_column_types</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; # Instantiate Spark</span>
+<span class="sd">        &gt;&gt;&gt; spark = SparkSession.builder.getOrCreate()</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; # Create data</span>
+<span class="sd">        &gt;&gt;&gt; df = spark.createDataFrame(</span>
+<span class="sd">        ...     pd.DataFrame(</span>
+<span class="sd">        ...         {</span>
+<span class="sd">        ...             &quot;a&quot;: [1, 2, 3, 4],</span>
+<span class="sd">        ...             &quot;b&quot;: [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;],</span>
+<span class="sd">        ...             &quot;c&quot;: [1, 1, 1, 1],</span>
+<span class="sd">        ...             &quot;d&quot;: [&quot;2&quot;, &quot;2&quot;, &quot;2&quot;, &quot;2&quot;],</span>
+<span class="sd">        ...         }</span>
+<span class="sd">        ...     )</span>
+<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; # Check</span>
+<span class="sd">        &gt;&gt;&gt; get_column_types(df).show()</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;div class=&quot;result&quot; markdown&gt;</span>
+<span class="sd">        ```{.txt .text title=&quot;Terminal&quot;}</span>
+<span class="sd">        +----------+----------+</span>
+<span class="sd">        | col_name | col_type |</span>
+<span class="sd">        +----------+----------+</span>
+<span class="sd">        | a        | bigint   |</span>
+<span class="sd">        | b        | string   |</span>
+<span class="sd">        | c        | bigint   |</span>
+<span class="sd">        | d        | string   |</span>
+<span class="sd">        +----------+----------+</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;/div&gt;</span>
+
+<span class="sd">        ```{.py .python linenums=&quot;1&quot; title=&quot;Example 1: Basic usage&quot;}</span>
+<span class="sd">        &gt;&gt;&gt; df = cast_column_to_type(df, [&#39;a&#39;], &#39;string&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; get_column_types(df).show()</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;div class=&quot;result&quot; markdown&gt;</span>
+<span class="sd">        ```{.txt .text title=&quot;Terminal&quot;}</span>
+<span class="sd">        +----------+----------+</span>
+<span class="sd">        | col_name | col_type |</span>
+<span class="sd">        +----------+----------+</span>
+<span class="sd">        | a        | string   |</span>
+<span class="sd">        | b        | string   |</span>
+<span class="sd">        | c        | bigint   |</span>
+<span class="sd">        | d        | bigint   |</span>
+<span class="sd">        +----------+----------+</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;/div&gt;</span>
+
+<span class="sd">        ```{.py .python linenums=&quot;1&quot; title=&quot;Example 2: Multiple columns&quot;}</span>
+<span class="sd">        &gt;&gt;&gt; df = cast_column_to_type(df, [&#39;c&#39;, &#39;d&#39;], &#39;string&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; get_column_types(df).show()</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;div class=&quot;result&quot; markdown&gt;</span>
+<span class="sd">        ```{.txt .text title=&quot;Terminal&quot;}</span>
+<span class="sd">        +----------+----------+</span>
+<span class="sd">        | col_name | col_type |</span>
+<span class="sd">        +----------+----------+</span>
+<span class="sd">        | a        | string   |</span>
+<span class="sd">        | b        | string   |</span>
+<span class="sd">        | c        | string   |</span>
+<span class="sd">        | d        | string   |</span>
+<span class="sd">        +----------+----------+</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;/div&gt;</span>
+
+<span class="sd">        ```{.py .python linenums=&quot;1&quot; title=&quot;Example 3: Invalid column&quot;}</span>
+<span class="sd">        &gt;&gt;&gt; df = cast_columns_to_type(df, [&#39;x&#39;, &#39;y&#39;], &#39;string&#39;)</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;div class=&quot;result&quot; markdown&gt;</span>
+<span class="sd">        ```{.txt .text title=&quot;Terminal&quot;}</span>
+<span class="sd">        AttributeError: Columns [&#39;x&#39;, &#39;y&#39;] do not exist in DataFrame.</span>
+<span class="sd">        Try one of: [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;].</span>
+<span class="sd">        ```</span>
+<span class="sd">        !!! failure &quot;Conclusion: Columns [`x`] does not exist as a valid column.&quot;</span>
+<span class="sd">        &lt;/div&gt;</span>
+
+<span class="sd">        ```{.py .python linenums=&quot;1&quot; title=&quot;Example 4: Invalid datatype&quot;}</span>
+<span class="sd">        &gt;&gt;&gt; df = cast_columns_to_type(df, [&#39;a&#39;, &#39;b&#39;], &#39;foo&#39;)</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;div class=&quot;result&quot; markdown&gt;</span>
+<span class="sd">        ```{.txt .text title=&quot;Terminal&quot;}</span>
+<span class="sd">        ParseException: DataType &#39;foo&#39; is not supported.</span>
+<span class="sd">        ```</span>
+<span class="sd">        !!! failure &quot;Conclusion: Datatype `foo` is not valid.&quot;</span>
+<span class="sd">        &lt;/div&gt;</span>
+
+<span class="sd">    ??? tip &quot;See Also&quot;</span>
+<span class="sd">        - [`assert_columns_exists()`][toolbox_pyspark.checks.assert_columns_exists]</span>
+<span class="sd">        - [`is_vaid_spark_type()`][toolbox_pyspark.checks.is_vaid_spark_type]</span>
+<span class="sd">        - [`get_column_types()`][toolbox_pyspark.types.get_column_types]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">columns</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">columns</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">columns</span>
+    <span class="n">assert_columns_exists</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">columns</span><span class="p">)</span>
+    <span class="n">datatype</span> <span class="o">=</span> <span class="n">_validate_pyspark_datatype</span><span class="p">(</span><span class="n">datatype</span><span class="o">=</span><span class="n">datatype</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">withColumns</span><span class="p">({</span><span class="n">col</span><span class="p">:</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">col</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">})</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="toolbox_pyspark.types.map_cast_columns_to_type" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <span class="doc doc-object-name doc-function-name">map_cast_columns_to_type</span>
+
+
+<a href="#toolbox_pyspark.types.map_cast_columns_to_type" class="headerlink" title="Permanent link">🔗</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">map_cast_columns_to_type</span><span class="p">(</span>
+    <span class="n">dataframe</span><span class="p">:</span> <span class="n">psDataFrame</span><span class="p">,</span>
+    <span class="n">columns_type_mapping</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span>
+        <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">DataType</span><span class="p">],</span>
+        <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">str_list</span><span class="p">,</span> <span class="n">str_tuple</span><span class="p">],</span>
+    <span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">psDataFrame</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <div class="admonition note">
+<p class="admonition-title">Summary</p>
+<p>Take a dictionary mapping of where the keys is the type and the values are the column(s), and apply that to the given dataframe.</p>
+</div>
+<details class="abstract" open="open">
+<summary>Details</summary>
+<p>Applies <a class="autorefs autorefs-internal" href="#toolbox_pyspark.types.cast_columns_to_type"><code class="highlight"><span class="n">cast_columns_to_type</span><span class="p">()</span></code></a> and <a class="autorefs autorefs-internal" href="#toolbox_pyspark.types.cast_column_to_type"><code class="highlight"><span class="n">cast_column_to_type</span><span class="p">()</span></code></a> under the hood.</p>
+</details>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>dataframe</code>
+            </td>
+            <td>
+                  <code><span title="pyspark.sql.DataFrame">DataFrame</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The DataFrame to transform.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>columns_type_mapping</code>
+            </td>
+            <td>
+                  <code>Dict[<span title="typing.Union">Union</span>[str, type, <span title="pyspark.sql.types.DataType">DataType</span>], <span title="typing.Union">Union</span>[str, <span title="toolbox_python.collection_types.str_list">str_list</span>, <span title="toolbox_python.collection_types.str_tuple">str_tuple</span>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The mapping of the columns to manipulate.<br>
+The format must be: <code class="highlight"><span class="p">{</span><span class="nb">type</span><span class="p">:</span> <span class="n">columns</span><span class="p">}</span></code>.<br>
+Where the keys are the relevant type to cast to, and the values are the column(s) for casting.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="pyspark.sql.DataFrame">DataFrame</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The transformed data frame.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+        <details class="example" open="open">
+<summary>Examples</summary>
+<p><div class="python highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Set up</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="c1"># Imports</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">pyspark.sql</span> <span class="kn">import</span> <span class="n">SparkSession</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">toolbox_pyspark.types</span> <span class="kn">import</span> <span class="n">cast_column_to_type</span><span class="p">,</span> <span class="n">get_column_types</span>
+<span class="o">&gt;&gt;&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="c1"># Instantiate Spark</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">spark</span> <span class="o">=</span> <span class="n">SparkSession</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="c1"># Create data</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">createDataFrame</span><span class="p">(</span>
+<span class="o">...</span>     <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+<span class="o">...</span>         <span class="p">{</span>
+<span class="o">...</span>             <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+<span class="o">...</span>             <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="s2">&quot;d&quot;</span><span class="p">],</span>
+<span class="o">...</span>             <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+<span class="o">...</span>             <span class="s2">&quot;d&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;2&quot;</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">],</span>
+<span class="o">...</span>         <span class="p">}</span>
+<span class="o">...</span>     <span class="p">)</span>
+<span class="o">...</span> <span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="c1"># Check</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">get_column_types</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+<div class="result" markdown>
+<div class="text highlight"><span class="filename">Terminal</span><pre><span></span><code>+----------+----------+
+| col_name | col_type |
++----------+----------+
+| a        | bigint   |
+| b        | string   |
+| c        | bigint   |
+| d        | string   |
++----------+----------+
+</code></pre></div>
+</div></p>
+<p><div class="python highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Basic usage</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">df</span> <span class="o">=</span> <span class="n">map_cast_columns_to_type</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;str&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">]})</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">get_column_types</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+<div class="result" markdown>
+<div class="text highlight"><span class="filename">Terminal</span><pre><span></span><code>+----------+----------+
+| col_name | col_type |
++----------+----------+
+| a        | string   |
+| b        | string   |
+| c        | string   |
+| d        | string   |
++----------+----------+
+</code></pre></div>
+</div></p>
+<p><div class="python highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Multiple types</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">df</span> <span class="o">=</span> <span class="n">map_cast_columns_to_type</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;int&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">],</span> <span class="s2">&quot;str&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;b&quot;</span><span class="p">],</span> <span class="s2">&quot;float&quot;</span><span class="p">:</span> <span class="s2">&quot;d&quot;</span><span class="p">})</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">get_column_types</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+<div class="result" markdown>
+<div class="text highlight"><span class="filename">Terminal</span><pre><span></span><code>+----------+----------+
+| col_name | col_type |
++----------+----------+
+| a        | bigint   |
+| b        | string   |
+| c        | bigint   |
+| d        | float    |
++----------+----------+
+</code></pre></div>
+</div></p>
+<p><div class="python highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">All to single type</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">df</span> <span class="o">=</span> <span class="n">map_cast_columns_to_type</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="p">{</span><span class="nb">str</span><span class="p">:</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">]})</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">get_column_types</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+<div class="result" markdown>
+<div class="text highlight"><span class="filename">Terminal</span><pre><span></span><code>+----------+----------+
+| col_name | col_type |
++----------+----------+
+| a        | string   |
+| b        | string   |
+| c        | string   |
+| d        | string   |
++----------+----------+
+</code></pre></div>
+</div></p>
+</details>
+<details class="tip">
+<summary>See Also</summary>
+<ul>
+<li><a class="autorefs autorefs-internal" href="#toolbox_pyspark.types.cast_column_to_type"><code>cast_column_to_type()</code></a></li>
+<li><a class="autorefs autorefs-internal" href="#toolbox_pyspark.types.cast_columns_to_type"><code>cast_columns_to_type()</code></a></li>
+<li><a class="autorefs autorefs-internal" href="../checks/#toolbox_pyspark.checks.assert_columns_exists"><code>assert_columns_exists()</code></a></li>
+<li><a class="autorefs autorefs-internal" href="../checks/#toolbox_pyspark.checks.is_vaid_spark_type"><code>is_vaid_spark_type()</code></a></li>
+<li><a class="autorefs autorefs-internal" href="#toolbox_pyspark.types.get_column_types"><code>get_column_types()</code></a></li>
+</ul>
+</details>
+
+            <details class="quote">
+              <summary>Source code in <code>src/toolbox_pyspark/types.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">547</span>
+<span class="normal">548</span>
+<span class="normal">549</span>
+<span class="normal">550</span>
+<span class="normal">551</span>
+<span class="normal">552</span>
+<span class="normal">553</span>
+<span class="normal">554</span>
+<span class="normal">555</span>
+<span class="normal">556</span>
+<span class="normal">557</span>
+<span class="normal">558</span>
+<span class="normal">559</span>
+<span class="normal">560</span>
+<span class="normal">561</span>
+<span class="normal">562</span>
+<span class="normal">563</span>
+<span class="normal">564</span>
+<span class="normal">565</span>
+<span class="normal">566</span>
+<span class="normal">567</span>
+<span class="normal">568</span>
+<span class="normal">569</span>
+<span class="normal">570</span>
+<span class="normal">571</span>
+<span class="normal">572</span>
+<span class="normal">573</span>
+<span class="normal">574</span>
+<span class="normal">575</span>
+<span class="normal">576</span>
+<span class="normal">577</span>
+<span class="normal">578</span>
+<span class="normal">579</span>
+<span class="normal">580</span>
+<span class="normal">581</span>
+<span class="normal">582</span>
+<span class="normal">583</span>
+<span class="normal">584</span>
+<span class="normal">585</span>
+<span class="normal">586</span>
+<span class="normal">587</span>
+<span class="normal">588</span>
+<span class="normal">589</span>
+<span class="normal">590</span>
+<span class="normal">591</span>
+<span class="normal">592</span>
+<span class="normal">593</span>
+<span class="normal">594</span>
+<span class="normal">595</span>
+<span class="normal">596</span>
+<span class="normal">597</span>
+<span class="normal">598</span>
+<span class="normal">599</span>
+<span class="normal">600</span>
+<span class="normal">601</span>
+<span class="normal">602</span>
+<span class="normal">603</span>
+<span class="normal">604</span>
+<span class="normal">605</span>
+<span class="normal">606</span>
+<span class="normal">607</span>
+<span class="normal">608</span>
+<span class="normal">609</span>
+<span class="normal">610</span>
+<span class="normal">611</span>
+<span class="normal">612</span>
+<span class="normal">613</span>
+<span class="normal">614</span>
+<span class="normal">615</span>
+<span class="normal">616</span>
+<span class="normal">617</span>
+<span class="normal">618</span>
+<span class="normal">619</span>
+<span class="normal">620</span>
+<span class="normal">621</span>
+<span class="normal">622</span>
+<span class="normal">623</span>
+<span class="normal">624</span>
+<span class="normal">625</span>
+<span class="normal">626</span>
+<span class="normal">627</span>
+<span class="normal">628</span>
+<span class="normal">629</span>
+<span class="normal">630</span>
+<span class="normal">631</span>
+<span class="normal">632</span>
+<span class="normal">633</span>
+<span class="normal">634</span>
+<span class="normal">635</span>
+<span class="normal">636</span>
+<span class="normal">637</span>
+<span class="normal">638</span>
+<span class="normal">639</span>
+<span class="normal">640</span>
+<span class="normal">641</span>
+<span class="normal">642</span>
+<span class="normal">643</span>
+<span class="normal">644</span>
+<span class="normal">645</span>
+<span class="normal">646</span>
+<span class="normal">647</span>
+<span class="normal">648</span>
+<span class="normal">649</span>
+<span class="normal">650</span>
+<span class="normal">651</span>
+<span class="normal">652</span>
+<span class="normal">653</span>
+<span class="normal">654</span>
+<span class="normal">655</span>
+<span class="normal">656</span>
+<span class="normal">657</span>
+<span class="normal">658</span>
+<span class="normal">659</span>
+<span class="normal">660</span>
+<span class="normal">661</span>
+<span class="normal">662</span>
+<span class="normal">663</span>
+<span class="normal">664</span>
+<span class="normal">665</span>
+<span class="normal">666</span>
+<span class="normal">667</span>
+<span class="normal">668</span>
+<span class="normal">669</span>
+<span class="normal">670</span>
+<span class="normal">671</span>
+<span class="normal">672</span>
+<span class="normal">673</span>
+<span class="normal">674</span>
+<span class="normal">675</span>
+<span class="normal">676</span>
+<span class="normal">677</span>
+<span class="normal">678</span>
+<span class="normal">679</span>
+<span class="normal">680</span>
+<span class="normal">681</span>
+<span class="normal">682</span>
+<span class="normal">683</span>
+<span class="normal">684</span>
+<span class="normal">685</span>
+<span class="normal">686</span>
+<span class="normal">687</span>
+<span class="normal">688</span>
+<span class="normal">689</span>
+<span class="normal">690</span>
+<span class="normal">691</span>
+<span class="normal">692</span>
+<span class="normal">693</span>
+<span class="normal">694</span>
+<span class="normal">695</span>
+<span class="normal">696</span>
+<span class="normal">697</span>
+<span class="normal">698</span>
+<span class="normal">699</span>
+<span class="normal">700</span>
+<span class="normal">701</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@typechecked</span>
+<span class="k">def</span> <span class="nf">map_cast_columns_to_type</span><span class="p">(</span>
+    <span class="n">dataframe</span><span class="p">:</span> <span class="n">psDataFrame</span><span class="p">,</span>
+    <span class="n">columns_type_mapping</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span>
+        <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span><span class="n">DataType</span><span class="p">],</span>
+        <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">str_list</span><span class="p">,</span> <span class="n">str_tuple</span><span class="p">],</span>
+    <span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">psDataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    !!! note &quot;Summary&quot;</span>
+<span class="sd">        Take a dictionary mapping of where the keys is the type and the values are the column(s), and apply that to the given dataframe.</span>
+
+<span class="sd">    ???+ abstract &quot;Details&quot;</span>
+<span class="sd">        Applies [`#!py cast_columns_to_type()`][toolbox_pyspark.types.cast_columns_to_type] and [`#!py cast_column_to_type()`][toolbox_pyspark.types.cast_column_to_type] under the hood.</span>
+
+<span class="sd">    Params:</span>
+<span class="sd">        dataframe (psDataFrame):</span>
+<span class="sd">            The DataFrame to transform.</span>
+<span class="sd">        columns_type_mapping (Dict[ Union[str, type, T.DataType], Union[str, str_list, str_tuple], ]):</span>
+<span class="sd">            The mapping of the columns to manipulate.&lt;br&gt;</span>
+<span class="sd">            The format must be: `#!py {type: columns}`.&lt;br&gt;</span>
+<span class="sd">            Where the keys are the relevant type to cast to, and the values are the column(s) for casting.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        (psDataFrame):</span>
+<span class="sd">            The transformed data frame.</span>
+
+<span class="sd">    ???+ example &quot;Examples&quot;</span>
+
+<span class="sd">        ```{.py .python linenums=&quot;1&quot; title=&quot;Set up&quot;}</span>
+<span class="sd">        &gt;&gt;&gt; # Imports</span>
+<span class="sd">        &gt;&gt;&gt; import pandas as pd</span>
+<span class="sd">        &gt;&gt;&gt; from pyspark.sql import SparkSession</span>
+<span class="sd">        &gt;&gt;&gt; from toolbox_pyspark.types import cast_column_to_type, get_column_types</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; # Instantiate Spark</span>
+<span class="sd">        &gt;&gt;&gt; spark = SparkSession.builder.getOrCreate()</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; # Create data</span>
+<span class="sd">        &gt;&gt;&gt; df = spark.createDataFrame(</span>
+<span class="sd">        ...     pd.DataFrame(</span>
+<span class="sd">        ...         {</span>
+<span class="sd">        ...             &quot;a&quot;: [1, 2, 3, 4],</span>
+<span class="sd">        ...             &quot;b&quot;: [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;],</span>
+<span class="sd">        ...             &quot;c&quot;: [1, 1, 1, 1],</span>
+<span class="sd">        ...             &quot;d&quot;: [&quot;2&quot;, &quot;2&quot;, &quot;2&quot;, &quot;2&quot;],</span>
+<span class="sd">        ...         }</span>
+<span class="sd">        ...     )</span>
+<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; # Check</span>
+<span class="sd">        &gt;&gt;&gt; get_column_types(df).show()</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;div class=&quot;result&quot; markdown&gt;</span>
+<span class="sd">        ```{.txt .text title=&quot;Terminal&quot;}</span>
+<span class="sd">        +----------+----------+</span>
+<span class="sd">        | col_name | col_type |</span>
+<span class="sd">        +----------+----------+</span>
+<span class="sd">        | a        | bigint   |</span>
+<span class="sd">        | b        | string   |</span>
+<span class="sd">        | c        | bigint   |</span>
+<span class="sd">        | d        | string   |</span>
+<span class="sd">        +----------+----------+</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;/div&gt;</span>
+
+<span class="sd">        ```{.py .python linenums=&quot;1&quot; title=&quot;Basic usage&quot;}</span>
+<span class="sd">        &gt;&gt;&gt; df = map_cast_columns_to_type(df, {&quot;str&quot;: [&quot;a&quot;, &quot;c&quot;]})</span>
+<span class="sd">        &gt;&gt;&gt; get_column_types(df).show()</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;div class=&quot;result&quot; markdown&gt;</span>
+<span class="sd">        ```{.txt .text title=&quot;Terminal&quot;}</span>
+<span class="sd">        +----------+----------+</span>
+<span class="sd">        | col_name | col_type |</span>
+<span class="sd">        +----------+----------+</span>
+<span class="sd">        | a        | string   |</span>
+<span class="sd">        | b        | string   |</span>
+<span class="sd">        | c        | string   |</span>
+<span class="sd">        | d        | string   |</span>
+<span class="sd">        +----------+----------+</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;/div&gt;</span>
+
+<span class="sd">        ```{.py .python linenums=&quot;1&quot; title=&quot;Multiple types&quot;}</span>
+<span class="sd">        &gt;&gt;&gt; df = map_cast_columns_to_type(df, {&quot;int&quot;: [&quot;a&quot;, &quot;c&quot;], &quot;str&quot;: [&quot;b&quot;], &quot;float&quot;: &quot;d&quot;})</span>
+<span class="sd">        &gt;&gt;&gt; get_column_types(df).show()</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;div class=&quot;result&quot; markdown&gt;</span>
+<span class="sd">        ```{.txt .text title=&quot;Terminal&quot;}</span>
+<span class="sd">        +----------+----------+</span>
+<span class="sd">        | col_name | col_type |</span>
+<span class="sd">        +----------+----------+</span>
+<span class="sd">        | a        | bigint   |</span>
+<span class="sd">        | b        | string   |</span>
+<span class="sd">        | c        | bigint   |</span>
+<span class="sd">        | d        | float    |</span>
+<span class="sd">        +----------+----------+</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;/div&gt;</span>
+
+<span class="sd">        ```{.py .python linenums=&quot;1&quot; title=&quot;All to single type&quot;}</span>
+<span class="sd">        &gt;&gt;&gt; df = map_cast_columns_to_type(df, {str: [col for col in df.columns]})</span>
+<span class="sd">        &gt;&gt;&gt; get_column_types(df).show()</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;div class=&quot;result&quot; markdown&gt;</span>
+<span class="sd">        ```{.txt .text title=&quot;Terminal&quot;}</span>
+<span class="sd">        +----------+----------+</span>
+<span class="sd">        | col_name | col_type |</span>
+<span class="sd">        +----------+----------+</span>
+<span class="sd">        | a        | string   |</span>
+<span class="sd">        | b        | string   |</span>
+<span class="sd">        | c        | string   |</span>
+<span class="sd">        | d        | string   |</span>
+<span class="sd">        +----------+----------+</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;/div&gt;</span>
+
+<span class="sd">    ??? tip &quot;See Also&quot;</span>
+<span class="sd">        - [`cast_column_to_type()`][toolbox_pyspark.types.cast_column_to_type]</span>
+<span class="sd">        - [`cast_columns_to_type()`][toolbox_pyspark.types.cast_columns_to_type]</span>
+<span class="sd">        - [`assert_columns_exists()`][toolbox_pyspark.checks.assert_columns_exists]</span>
+<span class="sd">        - [`is_vaid_spark_type()`][toolbox_pyspark.checks.is_vaid_spark_type]</span>
+<span class="sd">        - [`get_column_types()`][toolbox_pyspark.types.get_column_types]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Ensure all keys are `str`</span>
+    <span class="n">keys</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">columns_type_mapping</span><span class="o">.</span><span class="n">keys</span><span class="p">(),)</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">type</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+                <span class="n">columns_type_mapping</span><span class="p">[</span><span class="n">key</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+                    <span class="n">columns_type_mapping</span><span class="p">[</span><span class="n">key</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span>
+                <span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">columns_type_mapping</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">columns_type_mapping</span><span class="p">[</span><span class="n">key</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span> <span class="o">=</span> <span class="n">columns_type_mapping</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+    <span class="c1"># Reverse keys and values</span>
+    <span class="n">reversed_mapping</span> <span class="o">=</span> <span class="n">dict_reverse_keys_and_values</span><span class="p">(</span><span class="n">dictionary</span><span class="o">=</span><span class="n">columns_type_mapping</span><span class="p">)</span>
+
+    <span class="c1"># Validate</span>
+    <span class="n">assert_columns_exists</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">reversed_mapping</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+    <span class="c1"># Apply mapping to dataframe</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">dataframe</span> <span class="o">=</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">withColumns</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="n">col</span><span class="p">:</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">col</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">_validate_pyspark_datatype</span><span class="p">(</span><span class="n">typ</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">typ</span> <span class="ow">in</span> <span class="n">reversed_mapping</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Raised </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+
+    <span class="c1"># Return</span>
+    <span class="k">return</span> <span class="n">dataframe</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.indexes", "navigation.top", "navigation.instant", "search.highlight", "search.suggest", "toc.follow", "content.action.edit", "content.action.view"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.83f73b43.min.js"></script>
+      
+    
+  </body>
+</html>
