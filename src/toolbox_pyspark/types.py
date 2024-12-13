@@ -684,7 +684,7 @@ def map_cast_columns_to_type(
     reversed_mapping = dict_reverse_keys_and_values(dictionary=columns_type_mapping)
 
     # Validate
-    assert_columns_exists(dataframe, columns)
+    assert_columns_exists(dataframe, reversed_mapping.keys())
 
     # Apply mapping to dataframe
     try:
