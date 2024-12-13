@@ -12,6 +12,7 @@ There are 12 modules used in this package, which covers 41 functions
 |-------------------------------|-------------|
 | [io](./io.md)                 | The `io` module is used for reading and writing tables to/from directories.
 | [checks](./checks.md)         | The `checks` module is used to check and validate various attributed about a given `pyspark` dataframe.
+| [types](./types.md)           | The `types` module is used to get, check, and change a datafames column data types.
 <!--
 | [cleaning](./cleaning.md)     | The `cleaning` module is used to clean, fix, and fetch various aspects on a given DataFrame.
 | [columns](./columns.md)       | The `columns` module is used to fetch columns from a given DataFrame using convenient syntax.
@@ -21,7 +22,6 @@ There are 12 modules used in this package, which covers 41 functions
 | [dimensions](./dimensions.md) | The `dimensions` module is used for checking the dimensions of `pyspark` `dataframe`'s.
 | [scale](./scale.md)           | The `scale` module is used for rounding a column (or columns) to a given rounding accuracy.
 | [schema](./schema.md)         | The `schema` module is used for checking, validating, and viewing any schema differences between two different tables, either from in-memory variables, or pointing to locations on disk.
-| [types](./types.md)           | The `types` module is used to get, check, and change a datafames column data types.
 -->
 
 
@@ -38,6 +38,10 @@ There are 12 modules used in this package, which covers 41 functions
 |                                            | [`is_vaid_spark_type()`][toolbox_pyspark.checks.is_vaid_spark_type] |
 |                                            | [`table_exists()`][toolbox_pyspark.checks.table_exists] |
 |                                            | |
+| [`types`][toolbox_pyspark.types]           | [`get_column_types()`][toolbox_pyspark.types.get_column_types] |
+|                                            | [`cast_column_to_type()`][toolbox_pyspark.types.cast_column_to_type] |
+|                                            | [`cast_columns_to_type()`][toolbox_pyspark.types.cast_columns_to_type] |
+|                                            | [`map_cast_columns_to_type()`][toolbox_pyspark.types.map_cast_columns_to_type] |
 <!--
 | [`cleaning`][toolbox_pyspark.cleaning]     | [`create_empty_dataframe()`][toolbox_pyspark.cleaning.create_empty_dataframe] |
 |                                            | [`keep_first_record_by_columns()`][toolbox_pyspark.cleaning.keep_first_record_by_columns] |
@@ -87,10 +91,6 @@ There are 12 modules used in this package, which covers 41 functions
 | [`schema`][toolbox_pyspark.schema]         | [`view_schema_differences()`][toolbox_pyspark.schema.view_schema_differences] |
 |                                            | [`check_schemas_match()`][toolbox_pyspark.schema.check_schemas_match] |
 |                                            | |
-| [`types`][toolbox_pyspark.types]           | [`get_column_types()`][toolbox_pyspark.types.get_column_types] |
-|                                            | [`cast_column_to_type()`][toolbox_pyspark.types.cast_column_to_type] |
-|                                            | [`cast_columns_to_type()`][toolbox_pyspark.types.cast_columns_to_type] |
-|                                            | [`map_cast_columns_to_type()`][toolbox_pyspark.types.map_cast_columns_to_type] |
 -->
 
 

@@ -14,6 +14,7 @@
 import pytest
 from chispa.dataframe_comparer import assert_df_equality
 from parameterized import parameterized
+from pyspark.errors.exceptions.captured import ParseException
 from pyspark.sql import DataFrame as psDataFrame, functions as F
 
 # ## Local First Party Imports ----
@@ -126,6 +127,18 @@ class TestCastColumnsToType(PySparkSetup):
         )
         expected = self.ps_df_types.withColumn("c", F.col("c").cast(datatype))
         assert_df_equality(result, expected)
+
+    @parameterized.expand(
+        input=["foo", "bar"],
+        name_func=name_func_flat_list,
+    )
+    def test_cast_column_to_type_6(self, datatype) -> None:
+        with pytest.raises(ParseException):
+            cast_column_to_type(
+                dataframe=self.ps_df_types,
+                column="c",
+                datatype=datatype,
+            )
 
     def test_cast_columns_to_type_1(self) -> None:
         """Multiple columns, simple cast"""
