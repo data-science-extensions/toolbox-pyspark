@@ -42,6 +42,7 @@ theme:
     edit: material/file-edit-outline
     view: material/file-eye-outline
 
+
 nav:
   - Home: index.md
   - Usage:
@@ -52,6 +53,7 @@ nav:
       - IO: code/io.md
       - Checks: code/checks.md
       - Types: code/types.md
+      - Keys: code/keys.md
 
 
 markdown_extensions:
