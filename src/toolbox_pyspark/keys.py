@@ -90,7 +90,7 @@ def add_key_from_columns(
     Params:
         dataframe (psDataFrame):
             The table to be updated.
-        columns (Union[List[str], Tuple[str, ...], str]):
+        columns (Union[str, str_collection]):
             The columns to be combined.<br>
             If `columns` is a `#!py str`, then it will be coerced to a single-element list: `#!py [columns]`.
         join_character (Optional[str], optional):
@@ -114,25 +114,31 @@ def add_key_from_columns(
     ???+ example "Examples"
 
         ```{.py .python linenums="1" title="Set up"}
+        >>> # Imports
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
-        >>> from toolbox_pyspark.keys import add_key_from_columns
+        >>> from toolbox_pyspark.types import get_column_types
+        >>>
+        >>> # Instantiate Spark
         >>> spark = SparkSession.builder.getOrCreate()
+        >>>
+        >>> # Create data
         >>> df = spark.createDataFrame(
-        ...     pd.DataFrame({
-        ...         'a': [1,2,3,4],
-        ...         'b': ['a','b','c','d'],
-        ...         'c': [1,1,1,1],
-        ...         'd': [2,2,2,2],
-        ...     })
+        ...     pd.DataFrame(
+        ...         {
+        ...             "a": [1, 2, 3, 4],
+        ...             "b": ["a", "b", "c", "d"],
+        ...             "c": [1, 1, 1, 1],
+        ...             "d": ["2", "2", "2", "2"],
+        ...         }
+        ...     )
         ... )
-        ```
-
-        ```{.py .python linenums="1" title="Check"}
+        >>>
+        >>> # Check
         >>> df.show()
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+---+---+---+
         | a | b | c | d |
         +---+---+---+---+
@@ -144,12 +150,12 @@ def add_key_from_columns(
         ```
         </div>
 
-        ```{.py .python linenums="1" title="Basic usage"}
-        >>> new_df = add_key_from_columns(df, ['a','b'])
+        ```{.py .python linenums="1" title="Example 1: Basic usage"}
+        >>> new_df = add_key_from_columns(df, ["a", "b"])
         >>> new_df.show()
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+---+---+---+---------+
         | a | b | c | d | key_A_B |
         +---+---+---+---+---------+
@@ -159,14 +165,15 @@ def add_key_from_columns(
         | 4 | d | 1 | 2 | 4_d     |
         +---+---+---+---+---------+
         ```
+        !!! success "Conclusion: Successfully added new key column to DataFrame."
         </div>
 
-        ```{.py .python linenums="1" title="Single column"}
-        >>> new_df = add_key_from_columns(df, 'a')
+        ```{.py .python linenums="1" title="Example 2: Single column"}
+        >>> new_df = add_key_from_columns(df, "a")
         >>> new_df.show()
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+---+---+---+-------+
         | a | b | c | d | key_A |
         +---+---+---+---+-------+
@@ -176,14 +183,15 @@ def add_key_from_columns(
         | 4 | d | 1 | 2 | 4     |
         +---+---+---+---+-------+
         ```
+        !!! success "Conclusion: Successfully added new key column to DataFrame."
         </div>
 
-        ```{.py .python linenums="1" title="New name"}
-        >>> new_df = add_key_from_columns(df, ['a','b'], "new_key")
+        ```{.py .python linenums="1" title="Example 3: New name"}
+        >>> new_df = add_key_from_columns(df, ["a", "b"], "new_key")
         >>> new_df.show()
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+---+---+---+---------+
         | a | b | c | d | new_key |
         +---+---+---+---+---------+
@@ -193,15 +201,17 @@ def add_key_from_columns(
         | 4 | d | 1 | 2 | 4_d     |
         +---+---+---+---+---------+
         ```
+        !!! success "Conclusion: Successfully added new key column to DataFrame."
         </div>
 
-        ```{.py .python linenums="1" title="Raise error"}
-        >>> new_df = add_key_from_columns(df, ['a', 'x'])
+        ```{.py .python linenums="1" title="Example 4: Raise error"}
+        >>> new_df = add_key_from_columns(df, ["a", "x"])
         ```
         <div class="result" markdown>
-        ```{.txt .text}
-        Attribute Error: Columns ['x'] do not exist in 'dataframe'. Try one of: ['a','b','c','d'].
+        ```{.txt .text title="Terminal"}
+        Attribute Error: Columns ["x"] do not exist in "dataframe". Try one of: ["a", "b", "c", "d"].
         ```
+        !!! failure "Conclusion: Invalid column selection."
         </div>
     """
     columns = [columns] if isinstance(columns, str) else columns
@@ -238,7 +248,7 @@ def add_keys_from_columns(
     Params:
         dataframe (psDataFrame):
             The table to be updated.
-        collection_of_columns (Union[ Tuple[List[str], ...], Tuple[Tuple[str, ...], ...], List[List[str]], List[Tuple[str, ...]], Dict[str, Union[Tuple[str, ...], List[str]]], ]):
+        collection_of_columns (Union[tuple[Union[str, str_collection], ...], [Union[str, str_collection]], dict[str, Union[str, str_collection]]]):
             The collection of columns to be combined together.<br>
             If it is a `#!py list` of `#!py list`'s of `#!py str`'s (or similar), then the key name will be derived from a concatenation of the original columns names.<br>
             If it's a `#!py dict` where the values are a `#!py list` of `#!py str`'s (or similar), then the column name for the new key is taken from the key of the dictionary.
@@ -257,26 +267,33 @@ def add_keys_from_columns(
             The updated `dataframe`.
 
     ???+ example "Examples"
+
         ```{.py .python linenums="1" title="Set up"}
+        >>> # Imports
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
-        >>> from toolbox_pyspark.keys import add_keys_from_columns
+        >>> from toolbox_pyspark.types import get_column_types
+        >>>
+        >>> # Instantiate Spark
         >>> spark = SparkSession.builder.getOrCreate()
+        >>>
+        >>> # Create data
         >>> df = spark.createDataFrame(
-        ...     pd.DataFrame({
-        ...         'a': [1,2,3,4],
-        ...         'b': ['a','b','c','d'],
-        ...         'c': [1,1,1,1],
-        ...         'd': [2,2,2,2],
-        ...     })
+        ...     pd.DataFrame(
+        ...         {
+        ...             "a": [1, 2, 3, 4],
+        ...             "b": ["a", "b", "c", "d"],
+        ...             "c": [1, 1, 1, 1],
+        ...             "d": ["2", "2", "2", "2"],
+        ...         }
+        ...     )
         ... )
-        ```
-
-        ```{.py .python linenums="1" title="Check"}
+        >>>
+        >>> # Check
         >>> df.show()
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+---+---+---+
         | a | b | c | d |
         +---+---+---+---+
@@ -287,12 +304,13 @@ def add_keys_from_columns(
         +---+---+---+---+
         ```
         </div>
-        ```{.py .python linenums="1" title="Basic usage"}
-        >>> new_df = add_keys_from_columns(df, [['a','b'], ['b','c']])
+
+        ```{.py .python linenums="1" title="Example 1: Basic usage"}
+        >>> new_df = add_keys_from_columns(df, [["a", "b"], ["b", "c"]])
         >>> new_df.show()
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+---+---+---+---------+---------+
         | a | b | c | d | key_A_B | key_B_C |
         +---+---+---+---+---------+---------+
@@ -302,13 +320,15 @@ def add_keys_from_columns(
         | 4 | d | 1 | 2 | 4_d     | d_1     |
         +---+---+---+---+---------+---------+
         ```
+        !!! success "Conclusion: Successfully added two new key columns to DataFrame."
         </div>
-        ```{.py .python linenums="1" title="Created from dict"}
-        >>> new_df = add_keys_from_columns(df, {'first': ['a','b'], 'second': ['b','c']])
+
+        ```{.py .python linenums="1" title="Example 2: Created from dict"}
+        >>> new_df = add_keys_from_columns(df, {"first": ["a", "b"], "second": ["b", "c"]])
         >>> new_df.show()
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+---+---+---+-------+--------+
         | a | b | c | d | first | second |
         +---+---+---+---+-------+--------+
@@ -318,6 +338,7 @@ def add_keys_from_columns(
         | 4 | d | 1 | 2 | 4_d   | d_1    |
         +---+---+---+---+-------+--------+
         ```
+        !!! success "Conclusion: Successfully added two new key columns to DataFrame."
         </div>
     """
     join_character = join_character or ""
