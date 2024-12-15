@@ -32,15 +32,18 @@ install-python:
 install-pip:
 	sudo apt-get install python3-pip --yes
 upgrade-pip:
-	$(PYTHON) -m pip install --upgrade pip
+	pip install --upgrade pip
 install-python-and-pip: install-python install-pip upgrade-pip
 
 
 #* Poetry
 .PHONY: poetry-installs
 install-poetry:
-	$(PYTHON) -m pip install poetry
+	pip install poetry
 	poetry --version
+	poetry config virtualenvs.create true
+	poetry config virtualenvs.in-project true
+	poetry config --list
 install:
 	poetry lock
 	poetry install --no-interaction --only main
@@ -92,7 +95,7 @@ check-pycln:
 	poetry run pycln --config="pyproject.toml" src/$(PACKAGE_NAME)
 check-mkdocs:
 	poetry run mkdocs build --site-dir="temp"
-	if [ -d "temp" ]; then rm --recursive temp; fi
+	if [ -d "temp" ]; then rm -rf temp; fi
 check: check-black check-pycln check-isort check-codespell check-pylint check-mkdocs check-pytest
 # check: check-black check-mypy check-pycln check-isort check-codespell check-pylint check-mkdocs check-pytest
 

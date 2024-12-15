@@ -8,11 +8,12 @@ There are 12 modules used in this package, which covers 41 functions
 
 ### Module Descriptions
 
-| Module                        | Description |
-|-------------------------------|-------------|
-| [io](./io.md)                 | The `io` module is used for reading and writing tables to/from directories.
-| [checks](./checks.md)         | The `checks` module is used to check and validate various attributed about a given `pyspark` dataframe.
-| [types](./types.md)           | The `types` module is used to get, check, and change a datafames column data types.
+| Module                             | Description |
+|------------------------------------|-------------|
+| [`io`][toolbox_pyspark.io]         | The `io` module is used for reading and writing tables to/from directories.
+| [`checks`][toolbox_pyspark.checks] | The `checks` module is used to check and validate various attributed about a given `pyspark` dataframe.
+| [`types`][toolbox_pyspark.types]   | The `types` module is used to get, check, and change a datafames column data types.
+| [`keys`][toolbox_pyspark.keys]     | The `keys` module is used for creating new columns to act as keys (primary and foreign), to be used for joins with other tables, or to create relationships within downstream applications, like PowerBI.
 <!--
 | [cleaning](./cleaning.md)     | The `cleaning` module is used to clean, fix, and fetch various aspects on a given DataFrame.
 | [columns](./columns.md)       | The `columns` module is used to fetch columns from a given DataFrame using convenient syntax.
@@ -29,19 +30,22 @@ There are 12 modules used in this package, which covers 41 functions
 
 | Module                                     | Function |
 |--------------------------------------------|----------|
-| [`io`][toolbox_pyspark.io]                 | [`read_from_path()`][toolbox_pyspark.io.read_from_path] |
-|                                            | [`write_to_path()`][toolbox_pyspark.io.write_to_path] |
-|                                            | [`transfer_table()`][toolbox_pyspark.io.transfer_table] |
+| [`io`][toolbox_pyspark.io]                 | [`read_from_path()`][toolbox_pyspark.io.read_from_path]
+|                                            | [`write_to_path()`][toolbox_pyspark.io.write_to_path]
+|                                            | [`transfer_table()`][toolbox_pyspark.io.transfer_table]
 |                                            | |
-| [`checks`][toolbox_pyspark.checks]         | [`column_exists()`][toolbox_pyspark.checks.column_exists] |
-|                                            | [`columns_exists()`][toolbox_pyspark.checks.columns_exists] |
-|                                            | [`is_vaid_spark_type()`][toolbox_pyspark.checks.is_vaid_spark_type] |
-|                                            | [`table_exists()`][toolbox_pyspark.checks.table_exists] |
+| [`checks`][toolbox_pyspark.checks]         | [`column_exists()`][toolbox_pyspark.checks.column_exists]
+|                                            | [`columns_exists()`][toolbox_pyspark.checks.columns_exists]
+|                                            | [`is_vaid_spark_type()`][toolbox_pyspark.checks.is_vaid_spark_type]
+|                                            | [`table_exists()`][toolbox_pyspark.checks.table_exists]
 |                                            | |
-| [`types`][toolbox_pyspark.types]           | [`get_column_types()`][toolbox_pyspark.types.get_column_types] |
-|                                            | [`cast_column_to_type()`][toolbox_pyspark.types.cast_column_to_type] |
-|                                            | [`cast_columns_to_type()`][toolbox_pyspark.types.cast_columns_to_type] |
-|                                            | [`map_cast_columns_to_type()`][toolbox_pyspark.types.map_cast_columns_to_type] |
+| [`types`][toolbox_pyspark.types]           | [`get_column_types()`][toolbox_pyspark.types.get_column_types]
+|                                            | [`cast_column_to_type()`][toolbox_pyspark.types.cast_column_to_type]
+|                                            | [`cast_columns_to_type()`][toolbox_pyspark.types.cast_columns_to_type]
+|                                            | [`map_cast_columns_to_type()`][toolbox_pyspark.types.map_cast_columns_to_type]
+| [`keys`][toolbox_pyspark.keys]             | [`add_keys_from_columns()`][toolbox_pyspark.keys.add_keys_from_columns]
+|                                            | [`add_key_from_columns()`][toolbox_pyspark.keys.add_key_from_columns]
+|                                            | |
 <!--
 | [`cleaning`][toolbox_pyspark.cleaning]     | [`create_empty_dataframe()`][toolbox_pyspark.cleaning.create_empty_dataframe] |
 |                                            | [`keep_first_record_by_columns()`][toolbox_pyspark.cleaning.keep_first_record_by_columns] |
@@ -82,9 +86,6 @@ There are 12 modules used in this package, which covers 41 functions
 | [`dimensions`][toolbox_pyspark.dimensions] | [`get_dims()`][toolbox_pyspark.dimensions.get_dims] |
 |                                            | [`get_dims_of_tables()`][toolbox_pyspark.dimensions.get_dims_of_tables] |
 |                                            | |
-| [`keys`][toolbox_pyspark.keys]             | [`add_keys_from_columns()`][toolbox_pyspark.keys.add_keys_from_columns] |
-|                                            | [`add_key_from_columns()`][toolbox_pyspark.keys.add_key_from_columns] |
-|                                            | |
 | [`scale`][toolbox_pyspark.scale]           | [`round_column()`][toolbox_pyspark.scale.round_column] |
 |                                            | [`round_columns()`][toolbox_pyspark.scale.round_columns] |
 |                                            | |
@@ -107,5 +108,5 @@ This package is fully tested against:
 ### Latest Code Coverage
 
 <div style="position:relative; border:none; width:100%; height:100%; display:block; overflow:auto;">
-    <iframe src="../../assets/coverage/index.html" style="width:100%; height:800px;"></iframe>
+    <iframe src="./coverage/index.html" style="width:100%; height:800px;"></iframe>
 </div>
