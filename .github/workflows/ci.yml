@@ -89,14 +89,31 @@ jobs:
         id: install-dependencies
         run: make install-all
 
-      - name: Check .venv setup
-        id: check-venv
+      - name: Check .venv setup on ${{ matrix.os }}
+        id: check-venv-not-windows
+        if: ${{ matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest' }}
         run: |
+          echo "ls -la:"
           ls -la
+          echo "ls -la .venv:"
           ls -la .venv
+          echo "ls -la .venv/bin:"
           ls -la .venv/bin
+          echo "ls -la .venv/lib:"
           ls -la .venv/lib
-          ls -la .venv/lib/site-packages
+
+      - name: Check .venv setup on ${{ matrix.os }}
+        id: check-venv-windows
+        if: ${{ matrix.os == 'windows-latest' }}
+        run: |
+          echo "dir:"
+          dir
+          echo "dir .venv:"
+          dir .venv
+          echo "dir .venv\Scripts:"
+          dir .venv\Scripts
+          echo "dir .venv\Lib:"
+          dir .venv\Lib
 
       - name: Run checks
         id: run-checks
