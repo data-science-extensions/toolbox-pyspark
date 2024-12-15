@@ -73,8 +73,8 @@ jobs:
       #   if: ${{ matrix.os == 'ubuntu-latest' }}
       #   run: make install-check-java
 
-      - name: Install Java on MacOS
-        id: install-java-macos
+      - name: Install Java
+        id: install-java
         # if: ${{ matrix.os == 'macos-latest' }}
         uses: actions/setup-java@v4
         with:
@@ -82,9 +82,9 @@ jobs:
           java-version: '21'
           check-latest: true
 
-      - name: Install Pip
-        id: install-pip
-        run: make install-pip
+      - name: Upgrade Pip
+        id: upgrade-pip
+        run: make upgrade-pip
 
       - name: Install Poetry
         id: install-poetry

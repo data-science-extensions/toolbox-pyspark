@@ -32,14 +32,14 @@ install-python:
 install-pip:
 	sudo apt-get install python3-pip --yes
 upgrade-pip:
-	$(PYTHON) -m pip install --upgrade pip
+	pip install --upgrade pip
 install-python-and-pip: install-python install-pip upgrade-pip
 
 
 #* Poetry
 .PHONY: poetry-installs
 install-poetry:
-	$(PYTHON) -m pip install poetry
+	pip install poetry
 	poetry --version
 install:
 	poetry lock
