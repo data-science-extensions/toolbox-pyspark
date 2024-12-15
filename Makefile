@@ -41,6 +41,9 @@ install-python-and-pip: install-python install-pip upgrade-pip
 install-poetry:
 	pip install poetry
 	poetry --version
+	poetry config virtualenvs.create true
+	poetry config virtualenvs.in-project true
+	poetry config --list
 install:
 	poetry lock
 	poetry install --no-interaction --only main
