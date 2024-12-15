@@ -12,6 +12,7 @@
 
 # ## Python StdLib Imports ----
 from itertools import product
+from typing import Literal
 
 # ## Python Third Party Imports ----
 from chispa.dataframe_comparer import assert_df_equality
@@ -53,19 +54,23 @@ class TestAddKeysFromListsOfColumns(PySparkSetup):
     @parameterized.expand(
         input=list(
             product(
-                [list, tuple],
-                [list, tuple, set],
+                ["list", "tuple"],
+                ["list", "tuple", "set"],
+                ["list", "tuple", "set"],
             )
         ),
         name_func=name_func_nested_list,
     )
     def test_add_keys_from_columns_1(
         self,
-        outer_type: type,
-        first_inner_type: type,
-        second_inner_type: type,
+        outer: Literal["list", "tuple", "set"],
+        first_inner: Literal["list", "tuple", "set"],
+        second_inner: Literal["list", "tuple", "set"],
     ) -> None:
         """Parameterised test of all combination of types for outer collection and two different inner collections."""
+        outer_type: type = eval(outer)
+        first_inner_type: type = eval(first_inner)
+        second_inner_type: type = eval(second_inner)
         first_cols: str_list = ["a", "b"]
         second_cols: str_list = ["b", "c"]
         first = first_inner_type(first_cols)
