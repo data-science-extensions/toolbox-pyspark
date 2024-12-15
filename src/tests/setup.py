@@ -103,8 +103,8 @@ class PySparkSetup(TestCase):
         os.environ["PYSPARK_PYTHON"] = sys.executable
         os.environ["PYSPARK_DRIVER_PYTHON"] = sys.executable
         # os.environ["HADOOP_HOME"] = os.path.abspath(r".venv/lib/pyspark")
-        os.environ["HADOOP_HOME"] = (
-            Path(".venv").joinpath("lib").joinpath("pyspark").absolute()
+        os.environ["HADOOP_HOME"] = str(
+            Path(".venv").joinpath("bin").joinpath("pyspark").absolute()
         )
         return cls
 
