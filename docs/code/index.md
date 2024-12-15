@@ -108,5 +108,5 @@ This package is fully tested against:
 ### Latest Code Coverage
 
 <div style="position:relative; border:none; width:100%; height:100%; display:block; overflow:auto;">
-    <iframe src="../../assets/coverage/index.html" style="width:100%; height:800px;"></iframe>
+    <iframe src="./coverage/index.html" style="width:100%; height:800px;"></iframe>
 </div>
