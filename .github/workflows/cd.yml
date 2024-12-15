@@ -120,6 +120,10 @@ jobs:
         with:
           python-version: '3.13'
 
+      - name: Install Java
+        id: install-java
+        run: make install-check-java
+
       - name: Set up Git
         id: setup-git
         env:
