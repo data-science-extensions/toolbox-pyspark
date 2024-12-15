@@ -292,6 +292,32 @@ jobs:
         id: check
         run: echo 'Package deployed to PyPI 👉 https://pypi.org/project/toolbox-pyspark/'
 
+  install-package:
+
+    name: Install Package on '${{ matrix.os }}' with '${{ matrix.python-version }}'
+    needs: deploy-package
+
+    strategy:
+      matrix:
+        os: ['ubuntu-latest', 'macos-latest', 'windows-latest']
+        python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
+      fail-fast: false
+      max-parallel: 15
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+
+      - name: Setup Python
+        id: setup-python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Check Installation
+        id: check
+        run: pip install toolbox-pyspark
+
   build-docs:
 
     name: Build Docs
