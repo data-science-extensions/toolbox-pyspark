@@ -114,7 +114,11 @@ jobs:
           dir .venv\Scripts
           echo "dir .venv\Lib:"
           dir .venv\Lib
+          echo "dir .venv\Lib\site-packages:"
+          dir .venv\Lib\site-packages
 
       - name: Run checks
         id: run-checks
         run: make check
+        env:
+          OS: ${{ matrix.os }}
