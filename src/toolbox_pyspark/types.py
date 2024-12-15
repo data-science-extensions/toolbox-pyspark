@@ -234,7 +234,7 @@ def get_column_types(
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        AttributeError: Invalid value for `output_type`: 'foo'.
+        AttributeError: Invalid value for `output_type`: "foo".
         Must be one of: ["pandas.DataFrame", "pandas", "pd.DataFrame", "pd.df", "pddf", "pdDataFrame", "pdDF", "pd", "spark.DataFrame", "pyspark.DataFrame", "pyspark", "spark", "ps.DataFrame", "ps.df", "psdf", "psDataFrame", "psDF", "ps"]
         ```
         !!! failure "Conclusion: Invalid input."
@@ -347,7 +347,7 @@ def cast_column_to_type(
         </div>
 
         ```{.py .python linenums="1" title="Example 1: Valid casting"}
-        >>> df = cast_column_to_type(df, 'a', 'string')
+        >>> df = cast_column_to_type(df, "a", "string")
         >>> get_column_types(df).show()
         ```
         <div class="result" markdown>
@@ -365,22 +365,22 @@ def cast_column_to_type(
         </div>
 
         ```{.py .python linenums="1" title="Example 2: Invalid column"}
-        >>> df = cast_column_to_type(df, 'x', 'string')
+        >>> df = cast_column_to_type(df, "x", "string")
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        AttributeError: Column 'x' does not exist in DataFrame.
-        Try one of: ['a', 'b', 'c', 'd'].
+        AttributeError: Column "x" does not exist in DataFrame.
+        Try one of: ["a", "b", "c", "d"].
         ```
         !!! failure "Conclusion: Column `x` does not exist as a valid column."
         </div>
 
         ```{.py .python linenums="1" title="Example 3: Invalid datatype"}
-        >>> df = cast_column_to_type(df, 'b', 'foo')
+        >>> df = cast_column_to_type(df, "b", "foo")
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        ParseException: DataType 'foo' is not supported.
+        ParseException: DataType "foo" is not supported.
         ```
         !!! failure "Conclusion: Datatype `foo` is not valid."
         </div>
@@ -479,7 +479,7 @@ def cast_columns_to_type(
         </div>
 
         ```{.py .python linenums="1" title="Example 1: Basic usage"}
-        >>> df = cast_column_to_type(df, ['a'], 'string')
+        >>> df = cast_column_to_type(df, ["a"], "string")
         >>> get_column_types(df).show()
         ```
         <div class="result" markdown>
@@ -493,10 +493,11 @@ def cast_columns_to_type(
         | d        | bigint   |
         +----------+----------+
         ```
+        !!! success "Conclusion: Successfully cast column to type."
         </div>
 
         ```{.py .python linenums="1" title="Example 2: Multiple columns"}
-        >>> df = cast_column_to_type(df, ['c', 'd'], 'string')
+        >>> df = cast_column_to_type(df, ["c", "d"], "string")
         >>> get_column_types(df).show()
         ```
         <div class="result" markdown>
@@ -510,25 +511,26 @@ def cast_columns_to_type(
         | d        | string   |
         +----------+----------+
         ```
+        !!! success "Conclusion: Successfully cast columns to type."
         </div>
 
         ```{.py .python linenums="1" title="Example 3: Invalid column"}
-        >>> df = cast_columns_to_type(df, ['x', 'y'], 'string')
+        >>> df = cast_columns_to_type(df, ["x", "y"], "string")
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        AttributeError: Columns ['x', 'y'] do not exist in DataFrame.
-        Try one of: ['a', 'b', 'c', 'd'].
+        AttributeError: Columns ["x", "y"] do not exist in DataFrame.
+        Try one of: ["a", "b", "c", "d"].
         ```
-        !!! failure "Conclusion: Columns [`x`] does not exist as a valid column."
+        !!! failure "Conclusion: Columns `[x]` does not exist as a valid column."
         </div>
 
         ```{.py .python linenums="1" title="Example 4: Invalid datatype"}
-        >>> df = cast_columns_to_type(df, ['a', 'b'], 'foo')
+        >>> df = cast_columns_to_type(df, ["a", "b"], "foo")
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        ParseException: DataType 'foo' is not supported.
+        ParseException: DataType "foo" is not supported.
         ```
         !!! failure "Conclusion: Datatype `foo` is not valid."
         </div>
@@ -610,7 +612,7 @@ def map_cast_columns_to_type(
         ```
         </div>
 
-        ```{.py .python linenums="1" title="Basic usage"}
+        ```{.py .python linenums="1" title="Example 1: Basic usage"}
         >>> df = map_cast_columns_to_type(df, {"str": ["a", "c"]})
         >>> get_column_types(df).show()
         ```
@@ -625,9 +627,10 @@ def map_cast_columns_to_type(
         | d        | string   |
         +----------+----------+
         ```
+        !!! success "Conclusion: Successfully cast columns to type."
         </div>
 
-        ```{.py .python linenums="1" title="Multiple types"}
+        ```{.py .python linenums="1" title="Example 2: Multiple types"}
         >>> df = map_cast_columns_to_type(df, {"int": ["a", "c"], "str": ["b"], "float": "d"})
         >>> get_column_types(df).show()
         ```
@@ -642,9 +645,10 @@ def map_cast_columns_to_type(
         | d        | float    |
         +----------+----------+
         ```
+        !!! success "Conclusion: Successfully cast columns to types."
         </div>
 
-        ```{.py .python linenums="1" title="All to single type"}
+        ```{.py .python linenums="1" title="Example 3: All to single type"}
         >>> df = map_cast_columns_to_type(df, {str: [col for col in df.columns]})
         >>> get_column_types(df).show()
         ```
@@ -659,6 +663,7 @@ def map_cast_columns_to_type(
         | d        | string   |
         +----------+----------+
         ```
+        !!! success "Conclusion: Successfully cast all columns to type."
         </div>
 
     ??? tip "See Also"
