@@ -92,7 +92,7 @@ check-pycln:
 	poetry run pycln --config="pyproject.toml" src/$(PACKAGE_NAME)
 check-mkdocs:
 	poetry run mkdocs build --site-dir="temp"
-	if [ -d "temp" ]; then rm --recursive temp; fi
+	if [ -d "temp" ]; then rm -rf temp; fi
 check: check-black check-pycln check-isort check-codespell check-pylint check-mkdocs check-pytest
 # check: check-black check-mypy check-pycln check-isort check-codespell check-pylint check-mkdocs check-pytest
 
