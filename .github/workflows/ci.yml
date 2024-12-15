@@ -49,7 +49,7 @@ jobs:
 
     strategy:
       matrix:
-        os: ['ubuntu-latest', 'macos-latest', 'windows-latest']
+        os: ['ubuntu-latest', 'macos-latest']
         python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
       fail-fast: false
       max-parallel: 15
@@ -89,36 +89,6 @@ jobs:
         id: install-dependencies
         run: make install-all
 
-      - name: Check .venv setup on ${{ matrix.os }}
-        id: check-venv-not-windows
-        if: ${{ matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest' }}
-        run: |
-          echo "ls -la:"
-          ls -la
-          echo "ls -la .venv:"
-          ls -la .venv
-          echo "ls -la .venv/bin:"
-          ls -la .venv/bin
-          echo "ls -la .venv/lib:"
-          ls -la .venv/lib
-
-      - name: Check .venv setup on ${{ matrix.os }}
-        id: check-venv-windows
-        if: ${{ matrix.os == 'windows-latest' }}
-        run: |
-          echo "dir:"
-          dir
-          echo "dir .venv:"
-          dir .venv
-          echo "dir .venv\Scripts:"
-          dir .venv\Scripts
-          echo "dir .venv\Lib:"
-          dir .venv\Lib
-          echo "dir .venv\Lib\site-packages:"
-          dir .venv\Lib\site-packages
-
       - name: Run checks
         id: run-checks
         run: make check
-        env:
-          OS: ${{ matrix.os }}

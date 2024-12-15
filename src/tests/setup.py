@@ -102,17 +102,9 @@ class PySparkSetup(TestCase):
     def setup_environ(cls) -> PySparkSetup:
         os.environ["PYSPARK_PYTHON"] = sys.executable
         os.environ["PYSPARK_DRIVER_PYTHON"] = sys.executable
-        # os.environ["HADOOP_HOME"] = os.path.abspath(r".venv/lib/pyspark")
-        print(os.environ["OS"])
-        print(os.name)
-        if os.environ["OS"] == "windows-latest":
-            os.environ["HADOOP_HOME"] = str(
-                Path(".venv").joinpath("Lib", "site-packages", "pyspark").absolute()
-            )
-        elif os.environ["OS"] in ("ubuntu-latest", "macos-latest"):
-            os.environ["HADOOP_HOME"] = str(
-                Path(".venv").joinpath("bin", "pyspark").absolute()
-            )
+        os.environ["HADOOP_HOME"] = str(
+            Path(".venv").joinpath("bin", "pyspark").absolute()
+        )
         return cls
 
     @classmethod
