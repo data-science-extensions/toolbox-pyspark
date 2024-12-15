@@ -315,7 +315,7 @@ def assert_column_exists(
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        Attribute Error: Column 'c' does not exist in 'dataframe'.
+        Attribute Error: Column "c" does not exist in "dataframe".
         Try one of: ["a", "b"].
         ```
         !!! failure "Conclusion: Column does not exist."
@@ -390,10 +390,10 @@ def assert_columns_exists(
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        Attribute Error: Columns ["c"] do not exist in 'dataframe'.
+        Attribute Error: Columns ["c"] do not exist in "dataframe".
         Try one of: ["a", "b"].
         ```
-        !!! failure "Conclusion: Column 'c' does not exist."
+        !!! failure "Conclusion: Column "c" does not exist."
         </div>
 
         ```{.py .python linenums="1" title="Example 3: Multiple columns missing"}
@@ -401,10 +401,10 @@ def assert_columns_exists(
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        Attribute Error: Columns ["c", "d"] do not exist in 'dataframe'.
+        Attribute Error: Columns ["c", "d"] do not exist in "dataframe".
         Try one of: ["a", "b"].
         ```
-        !!! failure "Conclusion: Columns 'c' and 'd' does not exist."
+        !!! failure "Conclusion: Columns "c" and "d" does not exist."
         </div>
     """
     (exist, missing_cols) = _columns_exists(dataframe, columns, match_case)
