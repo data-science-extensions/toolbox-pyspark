@@ -68,11 +68,6 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      # - name: Install Java on Ubuntu
-      #   id: install-java-ubuntu
-      #   if: ${{ matrix.os == 'ubuntu-latest' }}
-      #   run: make install-check-java
-
       - name: Install Java
         id: install-java
         # if: ${{ matrix.os == 'macos-latest' }}
@@ -93,6 +88,15 @@ jobs:
       - name: Install dependencies
         id: install-dependencies
         run: make install-all
+
+      - name: Check .venv setup
+        id: check-venv
+        run: |
+          ls -la
+          ls -la .venv
+          ls -la .venv/bin
+          ls -la .venv/lib
+          ls -la .venv/lib/site-packages
 
       - name: Run checks
         id: run-checks
