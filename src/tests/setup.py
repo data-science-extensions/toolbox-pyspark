@@ -16,8 +16,9 @@ from __future__ import annotations
 # ## Python StdLib Imports ----
 import os
 import sys
+from pathlib import Path
 from string import ascii_letters
-from typing import Callable, Union
+from typing import Callable
 from unittest import TestCase
 
 # ## Python Third Party Imports ----
@@ -101,7 +102,10 @@ class PySparkSetup(TestCase):
     def setup_environ(cls) -> PySparkSetup:
         os.environ["PYSPARK_PYTHON"] = sys.executable
         os.environ["PYSPARK_DRIVER_PYTHON"] = sys.executable
-        os.environ["HADOOP_HOME"] = os.path.abspath(r".venv/Lib/site-packages/pyspark")
+        # os.environ["HADOOP_HOME"] = os.path.abspath(r".venv/lib/pyspark")
+        os.environ["HADOOP_HOME"] = (
+            Path(".venv").joinpath("lib").joinpath("pyspark").absolute()
+        )
         return cls
 
     @classmethod
