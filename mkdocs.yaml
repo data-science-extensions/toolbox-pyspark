@@ -55,6 +55,7 @@ nav:
       - Types: code/types.md
       - Keys: code/keys.md
       - Scale: code/scale.md
+      - Dimensions: code/dimensions.md
 
 
 markdown_extensions:
