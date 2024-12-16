@@ -47,7 +47,7 @@ For reference, these URL's are used:
 |---|---|---|
 | Git Repo | GitHub | https://github.com/data-science-extensions/toolbox-pyspark |
 | Python Package | PyPI | https://pypi.org/project/toolbox-pyspark |
-| Package Docs | Pages | https://data-science-extensions.com/toolbox-pyspark/ |
+| Package Docs | Pages | https://data-science-extensions.com/toolbox-pyspark |
 
 
 ### Installation
@@ -251,7 +251,7 @@ To ensure that the package is working as expected, please ensure that:
 [github-license]: https://github.com/data-science-extensions/toolbox-pyspark/blob/main/LICENSE
 [codecov-repo]: https://codecov.io/gh/data-science-extensions/toolbox-pyspark
 [pypi]: https://pypi.org/project/toolbox-pyspark
-[docs]: ...
+[docs]: https://data-science-extensions.com/toolbox-pyspark
 [pip]: https://pypi.org/project/pip
 [pipenv]: https://github.com/pypa/pipenv
 [poetry]: https://python-poetry.org
