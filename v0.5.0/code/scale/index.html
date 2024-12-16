@@ -1,0 +1,2342 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Helper files/functions/classes for generic PySpark processes">
+      
+      
+        <meta name="author" content="[Chris Mahoney](mailto:chris@mahoneyconsultingservices.com)">
+      
+      
+      
+        <link rel="prev" href="../keys/">
+      
+      
+      
+      <link rel="icon" href="../../assets/images/spark.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.49">
+    
+    
+      
+        <title>Scale - PySpark Toolbox</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6f8fc17f.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/style.css">
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/admonitions.css">
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/code_chunks.css">
+    
+      <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.4.2/css/all.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#toolbox_pyspark.scale" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+          <aside class="md-banner md-banner--warning">
+            <div class="md-banner__inner md-grid md-typeset">
+              
+  You're not viewing the latest version.
+  <a href="../../..">
+    <strong>Click here to go to latest.</strong>
+  </a>
+
+            </div>
+            <script>var el=document.querySelector("[data-md-component=outdated]"),outdated=__md_get("__outdated",sessionStorage);!0===outdated&&el&&(el.hidden=!1)</script>
+          </aside>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="PySpark Toolbox" class="md-header__button md-logo" aria-label="PySpark Toolbox" data-md-component="logo">
+      
+  <img src="../../assets/images/spark.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            PySpark Toolbox
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Scale
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/data-science-extensions/toolbox-pyspark" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m21.94 13.11-1.05-3.22c0-.03-.01-.06-.02-.09l-2.11-6.48a.86.86 0 0 0-.8-.57c-.36 0-.68.25-.79.58l-2 6.17H8.84L6.83 3.33a.85.85 0 0 0-.79-.58c-.37 0-.69.25-.8.58L3.13 9.82v.01l-1.07 3.28c-.16.5.01 1.04.44 1.34l9.22 6.71c.17.12.39.12.56-.01l9.22-6.7c.43-.3.6-.84.44-1.34M8.15 10.45l2.57 7.91-6.17-7.91m8.73 7.92 2.47-7.59.1-.33h3.61l-5.59 7.16m4.1-13.67 1.81 5.56h-3.62m-1.3.95-1.79 5.51L12 19.24l-2.86-8.79M6.03 3.94 7.84 9.5H4.23m-1.18 4.19c-.09-.07-.13-.19-.09-.29l.79-2.43 5.82 7.45m11.38-4.73-6.51 4.73.02-.03 5.79-7.42.79 2.43c.04.1 0 .22-.09.29"/></svg>
+  </div>
+  <div class="md-source__repository">
+    toolbox-pyspark
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../usage/overview/" class="md-tabs__link">
+          
+  
+    
+  
+  Usage
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+    
+  
+  Modules
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="PySpark Toolbox" class="md-nav__button md-logo" aria-label="PySpark Toolbox" data-md-component="logo">
+      
+  <img src="../../assets/images/spark.svg" alt="logo">
+
+    </a>
+    PySpark Toolbox
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/data-science-extensions/toolbox-pyspark" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m21.94 13.11-1.05-3.22c0-.03-.01-.06-.02-.09l-2.11-6.48a.86.86 0 0 0-.8-.57c-.36 0-.68.25-.79.58l-2 6.17H8.84L6.83 3.33a.85.85 0 0 0-.79-.58c-.37 0-.69.25-.8.58L3.13 9.82v.01l-1.07 3.28c-.16.5.01 1.04.44 1.34l9.22 6.71c.17.12.39.12.56-.01l9.22-6.7c.43-.3.6-.84.44-1.34M8.15 10.45l2.57 7.91-6.17-7.91m8.73 7.92 2.47-7.59.1-.33h3.61l-5.59 7.16m4.1-13.67 1.81 5.56h-3.62m-1.3.95-1.79 5.51L12 19.24l-2.86-8.79M6.03 3.94 7.84 9.5H4.23m-1.18 4.19c-.09-.07-.13-.19-.09-.29l.79-2.43 5.82 7.45m11.38-4.73-6.51 4.73.02-.03 5.79-7.42.79 2.43c.04.1 0 .22-.09.29"/></svg>
+  </div>
+  <div class="md-source__repository">
+    toolbox-pyspark
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Usage
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Usage
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/roadmap/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Roadmap
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Modules
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Modules
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../io/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    IO
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../checks/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Checks
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../types/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Types
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../keys/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Keys
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Scale
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Scale
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#toolbox_pyspark.scale" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-module"></code>&nbsp;scale
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" scale">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#toolbox_pyspark.scale.round_column" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;round_column
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toolbox_pyspark.scale.round_columns" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;round_columns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#toolbox_pyspark.scale" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-module"></code>&nbsp;scale
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" scale">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#toolbox_pyspark.scale.round_column" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;round_column
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#toolbox_pyspark.scale.round_columns" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;round_columns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+    <a href="https://github.com/data-science-extensions/toolbox-pyspark/edit/main/docs/code/scale.md" title="Edit this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/data-science-extensions/toolbox-pyspark/raw/main/docs/code/scale.md" title="View source of this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
+    </a>
+  
+
+
+  <h1>Scale</h1>
+
+<div class="doc doc-object doc-module">
+
+
+
+<h3 id="toolbox_pyspark.scale" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-module"></code>            <span class="doc doc-object-name doc-module-name">toolbox_pyspark.scale</span>
+
+
+<a href="#toolbox_pyspark.scale" class="headerlink" title="Permanent link">🔗</a></h3>
+
+    <div class="doc doc-contents first">
+
+        <div class="admonition note">
+<p class="admonition-title">Summary</p>
+<p>The <code>scale</code> module is used for rounding a column (or columns) to a given rounding accuracy.</p>
+</div>
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="toolbox_pyspark.scale.round_column" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <span class="doc doc-object-name doc-function-name">round_column</span>
+
+
+<a href="#toolbox_pyspark.scale.round_column" class="headerlink" title="Permanent link">🔗</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">round_column</span><span class="p">(</span>
+    <span class="n">dataframe</span><span class="p">:</span> <span class="n">psDataFrame</span><span class="p">,</span>
+    <span class="n">column</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">scale</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DEFAULT_DECIMAL_ACCURACY</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">psDataFrame</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <div class="admonition note">
+<p class="admonition-title">Summary</p>
+<p>For a given <code>dataframe</code>, on a given <code>column</code> if the column data type is decimal (that is, one of: <code class="highlight"><span class="p">[</span><span class="s2">&quot;float&quot;</span><span class="p">,</span> <span class="s2">&quot;double&quot;</span><span class="p">,</span> <span class="s2">&quot;decimal&quot;</span><span class="p">]</span></code>), then round that column to a <code>scale</code> accuracy at a given number of decimal places.</p>
+</div>
+<details class="abstract" open="open">
+<summary>Details</summary>
+<p>Realistically, under the hood, this function is super simple. It merely runs:
+<div class="python highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Python</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">dataframe</span> <span class="o">=</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="n">colName</span><span class="o">=</span><span class="n">column</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">col</span><span class="o">=</span><span class="n">column</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">))</span>
+</code></pre></div></td></tr></table></div>
+This function merely adds some additional validation, and is enabled to run in a pyspark <code>.transform()</code> method.
+For more info, see: <a href="https://spark.apache.org/docs/3.1.3/api/python/reference/api/pyspark.sql.DataFrame.transform.html"><code>pyspark.sql.DataFrame.transform</code></a></p>
+</details>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>dataframe</code>
+            </td>
+            <td>
+                  <code><span title="pyspark.sql.DataFrame">DataFrame</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The <code>dataframe</code> to be transformed.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>column</code>
+            </td>
+            <td>
+                  <code>str</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The desired column to be rounded.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>scale</code>
+            </td>
+            <td>
+                  <code>int</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The required level of rounding for the column.<br>
+If not provided explicitly, it will default to the global value <code class="highlight"><span class="n">DEFAULT_DECIMAL_ACCURACY</span></code>; which is <code class="highlight"><span class="mi">10</span></code>.<br>
+Defaults to <code class="highlight"><span class="n">DEFAULT_DECIMAL_ACCURACY</span></code>.</p>
+              </div>
+            </td>
+            <td>
+                  <code><span title="toolbox_pyspark.scale.DEFAULT_DECIMAL_ACCURACY">DEFAULT_DECIMAL_ACCURACY</span></code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<p><span class="doc-section-title">Raises:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code>TypeError</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If any of the inputs parsed to the parameters of this function are not the correct type. Uses the <a href="https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked"><code>@typeguard.typechecked</code></a> decorator.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                  <code>TypeError</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If the given <code>column</code> is not one of the correct data types for rounding. It must be one of: <code class="highlight"><span class="p">[</span><span class="s2">&quot;float&quot;</span><span class="p">,</span> <span class="s2">&quot;double&quot;</span><span class="p">,</span> <span class="s2">&quot;decimal&quot;</span><span class="p">]</span></code>.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="pyspark.sql.DataFrame">DataFrame</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The transformed <code>dataframe</code> containing the column which has now been rounded.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+        <details class="example" open="open">
+<summary>Examples</summary>
+<p><div class="python highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Set up</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="c1"># Imports</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">pyspark.sql</span> <span class="kn">import</span> <span class="n">SparkSession</span><span class="p">,</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">F</span><span class="p">,</span> <span class="n">types</span> <span class="k">as</span> <span class="n">T</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">pyspark_helpers.io</span> <span class="kn">import</span> <span class="n">read_from_path</span>
+<span class="o">&gt;&gt;&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="c1"># Instantiate Spark</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">spark</span> <span class="o">=</span> <span class="n">SparkSession</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="c1"># Create data</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">df</span> <span class="o">=</span> <span class="p">(</span>
+<span class="o">...</span>     <span class="n">spark</span>
+<span class="o">...</span>     <span class="o">.</span><span class="n">createDataFrame</span><span class="p">(</span>
+<span class="o">...</span>         <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+<span class="o">...</span>             <span class="p">{</span>
+<span class="o">...</span>                 <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span>
+<span class="o">...</span>                 <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;1.</span><span class="si">{</span><span class="s1">&#39;0&#39;</span><span class="o">*</span><span class="n">val</span><span class="si">}</span><span class="s2">1&quot;</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">)],</span>
+<span class="o">...</span>                 <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;1.</span><span class="si">{</span><span class="s1">&#39;0&#39;</span><span class="o">*</span><span class="n">val</span><span class="si">}</span><span class="s2">6&quot;</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">)],</span>
+<span class="o">...</span>             <span class="p">}</span>
+<span class="o">...</span>         <span class="p">)</span>
+<span class="o">...</span>     <span class="p">)</span>
+<span class="o">...</span>     <span class="o">.</span><span class="n">withColumns</span><span class="p">(</span>
+<span class="o">...</span>         <span class="p">{</span>
+<span class="o">...</span>             <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">DecimalType</span><span class="p">(</span><span class="mi">21</span><span class="p">,</span> <span class="mi">20</span><span class="p">)),</span>
+<span class="o">...</span>             <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;c&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">DecimalType</span><span class="p">(</span><span class="mi">21</span><span class="p">,</span> <span class="mi">20</span><span class="p">)),</span>
+<span class="o">...</span>         <span class="p">}</span>
+<span class="o">...</span>     <span class="p">)</span>
+<span class="o">...</span> <span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="c1"># Check</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">df</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">truncate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+<div class="result" markdown>
+<div class="text highlight"><span class="filename">Terminal</span><pre><span></span><code>+---+----------------------+----------------------+
+|a  |b                     |c                     |
++---+----------------------+----------------------+
+|0  |1.10000000000000000000|1.60000000000000000000|
+|1  |1.01000000000000000000|1.06000000000000000000|
+|2  |1.00100000000000000000|1.00600000000000000000|
+|3  |1.00010000000000000000|1.00060000000000000000|
+|4  |1.00001000000000000000|1.00006000000000000000|
+|5  |1.00000100000000000000|1.00000600000000000000|
+|6  |1.00000010000000000000|1.00000060000000000000|
+|7  |1.00000001000000000000|1.00000006000000000000|
+|8  |1.00000000100000000000|1.00000000600000000000|
+|9  |1.00000000010000000000|1.00000000060000000000|
+|10 |1.00000000001000000000|1.00000000006000000000|
+|11 |1.00000000000100000000|1.00000000000600000000|
+|12 |1.00000000000010000000|1.00000000000060000000|
+|13 |1.00000000000001000000|1.00000000000006000000|
+|14 |1.00000000000000100000|1.00000000000000600000|
+|15 |1.00000000000000010000|1.00000000000000060000|
+|16 |1.00000000000000001000|1.00000000000000006000|
+|17 |1.00000000000000000100|1.00000000000000000600|
+|18 |1.00000000000000000010|1.00000000000000000060|
+|19 |1.00000000000000000001|1.00000000000000000006|
++---+----------------------+----------------------+
+</code></pre></div>
+</div></p>
+<p><div class="python highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Example 1: Round with defaults</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">round_column</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">truncate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+<div class="result" markdown>
+<div class="text highlight"><span class="filename">Terminal</span><pre><span></span><code>+---+------------+----------------------+
+|a  |b           |c                     |
++---+------------+----------------------+
+|0  |1.1000000000|1.60000000000000000000|
+|1  |1.0100000000|1.06000000000000000000|
+|2  |1.0010000000|1.00600000000000000000|
+|3  |1.0001000000|1.00060000000000000000|
+|4  |1.0000100000|1.00006000000000000000|
+|5  |1.0000010000|1.00000600000000000000|
+|6  |1.0000001000|1.00000060000000000000|
+|7  |1.0000000100|1.00000006000000000000|
+|8  |1.0000000010|1.00000000600000000000|
+|9  |1.0000000001|1.00000000060000000000|
+|10 |1.0000000000|1.00000000006000000000|
+|11 |1.0000000000|1.00000000000600000000|
+|12 |1.0000000000|1.00000000000060000000|
+|13 |1.0000000000|1.00000000000006000000|
+|14 |1.0000000000|1.00000000000000600000|
+|15 |1.0000000000|1.00000000000000060000|
+|16 |1.0000000000|1.00000000000000006000|
+|17 |1.0000000000|1.00000000000000000600|
+|18 |1.0000000000|1.00000000000000000060|
+|19 |1.0000000000|1.00000000000000000006|
++---+------------+----------------------+
+</code></pre></div></p>
+<div class="admonition success">
+<p class="admonition-title">Conclusion: Successfully rounded column <code>b</code>.</p>
+</div>
+</div>
+<p><div class="python highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Example 2: Round to custom number</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">round_column</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">truncate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+<div class="result" markdown>
+<div class="text highlight"><span class="filename">Terminal</span><pre><span></span><code>+---+----------------------+-------+
+|a  |b                     |c      |
++---+----------------------+-------+
+|0  |1.10000000000000000000|1.60000|
+|1  |1.01000000000000000000|1.06000|
+|2  |1.00100000000000000000|1.00600|
+|3  |1.00010000000000000000|1.00060|
+|4  |1.00001000000000000000|1.00006|
+|5  |1.00000100000000000000|1.00001|
+|6  |1.00000010000000000000|1.00000|
+|7  |1.00000001000000000000|1.00000|
+|8  |1.00000000100000000000|1.00000|
+|9  |1.00000000010000000000|1.00000|
+|10 |1.00000000001000000000|1.00000|
+|11 |1.00000000000100000000|1.00000|
+|12 |1.00000000000010000000|1.00000|
+|13 |1.00000000000001000000|1.00000|
+|14 |1.00000000000000100000|1.00000|
+|15 |1.00000000000000010000|1.00000|
+|16 |1.00000000000000001000|1.00000|
+|17 |1.00000000000000000100|1.00000|
+|18 |1.00000000000000000010|1.00000|
+|19 |1.00000000000000000001|1.00000|
++---+----------------------+-------+
+</code></pre></div></p>
+<div class="admonition success">
+<p class="admonition-title">Conclusion: Successfully rounded column <code>b</code> to 5 decimal points.</p>
+</div>
+</div>
+<p><div class="python highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Example 3: Raise error</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">round_column</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">truncate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+<div class="result" markdown>
+<div class="text highlight"><span class="filename">Terminal</span><pre><span></span><code>TypeError: Column is not the correct type. Please check.
+For column &#39;a&#39;, the type is &#39;bigint&#39;.
+In order to round it, it needs to be one of: &#39;[&quot;float&quot;, &quot;double&quot;, &quot;decimal&quot;]&#39;.
+</code></pre></div></p>
+<div class="admonition failure">
+<p class="admonition-title">Conclusion: Cannot round a column <code>a</code>.</p>
+</div>
+</div>
+</details>
+
+            <details class="quote">
+              <summary>Source code in <code>src/toolbox_pyspark/scale.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span>
+<span class="normal">240</span>
+<span class="normal">241</span>
+<span class="normal">242</span>
+<span class="normal">243</span>
+<span class="normal">244</span>
+<span class="normal">245</span>
+<span class="normal">246</span>
+<span class="normal">247</span>
+<span class="normal">248</span>
+<span class="normal">249</span>
+<span class="normal">250</span>
+<span class="normal">251</span>
+<span class="normal">252</span>
+<span class="normal">253</span>
+<span class="normal">254</span>
+<span class="normal">255</span>
+<span class="normal">256</span>
+<span class="normal">257</span>
+<span class="normal">258</span>
+<span class="normal">259</span>
+<span class="normal">260</span>
+<span class="normal">261</span>
+<span class="normal">262</span>
+<span class="normal">263</span>
+<span class="normal">264</span>
+<span class="normal">265</span>
+<span class="normal">266</span>
+<span class="normal">267</span>
+<span class="normal">268</span>
+<span class="normal">269</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@typechecked</span>
+<span class="k">def</span> <span class="nf">round_column</span><span class="p">(</span>
+    <span class="n">dataframe</span><span class="p">:</span> <span class="n">psDataFrame</span><span class="p">,</span>
+    <span class="n">column</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">scale</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DEFAULT_DECIMAL_ACCURACY</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">psDataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    !!! note &quot;Summary&quot;</span>
+<span class="sd">        For a given `dataframe`, on a given `column` if the column data type is decimal (that is, one of: `#!py [&quot;float&quot;, &quot;double&quot;, &quot;decimal&quot;]`), then round that column to a `scale` accuracy at a given number of decimal places.</span>
+
+<span class="sd">    ???+ abstract &quot;Details&quot;</span>
+<span class="sd">        Realistically, under the hood, this function is super simple. It merely runs:</span>
+<span class="sd">        ```{.py .python linenums=&quot;1&quot; title=&quot;Python&quot;}</span>
+<span class="sd">        dataframe = dataframe.withColumn(colName=column, col=F.round(col=column, scale=scale))</span>
+<span class="sd">        ```</span>
+<span class="sd">        This function merely adds some additional validation, and is enabled to run in a pyspark `.transform()` method.</span>
+<span class="sd">        For more info, see: [`pyspark.sql.DataFrame.transform`](https://spark.apache.org/docs/3.1.3/api/python/reference/api/pyspark.sql.DataFrame.transform.html)</span>
+
+<span class="sd">    Params:</span>
+<span class="sd">        dataframe (psDataFrame):</span>
+<span class="sd">            The `dataframe` to be transformed.</span>
+<span class="sd">        column (str):</span>
+<span class="sd">            The desired column to be rounded.</span>
+<span class="sd">        scale (int, optional):</span>
+<span class="sd">            The required level of rounding for the column.&lt;br&gt;</span>
+<span class="sd">            If not provided explicitly, it will default to the global value `#!py DEFAULT_DECIMAL_ACCURACY`; which is `#!py 10`.&lt;br&gt;</span>
+<span class="sd">            Defaults to `#!py DEFAULT_DECIMAL_ACCURACY`.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        TypeError:</span>
+<span class="sd">            If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.</span>
+<span class="sd">        TypeError:</span>
+<span class="sd">            If the given `column` is not one of the correct data types for rounding. It must be one of: `#!py [&quot;float&quot;, &quot;double&quot;, &quot;decimal&quot;]`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        (psDataFrame):</span>
+<span class="sd">            The transformed `dataframe` containing the column which has now been rounded.</span>
+
+<span class="sd">    ???+ example &quot;Examples&quot;</span>
+
+<span class="sd">        ```{.py .python linenums=&quot;1&quot; title=&quot;Set up&quot;}</span>
+<span class="sd">        &gt;&gt;&gt; # Imports</span>
+<span class="sd">        &gt;&gt;&gt; import pandas as pd</span>
+<span class="sd">        &gt;&gt;&gt; from pyspark.sql import SparkSession, functions as F, types as T</span>
+<span class="sd">        &gt;&gt;&gt; from pyspark_helpers.io import read_from_path</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; # Instantiate Spark</span>
+<span class="sd">        &gt;&gt;&gt; spark = SparkSession.builder.getOrCreate()</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; # Create data</span>
+<span class="sd">        &gt;&gt;&gt; df = (</span>
+<span class="sd">        ...     spark</span>
+<span class="sd">        ...     .createDataFrame(</span>
+<span class="sd">        ...         pd.DataFrame(</span>
+<span class="sd">        ...             {</span>
+<span class="sd">        ...                 &quot;a&quot;: range(20),</span>
+<span class="sd">        ...                 &quot;b&quot;: [f&quot;1.{&#39;0&#39;*val}1&quot; for val in range(20)],</span>
+<span class="sd">        ...                 &quot;c&quot;: [f&quot;1.{&#39;0&#39;*val}6&quot; for val in range(20)],</span>
+<span class="sd">        ...             }</span>
+<span class="sd">        ...         )</span>
+<span class="sd">        ...     )</span>
+<span class="sd">        ...     .withColumns(</span>
+<span class="sd">        ...         {</span>
+<span class="sd">        ...             &quot;b&quot;: F.col(&quot;b&quot;).cast(T.DecimalType(21, 20)),</span>
+<span class="sd">        ...             &quot;c&quot;: F.col(&quot;c&quot;).cast(T.DecimalType(21, 20)),</span>
+<span class="sd">        ...         }</span>
+<span class="sd">        ...     )</span>
+<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; # Check</span>
+<span class="sd">        &gt;&gt;&gt; df.show(truncate=False)</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;div class=&quot;result&quot; markdown&gt;</span>
+<span class="sd">        ```{.txt .text title=&quot;Terminal&quot;}</span>
+<span class="sd">        +---+----------------------+----------------------+</span>
+<span class="sd">        |a  |b                     |c                     |</span>
+<span class="sd">        +---+----------------------+----------------------+</span>
+<span class="sd">        |0  |1.10000000000000000000|1.60000000000000000000|</span>
+<span class="sd">        |1  |1.01000000000000000000|1.06000000000000000000|</span>
+<span class="sd">        |2  |1.00100000000000000000|1.00600000000000000000|</span>
+<span class="sd">        |3  |1.00010000000000000000|1.00060000000000000000|</span>
+<span class="sd">        |4  |1.00001000000000000000|1.00006000000000000000|</span>
+<span class="sd">        |5  |1.00000100000000000000|1.00000600000000000000|</span>
+<span class="sd">        |6  |1.00000010000000000000|1.00000060000000000000|</span>
+<span class="sd">        |7  |1.00000001000000000000|1.00000006000000000000|</span>
+<span class="sd">        |8  |1.00000000100000000000|1.00000000600000000000|</span>
+<span class="sd">        |9  |1.00000000010000000000|1.00000000060000000000|</span>
+<span class="sd">        |10 |1.00000000001000000000|1.00000000006000000000|</span>
+<span class="sd">        |11 |1.00000000000100000000|1.00000000000600000000|</span>
+<span class="sd">        |12 |1.00000000000010000000|1.00000000000060000000|</span>
+<span class="sd">        |13 |1.00000000000001000000|1.00000000000006000000|</span>
+<span class="sd">        |14 |1.00000000000000100000|1.00000000000000600000|</span>
+<span class="sd">        |15 |1.00000000000000010000|1.00000000000000060000|</span>
+<span class="sd">        |16 |1.00000000000000001000|1.00000000000000006000|</span>
+<span class="sd">        |17 |1.00000000000000000100|1.00000000000000000600|</span>
+<span class="sd">        |18 |1.00000000000000000010|1.00000000000000000060|</span>
+<span class="sd">        |19 |1.00000000000000000001|1.00000000000000000006|</span>
+<span class="sd">        +---+----------------------+----------------------+</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;/div&gt;</span>
+
+<span class="sd">        ```{.py .python linenums=&quot;1&quot; title=&quot;Example 1: Round with defaults&quot;}</span>
+<span class="sd">        &gt;&gt;&gt; round_column(df, &quot;b&quot;).show(truncate=False)</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;div class=&quot;result&quot; markdown&gt;</span>
+<span class="sd">        ```{.txt .text title=&quot;Terminal&quot;}</span>
+<span class="sd">        +---+------------+----------------------+</span>
+<span class="sd">        |a  |b           |c                     |</span>
+<span class="sd">        +---+------------+----------------------+</span>
+<span class="sd">        |0  |1.1000000000|1.60000000000000000000|</span>
+<span class="sd">        |1  |1.0100000000|1.06000000000000000000|</span>
+<span class="sd">        |2  |1.0010000000|1.00600000000000000000|</span>
+<span class="sd">        |3  |1.0001000000|1.00060000000000000000|</span>
+<span class="sd">        |4  |1.0000100000|1.00006000000000000000|</span>
+<span class="sd">        |5  |1.0000010000|1.00000600000000000000|</span>
+<span class="sd">        |6  |1.0000001000|1.00000060000000000000|</span>
+<span class="sd">        |7  |1.0000000100|1.00000006000000000000|</span>
+<span class="sd">        |8  |1.0000000010|1.00000000600000000000|</span>
+<span class="sd">        |9  |1.0000000001|1.00000000060000000000|</span>
+<span class="sd">        |10 |1.0000000000|1.00000000006000000000|</span>
+<span class="sd">        |11 |1.0000000000|1.00000000000600000000|</span>
+<span class="sd">        |12 |1.0000000000|1.00000000000060000000|</span>
+<span class="sd">        |13 |1.0000000000|1.00000000000006000000|</span>
+<span class="sd">        |14 |1.0000000000|1.00000000000000600000|</span>
+<span class="sd">        |15 |1.0000000000|1.00000000000000060000|</span>
+<span class="sd">        |16 |1.0000000000|1.00000000000000006000|</span>
+<span class="sd">        |17 |1.0000000000|1.00000000000000000600|</span>
+<span class="sd">        |18 |1.0000000000|1.00000000000000000060|</span>
+<span class="sd">        |19 |1.0000000000|1.00000000000000000006|</span>
+<span class="sd">        +---+------------+----------------------+</span>
+<span class="sd">        ```</span>
+<span class="sd">        !!! success &quot;Conclusion: Successfully rounded column `b`.&quot;</span>
+<span class="sd">        &lt;/div&gt;</span>
+
+<span class="sd">        ```{.py .python linenums=&quot;1&quot; title=&quot;Example 2: Round to custom number&quot;}</span>
+<span class="sd">        &gt;&gt;&gt; round_column(df, &quot;c&quot;, 5).show(truncate=False)</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;div class=&quot;result&quot; markdown&gt;</span>
+<span class="sd">        ```{.txt .text title=&quot;Terminal&quot;}</span>
+<span class="sd">        +---+----------------------+-------+</span>
+<span class="sd">        |a  |b                     |c      |</span>
+<span class="sd">        +---+----------------------+-------+</span>
+<span class="sd">        |0  |1.10000000000000000000|1.60000|</span>
+<span class="sd">        |1  |1.01000000000000000000|1.06000|</span>
+<span class="sd">        |2  |1.00100000000000000000|1.00600|</span>
+<span class="sd">        |3  |1.00010000000000000000|1.00060|</span>
+<span class="sd">        |4  |1.00001000000000000000|1.00006|</span>
+<span class="sd">        |5  |1.00000100000000000000|1.00001|</span>
+<span class="sd">        |6  |1.00000010000000000000|1.00000|</span>
+<span class="sd">        |7  |1.00000001000000000000|1.00000|</span>
+<span class="sd">        |8  |1.00000000100000000000|1.00000|</span>
+<span class="sd">        |9  |1.00000000010000000000|1.00000|</span>
+<span class="sd">        |10 |1.00000000001000000000|1.00000|</span>
+<span class="sd">        |11 |1.00000000000100000000|1.00000|</span>
+<span class="sd">        |12 |1.00000000000010000000|1.00000|</span>
+<span class="sd">        |13 |1.00000000000001000000|1.00000|</span>
+<span class="sd">        |14 |1.00000000000000100000|1.00000|</span>
+<span class="sd">        |15 |1.00000000000000010000|1.00000|</span>
+<span class="sd">        |16 |1.00000000000000001000|1.00000|</span>
+<span class="sd">        |17 |1.00000000000000000100|1.00000|</span>
+<span class="sd">        |18 |1.00000000000000000010|1.00000|</span>
+<span class="sd">        |19 |1.00000000000000000001|1.00000|</span>
+<span class="sd">        +---+----------------------+-------+</span>
+<span class="sd">        ```</span>
+<span class="sd">        !!! success &quot;Conclusion: Successfully rounded column `b` to 5 decimal points.&quot;</span>
+<span class="sd">        &lt;/div&gt;</span>
+
+<span class="sd">        ```{.py .python linenums=&quot;1&quot; title=&quot;Example 3: Raise error&quot;}</span>
+<span class="sd">        &gt;&gt;&gt; round_column(df, &quot;a&quot;).show(truncate=False)</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;div class=&quot;result&quot; markdown&gt;</span>
+<span class="sd">        ```{.txt .text title=&quot;Terminal&quot;}</span>
+<span class="sd">        TypeError: Column is not the correct type. Please check.</span>
+<span class="sd">        For column &#39;a&#39;, the type is &#39;bigint&#39;.</span>
+<span class="sd">        In order to round it, it needs to be one of: &#39;[&quot;float&quot;, &quot;double&quot;, &quot;decimal&quot;]&#39;.</span>
+<span class="sd">        ```</span>
+<span class="sd">        !!! failure &quot;Conclusion: Cannot round a column `a`.&quot;</span>
+<span class="sd">        &lt;/div&gt;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">assert_column_exists</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">column</span><span class="p">)</span>
+    <span class="n">col_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">typ</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">typ</span> <span class="ow">in</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">dtypes</span> <span class="k">if</span> <span class="n">col</span> <span class="o">==</span> <span class="n">column</span>
+    <span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">col_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">VALID_TYPES</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Column is not the correct type. Please check.</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;For column &#39;</span><span class="si">{</span><span class="n">column</span><span class="si">}</span><span class="s2">&#39;, the type is &#39;</span><span class="si">{</span><span class="n">col_type</span><span class="si">}</span><span class="s2">&#39;.</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;In order to round it, it needs to be one of: &#39;</span><span class="si">{</span><span class="n">VALID_TYPES</span><span class="si">}</span><span class="s2">&#39;.&quot;</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="n">colName</span><span class="o">=</span><span class="n">column</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">col</span><span class="o">=</span><span class="n">column</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">))</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="toolbox_pyspark.scale.round_columns" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-function"></code>            <span class="doc doc-object-name doc-function-name">round_columns</span>
+
+
+<a href="#toolbox_pyspark.scale.round_columns" class="headerlink" title="Permanent link">🔗</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">round_columns</span><span class="p">(</span>
+    <span class="n">dataframe</span><span class="p">:</span> <span class="n">psDataFrame</span><span class="p">,</span>
+    <span class="n">columns</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span>
+        <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">str_collection</span><span class="p">]</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;all_float&quot;</span><span class="p">,</span>
+    <span class="n">scale</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DEFAULT_DECIMAL_ACCURACY</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">psDataFrame</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <div class="admonition note">
+<p class="admonition-title">Summary</p>
+<p>For a given <code>dataframe</code>, on a set of <code>columns</code> if the column data type is decimal (that is, one of: <code class="highlight"><span class="p">[</span><span class="s2">&quot;float&quot;</span><span class="p">,</span> <span class="s2">&quot;double&quot;</span><span class="p">,</span> <span class="s2">&quot;decimal&quot;</span><span class="p">]</span></code>), then round that column to a <code>scale</code> accuracy at a given number of decimal places.</p>
+</div>
+<details class="abstract" open="open">
+<summary>Details</summary>
+<p>Realistically, under the hood, this function is super simple. It merely runs:
+<div class="python highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Python</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">dataframe</span> <span class="o">=</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">withColumns</span><span class="p">({</span><span class="n">col</span><span class="p">:</span> <span class="n">F</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">})</span>
+</code></pre></div></td></tr></table></div>
+This function merely adds some additional validation, and is enabled to run in a pyspark <code>.transform()</code> method.
+For more info, see: <a href="https://spark.apache.org/docs/3.1.3/api/python/reference/api/pyspark.sql.DataFrame.transform.html"><code>pyspark.sql.DataFrame.transform</code></a></p>
+</details>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>dataframe</code>
+            </td>
+            <td>
+                  <code><span title="pyspark.sql.DataFrame">DataFrame</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The <code>dataframe</code> to be transformed.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>columns</code>
+            </td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="typing.Union">Union</span>[str, <span title="toolbox_python.collection_types.str_collection">str_collection</span>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The desired column to be rounded.<br>
+If no value is parsed, or is the value <code class="highlight"><span class="kc">None</span></code>, or one of <code class="highlight"><span class="p">[</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="s2">&quot;all_float&quot;</span><span class="p">]</span></code>, then it will default to all numeric decimal columns on the <code>dataframe</code>.<br>
+If the value is a <code class="highlight"><span class="nb">str</span></code>, then it will be coerced to a single-element list, like: <code class="highlight"><span class="p">[</span><span class="n">columns</span><span class="p">]</span></code>.<br>
+Defaults to <code class="highlight"><span class="s2">&quot;all_float&quot;</span></code>.</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;all_float&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>scale</code>
+            </td>
+            <td>
+                  <code>int</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The required level of rounding for the column.<br>
+If not provided explicitly, it will default to the global value <code class="highlight"><span class="n">DEFAULT_DECIMAL_ACCURACY</span></code>; which is <code class="highlight"><span class="mi">10</span></code>.<br>
+Defaults to <code class="highlight"><span class="n">DEFAULT_DECIMAL_ACCURACY</span></code>.</p>
+              </div>
+            </td>
+            <td>
+                  <code><span title="toolbox_pyspark.scale.DEFAULT_DECIMAL_ACCURACY">DEFAULT_DECIMAL_ACCURACY</span></code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<p><span class="doc-section-title">Raises:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code>TypeError</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If any of the inputs parsed to the parameters of this function are not the correct type. Uses the <a href="https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked"><code>@typeguard.typechecked</code></a> decorator.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                  <code>TypeError</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If any of the given <code>columns</code> are not one of the correct data types for rounding. They must be one of: <code class="highlight"><span class="p">[</span><span class="s2">&quot;float&quot;</span><span class="p">,</span> <span class="s2">&quot;double&quot;</span><span class="p">,</span> <span class="s2">&quot;decimal&quot;</span><span class="p">]</span></code>.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="pyspark.sql.DataFrame">DataFrame</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The transformed <code>dataframe</code> containing the column which has now been rounded.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+        <details class="example" open="open">
+<summary>Examples</summary>
+<p><div class="python highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Set up</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="c1"># Imports</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">pyspark.sql</span> <span class="kn">import</span> <span class="n">SparkSession</span><span class="p">,</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">F</span><span class="p">,</span> <span class="n">types</span> <span class="k">as</span> <span class="n">T</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">pyspark_helpers.io</span> <span class="kn">import</span> <span class="n">read_from_path</span>
+<span class="o">&gt;&gt;&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="c1"># Instantiate Spark</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">spark</span> <span class="o">=</span> <span class="n">SparkSession</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="c1"># Create data</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">df</span> <span class="o">=</span> <span class="p">(</span>
+<span class="o">...</span>     <span class="n">spark</span>
+<span class="o">...</span>     <span class="o">.</span><span class="n">createDataFrame</span><span class="p">(</span>
+<span class="o">...</span>         <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+<span class="o">...</span>             <span class="p">{</span>
+<span class="o">...</span>                 <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span>
+<span class="o">...</span>                 <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;1.</span><span class="si">{</span><span class="s1">&#39;0&#39;</span><span class="o">*</span><span class="n">val</span><span class="si">}</span><span class="s2">1&quot;</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">)],</span>
+<span class="o">...</span>                 <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;1.</span><span class="si">{</span><span class="s1">&#39;0&#39;</span><span class="o">*</span><span class="n">val</span><span class="si">}</span><span class="s2">6&quot;</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">)],</span>
+<span class="o">...</span>             <span class="p">}</span>
+<span class="o">...</span>         <span class="p">)</span>
+<span class="o">...</span>     <span class="p">)</span>
+<span class="o">...</span>     <span class="o">.</span><span class="n">withColumns</span><span class="p">(</span>
+<span class="o">...</span>         <span class="p">{</span>
+<span class="o">...</span>             <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">DecimalType</span><span class="p">(</span><span class="mi">21</span><span class="p">,</span> <span class="mi">20</span><span class="p">)),</span>
+<span class="o">...</span>             <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;c&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">DecimalType</span><span class="p">(</span><span class="mi">21</span><span class="p">,</span> <span class="mi">20</span><span class="p">)),</span>
+<span class="o">...</span>         <span class="p">}</span>
+<span class="o">...</span>     <span class="p">)</span>
+<span class="o">...</span> <span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="c1"># Check</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">df</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">truncate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+<div class="result" markdown>
+<div class="text highlight"><span class="filename">Terminal</span><pre><span></span><code>+---+----------------------+----------------------+
+|a  |b                     |c                     |
++---+----------------------+----------------------+
+|0  |1.10000000000000000000|1.60000000000000000000|
+|1  |1.01000000000000000000|1.06000000000000000000|
+|2  |1.00100000000000000000|1.00600000000000000000|
+|3  |1.00010000000000000000|1.00060000000000000000|
+|4  |1.00001000000000000000|1.00006000000000000000|
+|5  |1.00000100000000000000|1.00000600000000000000|
+|6  |1.00000010000000000000|1.00000060000000000000|
+|7  |1.00000001000000000000|1.00000006000000000000|
+|8  |1.00000000100000000000|1.00000000600000000000|
+|9  |1.00000000010000000000|1.00000000060000000000|
+|10 |1.00000000001000000000|1.00000000006000000000|
+|11 |1.00000000000100000000|1.00000000000600000000|
+|12 |1.00000000000010000000|1.00000000000060000000|
+|13 |1.00000000000001000000|1.00000000000006000000|
+|14 |1.00000000000000100000|1.00000000000000600000|
+|15 |1.00000000000000010000|1.00000000000000060000|
+|16 |1.00000000000000001000|1.00000000000000006000|
+|17 |1.00000000000000000100|1.00000000000000000600|
+|18 |1.00000000000000000010|1.00000000000000000060|
+|19 |1.00000000000000000001|1.00000000000000000006|
++---+----------------------+----------------------+
+</code></pre></div>
+</div></p>
+<p><div class="python highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Example 1: Round with defaults</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">round_columns</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">truncate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+<div class="result" markdown>
+<div class="text highlight"><span class="filename">Terminal</span><pre><span></span><code>+---+------------+------------+
+|  a|           b|           c|
++---+------------+------------+
+|  0|1.1000000000|1.6000000000|
+|  1|1.0100000000|1.0600000000|
+|  2|1.0010000000|1.0060000000|
+|  3|1.0001000000|1.0006000000|
+|  4|1.0000100000|1.0000600000|
+|  5|1.0000010000|1.0000060000|
+|  6|1.0000001000|1.0000006000|
+|  7|1.0000000100|1.0000000600|
+|  8|1.0000000010|1.0000000060|
+|  9|1.0000000001|1.0000000006|
+| 10|1.0000000000|1.0000000001|
+| 11|1.0000000000|1.0000000000|
+| 12|1.0000000000|1.0000000000|
+| 13|1.0000000000|1.0000000000|
+| 14|1.0000000000|1.0000000000|
+| 15|1.0000000000|1.0000000000|
+| 16|1.0000000000|1.0000000000|
+| 17|1.0000000000|1.0000000000|
+| 18|1.0000000000|1.0000000000|
+| 19|1.0000000000|1.0000000000|
++---+------------+------------+
+</code></pre></div>
+</div></p>
+<p><div class="python highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Example 2: Round to custom number</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">round_columns</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">truncate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+<div class="result" markdown>
+<div class="text highlight"><span class="filename">Terminal</span><pre><span></span><code>+---+----------------------+-------+
+|a  |b                     |c      |
++---+----------------------+-------+
+|0  |1.10000000000000000000|1.60000|
+|1  |1.01000000000000000000|1.06000|
+|2  |1.00100000000000000000|1.00600|
+|3  |1.00010000000000000000|1.00060|
+|4  |1.00001000000000000000|1.00006|
+|5  |1.00000100000000000000|1.00001|
+|6  |1.00000010000000000000|1.00000|
+|7  |1.00000001000000000000|1.00000|
+|8  |1.00000000100000000000|1.00000|
+|9  |1.00000000010000000000|1.00000|
+|10 |1.00000000001000000000|1.00000|
+|11 |1.00000000000100000000|1.00000|
+|12 |1.00000000000010000000|1.00000|
+|13 |1.00000000000001000000|1.00000|
+|14 |1.00000000000000100000|1.00000|
+|15 |1.00000000000000010000|1.00000|
+|16 |1.00000000000000001000|1.00000|
+|17 |1.00000000000000000100|1.00000|
+|18 |1.00000000000000000010|1.00000|
+|19 |1.00000000000000000001|1.00000|
++---+----------------------+-------+
+</code></pre></div>
+</div></p>
+<p><div class="python highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Example 3: Raise error</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">round_columns</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">truncate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+<div class="result" markdown>
+<div class="text highlight"><span class="filename">Terminal</span><pre><span></span><code>TypeError: Columns are not the correct types. Please check.
+These columns are invalid: &#39;[(&quot;a&quot;, &quot;bigint&quot;)]&#39;.
+In order to round them, they need to be one of: &#39;[&quot;float&quot;, &quot;double&quot;, &quot;decimal&quot;]&#39;.
+</code></pre></div>
+</div></p>
+</details>
+
+            <details class="quote">
+              <summary>Source code in <code>src/toolbox_pyspark/scale.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">272</span>
+<span class="normal">273</span>
+<span class="normal">274</span>
+<span class="normal">275</span>
+<span class="normal">276</span>
+<span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span>
+<span class="normal">280</span>
+<span class="normal">281</span>
+<span class="normal">282</span>
+<span class="normal">283</span>
+<span class="normal">284</span>
+<span class="normal">285</span>
+<span class="normal">286</span>
+<span class="normal">287</span>
+<span class="normal">288</span>
+<span class="normal">289</span>
+<span class="normal">290</span>
+<span class="normal">291</span>
+<span class="normal">292</span>
+<span class="normal">293</span>
+<span class="normal">294</span>
+<span class="normal">295</span>
+<span class="normal">296</span>
+<span class="normal">297</span>
+<span class="normal">298</span>
+<span class="normal">299</span>
+<span class="normal">300</span>
+<span class="normal">301</span>
+<span class="normal">302</span>
+<span class="normal">303</span>
+<span class="normal">304</span>
+<span class="normal">305</span>
+<span class="normal">306</span>
+<span class="normal">307</span>
+<span class="normal">308</span>
+<span class="normal">309</span>
+<span class="normal">310</span>
+<span class="normal">311</span>
+<span class="normal">312</span>
+<span class="normal">313</span>
+<span class="normal">314</span>
+<span class="normal">315</span>
+<span class="normal">316</span>
+<span class="normal">317</span>
+<span class="normal">318</span>
+<span class="normal">319</span>
+<span class="normal">320</span>
+<span class="normal">321</span>
+<span class="normal">322</span>
+<span class="normal">323</span>
+<span class="normal">324</span>
+<span class="normal">325</span>
+<span class="normal">326</span>
+<span class="normal">327</span>
+<span class="normal">328</span>
+<span class="normal">329</span>
+<span class="normal">330</span>
+<span class="normal">331</span>
+<span class="normal">332</span>
+<span class="normal">333</span>
+<span class="normal">334</span>
+<span class="normal">335</span>
+<span class="normal">336</span>
+<span class="normal">337</span>
+<span class="normal">338</span>
+<span class="normal">339</span>
+<span class="normal">340</span>
+<span class="normal">341</span>
+<span class="normal">342</span>
+<span class="normal">343</span>
+<span class="normal">344</span>
+<span class="normal">345</span>
+<span class="normal">346</span>
+<span class="normal">347</span>
+<span class="normal">348</span>
+<span class="normal">349</span>
+<span class="normal">350</span>
+<span class="normal">351</span>
+<span class="normal">352</span>
+<span class="normal">353</span>
+<span class="normal">354</span>
+<span class="normal">355</span>
+<span class="normal">356</span>
+<span class="normal">357</span>
+<span class="normal">358</span>
+<span class="normal">359</span>
+<span class="normal">360</span>
+<span class="normal">361</span>
+<span class="normal">362</span>
+<span class="normal">363</span>
+<span class="normal">364</span>
+<span class="normal">365</span>
+<span class="normal">366</span>
+<span class="normal">367</span>
+<span class="normal">368</span>
+<span class="normal">369</span>
+<span class="normal">370</span>
+<span class="normal">371</span>
+<span class="normal">372</span>
+<span class="normal">373</span>
+<span class="normal">374</span>
+<span class="normal">375</span>
+<span class="normal">376</span>
+<span class="normal">377</span>
+<span class="normal">378</span>
+<span class="normal">379</span>
+<span class="normal">380</span>
+<span class="normal">381</span>
+<span class="normal">382</span>
+<span class="normal">383</span>
+<span class="normal">384</span>
+<span class="normal">385</span>
+<span class="normal">386</span>
+<span class="normal">387</span>
+<span class="normal">388</span>
+<span class="normal">389</span>
+<span class="normal">390</span>
+<span class="normal">391</span>
+<span class="normal">392</span>
+<span class="normal">393</span>
+<span class="normal">394</span>
+<span class="normal">395</span>
+<span class="normal">396</span>
+<span class="normal">397</span>
+<span class="normal">398</span>
+<span class="normal">399</span>
+<span class="normal">400</span>
+<span class="normal">401</span>
+<span class="normal">402</span>
+<span class="normal">403</span>
+<span class="normal">404</span>
+<span class="normal">405</span>
+<span class="normal">406</span>
+<span class="normal">407</span>
+<span class="normal">408</span>
+<span class="normal">409</span>
+<span class="normal">410</span>
+<span class="normal">411</span>
+<span class="normal">412</span>
+<span class="normal">413</span>
+<span class="normal">414</span>
+<span class="normal">415</span>
+<span class="normal">416</span>
+<span class="normal">417</span>
+<span class="normal">418</span>
+<span class="normal">419</span>
+<span class="normal">420</span>
+<span class="normal">421</span>
+<span class="normal">422</span>
+<span class="normal">423</span>
+<span class="normal">424</span>
+<span class="normal">425</span>
+<span class="normal">426</span>
+<span class="normal">427</span>
+<span class="normal">428</span>
+<span class="normal">429</span>
+<span class="normal">430</span>
+<span class="normal">431</span>
+<span class="normal">432</span>
+<span class="normal">433</span>
+<span class="normal">434</span>
+<span class="normal">435</span>
+<span class="normal">436</span>
+<span class="normal">437</span>
+<span class="normal">438</span>
+<span class="normal">439</span>
+<span class="normal">440</span>
+<span class="normal">441</span>
+<span class="normal">442</span>
+<span class="normal">443</span>
+<span class="normal">444</span>
+<span class="normal">445</span>
+<span class="normal">446</span>
+<span class="normal">447</span>
+<span class="normal">448</span>
+<span class="normal">449</span>
+<span class="normal">450</span>
+<span class="normal">451</span>
+<span class="normal">452</span>
+<span class="normal">453</span>
+<span class="normal">454</span>
+<span class="normal">455</span>
+<span class="normal">456</span>
+<span class="normal">457</span>
+<span class="normal">458</span>
+<span class="normal">459</span>
+<span class="normal">460</span>
+<span class="normal">461</span>
+<span class="normal">462</span>
+<span class="normal">463</span>
+<span class="normal">464</span>
+<span class="normal">465</span>
+<span class="normal">466</span>
+<span class="normal">467</span>
+<span class="normal">468</span>
+<span class="normal">469</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@typechecked</span>
+<span class="k">def</span> <span class="nf">round_columns</span><span class="p">(</span>
+    <span class="n">dataframe</span><span class="p">:</span> <span class="n">psDataFrame</span><span class="p">,</span>
+    <span class="n">columns</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">str_collection</span><span class="p">]]</span> <span class="o">=</span> <span class="s2">&quot;all_float&quot;</span><span class="p">,</span>
+    <span class="n">scale</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DEFAULT_DECIMAL_ACCURACY</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">psDataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    !!! note &quot;Summary&quot;</span>
+<span class="sd">        For a given `dataframe`, on a set of `columns` if the column data type is decimal (that is, one of: `#!py [&quot;float&quot;, &quot;double&quot;, &quot;decimal&quot;]`), then round that column to a `scale` accuracy at a given number of decimal places.</span>
+
+<span class="sd">    ???+ abstract &quot;Details&quot;</span>
+<span class="sd">        Realistically, under the hood, this function is super simple. It merely runs:</span>
+<span class="sd">        ```{.py .python linenums=&quot;1&quot; title=&quot;Python&quot;}</span>
+<span class="sd">        dataframe = dataframe.withColumns({col: F.round(col, scale) for col in columns})</span>
+<span class="sd">        ```</span>
+<span class="sd">        This function merely adds some additional validation, and is enabled to run in a pyspark `.transform()` method.</span>
+<span class="sd">        For more info, see: [`pyspark.sql.DataFrame.transform`](https://spark.apache.org/docs/3.1.3/api/python/reference/api/pyspark.sql.DataFrame.transform.html)</span>
+
+<span class="sd">    Params:</span>
+<span class="sd">        dataframe (psDataFrame):</span>
+<span class="sd">            The `dataframe` to be transformed.</span>
+<span class="sd">        columns (Optional[Union[str, str_collection]], optional):</span>
+<span class="sd">            The desired column to be rounded.&lt;br&gt;</span>
+<span class="sd">            If no value is parsed, or is the value `#!py None`, or one of `#!py [&quot;all&quot;, &quot;all_float&quot;]`, then it will default to all numeric decimal columns on the `dataframe`.&lt;br&gt;</span>
+<span class="sd">            If the value is a `#!py str`, then it will be coerced to a single-element list, like: `#!py [columns]`.&lt;br&gt;</span>
+<span class="sd">            Defaults to `#!py &quot;all_float&quot;`.</span>
+<span class="sd">        scale (int, optional):</span>
+<span class="sd">            The required level of rounding for the column.&lt;br&gt;</span>
+<span class="sd">            If not provided explicitly, it will default to the global value `#!py DEFAULT_DECIMAL_ACCURACY`; which is `#!py 10`.&lt;br&gt;</span>
+<span class="sd">            Defaults to `#!py DEFAULT_DECIMAL_ACCURACY`.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        TypeError:</span>
+<span class="sd">            If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.</span>
+<span class="sd">        TypeError:</span>
+<span class="sd">            If any of the given `columns` are not one of the correct data types for rounding. They must be one of: `#!py [&quot;float&quot;, &quot;double&quot;, &quot;decimal&quot;]`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        (psDataFrame):</span>
+<span class="sd">            The transformed `dataframe` containing the column which has now been rounded.</span>
+
+<span class="sd">    ???+ example &quot;Examples&quot;</span>
+
+<span class="sd">        ```{.py .python linenums=&quot;1&quot; title=&quot;Set up&quot;}</span>
+<span class="sd">        &gt;&gt;&gt; # Imports</span>
+<span class="sd">        &gt;&gt;&gt; import pandas as pd</span>
+<span class="sd">        &gt;&gt;&gt; from pyspark.sql import SparkSession, functions as F, types as T</span>
+<span class="sd">        &gt;&gt;&gt; from pyspark_helpers.io import read_from_path</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; # Instantiate Spark</span>
+<span class="sd">        &gt;&gt;&gt; spark = SparkSession.builder.getOrCreate()</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; # Create data</span>
+<span class="sd">        &gt;&gt;&gt; df = (</span>
+<span class="sd">        ...     spark</span>
+<span class="sd">        ...     .createDataFrame(</span>
+<span class="sd">        ...         pd.DataFrame(</span>
+<span class="sd">        ...             {</span>
+<span class="sd">        ...                 &quot;a&quot;: range(20),</span>
+<span class="sd">        ...                 &quot;b&quot;: [f&quot;1.{&#39;0&#39;*val}1&quot; for val in range(20)],</span>
+<span class="sd">        ...                 &quot;c&quot;: [f&quot;1.{&#39;0&#39;*val}6&quot; for val in range(20)],</span>
+<span class="sd">        ...             }</span>
+<span class="sd">        ...         )</span>
+<span class="sd">        ...     )</span>
+<span class="sd">        ...     .withColumns(</span>
+<span class="sd">        ...         {</span>
+<span class="sd">        ...             &quot;b&quot;: F.col(&quot;b&quot;).cast(T.DecimalType(21, 20)),</span>
+<span class="sd">        ...             &quot;c&quot;: F.col(&quot;c&quot;).cast(T.DecimalType(21, 20)),</span>
+<span class="sd">        ...         }</span>
+<span class="sd">        ...     )</span>
+<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; # Check</span>
+<span class="sd">        &gt;&gt;&gt; df.show(truncate=False)</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;div class=&quot;result&quot; markdown&gt;</span>
+<span class="sd">        ```{.txt .text title=&quot;Terminal&quot;}</span>
+<span class="sd">        +---+----------------------+----------------------+</span>
+<span class="sd">        |a  |b                     |c                     |</span>
+<span class="sd">        +---+----------------------+----------------------+</span>
+<span class="sd">        |0  |1.10000000000000000000|1.60000000000000000000|</span>
+<span class="sd">        |1  |1.01000000000000000000|1.06000000000000000000|</span>
+<span class="sd">        |2  |1.00100000000000000000|1.00600000000000000000|</span>
+<span class="sd">        |3  |1.00010000000000000000|1.00060000000000000000|</span>
+<span class="sd">        |4  |1.00001000000000000000|1.00006000000000000000|</span>
+<span class="sd">        |5  |1.00000100000000000000|1.00000600000000000000|</span>
+<span class="sd">        |6  |1.00000010000000000000|1.00000060000000000000|</span>
+<span class="sd">        |7  |1.00000001000000000000|1.00000006000000000000|</span>
+<span class="sd">        |8  |1.00000000100000000000|1.00000000600000000000|</span>
+<span class="sd">        |9  |1.00000000010000000000|1.00000000060000000000|</span>
+<span class="sd">        |10 |1.00000000001000000000|1.00000000006000000000|</span>
+<span class="sd">        |11 |1.00000000000100000000|1.00000000000600000000|</span>
+<span class="sd">        |12 |1.00000000000010000000|1.00000000000060000000|</span>
+<span class="sd">        |13 |1.00000000000001000000|1.00000000000006000000|</span>
+<span class="sd">        |14 |1.00000000000000100000|1.00000000000000600000|</span>
+<span class="sd">        |15 |1.00000000000000010000|1.00000000000000060000|</span>
+<span class="sd">        |16 |1.00000000000000001000|1.00000000000000006000|</span>
+<span class="sd">        |17 |1.00000000000000000100|1.00000000000000000600|</span>
+<span class="sd">        |18 |1.00000000000000000010|1.00000000000000000060|</span>
+<span class="sd">        |19 |1.00000000000000000001|1.00000000000000000006|</span>
+<span class="sd">        +---+----------------------+----------------------+</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;/div&gt;</span>
+
+<span class="sd">        ```{.py .python linenums=&quot;1&quot; title=&quot;Example 1: Round with defaults&quot;}</span>
+<span class="sd">        &gt;&gt;&gt; round_columns(df).show(truncate=False)</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;div class=&quot;result&quot; markdown&gt;</span>
+<span class="sd">        ```{.txt .text title=&quot;Terminal&quot;}</span>
+<span class="sd">        +---+------------+------------+</span>
+<span class="sd">        |  a|           b|           c|</span>
+<span class="sd">        +---+------------+------------+</span>
+<span class="sd">        |  0|1.1000000000|1.6000000000|</span>
+<span class="sd">        |  1|1.0100000000|1.0600000000|</span>
+<span class="sd">        |  2|1.0010000000|1.0060000000|</span>
+<span class="sd">        |  3|1.0001000000|1.0006000000|</span>
+<span class="sd">        |  4|1.0000100000|1.0000600000|</span>
+<span class="sd">        |  5|1.0000010000|1.0000060000|</span>
+<span class="sd">        |  6|1.0000001000|1.0000006000|</span>
+<span class="sd">        |  7|1.0000000100|1.0000000600|</span>
+<span class="sd">        |  8|1.0000000010|1.0000000060|</span>
+<span class="sd">        |  9|1.0000000001|1.0000000006|</span>
+<span class="sd">        | 10|1.0000000000|1.0000000001|</span>
+<span class="sd">        | 11|1.0000000000|1.0000000000|</span>
+<span class="sd">        | 12|1.0000000000|1.0000000000|</span>
+<span class="sd">        | 13|1.0000000000|1.0000000000|</span>
+<span class="sd">        | 14|1.0000000000|1.0000000000|</span>
+<span class="sd">        | 15|1.0000000000|1.0000000000|</span>
+<span class="sd">        | 16|1.0000000000|1.0000000000|</span>
+<span class="sd">        | 17|1.0000000000|1.0000000000|</span>
+<span class="sd">        | 18|1.0000000000|1.0000000000|</span>
+<span class="sd">        | 19|1.0000000000|1.0000000000|</span>
+<span class="sd">        +---+------------+------------+</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;/div&gt;</span>
+
+<span class="sd">        ```{.py .python linenums=&quot;1&quot; title=&quot;Example 2: Round to custom number&quot;}</span>
+<span class="sd">        &gt;&gt;&gt; round_columns(df, &quot;c&quot;, 5).show(truncate=False)</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;div class=&quot;result&quot; markdown&gt;</span>
+<span class="sd">        ```{.txt .text title=&quot;Terminal&quot;}</span>
+<span class="sd">        +---+----------------------+-------+</span>
+<span class="sd">        |a  |b                     |c      |</span>
+<span class="sd">        +---+----------------------+-------+</span>
+<span class="sd">        |0  |1.10000000000000000000|1.60000|</span>
+<span class="sd">        |1  |1.01000000000000000000|1.06000|</span>
+<span class="sd">        |2  |1.00100000000000000000|1.00600|</span>
+<span class="sd">        |3  |1.00010000000000000000|1.00060|</span>
+<span class="sd">        |4  |1.00001000000000000000|1.00006|</span>
+<span class="sd">        |5  |1.00000100000000000000|1.00001|</span>
+<span class="sd">        |6  |1.00000010000000000000|1.00000|</span>
+<span class="sd">        |7  |1.00000001000000000000|1.00000|</span>
+<span class="sd">        |8  |1.00000000100000000000|1.00000|</span>
+<span class="sd">        |9  |1.00000000010000000000|1.00000|</span>
+<span class="sd">        |10 |1.00000000001000000000|1.00000|</span>
+<span class="sd">        |11 |1.00000000000100000000|1.00000|</span>
+<span class="sd">        |12 |1.00000000000010000000|1.00000|</span>
+<span class="sd">        |13 |1.00000000000001000000|1.00000|</span>
+<span class="sd">        |14 |1.00000000000000100000|1.00000|</span>
+<span class="sd">        |15 |1.00000000000000010000|1.00000|</span>
+<span class="sd">        |16 |1.00000000000000001000|1.00000|</span>
+<span class="sd">        |17 |1.00000000000000000100|1.00000|</span>
+<span class="sd">        |18 |1.00000000000000000010|1.00000|</span>
+<span class="sd">        |19 |1.00000000000000000001|1.00000|</span>
+<span class="sd">        +---+----------------------+-------+</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;/div&gt;</span>
+
+<span class="sd">        ```{.py .python linenums=&quot;1&quot; title=&quot;Example 3: Raise error&quot;}</span>
+<span class="sd">        &gt;&gt;&gt; round_columns(df, [&quot;a&quot;, &quot;b&quot;]).show(truncate=False)</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;div class=&quot;result&quot; markdown&gt;</span>
+<span class="sd">        ```{.txt .text title=&quot;Terminal&quot;}</span>
+<span class="sd">        TypeError: Columns are not the correct types. Please check.</span>
+<span class="sd">        These columns are invalid: &#39;[(&quot;a&quot;, &quot;bigint&quot;)]&#39;.</span>
+<span class="sd">        In order to round them, they need to be one of: &#39;[&quot;float&quot;, &quot;double&quot;, &quot;decimal&quot;]&#39;.</span>
+<span class="sd">        ```</span>
+<span class="sd">        &lt;/div&gt;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">columns</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">columns</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="s2">&quot;all_float&quot;</span><span class="p">]:</span>
+        <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">col</span> <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">typ</span> <span class="ow">in</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">dtypes</span> <span class="k">if</span> <span class="n">typ</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">VALID_TYPES</span>
+        <span class="p">]</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">columns</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">columns</span><span class="p">]</span>
+    <span class="n">assert_columns_exists</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">columns</span><span class="p">)</span>
+    <span class="n">invalid_cols</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">typ</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">typ</span> <span class="ow">in</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">dtypes</span>
+        <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">columns</span> <span class="ow">and</span> <span class="n">typ</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">VALID_TYPES</span>
+    <span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">invalid_cols</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Columns are not the correct types. Please check.</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;These columns are invalid: &#39;</span><span class="si">{</span><span class="n">invalid_cols</span><span class="si">}</span><span class="s2">&#39;.</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;In order to round them, they need to be one of: &#39;</span><span class="si">{</span><span class="n">VALID_TYPES</span><span class="si">}</span><span class="s2">&#39;.&quot;</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">withColumns</span><span class="p">({</span><span class="n">col</span><span class="p">:</span> <span class="n">F</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">})</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.indexes", "navigation.top", "navigation.instant", "search.highlight", "search.suggest", "toc.follow", "content.action.edit", "content.action.view"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.88dd0f4e.min.js"></script>
+      
+    
+  </body>
+</html>
