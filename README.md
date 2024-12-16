@@ -263,5 +263,5 @@ To ensure that the package is working as expected, please ensure that:
 [unittest]: https://docs.python.org/3/library/unittest.html
 [codecov]: https://codecov.io/
 [pytest]: https://docs.pytest.org
-[mypy]: http://www.mypy-lang.org/
+[mypy]: https://www.mypy-lang.org/
 [black]: https://black.readthedocs.io/
