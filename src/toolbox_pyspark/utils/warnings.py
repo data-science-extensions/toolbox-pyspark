@@ -1,0 +1,2 @@
+class AttributeWarning(Warning):
+    pass
