@@ -52,6 +52,12 @@ There are 12 modules used in this package, which covers 41 functions
 | [`dimensions`][toolbox_pyspark.dimensions] | [`get_dims()`][toolbox_pyspark.dimensions.get_dims] |
 |                                            | [`get_dims_of_tables()`][toolbox_pyspark.dimensions.get_dims_of_tables] |
 |                                            | |
+| [`columns`][toolbox_pyspark.columns]       | [`get_columns()`][toolbox_pyspark.cleaning.get_columns] |
+|                                            | [`get_columns_by_likeness()`][toolbox_pyspark.columns.get_columns_by_likeness] |
+|                                            | [`rename_columns()`][toolbox_pyspark.columns.rename_columns] |
+|                                            | [`reorder_columns()`][toolbox_pyspark.columns.reorder_columns] |
+|                                            | [`delete_columns()`][toolbox_pyspark.columns.delete_columns] |
+|                                            | |
 <!--
 | [`schema`][toolbox_pyspark.schema]         | [`view_schema_differences()`][toolbox_pyspark.schema.view_schema_differences] |
 |                                            | [`check_schemas_match()`][toolbox_pyspark.schema.check_schemas_match] |
@@ -66,12 +72,6 @@ There are 12 modules used in this package, which covers 41 functions
 |                                            | [`apply_function_to_column()`][toolbox_pyspark.cleaning.apply_function_to_column] |
 |                                            | [`apply_function_to_columns()`][toolbox_pyspark.cleaning.apply_function_to_columns] |
 |                                            | [`drop_matching_rows()`][toolbox_pyspark.cleaning.drop_matching_rows] |
-|                                            | |
-| [`columns`][toolbox_pyspark.columns]       | [`get_columns()`][toolbox_pyspark.cleaning.get_columns] |
-|                                            | [`get_columns_by_likeness()`][toolbox_pyspark.columns.get_columns_by_likeness] |
-|                                            | [`rename_columns()`][toolbox_pyspark.columns.rename_columns] |
-|                                            | [`reorder_columns()`][toolbox_pyspark.columns.reorder_columns] |
-|                                            | [`delete_columns()`][toolbox_pyspark.columns.delete_columns] |
 |                                            | |
 | [`constants`][toolbox_pyspark.constants]   | |
 |                                            | |
