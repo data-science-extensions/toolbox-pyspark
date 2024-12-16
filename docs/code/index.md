@@ -52,7 +52,7 @@ There are 12 modules used in this package, which covers 41 functions
 | [`dimensions`][toolbox_pyspark.dimensions] | [`get_dims()`][toolbox_pyspark.dimensions.get_dims] |
 |                                            | [`get_dims_of_tables()`][toolbox_pyspark.dimensions.get_dims_of_tables] |
 |                                            | |
-| [`columns`][toolbox_pyspark.columns]       | [`get_columns()`][toolbox_pyspark.cleaning.get_columns] |
+| [`columns`][toolbox_pyspark.columns]       | [`get_columns()`][toolbox_pyspark.columns.get_columns] |
 |                                            | [`get_columns_by_likeness()`][toolbox_pyspark.columns.get_columns_by_likeness] |
 |                                            | [`rename_columns()`][toolbox_pyspark.columns.rename_columns] |
 |                                            | [`reorder_columns()`][toolbox_pyspark.columns.reorder_columns] |

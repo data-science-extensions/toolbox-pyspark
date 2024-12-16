@@ -101,7 +101,7 @@ def get_dims(
         ```{.py .python linenums="1" title="Set up"}
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
-        >>> from pyspark_helpers.dimensions import get_dims
+        >>> from toolbox_pyspark.dimensions import get_dims
         >>> spark = SparkSession.builder.getOrCreate()
         >>> df = spark.createDataFrame(
         ...     pd.DataFrame({
@@ -211,7 +211,7 @@ def get_dims_of_tables(
         ```{.py .python linenums="1" title="Set up"}
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
-        >>> from pyspark_helpers.dimensions import get_dims_of_tables, get_dims
+        >>> from toolbox_pyspark.dimensions import get_dims_of_tables, get_dims
         >>> spark = SparkSession.builder.getOrCreate()
         >>> df1 = spark.createDataFrame(
         ...     pd.DataFrame({
