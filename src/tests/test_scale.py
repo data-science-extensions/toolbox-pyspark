@@ -17,17 +17,11 @@ from itertools import product
 import pytest
 from chispa.dataframe_comparer import assert_df_equality
 from parameterized import parameterized
-from pyspark.sql import (
-    functions as F,
-)
+from pyspark.sql import DataFrame as psDataFrame, functions as F
 
 # ## Local First Party Imports ----
 from tests.setup import PySparkSetup
-from toolbox_pyspark.scale import (
-    DEFAULT_DECIMAL_ACCURACY,
-    round_column,
-    round_columns,
-)
+from toolbox_pyspark.scale import DEFAULT_DECIMAL_ACCURACY, round_column, round_columns
 
 
 # ---------------------------------------------------------------------------- #
@@ -47,22 +41,22 @@ class TestRoundColumnToDecimalScale(PySparkSetup):
         pass
 
     def test_round_column_1(self) -> None:
-        result = round_column(
+        result: psDataFrame = round_column(
             dataframe=self.ps_df_decimals,
             column="b",
         )
-        expected = self.ps_df_decimals.withColumn(
+        expected: psDataFrame = self.ps_df_decimals.withColumn(
             colName="b",
             col=F.round("b", DEFAULT_DECIMAL_ACCURACY),
         )
         assert_df_equality(result, expected)
 
     def test_round_column_2(self) -> None:
-        result = round_column(
+        result: psDataFrame = round_column(
             dataframe=self.ps_df_decimals,
             column="c",
         )
-        expected = self.ps_df_decimals.withColumn(
+        expected: psDataFrame = self.ps_df_decimals.withColumn(
             colName="c",
             col=F.round("c", DEFAULT_DECIMAL_ACCURACY),
         )
@@ -73,12 +67,12 @@ class TestRoundColumnToDecimalScale(PySparkSetup):
         name_func=lambda func, idx, params: f"{func.__name__}_{idx}_{'_'.join([str(prm) for prm in params[0]])}",
     )
     def test_round_column_3(self, name, scale) -> None:
-        result = round_column(
+        result: psDataFrame = round_column(
             dataframe=self.ps_df_decimals,
             column="b",
             scale=scale,
         )
-        expected = self.ps_df_decimals.withColumn(
+        expected: psDataFrame = self.ps_df_decimals.withColumn(
             colName="b",
             col=F.round(col="b", scale=scale),
         )
@@ -103,50 +97,50 @@ class TestRoundColumnsToDecimalScale(PySparkSetup):
         pass
 
     def test_round_columns_1(self) -> None:
-        result = round_columns(
+        result: psDataFrame = round_columns(
             dataframe=self.ps_df_decimals,
         )
-        expected = self.ps_df_decimals.withColumns(
+        expected: psDataFrame = self.ps_df_decimals.withColumns(
             {col: F.round(col, DEFAULT_DECIMAL_ACCURACY) for col in ["b", "c"]}
         )
         assert_df_equality(result, expected)
 
     def test_round_columns_2(self) -> None:
-        result = round_columns(
+        result: psDataFrame = round_columns(
             dataframe=self.ps_df_decimals,
             columns=["b", "c"],
         )
-        expected = self.ps_df_decimals.withColumns(
+        expected: psDataFrame = self.ps_df_decimals.withColumns(
             {col: F.round(col, DEFAULT_DECIMAL_ACCURACY) for col in ["b", "c"]}
         )
         assert_df_equality(result, expected)
 
     def test_round_columns_3(self) -> None:
-        result = round_columns(
+        result: psDataFrame = round_columns(
             dataframe=self.ps_df_decimals,
             columns=["b"],
         )
-        expected = self.ps_df_decimals.withColumns(
+        expected: psDataFrame = self.ps_df_decimals.withColumns(
             {col: F.round(col, DEFAULT_DECIMAL_ACCURACY) for col in ["b"]}
         )
         assert_df_equality(result, expected)
 
     def test_round_columns_4(self) -> None:
-        result = round_columns(
+        result: psDataFrame = round_columns(
             dataframe=self.ps_df_decimals,
             columns="b",
         )
-        expected = self.ps_df_decimals.withColumns(
+        expected: psDataFrame = self.ps_df_decimals.withColumns(
             {col: F.round(col, DEFAULT_DECIMAL_ACCURACY) for col in ["b"]}
         )
         assert_df_equality(result, expected)
 
     def test_round_columns_5(self) -> None:
-        result = round_columns(
+        result: psDataFrame = round_columns(
             dataframe=self.ps_df_decimals,
             scale=5,
         )
-        expected = self.ps_df_decimals.withColumns(
+        expected: psDataFrame = self.ps_df_decimals.withColumns(
             {col: F.round(col, 5) for col in ["b", "c"]}
         )
         assert_df_equality(result, expected)
@@ -156,11 +150,11 @@ class TestRoundColumnsToDecimalScale(PySparkSetup):
         name_func=lambda func, idx, params: f"{func.__name__}_{idx}_{'_'.join(params[0])}",
     )
     def test_round_columns_6(self, name, columns) -> None:
-        result = round_columns(
+        result: psDataFrame = round_columns(
             dataframe=self.ps_df_decimals,
             columns=columns,
         )
-        expected = self.ps_df_decimals.withColumns(
+        expected: psDataFrame = self.ps_df_decimals.withColumns(
             {col: F.round(col, DEFAULT_DECIMAL_ACCURACY) for col in ["b", "c"]}
         )
         assert_df_equality(result, expected)
@@ -170,11 +164,11 @@ class TestRoundColumnsToDecimalScale(PySparkSetup):
         name_func=lambda func, idx, params: f"{func.__name__}_{idx}_{'_'.join([str(prm) for prm in params[0]])}",
     )
     def test_round_columns_7(self, name, scale) -> None:
-        result = round_columns(
+        result: psDataFrame = round_columns(
             dataframe=self.ps_df_decimals,
             scale=scale,
         )
-        expected = self.ps_df_decimals.withColumns(
+        expected: psDataFrame = self.ps_df_decimals.withColumns(
             {col: F.round(col, scale) for col in ["b", "c"]}
         )
         assert_df_equality(result, expected)

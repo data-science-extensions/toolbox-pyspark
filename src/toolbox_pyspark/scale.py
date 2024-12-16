@@ -90,7 +90,7 @@ def round_column(
     ???+ abstract "Details"
         Realistically, under the hood, this function is super simple. It merely runs:
         ```{.py .python linenums="1" title="Python"}
-        dataframe.withColumn(colName=column, col=F.round(col=column, scale=scale))
+        dataframe = dataframe.withColumn(colName=column, col=F.round(col=column, scale=scale))
         ```
         This function merely adds some additional validation, and is enabled to run in a pyspark `.transform()` method.
         For more info, see: [`pyspark.sql.DataFrame.transform`](https://spark.apache.org/docs/3.1.3/api/python/reference/api/pyspark.sql.DataFrame.transform.html)
@@ -118,12 +118,18 @@ def round_column(
     ???+ example "Examples"
 
         ```{.py .python linenums="1" title="Set up"}
+        >>> # Imports
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession, functions as F, types as T
         >>> from pyspark_helpers.io import read_from_path
+        >>>
+        >>> # Instantiate Spark
         >>> spark = SparkSession.builder.getOrCreate()
+        >>>
+        >>> # Create data
         >>> df = (
-        ...     spark.createDataFrame(
+        ...     spark
+        ...     .createDataFrame(
         ...         pd.DataFrame(
         ...             {
         ...                 "a": range(20),
@@ -139,13 +145,12 @@ def round_column(
         ...         }
         ...     )
         ... )
-        ```
-
-        ```{.py .python linenums="1" title="Check"}
-        >>> print(df.show(truncate=False))
+        >>>
+        >>> # Check
+        >>> df.show(truncate=False)
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+----------------------+----------------------+
         |a  |b                     |c                     |
         +---+----------------------+----------------------+
@@ -173,11 +178,11 @@ def round_column(
         ```
         </div>
 
-        ```{.py .python linenums="1" title="Round with defaults"}
-        >>> print(round_column(df, "b").show(truncate=False))
+        ```{.py .python linenums="1" title="Example 1: Round with defaults"}
+        >>> round_column(df, "b").show(truncate=False)
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+------------+----------------------+
         |a  |b           |c                     |
         +---+------------+----------------------+
@@ -203,13 +208,14 @@ def round_column(
         |19 |1.0000000000|1.00000000000000000006|
         +---+------------+----------------------+
         ```
+        !!! success "Conclusion: Successfully rounded column `b`."
         </div>
 
-        ```{.py .python linenums="1" title="Round to custom number"}
-        >>> print(round_column(df, "c", 5).show(truncate=False))
+        ```{.py .python linenums="1" title="Example 2: Round to custom number"}
+        >>> round_column(df, "c", 5).show(truncate=False)
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+----------------------+-------+
         |a  |b                     |c      |
         +---+----------------------+-------+
@@ -235,17 +241,19 @@ def round_column(
         |19 |1.00000000000000000001|1.00000|
         +---+----------------------+-------+
         ```
+        !!! success "Conclusion: Successfully rounded column `b` to 5 decimal points."
         </div>
 
-        ```{.py .python linenums="1" title="Raise error"}
-        >>> print(round_column(df, "a").show(truncate=False))
+        ```{.py .python linenums="1" title="Example 3: Raise error"}
+        >>> round_column(df, "a").show(truncate=False)
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         TypeError: Column is not the correct type. Please check.
         For column 'a', the type is 'bigint'.
         In order to round it, it needs to be one of: '["float", "double", "decimal"]'.
         ```
+        !!! failure "Conclusion: Cannot round a column `a`."
         </div>
     """
     assert_column_exists(dataframe, column)
@@ -274,7 +282,7 @@ def round_columns(
     ???+ abstract "Details"
         Realistically, under the hood, this function is super simple. It merely runs:
         ```{.py .python linenums="1" title="Python"}
-        dataframe.withColumns({col: F.round(col, scale) for col in columns})
+        dataframe = dataframe.withColumns({col: F.round(col, scale) for col in columns})
         ```
         This function merely adds some additional validation, and is enabled to run in a pyspark `.transform()` method.
         For more info, see: [`pyspark.sql.DataFrame.transform`](https://spark.apache.org/docs/3.1.3/api/python/reference/api/pyspark.sql.DataFrame.transform.html)
@@ -282,7 +290,7 @@ def round_columns(
     Params:
         dataframe (psDataFrame):
             The `dataframe` to be transformed.
-        columns (Optional[Union[str, List[str]]], optional):
+        columns (Optional[Union[str, str_collection]], optional):
             The desired column to be rounded.<br>
             If no value is parsed, or is the value `#!py None`, or one of `#!py ["all", "all_float"]`, then it will default to all numeric decimal columns on the `dataframe`.<br>
             If the value is a `#!py str`, then it will be coerced to a single-element list, like: `#!py [columns]`.<br>
@@ -305,12 +313,18 @@ def round_columns(
     ???+ example "Examples"
 
         ```{.py .python linenums="1" title="Set up"}
+        >>> # Imports
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession, functions as F, types as T
         >>> from pyspark_helpers.io import read_from_path
+        >>>
+        >>> # Instantiate Spark
         >>> spark = SparkSession.builder.getOrCreate()
+        >>>
+        >>> # Create data
         >>> df = (
-        ...     spark.createDataFrame(
+        ...     spark
+        ...     .createDataFrame(
         ...         pd.DataFrame(
         ...             {
         ...                 "a": range(20),
@@ -326,13 +340,12 @@ def round_columns(
         ...         }
         ...     )
         ... )
-        ```
-
-        ```{.py .python linenums="1" title="Check"}
-        >>> print(df.show(truncate=False))
+        >>>
+        >>> # Check
+        >>> df.show(truncate=False)
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+----------------------+----------------------+
         |a  |b                     |c                     |
         +---+----------------------+----------------------+
@@ -360,11 +373,11 @@ def round_columns(
         ```
         </div>
 
-        ```{.py .python linenums="1" title="Round with defaults"}
-        >>> print(round_columns(df).show(truncate=False))
+        ```{.py .python linenums="1" title="Example 1: Round with defaults"}
+        >>> round_columns(df).show(truncate=False)
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+------------+------------+
         |  a|           b|           c|
         +---+------------+------------+
@@ -392,11 +405,11 @@ def round_columns(
         ```
         </div>
 
-        ```{.py .python linenums="1" title="Round to custom number"}
-        >>> print(round_columns(df, "c", 5).show(truncate=False))
+        ```{.py .python linenums="1" title="Example 2: Round to custom number"}
+        >>> round_columns(df, "c", 5).show(truncate=False)
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+----------------------+-------+
         |a  |b                     |c      |
         +---+----------------------+-------+
@@ -424,11 +437,11 @@ def round_columns(
         ```
         </div>
 
-        ```{.py .python linenums="1" title="Raise error"}
-        >>> print(round_columns(df, ["a", "b"]).show(truncate=False))
+        ```{.py .python linenums="1" title="Example 3: Raise error"}
+        >>> round_columns(df, ["a", "b"]).show(truncate=False)
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         TypeError: Columns are not the correct types. Please check.
         These columns are invalid: '[("a", "bigint")]'.
         In order to round them, they need to be one of: '["float", "double", "decimal"]'.
