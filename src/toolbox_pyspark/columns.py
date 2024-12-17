@@ -682,7 +682,7 @@ def rename_columns(
     assert_columns_exists(dataframe=dataframe, columns=columns, match_case=True)
     cols_exprs: dict[str, str] = {
         col: eval(
-            f"{col}.{string_function}{'()' if not string_function.endswith(')') else ''}"
+            f"'{col}'.{string_function}{'()' if not string_function.endswith(')') else ''}"
         )
         for col in columns
     }
