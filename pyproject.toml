@@ -164,6 +164,7 @@ disable = [
     "C0301", # line-too-long
     "C0302", # too-many-lines
     "C0411", # wrong-import-order
+    "C3001", # unnecessary-lambda-assignment
     "W0123", # eval-used
     "W0212", # protected-access
     "W0511", # fixme
@@ -175,6 +176,7 @@ disable = [
     "W0718", # broad-exception-caught
     "W0719", # broad-exception-raised
     "W1309", # f-string-without-interpolation
+    "R0911", # too-many-return-statements
     "R0913", # too-many-arguments
     "R0914", # too-many-locals
     "R0915", # too-many-statements
