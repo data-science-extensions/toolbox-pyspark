@@ -37,7 +37,6 @@
 
 
 # ## Python StdLib Imports ----
-import warnings
 from typing import Literal, Optional, Union
 
 # ## Python Third Party Imports ----
@@ -46,8 +45,10 @@ from toolbox_python.collection_types import str_collection, str_list
 from typeguard import typechecked
 
 # ## Local First Party Imports ----
-from toolbox_pyspark.checks import _columns_exists, assert_columns_exists
-from toolbox_pyspark.utils.warnings import AttributeWarning
+from toolbox_pyspark.checks import (
+    assert_columns_exists,
+    warn_columns_missing,
+)
 
 
 # ---------------------------------------------------------------------------- #
@@ -88,17 +89,19 @@ def get_columns(
     Params:
         dataframe (psDataFrame):
             The DataFrame from which to retrieve column names.
-        columns (Optional[Union[str, List[str], Tuple[str, ...]]], optional):
+        columns (Optional[Union[str, str_collection]], optional):
             Optional filter criteria for selecting columns.<br>
             If a string is provided, it can be one of the following options:
 
-            - `#!py "all"`: Return all columns in the DataFrame.
-            - `#!py "all_str"`: Return columns of string type.
-            - `#!py "all_int"`: Return columns of integer type.
-            - `#!py "all_numeric"`: Return columns of numeric types (integers and floats).
-            - `#!py "all_datetime"` or 'all timestamp': Return columns of datetime or timestamp type.
-            - `#!py "all_date"`: Return columns of date type.
-            - Any other string: Return columns matching the provided exact column name.
+            | Value | Description |
+            |-------|-------------|
+            | `#!py "all"` | Return all columns in the DataFrame.
+            | `#!py "all_str"` | Return columns of string type.
+            | `#!py "all_int"` | Return columns of integer type.
+            | `#!py "all_numeric"` | Return columns of numeric types (integers and floats).
+            | `#!py "all_datetime"` or `#!py "all_timestamp"` | Return columns of datetime or timestamp type.
+            | `#!py "all_date"` | Return columns of date type.
+            | Any other string | Return columns matching the provided exact column name.
 
             If a list or tuple of column names is provided, return only those columns.<br>
             Defaults to `#!py None` (which returns all columns).
@@ -108,40 +111,50 @@ def get_columns(
             If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
 
     Returns:
-        (List[str]):
+        (str_list):
             The selected column names from the DataFrame.
 
     ???+ example "Examples"
 
         ```{.py .python linenums="1" title="Set up"}
+        >>> # Imports
+        >>> from pprint import pprint
         >>> import pandas as pd
-        >>> from pyspark.sql import SparkSession
-        >>> from pyspark_helpers.columns import get_columns
+        >>> from pyspark.sql import SparkSession, functions as F
+        >>> from toolbox_pyspark.columns import get_columns
+        >>>
+        >>> # Instantiate Spark
         >>> spark = SparkSession.builder.getOrCreate()
-        >>> df = spark.createDataFrame(
-        ...     pdDataFrame(
+        >>>
+        >>> # Create data
+        >>> df = (
+        ...     spark
+        ...     .createDataFrame(
+        ...         pd.DataFrame(
+        ...             {
+        ...                 "a": (0, 1, 2, 3),
+        ...                 "b": ["a", "b", "c", "d"],
+        ...             }
+        ...         )
+        ...     )
+        ...     .withColumns(
         ...         {
-        ...             "a": range(0,1,2,3),
-        ...             "b": ['a','b','c','d'],
+        ...             "c": F.lit("1").cast("int"),
+        ...             "d": F.lit("2").cast("string"),
+        ...             "e": F.lit("1.1").cast("float"),
+        ...             "f": F.lit("1.2").cast("double"),
+        ...             "g": F.lit("2022-01-01").cast("date"),
+        ...             "h": F.lit("2022-02-01 01:00:00").cast("timestamp"),
         ...         }
         ...     )
-        ... ).withColumns(
-        ...     {
-        ...         "c": F.lit("1").cast("int"),
-        ...         "d": F.lit("2").cast("string"),
-        ...         "e": F.lit("1.1").cast("float"),
-        ...         "f": F.lit("1.2").cast("double"),
-        ...         "g": F.lit("2022-01-01").cast("date"),
-        ...         "h": F.lit("2022-02-01 01:00:00").cast("timestamp"),
-        ...     }
         ... )
-        ```
-
-        ```{.py .python linenums="1" title="Check"}
+        >>>
+        >>> # Check
         >>> df.show()
+        >>> print(df.dtypes)
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+---+---+---+-----+-----+------------+---------------------+
         | a | b | c | d |   e |   f |          g |                   h |
         +---+---+---+---+-----+-----+------------+---------------------+
@@ -151,105 +164,128 @@ def get_columns(
         | 3 | d | 1 | 2 | 1.1 | 1.2 | 2022-01-01 | 2022-02-01 01:00:00 |
         +---+---+---+---+-----+-----+------------+---------------------+
         ```
+        ```{.txt .text title="Terminal"}
+        [
+            ("a", "bigint"),
+            ("b", "string"),
+            ("c", "int"),
+            ("d", "string"),
+            ("e", "float"),
+            ("f", "double"),
+            ("g", "date"),
+            ("h", "timestamp"),
+        ]
+        ```
         </div>
 
-        ```{.py .python linenums="1" title="Default params"}
+        ```{.py .python linenums="1" title="Example 1: Default params"}
         >>> print(get_columns(df).columns)
         ```
         <div class="result" markdown>
-        ```{.py .python}
-        ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+        ```{.sh .shell title="Terminal"}
+        ["a", "b", "c", "d", "e", "f", "g", "h"]
         ```
+        !!! success "Conclusion: Success."
         </div>
 
-        ```{.py .python linenums="1" title="Specific columns"}
+        ```{.py .python linenums="1" title="Example 2: Specific columns"}
         >>> print(get_columns(df, ["a", "b", "c"]).columns)
         ```
         <div class="result" markdown>
-        ```{.py .python}
+        ```{.sh .shell title="Terminal"}
         ["a", "b", "c"]
         ```
+        !!! success "Conclusion: Success."
         </div>
 
-        ```{.py .python linenums="1" title="Single column as list"}
+        ```{.py .python linenums="1" title="Example 3: Single column as list"}
         >>> print(get_columns(df, ["a"]).columns)
         ```
         <div class="result" markdown>
-        ```{.py .python}
+        ```{.sh .shell title="Terminal"}
         ["a"]
         ```
+        !!! success "Conclusion: Success."
         </div>
 
-        ```{.py .python linenums="1" title="Single column as string"}
+        ```{.py .python linenums="1" title="Example 4: Single column as string"}
         >>> print(get_columns(df, "a").columns)
         ```
         <div class="result" markdown>
-        ```{.py .python}
+        ```{.sh .shell title="Terminal"}
         ["a"]
         ```
+        !!! success "Conclusion: Success."
         </div>
 
-        ```{.py .python linenums="1" title="All columns"}
+        ```{.py .python linenums="1" title="Example 5: All columns"}
         >>> print(get_columns(df, "all").columns)
         ```
         <div class="result" markdown>
-        ```{.py .python}
-        ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+        ```{.sh .shell title="Terminal"}
+        ["a", "b", "c", "d", "e", "f", "g", "h"]
         ```
+        !!! success "Conclusion: Success."
         </div>
 
-        ```{.py .python linenums="1" title="All str"}
+        ```{.py .python linenums="1" title="Example 6: All str"}
         >>> print(get_columns(df, "all_str").columns)
         ```
         <div class="result" markdown>
-        ```{.py .python}
-        ['b', 'd']
+        ```{.sh .shell title="Terminal"}
+        ["b", "d"]
         ```
+        !!! success "Conclusion: Success."
         </div>
 
-        ```{.py .python linenums="1" title="All int"}
+        ```{.py .python linenums="1" title="Example 7: All int"}
         >>> print(get_columns(df, "all int").columns)
         ```
         <div class="result" markdown>
-        ```{.py .python}
-        ['c']
+        ```{.sh .shell title="Terminal"}
+        ["c"]
         ```
+        !!! success "Conclusion: Success."
         </div>
 
-        ```{.py .python linenums="1" title="All float"}
+        ```{.py .python linenums="1" title="Example 8: All float"}
         >>> print(get_columns(df, "all_decimal").columns)
         ```
         <div class="result" markdown>
-        ```{.py .python}
-        ['e','f']
+        ```{.sh .shell title="Terminal"}
+        ["e", "f"]
         ```
+        !!! success "Conclusion: Success."
         </div>
 
-        ```{.py .python linenums="1" title="All numeric"}
+        ```{.py .python linenums="1" title="Example 9: All numeric"}
         >>> print(get_columns(df, "all_numeric").columns)
         ```
         <div class="result" markdown>
-        ```{.py .python}
-        ['c','e','f']
+        ```{.sh .shell title="Terminal"}
+        ["c", "e", "f"]
         ```
+        !!! success "Conclusion: Success."
         </div>
 
-        ```{.py .python linenums="1" title="All date"}
+        ```{.py .python linenums="1" title="Example 10: All date"}
         >>> print(get_columns(df, "all_date").columns)
         ```
         <div class="result" markdown>
-        ```{.py .python}
-        ['g']
+        ```{.sh .shell title="Terminal"}
+        ["g"]
         ```
+        !!! success "Conclusion: Success."
         </div>
 
-        ```{.py .python linenums="1" title="All datetime"}
+        ```{.py .python linenums="1" title="Example 11: All datetime"}
         >>> print(get_columns(df, "all_datetime").columns)
         ```
         <div class="result" markdown>
-        ```{.py .python}
-        ['h']
+        ```{.sh .shell title="Terminal"}
+        ["h"]
         ```
+        !!! success "Conclusion: Success."
         </div>
     """
     if columns is None:
@@ -306,8 +342,11 @@ def get_columns_by_likeness(
     !!! note "Summary"
         Extract the column names from a given `dataframe` based on text that the column name contains.
 
-    !!! deprecation "ToDo"
-        Update examples in function docstring to explain how the `operator` parameter works.
+    !!! deprecation "TODO"
+        Update the description in function docstring to explain how the `operator` works.
+        Update examples in function docstring to show:
+        1. How the `operator` parameter works.
+        2. Two examples of errors.
 
     ???+ abstract "Details"
         You can use any combination of `startswith`, `contains`, and `endswith`. Under the hood, these will be implemented with a number of internal `#!py lambda` functions to determine matches.
@@ -342,10 +381,15 @@ def get_columns_by_likeness(
     ???+ example "Examples"
 
         ```{.py .python linenums="1" title="Set up"}
+        >>> # Imports
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
-        >>> from pyspark_helpers.columns import get_columns_by_likeness
+        >>> from toolbox_pyspark.columns import get_columns_by_likeness
+        >>>
+        >>> # Instantiate Spark
         >>> spark = SparkSession.builder.getOrCreate()
+        >>>
+        >>> # Create data
         >>> values = list(range(1, 6))
         >>> df = spark.createDataFrame(
         ...     pd.DataFrame(
@@ -360,13 +404,12 @@ def get_columns_by_likeness(
         ...         }
         ...     )
         ... )
-        ```
-
-        ```{.py .python linenums="1" title="Check"}
+        >>>
+        >>> # Check
         >>> df.show()
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +-----+-----+-----+-----+-----+-----+-----+
         | aaa | aab | aac | afa | afb | afc | bac |
         +-----+-----+-----+-----+-----+-----+-----+
@@ -379,67 +422,74 @@ def get_columns_by_likeness(
         ```
         </div>
 
-        ```{.py .python linenums="1" title="Starts With"}
-        >>> get_columns_by_likeness(df, starts_with="a")
+        ```{.py .python linenums="1" title="Example 1: Starts With"}
+        >>> print(get_columns_by_likeness(df, starts_with="a"))
         ```
         <div class="result" markdown>
-        ```{.py .python}
+        ```{.sh .shell title="Terminal"}
         ["aaa", "aab", "aac", "afa", "afb", "afc"]
         ```
+        !!! success "Conclusion: Success."
         </div>
 
-        ```{.py .python linenums="1" title="Contains"}
-        >>> get_columns_by_likeness(df, contains="f")
+        ```{.py .python linenums="1" title="Example 2: Contains"}
+        >>> print(get_columns_by_likeness(df, contains="f"))
         ```
         <div class="result" markdown>
-        ```{.py .python}
+        ```{.sh .shell title="Terminal"}
         ["afa", "afb", "afc"]
         ```
+        !!! success "Conclusion: Success."
         </div>
 
-        ```{.py .python linenums="1" title="Third"}
-        >>> get_columns_by_likeness(df, ends_with="c")
+        ```{.py .python linenums="1" title="Example 3: Third"}
+        >>> print(get_columns_by_likeness(df, ends_with="c"))
         ```
         <div class="result" markdown>
-        ```{.py .python}
+        ```{.sh .shell title="Terminal"}
         ["aac", "afc", "bac"]
         ```
+        !!! success "Conclusion: Success."
         </div>
 
-        ```{.py .python linenums="1" title="Starts With and Contains"}
-        >>> get_columns_by_likeness(df, starts_with="a", contains="c")
+        ```{.py .python linenums="1" title="Example 4: Starts With and Contains"}
+        >>> print(get_columns_by_likeness(df, starts_with="a", contains="c"))
         ```
         <div class="result" markdown>
-        ```{.py .python}
+        ```{.sh .shell title="Terminal"}
         ["aac", "afc"]
         ```
+        !!! success "Conclusion: Success."
         </div>
 
-        ```{.py .python linenums="1" title="Starts With and Ends With"}
-        >>> get_columns_by_likeness(df, starts_with="a", ends_with="b")
+        ```{.py .python linenums="1" title="Example 5: Starts With and Ends With"}
+        >>> print(get_columns_by_likeness(df, starts_with="a", ends_with="b"))
         ```
         <div class="result" markdown>
-        ```{.py .python}
+        ```{.sh .shell title="Terminal"}
         ["aab", "afb"]
         ```
+        !!! success "Conclusion: Success."
         </div>
 
-        ```{.py .python linenums="1" title="Contains and Ends With"}
-        >>> get_columns_by_likeness(df, contains="f", ends_with="b")
+        ```{.py .python linenums="1" title="Example 6: Contains and Ends With"}
+        >>> print(get_columns_by_likeness(df, contains="f", ends_with="b"))
         ```
         <div class="result" markdown>
-        ```{.py .python}
+        ```{.sh .shell title="Terminal"}
         ["afb"]
         ```
+        !!! success "Conclusion: Success."
         </div>
 
-        ```{.py .python linenums="1" title="Starts With and Contains and Ends With"}
-        >>> get_columns_by_likeness(df, starts_with="a", contains="f", ends_with="b")
+        ```{.py .python linenums="1" title="Example 7: Starts With and Contains and Ends With"}
+        >>> print(get_columns_by_likeness(df, starts_with="a", contains="f", ends_with="b"))
         ```
         <div class="result" markdown>
-        ```{.py .python}
+        ```{.sh .shell title="Terminal"}
         ["afb"]
         ```
+        !!! success "Conclusion: Success."
         </div>
     """
 
@@ -512,11 +562,11 @@ def rename_columns(
     Params:
         dataframe (psDataFrame):
             The DataFrame to be updated.
-        columns (Optional[Union[str, str_list, str_tuple, str_set]], optional):
+        columns (Optional[Union[str, str_collection]], optional):
             The columns to be updated.<br>
             Must be a valid column on `dataframe`.<br>
             If not provided, will be applied to all columns.<br>
-            It is also possible to parse the values `'all'`, which will also apply this function to all columns in `dataframe`.<br>
+            It is also possible to parse the values `"all"`, which will also apply this function to all columns in `dataframe`.<br>
             Defaults to `None`.
         string_function (str, optional):
             The string function to be applied. Defaults to `"upper"`.
@@ -528,27 +578,31 @@ def rename_columns(
     ???+ example "Examples"
 
         ```{.py .python linenums="1" title="Set up"}
+        >>> # Import
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
-        >>> from pyspark_helpers.columns import rename_columns
+        >>> from toolbox_pyspark.columns import rename_columns
+        >>>
+        >>> # Instantiate Spark
         >>> spark = SparkSession.builder.getOrCreate()
+        >>>
+        >>> # Create data
         >>> df = spark.createDataFrame(
         ...     pd.DataFrame(
         ...         {
-        ...             "a": [0,1,2,3],
+        ...             "a": [0, 1, 2, 3],
         ...             "b": ["a", "b", "c", "d"],
-        ...             "c": ['c','c','c','c'],
-        ...             "d": ['d','d','d','d'],
+        ...             "c": ["c", "c", "c", "c"],
+        ...             "d": ["d", "d", "d", "d"],
         ...         }
         ...     )
         ... )
-        ```
-
-        ```{.py .python linenums="1" title="Check"}
+        >>>
+        >>> # Check
         >>> df.show()
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+---+---+---+
         | a | b | c | d |
         +---+---+---+---+
@@ -560,75 +614,75 @@ def rename_columns(
         ```
         </div>
 
-        ```{.py .python linenums="1" title="Single column, default params"}
-        >>> new_df = rename_columns(df, "a")
-        >>> print(new_df.columns)
+        ```{.py .python linenums="1" title="Example 1: Single column, default params"}
+        >>> print(rename_columns(df, "a").columns)
         ```
         <div class="result" markdown>
-        ```{.py .python}
-        ['A', 'b', 'c', 'd']
+        ```{.sh .shell title="Terminal"}
+        ["A", "b", "c", "d"]
         ```
+        !!! success "Conclusion: Success."
         </div>
 
-        ```{.py .python linenums="1" title="Single column, simple function"}
-        >>> new_df = rename_columns(df, "a", "upper")
-        >>> print(new_df.columns)
+        ```{.py .python linenums="1" title="Example 2: Single column, simple function"}
+        >>> print(rename_columns(df, "a", "upper").columns)
         ```
         <div class="result" markdown>
-        ```{.py .python}
-        ['A', 'b', 'c', 'd']
+        ```{.sh .shell title="Terminal"}
+        ["A", "b", "c", "d"]
         ```
+        !!! success "Conclusion: Success."
         </div>
 
-        ```{.py .python linenums="1" title="Single column, complex function"}
-        >>> new_df = rename_columns(df, "a", "replace('b', 'test')")
-        >>> print(new_df.columns)
+        ```{.py .python linenums="1" title="Example 3: Single column, complex function"}
+        >>> print(rename_columns(df, "a", "replace('b', 'test')").columns)
         ```
         <div class="result" markdown>
-        ```{.py .python}
-        ['a', 'test', 'c', 'd']
+        ```{.sh .shell title="Terminal"}
+        ["a", "test", "c", "d"]
         ```
+        !!! success "Conclusion: Success."
         </div>
 
-        ```{.py .python linenums="1" title="Multiple columns"}
-        >>> new_df = rename_columns(df, ['a', 'b']")
-        >>> print(new_df.columns)
+        ```{.py .python linenums="1" title="Example 4: Multiple columns"}
+        >>> print(rename_columns(df, ["a", "b"]).columns)
         ```
         <div class="result" markdown>
-        ```{.py .python}
-        ['A', 'B', 'c', 'd']
+        ```{.sh .shell title="Terminal"}
+        ["A", "B", "c", "d"]
         ```
+        !!! success "Conclusion: Success."
         </div>
 
-        ```{.py .python linenums="1" title="Default function over all columns"}
-        >>> new_df = rename_columns(df)
-        >>> print(new_df.columns)
+        ```{.py .python linenums="1" title="Example 5: Default function over all columns"}
+        >>> print(rename_columns(df).columns)
         ```
         <div class="result" markdown>
-        ```{.py .python}
-        ['A', 'B', 'C', 'D']
+        ```{.sh .shell title="Terminal"}
+        ["A", "B", "C", "D"]
         ```
+        !!! success "Conclusion: Success."
         </div>
 
-        ```{.py .python linenums="1" title="Complex function over multiple columns"}
-        >>> new_df = rename_columns(df, ['a', 'b'], "replace('b', 'test')")
-        >>> print(new_df.columns)
+        ```{.py .python linenums="1" title="Example 6: Complex function over multiple columns"}
+        >>> print(rename_columns(df, ["a", "b"], "replace('b', 'test')").columns)
         ```
         <div class="result" markdown>
-        ```{.py .python}
-        ['a', 'test', 'c', 'd']
+        ```{.sh .shell title="Terminal"}
+        ["a", "test", "c", "d"]
         ```
+        !!! success "Conclusion: Success."
         </div>
 
     ??? tip "See Also"
-        - [`assert_columns_exists()`][pyspark_helpers.checks.assert_columns_exists]
-        - [`assert_column_exists()`][pyspark_helpers.checks.assert_column_exists]
+        - [`assert_columns_exists()`][toolbox_pyspark.checks.assert_columns_exists]
+        - [`assert_column_exists()`][toolbox_pyspark.checks.assert_column_exists]
     """
     columns = get_columns(dataframe, columns)
     assert_columns_exists(dataframe=dataframe, columns=columns, match_case=True)
     cols_exprs: dict[str, str] = {
         col: eval(
-            f"'{col}'.{string_function}{'()' if not string_function.endswith(')') else ''}"
+            f"{col}.{string_function}{'()' if not string_function.endswith(')') else ''}"
         )
         for col in columns
     }
@@ -645,7 +699,6 @@ def reorder_columns(
     dataframe: psDataFrame,
     new_order: Optional[str_collection] = None,
     missing_columns_last: bool = True,
-    key_columns_last: bool = True,
     key_columns_position: Optional[Literal["first", "last"]] = "first",
 ) -> psDataFrame:
     """
@@ -654,6 +707,7 @@ def reorder_columns(
 
     ???+ abstract "Details"
         The decision flow chart is as follows:
+
         ```mermaid
         graph TD
             a([begin])
@@ -670,10 +724,10 @@ def reorder_columns(
             a --> b
             b --is not None--> h --> c
             b --is None--> g --> d
-            c --True--> i ---> l
             c --False--> l
-            d --'first'--> k ---> l
-            d --'last'---> j --> l
+            c --True--> i ----> l
+            d --"first"--> k ---> l
+            d --"last"---> j --> l
             d --None--> l
             l --> z
         ```
@@ -687,15 +741,11 @@ def reorder_columns(
         missing_columns_last (bool, optional):
             For any columns existing on `#!py dataframes.columns`, but missing from `#!py new_order`, if `#!py missing_columns_last=True`, then include those missing columns to the right of the dataframe, in the same order that they originally appear.<br>
             Defaults to `#!py True`.
-        key_columns_last (bool, optional):
-            !!! deprecation "Deprecated"
-                Parameter `key_columns_last` is deprecated in `v1.18.2` in favour of `key_columns_position`.<br>
-                It will be removed in `v1.19.0`.
         key_columns_position (Optional[Literal["first", "last"]], optional):
-            Where should the `#!py 'key_*'` columns be located?.<br>
+            Where should the `#!py "key_*"` columns be located?.<br>
 
-            - If `#!py 'first'`, then they will be relocated to the start of the dataframe, before all other columns.
-            - If `#!py 'last'`, then they will be relocated to the end of the dataframe, after all other columns.
+            - If `#!py "first"`, then they will be relocated to the start of the dataframe, before all other columns.
+            - If `#!py "last"`, then they will be relocated to the end of the dataframe, after all other columns.
             - If `#!py None`, they they will remain their original order.
 
             Regardless of their position, their original order will be maintained.
@@ -712,30 +762,34 @@ def reorder_columns(
     ???+ example "Examples"
 
         ```{.py .python linenums="1" title="Set up"}
+        >>> # Imports
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
-        >>> from pyspark_helpers.columns import reorder_columns
+        >>> from toolbox_pyspark.columns import reorder_columns
+        >>>
+        >>> # Instantiate Spark
         >>> spark = SparkSession.builder.getOrCreate()
+        >>>
+        >>> # Create data
         >>> df = spark.createDataFrame(
         ...     pd.DataFrame(
         ...         {
-        ...             "a": [0,1,2,3],
+        ...             "a": [0, 1, 2, 3],
         ...             "b": ["a", "b", "c", "d"],
-        ...             "key_a": ['0','1','2','3'],
-        ...             "c": ['1','1','1','1'],
-        ...             "d": ['2','2','2','2'],
-        ...             "key_c": ['1','1','1','1'],
-        ...             "key_e": ['3','3','3','3'],
+        ...             "key_a": ["0", "1", "2", "3"],
+        ...             "c": ["1", "1", "1", "1"],
+        ...             "d": ["2", "2", "2", "2"],
+        ...             "key_c": ["1", "1", "1", "1"],
+        ...             "key_e": ["3", "3", "3", "3"],
         ...         }
         ...     )
         ... )
-        ```
-
-        ```{.py .python linenums="1" title="Check"}
+        >>>
+        >>> # Check
         >>> df.show()
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+---+-------+---+---+-------+-------+
         | a | b | key_a | c | d | key_c | key_e |
         +---+---+-------+---+---+-------+-------+
@@ -747,12 +801,12 @@ def reorder_columns(
         ```
         </div>
 
-        ```{.py .python linenums="1" title="Default config"}
+        ```{.py .python linenums="1" title="Example 1: Default config"}
         >>> new_df = reorder_columns(dataframe=df)
         >>> new_df.show()
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +-------+-------+-------+---+---+---+---+
         | key_a | key_c | key_e | a | b | c | d |
         +-------+-------+-------+---+---+---+---+
@@ -762,9 +816,10 @@ def reorder_columns(
         |     3 |     1 |     3 | 3 | d | 1 | 2 |
         +-------+-------+-------+---+---+---+---+
         ```
+        !!! success "Conclusion: Success."
         </div>
 
-        ```{.py .python linenums="1" title="Custom order"}
+        ```{.py .python linenums="1" title="Example 2: Custom order"}
         >>> new_df = reorder_columns(
         ...     dataframe=df,
         ...     new_order=["key_a", "key_c", "b", "key_e", "a", "c", "d"],
@@ -772,7 +827,7 @@ def reorder_columns(
         >>> new_df.show()
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +-------+-------+---+-------+---+---+---+
         | key_a | key_c | b | key_e | a | c | d |
         +-------+-------+---+-------+---+---+---+
@@ -782,9 +837,10 @@ def reorder_columns(
         |     3 |     1 | d |     3 | 3 | 1 | 2 |
         +-------+-------+---+-------+---+---+---+
         ```
+        !!! success "Conclusion: Success."
         </div>
 
-        ```{.py .python linenums="1" title="Custom order, include missing columns"}
+        ```{.py .python linenums="1" title="Example 3: Custom order, include missing columns"}
         >>> new_df = reorder_columns(
         ...     dataframe=df,
         ...     new_order=["key_a", "key_c", "a", "b"],
@@ -793,7 +849,7 @@ def reorder_columns(
         >>> new_df.show()
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +-------+-------+---+---+-------+---+---+
         | key_a | key_c | a | b | key_e | c | d |
         +-------+-------+---+---+-------+---+---+
@@ -803,9 +859,10 @@ def reorder_columns(
         |     3 |     1 | 3 | d |     3 | 1 | 2 |
         +-------+-------+---+---+-------+---+---+
         ```
+        !!! success "Conclusion: Success."
         </div>
 
-        ```{.py .python linenums="1" title="Custom order, exclude missing columns"}
+        ```{.py .python linenums="1" title="Example 4: Custom order, exclude missing columns"}
         >>> new_df = reorder_columns(
         ...     dataframe=df,
         ...     new_order=["key_a", "key_c", "a", "b"],
@@ -814,7 +871,7 @@ def reorder_columns(
         >>> new_df.show()
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +-------+-------+---+---+
         | key_a | key_c | a | b |
         +-------+-------+---+---+
@@ -824,9 +881,10 @@ def reorder_columns(
         |     3 |     1 | 3 | d |
         +-------+-------+---+---+
         ```
+        !!! success "Conclusion: Success."
         </div>
 
-        ```{.py .python linenums="1" title="Keys last"}
+        ```{.py .python linenums="1" title="Example 5: Keys last"}
         >>> new_df = reorder_columns(
         ...     dataframe=df,
         ...     key_columns_position="last",
@@ -834,7 +892,7 @@ def reorder_columns(
         >>> new_df.show()
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+---+---+---+-------+-------+-------+
         | a | b | c | d | key_a | key_c | key_e |
         +---+---+---+---+-------+-------+-------+
@@ -844,9 +902,10 @@ def reorder_columns(
         | 3 | d | 1 | 2 |     3 |     1 |     3 |
         +---+---+---+---+-------+-------+-------+
         ```
+        !!! success "Conclusion: Success."
         </div>
 
-        ```{.py .python linenums="1" title="Keys first"}
+        ```{.py .python linenums="1" title="Example 6: Keys first"}
         >>> new_df = reorder_columns(
         ...     dataframe=df,
         ...     key_columns_position="first",
@@ -854,7 +913,7 @@ def reorder_columns(
         >>> new_df.show()
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +-------+-------+-------+---+---+---+---+
         | key_a | key_c | key_e | a | b | c | d |
         +-------+-------+-------+---+---+---+---+
@@ -864,6 +923,7 @@ def reorder_columns(
         |     3 |     1 |     3 | 3 | d | 1 | 2 |
         +-------+-------+-------+---+---+---+---+
         ```
+        !!! success "Conclusion: Success."
         </div>
     """
     df_cols: str_list = dataframe.columns
@@ -906,16 +966,18 @@ def delete_columns(
     Params:
         dataframe (psDataFrame):
             The dataframe from which to delete the columns
-        columns (Union[str, str_list, str_tuple, str_set]):
+        columns (Union[str, str_collection]):
             The list of columns to delete.
         missing_column_handler (Literal["raise", "warn", "pass"], optional):
             How to handle any columns which are missing from `#!py dataframe.columns`.
 
             If _any_ columns in `columns` are missing from `#!py dataframe.columns`, then the following will happen for each option:
 
-            - If `#!py "raise"` then an `#!py AttributeError` exception will be raised
-            - If `#!py "warn"` then an `#!py AttributeWarning` warning will be raised
-            - If `#!py "pass"`, then nothing will be raised
+            | Option | Result |
+            |--------|--------|
+            | `#!py "raise"` | An `#!py AttributeError` exception will be raised
+            | `#!py "warn"` | An `#!py AttributeWarning` warning will be raised
+            | `#!py "pass"` | Nothing will be raised
 
             Defaults to `#!py "pass"`.
 
@@ -926,10 +988,15 @@ def delete_columns(
     ???+ example "Examples"
 
         ```{.py .python linenums="1" title="Set up"}
+        >>> # Imports
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
-        >>> from pyspark_helpers.columns import delete_columns
+        >>> from toolbox_pyspark.columns import delete_columns
+        >>>
+        >>> # Instantiate Spark
         >>> spark = SparkSession.builder.getOrCreate()
+        >>>
+        >>> # Create data
         >>> df = spark.createDataFrame(
         ...     pd.DataFrame(
         ...         {
@@ -940,13 +1007,12 @@ def delete_columns(
         ...         }
         ...     )
         ... )
-        ```
-
-        ```{.py .python linenums="1" title="Check"}
+        >>>
+        >>> # Check
         >>> df.show()
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+---+---+---+
         | a | b | c | d |
         +---+---+---+---+
@@ -958,11 +1024,11 @@ def delete_columns(
         ```
         </div>
 
-        ```{.py .python linenums="1" title="Single column"}
+        ```{.py .python linenums="1" title="Example 1: Single column"}
         >>> df.transform(delete_columns, "a").show()
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+---+---+
         | b | c | d |
         +---+---+---+
@@ -972,13 +1038,14 @@ def delete_columns(
         | d | c | d |
         +---+---+---+
         ```
+        !!! success "Conclusion: Success."
         </div>
 
-        ```{.py .python linenums="1" title="Multiple columns"}
+        ```{.py .python linenums="1" title="Example 2: Multiple columns"}
         >>> df.transform(delete_columns, ["a", "b"]).show()
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+---+
         | c | d |
         +---+---+
@@ -988,9 +1055,10 @@ def delete_columns(
         | c | d |
         +---+---+
         ```
+        !!! success "Conclusion: Success."
         </div>
 
-        ```{.py .python linenums="1" title="Single column missing, raises error"}
+        ```{.py .python linenums="1" title="Example 3: Single column missing, raises error"}
         >>> (
         ...     df.transform(
         ...         delete_columns,
@@ -1001,13 +1069,14 @@ def delete_columns(
         ... )
         ```
         <div class="result" markdown>
-        ```{.txt .text}
-        AttributeError: Columns ['z'] do not exist in 'dataframe'.
-        Try one of: ['a', 'b', 'c', 'd']
+        ```{.txt .text title="Terminal"}
+        AttributeError: Columns ["z"] do not exist in "dataframe".
+        Try one of: ["a", "b", "c", "d"]
         ```
+        !!! success "Conclusion: Success."
         </div>
 
-        ```{.py .python linenums="1" title="Multiple columns, one missing, raises error"}
+        ```{.py .python linenums="1" title="Example 4: Multiple columns, one missing, raises error"}
         >>> (
         ...     df.transform(
         ...         delete_columns,
@@ -1018,13 +1087,14 @@ def delete_columns(
         ... )
         ```
         <div class="result" markdown>
-        ```{.txt .text}
-        AttributeError: Columns ['z'] do not exist in 'dataframe'.
-        Try one of: ['a', 'b', 'c', 'd']
+        ```{.txt .text title="Terminal"}
+        AttributeError: Columns ["z"] do not exist in "dataframe".
+        Try one of: ["a", "b", "c", "d"]
         ```
+        !!! success "Conclusion: Success."
         </div>
 
-        ```{.py .python linenums="1" title="Multiple columns, all missing, raises error"}
+        ```{.py .python linenums="1" title="Example 5: Multiple columns, all missing, raises error"}
         >>> (
         ...     df.transform(
         ...         delete_columns,
@@ -1035,13 +1105,14 @@ def delete_columns(
         ... )
         ```
         <div class="result" markdown>
-        ```{.txt .text}
-        AttributeError: Columns ['x', 'y', 'z'] do not exist in 'dataframe'.
-        Try one of: ['a', 'b', 'c', 'd']
+        ```{.txt .text title="Terminal"}
+        AttributeError: Columns ["x", "y", "z"] do not exist in "dataframe".
+        Try one of: ["a", "b", "c", "d"]
         ```
+        !!! success "Conclusion: Success."
         </div>
 
-        ```{.py .python linenums="1" title="Single column missing, raises warning"}
+        ```{.py .python linenums="1" title="Example 6: Single column missing, raises warning"}
         >>> (
         ...     df.transform(
         ...         delete_columns,
@@ -1052,11 +1123,11 @@ def delete_columns(
         ... )
         ```
         <div class="result" markdown>
-        ```{.txt .text}
-        AttributeWarning: Columns missing from 'dataframe': ['z'].
+        ```{.txt .text title="Terminal"}
+        AttributeWarning: Columns missing from "dataframe": ["z"].
         Will still proceed to delete columns that do exist.
         ```
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+---+---+---+
         | a | b | c | d |
         +---+---+---+---+
@@ -1066,9 +1137,10 @@ def delete_columns(
         | 3 | d | c | d |
         +---+---+---+---+
         ```
+        !!! success "Conclusion: Success."
         </div>
 
-        ```{.py .python linenums="1" title="Multiple columns, one missing, raises warning"}
+        ```{.py .python linenums="1" title="Example 7: Multiple columns, one missing, raises warning"}
         >>> (
         ...     df.transform(
         ...         delete_columns,
@@ -1079,11 +1151,11 @@ def delete_columns(
         ... )
         ```
         <div class="result" markdown>
-        ```{.txt .text}
-        AttributeWarning: Columns missing from 'dataframe': ['z'].
+        ```{.txt .text title="Terminal"}
+        AttributeWarning: Columns missing from "dataframe": ["z"].
         Will still proceed to delete columns that do exist.
         ```
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+---+
         | c | d |
         +---+---+
@@ -1093,9 +1165,10 @@ def delete_columns(
         | c | d |
         +---+---+
         ```
+        !!! success "Conclusion: Success."
         </div>
 
-        ```{.py .python linenums="1" title="Multiple columns, all missing, raises warning"}
+        ```{.py .python linenums="1" title="Example 8: Multiple columns, all missing, raises warning"}
         >>> (
         ...     df.transform(
         ...         delete_columns,
@@ -1106,11 +1179,11 @@ def delete_columns(
         ... )
         ```
         <div class="result" markdown>
-        ```{.txt .text}
-        AttributeWarning: Columns missing from 'dataframe': ['x', 'y', 'z'].
+        ```{.txt .text title="Terminal"}
+        AttributeWarning: Columns missing from "dataframe": ["x", "y", "z"].
         Will still proceed to delete columns that do exist.
         ```
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+---+---+---+
         | a | b | c | d |
         +---+---+---+---+
@@ -1120,9 +1193,10 @@ def delete_columns(
         | 3 | d | c | d |
         +---+---+---+---+
         ```
+        !!! success "Conclusion: Success."
         </div>
 
-        ```{.py .python linenums="1" title="Single column missing, nothing raised"}
+        ```{.py .python linenums="1" title="Example 9: Single column missing, nothing raised"}
         >>> (
         ...     df.transform(
         ...         delete_columns,
@@ -1133,7 +1207,7 @@ def delete_columns(
         ... )
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+---+---+---+
         | a | b | c | d |
         +---+---+---+---+
@@ -1143,9 +1217,10 @@ def delete_columns(
         | 3 | d | c | d |
         +---+---+---+---+
         ```
+        !!! success "Conclusion: Success."
         </div>
 
-        ```{.py .python linenums="1" title="Multiple columns, one missing, nothing raised"}
+        ```{.py .python linenums="1" title="Example 10: Multiple columns, one missing, nothing raised"}
         >>> (
         ...     df.transform(
         ...         delete_columns,
@@ -1156,7 +1231,7 @@ def delete_columns(
         ... )
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+---+
         | c | d |
         +---+---+
@@ -1166,9 +1241,10 @@ def delete_columns(
         | c | d |
         +---+---+
         ```
+        !!! success "Conclusion: Success."
         </div>
 
-        ```{.py .python linenums="1" title="Multiple columns, all missing, nothing raised"}
+        ```{.py .python linenums="1" title="Example 11: Multiple columns, all missing, nothing raised"}
         >>> (
         ...     df.transform(
         ...         delete_columns,
@@ -1179,7 +1255,7 @@ def delete_columns(
         ... )
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+---+---+---+
         | a | b | c | d |
         +---+---+---+---+
@@ -1189,19 +1265,14 @@ def delete_columns(
         | 3 | d | c | d |
         +---+---+---+---+
         ```
+        !!! success "Conclusion: Success."
         </div>
     """
     columns = get_columns(dataframe, columns)
     if missing_column_handler == "raise":
         assert_columns_exists(dataframe=dataframe, columns=columns)
     elif missing_column_handler == "warn":
-        exists, missing_cols = _columns_exists(dataframe=dataframe, columns=columns)
-        if not exists:
-            warnings.warn(
-                f"Columns missing from 'dataframe': {missing_cols}.\n"
-                f"Will still proceed to delete columns that do exist",
-                AttributeWarning,
-            )
+        warn_columns_missing(dataframe=dataframe, columns=columns)
     elif missing_column_handler == "pass":
         pass
     return dataframe.select([col for col in dataframe.columns if col not in columns])
