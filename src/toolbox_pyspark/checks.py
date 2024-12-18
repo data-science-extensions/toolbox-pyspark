@@ -62,6 +62,8 @@ __all__: str_list = [
     "columns_exists",
     "assert_column_exists",
     "assert_columns_exists",
+    "warn_column_missing",
+    "warn_columns_missing",
     "is_vaid_spark_type",
     "table_exists",
 ]
