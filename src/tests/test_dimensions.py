@@ -11,6 +11,7 @@
 
 
 # ## Python Third Party Imports ----
+import numpy as np
 from pandas import DataFrame as pdDataFrame
 
 # ## Local First Party Imports ----
@@ -38,23 +39,36 @@ class TestGetDims(PySparkSetup):
         pass
 
     def test_get_dims_1(self) -> None:
-        result = get_dims(self.ps_df)
-        expected = {"rows": "4", "cols": "2"}
+        result: dict[str, str] = get_dims(self.ps_df)
+        expected: dict[str, str] = {"rows": "4", "cols": "2"}
         assert result == expected
 
     def test_get_dims_2(self) -> None:
-        result = get_dims(self.ps_df, use_comma=False)
-        expected = {"rows": 4, "cols": 2}
+        result: dict[str, int] = get_dims(self.ps_df, use_comma=False)
+        expected: dict[str, int] = {"rows": 4, "cols": 2}
         assert result == expected
 
     def test_get_dims_3(self) -> None:
-        result = get_dims(self.ps_df, use_comma=True)
-        expected = {"rows": "4", "cols": "2"}
+        result: dict[str, str] = get_dims(self.ps_df, use_comma=True)
+        expected: dict[str, str] = {"rows": "4", "cols": "2"}
+        assert result == expected
+
+    def test_get_dims_4(self) -> None:
+        result: tuple[str, str] = get_dims(self.ps_df, use_comma=True, use_names=False)
+        expected: tuple[str, str] = ("4", "2")
+        assert result == expected
+
+    def test_get_dims_4(self) -> None:
+        result: tuple[int, int] = get_dims(self.ps_df, use_comma=False, use_names=False)
+        expected: tuple[int, int] = (4, 2)
         assert result == expected
 
 
 class TestGetSizesOfListOfTables(PySparkSetup):
+
     def test_get_dims_of_tables_1(self) -> None:
+
+        # Set up the data
         df1 = self.spark.createDataFrame(
             pdDataFrame(
                 {
@@ -82,10 +96,12 @@ class TestGetSizesOfListOfTables(PySparkSetup):
                 }
             )
         )
-        result = get_dims_of_tables(
+
+        # Test use_comma=True
+        result1 = get_dims_of_tables(
             ["df1", "df2", "df3_prd", "df_4"], scope=locals(), use_comma=True
         )
-        expected = pdDataFrame(
+        expected1 = pdDataFrame(
             {
                 "table": ["df1", "df2", "df3", "df_4"],
                 "type": ["", "", "prd", ""],
@@ -93,4 +109,18 @@ class TestGetSizesOfListOfTables(PySparkSetup):
                 "cols": ["2", "3", "4", "Did not load"],
             }
         )
-        assert result.to_dict(orient="list") == expected.to_dict(orient="list")
+        assert result1.to_dict(orient="list") == expected1.to_dict(orient="list")
+
+        # Test use_comma=False
+        result2 = get_dims_of_tables(
+            ["df1", "df2", "df3_prd", "df_4"], scope=locals(), use_comma=False
+        ).to_dict(orient="list")
+        expected2 = pdDataFrame(
+            {
+                "table": ["df1", "df2", "df3", "df_4"],
+                "type": ["", "", "prd", ""],
+                "rows": [5000, 10000, 1000, np.nan],
+                "cols": [2, 3, 4, np.nan],
+            }
+        ).to_dict(orient="list")
+        assert str(result2) == str(expected2)

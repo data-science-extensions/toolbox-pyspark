@@ -72,7 +72,7 @@ def get_dims(
     dataframe: psDataFrame,
     use_names: bool = True,
     use_comma: bool = True,
-) -> Union[Dict[str, Union[str, int]], tuple[str, ...], tuple[int, ...]]:
+) -> Union[dict[str, str], dict[str, int], tuple[str, str], tuple[int, int]]:
     """
     !!! note "Summary"
         Extract the dimensions of a given `dataframe`.
@@ -168,8 +168,6 @@ def get_dims(
         return {"rows": dims[0], "cols": dims[1]}
     elif not use_names and use_comma:
         return (f"{dims[0]:,}", f"{dims[1]:,}")
-    elif not use_names and not use_comma:
-        return dims
     else:
         return dims
 
