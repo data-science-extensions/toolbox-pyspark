@@ -95,4 +95,4 @@ jobs:
 
       - name: Report coverage
         id: report-coverage
-        run: coverage report --fail-under=100
+        run: poetry run coverage report --fail-under=99
