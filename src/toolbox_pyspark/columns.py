@@ -342,14 +342,17 @@ def get_columns_by_likeness(
     !!! note "Summary"
         Extract the column names from a given `dataframe` based on text that the column name contains.
 
-    !!! deprecation "TODO"
-        Update the description in function docstring to explain how the `operator` works.
-        Update examples in function docstring to show:
-        1. How the `operator` parameter works.
-        2. Two examples of errors.
-
     ???+ abstract "Details"
         You can use any combination of `startswith`, `contains`, and `endswith`. Under the hood, these will be implemented with a number of internal `#!py lambda` functions to determine matches.
+
+        The `operator` parameter determines how the conditions (`starts_with`, `contains`, `ends_with`) are combined:
+
+        | Value | Description |
+        |-------|-------------|
+        | `"and"` | All conditions must be true.
+        | `"or"` | At least one condition must be true.
+        | `"and not"` | The first condition must be true and the second condition must be false.
+        | `"or not"` | At least one condition must be true, but not all.
 
     Params:
         dataframe (psDataFrame):
@@ -442,7 +445,7 @@ def get_columns_by_likeness(
         !!! success "Conclusion: Success."
         </div>
 
-        ```{.py .python linenums="1" title="Example 3: Third"}
+        ```{.py .python linenums="1" title="Example 3: Ends With"}
         >>> print(get_columns_by_likeness(df, ends_with="c"))
         ```
         <div class="result" markdown>
@@ -490,6 +493,46 @@ def get_columns_by_likeness(
         ["afb"]
         ```
         !!! success "Conclusion: Success."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 8: Using 'or' Operator"}
+        >>> print(get_columns_by_likeness(df, starts_with="a", operator="or", contains="f"))
+        ```
+        <div class="result" markdown>
+        ```{.sh .shell title="Terminal"}
+        ["aaa", "aab", "aac", "afa", "afb", "afc"]
+        ```
+        !!! success "Conclusion: Success."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 9: Using 'and not' Operator"}
+        >>> print(get_columns_by_likeness(df, starts_with="a", operator="and not", contains="f"))
+        ```
+        <div class="result" markdown>
+        ```{.sh .shell title="Terminal"}
+        ["aaa", "aab", "aac"]
+        ```
+        !!! success "Conclusion: Success."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 10: Error Example 1"}
+        >>> print(get_columns_by_likeness(df, starts_with=123))
+        ```
+        <div class="result" markdown>
+        ```{.sh .shell title="Terminal"}
+        TypeError: `starts_with` must be a `string` or `None`.
+        ```
+        !!! failure "Conclusion: Error."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 11: Error Example 2"}
+        >>> print(get_columns_by_likeness(df, operator="xor"))
+        ```
+        <div class="result" markdown>
+        ```{.sh .shell title="Terminal"}
+        ValueError: `operator` must be one of 'and', 'or', 'and not', 'or not'
+        ```
+        !!! failure "Conclusion: Error."
         </div>
     """
 
