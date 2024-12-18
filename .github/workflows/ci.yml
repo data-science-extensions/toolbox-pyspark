@@ -95,4 +95,6 @@ jobs:
 
       - name: Report coverage
         id: report-coverage
-        run: poetry run coverage report --fail-under=99
+        run: make assert-coverage
+        env:
+          MINIMUM_COVERAGE: ${{ vars.MINIMUM_COVERAGE }}

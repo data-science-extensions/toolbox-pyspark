@@ -2,7 +2,8 @@
 PYTHON := python3
 PACKAGE_NAME := toolbox_pyspark
 PYTHONPATH := `pwd`
-VERSION ?= v0.0.0
+VERSION ?= v0.0.0  #<-- Default version if not already set by the CI/CD workflows
+MINIMUM_COVERAGE ?= 99  #<-- Default minimum coverage if not already set by the CI/CD workflows
 VERSION_CLEAN := $(shell echo $(VERSION) | awk '{gsub(/v/,"")}1')
 VERSION_NO_PATCH := "$(shell echo $(VERSION) | cut --delimiter '.' --fields 1-2).*"
 
@@ -110,6 +111,8 @@ commit-coverage-report:
 	git add .
 	git commit --no-verify --message "Update coverage report [skip ci]"
 	git push
+assert-coverage:
+	poetry run coverage report --fail-under=$(MINIMUM_COVERAGE)
 
 
 #* Git
