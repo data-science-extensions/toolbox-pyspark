@@ -6,8 +6,8 @@
 | [`keys`][toolbox_pyspark.keys]             | ✅ | [![][issue-shield-keys]][issue-url-keys]               | [![][milestone-shield-keys]][milestone-url-keys]               |
 | [`scale`][toolbox_pyspark.scale]           | ✅ | [![][issue-shield-scale]][issue-url-scale]             | [![][milestone-shield-scale]][milestone-url-scale]             |
 | [`dimensions`][toolbox_pyspark.dimensions] | ✅ | [![][issue-shield-dimensions]][issue-url-dimensions]   | [![][milestone-shield-dimensions]][milestone-url-dimensions]   |
+| [`columns`][toolbox_pyspark.columns]       | ✅ | [![][issue-shield-columns]][issue-url-columns]         | [![][milestone-shield-columns]][milestone-url-columns]         |
 | `cleaning`                                 | ⬜ | [![][issue-shield-cleaning]][issue-url-cleaning]       | [![][milestone-shield-cleaning]][milestone-url-cleaning]       |
-| `columns`                                  | ⬜ | [![][issue-shield-columns]][issue-url-columns]         | [![][milestone-shield-columns]][milestone-url-columns]         |
 | `datetime`                                 | ⬜ | [![][issue-shield-datetime]][issue-url-datetime]       | [![][milestone-shield-datetime]][milestone-url-datetime]       |
 | `delta`                                    | ⬜ | [![][issue-shield-delta]][issue-url-delta]             | [![][milestone-shield-delta]][milestone-url-delta]             |
 | `duplication`                              | ⬜ | [![][issue-shield-duplication]][issue-url-duplication] | [![][milestone-shield-duplication]][milestone-url-duplication] |

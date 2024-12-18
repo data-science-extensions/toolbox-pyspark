@@ -121,7 +121,7 @@ def round_column(
         >>> # Imports
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession, functions as F, types as T
-        >>> from pyspark_helpers.io import read_from_path
+        >>> from toolbox_pyspark.io import read_from_path
         >>>
         >>> # Instantiate Spark
         >>> spark = SparkSession.builder.getOrCreate()
@@ -316,7 +316,7 @@ def round_columns(
         >>> # Imports
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession, functions as F, types as T
-        >>> from pyspark_helpers.io import read_from_path
+        >>> from toolbox_pyspark.io import read_from_path
         >>>
         >>> # Instantiate Spark
         >>> spark = SparkSession.builder.getOrCreate()

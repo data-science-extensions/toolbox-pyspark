@@ -27,9 +27,12 @@ from toolbox_pyspark.checks import (
     columns_exists,
     is_vaid_spark_type,
     table_exists,
+    warn_column_missing,
+    warn_columns_missing,
 )
 from toolbox_pyspark.constants import VALID_PYSPARK_TYPE_NAMES
 from toolbox_pyspark.io import write_to_path
+from toolbox_pyspark.utils.warnings import AttributeWarning
 
 
 # ---------------------------------------------------------------------------- #
@@ -97,7 +100,7 @@ class TestColumnsExists(PySparkSetup):
 # ---------------------------------------------------------------------------- #
 
 
-class TestAssertColumnExists(PySparkSetup):
+class TestAssertColumnsExists(PySparkSetup):
     def setUp(self) -> None:
         pass
 
@@ -114,16 +117,6 @@ class TestAssertColumnExists(PySparkSetup):
     def test_assert_column_exists_4(self) -> None:
         with pytest.raises(AttributeError):
             assert_column_exists(self.ps_df, "A", True)
-
-
-# ---------------------------------------------------------------------------- #
-#  TestAssertColumnsExists                                                  ####
-# ---------------------------------------------------------------------------- #
-
-
-class TestAssertColumnsExists(PySparkSetup):
-    def setUp(self) -> None:
-        pass
 
     def test_assert_columns_exists_1(self) -> None:
         assert assert_columns_exists(self.ps_df, ["a", "b"]) is None
@@ -149,6 +142,55 @@ class TestAssertColumnsExists(PySparkSetup):
     def test_assert_columns_exists_6(self) -> None:
         with pytest.raises(AttributeError):
             assert_columns_exists(self.ps_df, ["B", "C", "D", "E"])
+
+
+## --------------------------------------------------------------------------- #
+##  TestWarnColumnMissing                                                   ####
+## --------------------------------------------------------------------------- #
+
+
+class TestWarnColumnsMissing(PySparkSetup):
+    def setUp(self) -> None:
+        pass
+
+    def test_warn_column_missing_1(self) -> None:
+        assert warn_column_missing(self.ps_df, "a") is None
+
+    def test_warn_column_missing_2(self) -> None:
+        with pytest.warns(AttributeWarning):
+            warn_column_missing(self.ps_df, "c")
+
+    def test_warn_column_missing_3(self) -> None:
+        assert warn_column_missing(self.ps_df, "A", False) is None
+
+    def test_warn_column_missing_4(self) -> None:
+        with pytest.warns(AttributeWarning):
+            warn_column_missing(self.ps_df, "A", True)
+
+    def test_warn_columns_missing_1(self) -> None:
+        assert warn_columns_missing(self.ps_df, ["a", "b"]) is None
+
+    def test_warn_columns_missing_2(self) -> None:
+        with pytest.warns(AttributeWarning):
+            warn_columns_missing(self.ps_df, ["b", "c"])
+
+    def test_warn_columns_missing_3(self) -> None:
+        with pytest.warns(AttributeWarning):
+            warn_columns_missing(
+                self.ps_df.withColumn("c", F.lit("c")).withColumn("d", F.lit("d")),
+                ["b", "c", "d", "e", "f"],
+            )
+
+    def test_warn_columns_missing_4(self) -> None:
+        assert warn_columns_missing(self.ps_df, ["A", "B"], False) is None
+
+    def test_warn_columns_missing_5(self) -> None:
+        with pytest.warns(AttributeWarning):
+            warn_columns_missing(self.ps_df, ["B", "C"], True)
+
+    def test_warn_columns_missing_6(self) -> None:
+        with pytest.warns(AttributeWarning):
+            warn_columns_missing(self.ps_df, ["B", "C", "D", "E"])
 
 
 # ---------------------------------------------------------------------------- #

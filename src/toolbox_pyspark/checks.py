@@ -39,15 +39,17 @@
 # ## Python StdLib Imports ----
 from dataclasses import dataclass, fields
 from typing import Union
+from warnings import warn
 
 # ## Python Third Party Imports ----
 from pyspark.sql import DataFrame as psDataFrame, SparkSession
-from toolbox_python.collection_types import str_list, str_set, str_tuple
+from toolbox_python.collection_types import str_collection, str_list
 from typeguard import typechecked
 
 # ## Local First Party Imports ----
 from toolbox_pyspark.constants import VALID_PYSPARK_TYPE_NAMES
 from toolbox_pyspark.io import read_from_path
+from toolbox_pyspark.utils.warnings import AttributeWarning
 
 
 # ---------------------------------------------------------------------------- #
@@ -60,6 +62,8 @@ __all__: str_list = [
     "columns_exists",
     "assert_column_exists",
     "assert_columns_exists",
+    "warn_column_missing",
+    "warn_columns_missing",
     "is_vaid_spark_type",
     "table_exists",
 ]
@@ -90,12 +94,10 @@ class ColumnExistsResult:
 @typechecked
 def _columns_exists(
     dataframe: psDataFrame,
-    columns: Union[str_list, str_tuple, str_set],
+    columns: str_collection,
     match_case: bool = False,
 ) -> ColumnExistsResult:
-    cols: Union[str_list, str_tuple, str_set] = (
-        columns if match_case else [col.upper() for col in columns]
-    )
+    cols: str_collection = columns if match_case else [col.upper() for col in columns]
     df_cols: str_list = (
         dataframe.columns
         if match_case
@@ -178,7 +180,7 @@ def column_exists(
 @typechecked
 def columns_exists(
     dataframe: psDataFrame,
-    columns: Union[str_list, str_tuple, str_set],
+    columns: str_collection,
     match_case: bool = False,
 ) -> bool:
     """
@@ -331,7 +333,7 @@ def assert_column_exists(
 @typechecked
 def assert_columns_exists(
     dataframe: psDataFrame,
-    columns: Union[str_list, str_tuple, str_set],
+    columns: Union[str, str_collection],
     match_case: bool = False,
 ) -> None:
     """
@@ -407,11 +409,171 @@ def assert_columns_exists(
         !!! failure "Conclusion: Columns "c" and "d" does not exist."
         </div>
     """
+    columns = [columns] if isinstance(columns, str) else columns
     (exist, missing_cols) = _columns_exists(dataframe, columns, match_case)
     if not exist:
         raise AttributeError(
             f"Columns {missing_cols} do not exist in 'dataframe'.\n"
             f"Try one of: {dataframe.columns}"
+        )
+
+
+@typechecked
+def warn_column_missing(
+    dataframe: psDataFrame,
+    column: str,
+    match_case: bool = False,
+) -> None:
+    """
+    !!! summary "Summary"
+        Check whether a given `#!py column` exists as a valid column within `#!py dataframe.columns`.
+
+    Params:
+        dataframe (psDataFrame):
+            The DataFrame to check.
+        column (str):
+            The column to check.
+        match_case (bool, optional):
+            Whether or not to match the string case for the columns.<br>
+            Defaults to `#!py False`.
+
+    Raises:
+        TypeError:
+            If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
+
+    Returns:
+        (type(None)):
+            Nothing is returned. Either an `#!py AttributeWarning` exception is raised, or nothing.
+
+    ???+ example "Examples"
+
+        ```{.py .python linenums="1" title="Set up"}
+        >>> import pandas as pd
+        >>> from pyspark.sql import SparkSession
+        >>> from toolbox_pyspark.checks import warn_column_missing
+        >>> spark = SparkSession.builder.getOrCreate()
+        >>> df = spark.createDataFrame(
+        ...     pd.DataFrame(
+        ...         {
+        ...             "a": [1, 2, 3, 4],
+        ...             "b": ["a", "b", "c", "d"],
+        ...         }
+        ...     )
+        ... )
+        ```
+
+        ```{.py .python linenums="1" title="Example 1: No error"}
+        >>> warn_column_missing(df, ["a", "b"])
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        None
+        ```
+        !!! success "Conclusion: Columns exist."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 2: Warning raised"}
+        >>> warn_column_missing(df, "c")
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        Attribute Warning: Column "c" does not exist in "dataframe".
+        Try one of: ["a", "b"].
+        ```
+        !!! failure "Conclusion: Column does not exist."
+        </div>
+    """
+    if not column_exists(dataframe, column, match_case):
+        warn(
+            f"Column '{column}' does not exist in 'dataframe'.\n"
+            f"Try one of: {dataframe.columns}.",
+            AttributeWarning,
+        )
+
+
+@typechecked
+def warn_columns_missing(
+    dataframe: psDataFrame,
+    columns: Union[str, str_collection],
+    match_case: bool = False,
+) -> None:
+    """
+    !!! summary "Summary"
+        Check whether all of the values in `#!py columns` exist in `#!py dataframe.columns`.
+
+    Params:
+        dataframe (psDataFrame):
+            The DataFrame to check.
+        columns (Union[str, str_collection]):
+            The columns to check.
+        match_case (bool, optional):
+            Whether or not to match the string case for the columns.<br>
+            Defaults to `#!py False`.
+
+    Raises:
+        TypeError:
+            If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
+
+    Returns:
+        (type(None)):
+            Nothing is returned. Either an `#!py AttributeWarning` exception is raised, or nothing.
+
+    ???+ example "Examples"
+
+        ```{.py .python linenums="1" title="Set up"}
+        >>> import pandas as pd
+        >>> from pyspark.sql import SparkSession
+        >>> from toolbox_pyspark.checks import warn_columns_missing
+        >>> spark = SparkSession.builder.getOrCreate()
+        >>> df = spark.createDataFrame(
+        ...     pd.DataFrame(
+        ...         {
+        ...             "a": [1, 2, 3, 4],
+        ...             "b": ["a", "b", "c", "d"],
+        ...         }
+        ...     )
+        ... )
+        ```
+
+        ```{.py .python linenums="1" title="Example 1: No error"}
+        >>> warn_columns_missing(df, ["a", "b"])
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        None
+        ```
+        !!! success "Conclusion: Columns exist."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 2: One column missing"}
+        >>> warn_columns_missing(df, ["b", "c"])
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        Attribute Warning: Columns ["c"] do not exist in "dataframe".
+        Try one of: ["a", "b"].
+        ```
+        !!! failure "Conclusion: Column "c" does not exist."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 3: Multiple columns missing"}
+        >>> warn_columns_missing(df, ["b", "c", "d"])
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        Attribute Warning: Columns ["c", "d"] do not exist in "dataframe".
+        Try one of: ["a", "b"].
+        ```
+        !!! failure "Conclusion: Columns "c" and "d" does not exist."
+        </div>
+    """
+    columns = [columns] if isinstance(columns, str) else columns
+    (exist, missing_cols) = _columns_exists(dataframe, columns, match_case)
+    if not exist:
+        warn(
+            f"Columns {missing_cols} do not exist in 'dataframe'.\n"
+            f"Try one of: {dataframe.columns}",
+            AttributeWarning,
         )
 
 
