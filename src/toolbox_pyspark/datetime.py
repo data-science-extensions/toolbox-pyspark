@@ -337,16 +337,19 @@ def rename_datetime_columns(
         - [`rename_datetime_column()`][toolbox_pyspark.datetime.rename_datetime_column]
     """
     if columns is None or columns == "all":
+        datetime_cols: str_list = [
+            col
+            for col in get_columns(dataframe, "all_datetime")
+            if col.lower().endswith("date")
+        ]
         columns = [
             col
-            for col, typ in dataframe.dtypes
-            if col.lower().endswith("date")
-            and typ.lower() == "timestamp"
-            and f"{col.upper()}TIME" not in [col.upper() for col in dataframe.columns]
+            for col in datetime_cols
+            if col.lower().endswith("date") and f"{col}TIME" not in dataframe.columns
         ]
     elif isinstance(columns, str):
         columns = [columns]
-    assert_columns_exists(dataframe=dataframe, columns=columns, match_case=True)
+    assert_columns_exists(dataframe, columns, True)
     for column in columns:
         dataframe = rename_datetime_column(dataframe, column)
     return dataframe
