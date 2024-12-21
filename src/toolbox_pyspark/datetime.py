@@ -120,8 +120,8 @@ def rename_datetime_column(
         ...         {
         ...             "a": [1, 2, 3, 4],
         ...             "b": ["a", "b", "c", "d"],
-        ...             "c_date": pd.date_range(start="2022-01-01", periods=4, freq="H"),
-        ...             "d_date": pd.date_range(start="2022-02-01", periods=4, freq="H"),
+        ...             "c_date": pd.date_range(start="2022-01-01", periods=4, freq="h"),
+        ...             "d_date": pd.date_range(start="2022-02-01", periods=4, freq="h"),
         ...         }
         ...     )
         ... )
@@ -237,8 +237,8 @@ def rename_datetime_columns(
         ...         {
         ...             "a": [1, 2, 3, 4],
         ...             "b": ["a", "b", "c", "d"],
-        ...             "c_date": pd.date_range(start="2022-01-01", periods=4, freq="H"),
-        ...             "d_date": pd.date_range(start="2022-02-01", periods=4, freq="H"),
+        ...             "c_date": pd.date_range(start="2022-01-01", periods=4, freq="h"),
+        ...             "d_date": pd.date_range(start="2022-02-01", periods=4, freq="h"),
         ...         }
         ...     )
         ... )
@@ -777,13 +777,13 @@ def split_datetime_column(
         ...             "a": [1, 2, 3, 4],
         ...             "b": ["a", "b", "c", "d"],
         ...             "c_datetime": pd.date_range(
-        ...                 start="2022-01-01", periods=4, freq="H"
+        ...                 start="2022-01-01", periods=4, freq="h"
         ...             ),
         ...             "d_datetime": pd.date_range(
-        ...                 start="2022-02-01", periods=4, freq="H"
+        ...                 start="2022-02-01", periods=4, freq="h"
         ...             ),
         ...             "e_datetime": pd.date_range(
-        ...                 start="2022-03-01", periods=4, freq="H"
+        ...                 start="2022-03-01", periods=4, freq="h"
         ...             ),
         ...             "TIMEZONE_LOCATION": ["Australia/Perth"] * 4,
         ...         }
@@ -884,13 +884,13 @@ def split_datetime_columns(
         ...             "a": [1, 2, 3, 4],
         ...             "b": ["a", "b", "c", "d"],
         ...             "c_datetime": pd.date_range(
-        ...                 start="2022-01-01", periods=4, freq="H"
+        ...                 start="2022-01-01", periods=4, freq="h"
         ...             ),
         ...             "d_datetime": pd.date_range(
-        ...                 start="2022-02-01", periods=4, freq="H"
+        ...                 start="2022-02-01", periods=4, freq="h"
         ...             ),
         ...             "e_datetime": pd.date_range(
-        ...                 start="2022-03-01", periods=4, freq="H"
+        ...                 start="2022-03-01", periods=4, freq="h"
         ...             ),
         ...             "TIMEZONE_LOCATION": ["Australia/Perth"] * 4,
         ...         }
