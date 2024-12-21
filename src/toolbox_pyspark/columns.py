@@ -294,30 +294,30 @@ def get_columns(
         if "all" in columns:
             if "str" in columns:
                 return [
-                    col for col, typ in dataframe.dtypes if typ in ["str", "string"]
+                    col for col, typ in dataframe.dtypes if typ in ("str", "string")
                 ]
             elif "int" in columns:
                 return [
-                    col for col, typ in dataframe.dtypes if typ in ["int", "integer"]
+                    col for col, typ in dataframe.dtypes if typ in ("int", "integer")
                 ]
             elif "numeric" in columns:
                 return [
                     col
                     for col, typ in dataframe.dtypes
-                    if typ in ["int", "integer", "float", "double", "long"]
+                    if typ in ("int", "integer", "float", "double", "long")
                     or "decimal" in typ
                 ]
             elif "float" in columns or "double" in columns or "decimal" in columns:
                 return [
                     col
                     for col, typ in dataframe.dtypes
-                    if typ in ["float", "double", "long"] or "decimal" in typ
+                    if typ in ("float", "double", "long") or "decimal" in typ
                 ]
             elif "datetime" in columns or "timestamp" in columns:
                 return [
                     col
                     for col, typ in dataframe.dtypes
-                    if typ in ["datetime", "timestamp"]
+                    if typ in ("datetime", "timestamp")
                 ]
             elif "date" in columns:
                 return [col for col, typ in dataframe.dtypes if typ in ["date"]]
