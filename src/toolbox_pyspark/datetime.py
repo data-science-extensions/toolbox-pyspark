@@ -377,9 +377,6 @@ def add_local_datetime_column(
     !!! note "Summary"
         For the given `column`, add a new column with the suffix `_LOCAL` which is a conversion of the datetime values from `column` to the desired timezone.
 
-    !!! abstract "TODO"
-        Add a few more examples of errors that can be raised.
-
     Params:
         dataframe (psDataFrame):
             The DataFrame to be fixed
@@ -398,6 +395,8 @@ def add_local_datetime_column(
             If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
         AttributeError:
             If `#!py "column"` or `column_with_target_timezone` does not exist within `#!py dataframe.columns`.
+        ValueError:
+            If the `from_timezone` or `column_with_target_timezone` is not a valid timezone.
 
     Returns:
         (psDataFrame):
@@ -484,6 +483,27 @@ def add_local_datetime_column(
         !!! success "Conclusion: Successfully converted timezone."
         </div>
 
+        ```{.py .python linenums="1" title="Example 3: Invalid column name"}
+        >>> add_local_datetime_column(df, "invalid_column")
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        AttributeError: Column "invalid_column" does not exist in "dataframe".
+        Try one of: ["a", "b", "c", "d", "e", "target", "TIMEZONE_LOCATION"].
+        ```
+        !!! failure "Conclusion: Column does not exist."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 4: Invalid timezone"}
+        >>> add_local_datetime_column(df, "c", from_timezone="Invalid/Timezone")
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        ValueError: The timezone "Invalid/Timezone" is not a valid timezone.
+        ```
+        !!! failure "Conclusion: Invalid timezone."
+        </div>
+
     ??? info "Notes"
         - If `#!py from_timezone is None`, then it is assumed that the datetime data in `column` is _already_ in UTC timezone.<br>
         - If `#!py from_timezone is not None`, then a new column will be added with the syntax `#!py {column}_UTC`, then another column added with `#!py {column}_LOCAL`. This is necessary because PySpark cannot convert immediately from one timezone to another; it must first require a conversion from the `from_timezone` value _to_ UTC, then a second conversion _from_ UTC to whichever timezone is defined in the column `column_with_target_timezone`.<br>
@@ -543,9 +563,6 @@ def add_local_datetime_columns(
     ???+ abstract "Details"
         Under the hood, this function will call [`add_local_datetime_column()`][toolbox_pyspark.datetime.add_local_datetime_column] for each `column` in `columns`.
 
-    !!! abstract "TODO"
-        Add a few more examples of errors that can be raised.
-
     Params:
         dataframe (psDataFrame):
             The DataFrame to update.
@@ -564,6 +581,8 @@ def add_local_datetime_columns(
             If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
         AttributeError:
             If the `columns` do not exist within `#!py dataframe.columns`.
+        ValueError:
+            If the `from_timezone` or `column_with_target_timezone` is not a valid timezone.
 
     Returns:
         (psDataFrame):
@@ -714,6 +733,27 @@ def add_local_datetime_columns(
         +---+---+---------------------+---------------------+---------------------+----------------+-------------------+---------------------+---------------------+---------------------+---------------------+
         ```
         !!! success "Conclusion: Successfully converted all date time columns from other time zone to local time zone."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 6: Invalid column name"}
+        >>> add_local_datetime_columns(df, "invalid_column")
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        AttributeError: Column "invalid_column" does not exist in "dataframe".
+        Try one of: ["a", "b", "c", "d_datetime", "e_datetime", "target", "TIMEZONE_LOCATION"].
+        ```
+        !!! failure "Conclusion: Column does not exist."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 7: Invalid timezone"}
+        >>> add_local_datetime_columns(df, "c", from_timezone="Invalid/Timezone")
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        ValueError: The timezone "Invalid/Timezone" is not a valid timezone.
+        ```
+        !!! failure "Conclusion: Invalid timezone."
         </div>
 
     ??? tip "See Also"
