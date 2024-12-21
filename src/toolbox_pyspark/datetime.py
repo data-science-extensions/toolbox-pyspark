@@ -48,6 +48,7 @@ from typeguard import typechecked
 
 # ## Local First Party Imports ----
 from toolbox_pyspark.checks import assert_column_exists, assert_columns_exists
+from toolbox_pyspark.columns import get_columns
 
 
 # ---------------------------------------------------------------------------- #
@@ -272,6 +273,7 @@ def rename_datetime_columns(
         | 3 | d | 2022-01-01 03:00:00 | 2022-02-01 03:00:00 |
         +---+---+---------------------+---------------------+
         ```
+        !!! success "Conclusion: Successfully renamed column."
         </div>
 
         ```{.py .python linenums="1" title="Example 2: One column `str`"}
@@ -288,6 +290,7 @@ def rename_datetime_columns(
         | 3 | d | 2022-01-01 03:00:00 | 2022-02-01 03:00:00 |
         +---+---+---------------------+---------------------+
         ```
+        !!! success "Conclusion: Successfully renamed column."
         </div>
 
         ```{.py .python linenums="1" title="Example 3: All columns"}
@@ -304,6 +307,7 @@ def rename_datetime_columns(
         | 3 | d | 2022-01-01 03:00:00 | 2022-02-01 03:00:00 |
         +---+---+---------------------+---------------------+
         ```
+        !!! success "Conclusion: Successfully renamed columns."
         </div>
 
         ```{.py .python linenums="1" title="Example 4: All columns using 'all'"}
@@ -320,6 +324,7 @@ def rename_datetime_columns(
         | 3 | d | 2022-01-01 03:00:00 | 2022-02-01 03:00:00 |
         +---+---+---------------------+---------------------+
         ```
+        !!! success "Conclusion: Successfully renamed columns."
         </div>
 
         ```{.py .python linenums="1" title="Example 5: Missing column"}
@@ -330,6 +335,7 @@ def rename_datetime_columns(
         Attribute Error: Columns ["fff", "ggg"] do not exist in "dataframe".
         Try one of: ["a", "b", "c_dateTIME", "d_dateTIME"].
         ```
+        !!! failure "Conclusion: Columns do not exist."
         </div>
 
     ??? tip "See Also"
@@ -439,7 +445,7 @@ def add_local_datetime_column(
         ```
         </div>
 
-        ```{.py .python linenums="1" title="Converting from UTC time"}
+        ```{.py .python linenums="1" title="Example 1: Converting from UTC time"}
         >>> add_local_datetime_column(df, "c").show()
         ```
         <div class="result" markdown>
@@ -453,9 +459,10 @@ def add_local_datetime_column(
         | 4 | d | 2022-01-04 00:00:00 | 2022-02-04 00:00:00 | 2022-03-04 00:00:00 | Asia/Singapore |   Australia/Perth | 2022-01-04 08:00:00 |
         +---+---+---------------------+---------------------+---------------------+----------------+-------------------+---------------------+
         ```
+        !!! success "Conclusion: Successfully converted from UTC."
         </div>
 
-        ```{.py .python linenums="1" title="Converting from specific timezone, with custom column containing target timezone"}
+        ```{.py .python linenums="1" title="Example 2: Converting from specific timezone, with custom column containing target timezone"}
         >>> add_local_datetime_column(
         ...     dataframe=df,
         ...     column="c",
@@ -474,6 +481,7 @@ def add_local_datetime_column(
         | 4 | d | 2022-01-04 00:00:00 | 2022-02-04 00:00:00 | 2022-03-04 00:00:00 | Asia/Singapore |   Australia/Perth | 2022-01-03 13:00:00 | 2022-01-03 21:00:00 |
         +---+---+---------------------+---------------------+---------------------+----------------+-------------------+---------------------+---------------------+
         ```
+        !!! success "Conclusion: Successfully converted timezone."
         </div>
 
     ??? info "Notes"
@@ -535,10 +543,13 @@ def add_local_datetime_columns(
     ???+ abstract "Details"
         Under the hood, this function will call [`add_local_datetime_column()`][toolbox_pyspark.datetime.add_local_datetime_column] for each `column` in `columns`.
 
+    !!! abstract "TODO"
+        Add a few more examples of errors that can be raised.
+
     Params:
         dataframe (psDataFrame):
             The DataFrame to update.
-        columns (Optional[Union[str, List[str]]], optional):
+        columns (Optional[Union[str, str_collection]], optional):
             The columns to check. If not provided, it will use all of the columns which contains the text `date`.<br>
             Defaults to `#!py None`.
         from_timezone (Optional[str], optional):
@@ -561,24 +572,30 @@ def add_local_datetime_columns(
     ???+ example "Examples"
 
         ```{.py .python linenums="1" title="Set up"}
+        >>> # Imports
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
         >>> from toolbox_pyspark.datetime import add_local_datetime_columns
+        >>>
+        >>> # Instantiate Spark
         >>> spark = SparkSession.builder.getOrCreate()
+        >>>
+        >>> # Create data
         >>> df = spark.createDataFrame(
-        ...     pd.DataFrame({
-        ...         "a": [1, 2, 3, 4],
-        ...         "b": ["a", "b", "c", "d"],
-        ...         "c": pd.date_range(start="2022-01-01", periods=4, freq="D"),
-        ...         "d_datetime": pd.date_range(start="2022-02-01", periods=4, freq="D"),
-        ...         "e_datetime": pd.date_range(start="2022-03-01", periods=4, freq="D"),
-        ...         "target": ["Asia/Singapore"] * 4,
-        ...         "TIMEZONE_LOCATION": ["Australia/Perth"] * 4,
-        ...     })
+        ...     pd.DataFrame(
+        ...         {
+        ...             "a": [1, 2, 3, 4],
+        ...             "b": ["a", "b", "c", "d"],
+        ...             "c": pd.date_range(start="2022-01-01", periods=4, freq="D"),
+        ...             "d_datetime": pd.date_range(start="2022-02-01", periods=4, freq="D"),
+        ...             "e_datetime": pd.date_range(start="2022-03-01", periods=4, freq="D"),
+        ...             "target": ["Asia/Singapore"] * 4,
+        ...             "TIMEZONE_LOCATION": ["Australia/Perth"] * 4,
+        ...         }
+        ...     )
         ... )
-        ```
-
-        ```{.py .python linenums="1" title="Check"}
+        >>>
+        >>> # Check
         >>> df.show()
         ```
         <div class="result" markdown>
@@ -594,7 +611,7 @@ def add_local_datetime_columns(
         ```
         </div>
 
-        ```{.py .python linenums="1" title="Default config"}
+        ```{.py .python linenums="1" title="Example 1: Default config"}
         >>> new_df = add_local_datetime_columns(df)
         >>> new_df.show()
         ```
@@ -609,9 +626,10 @@ def add_local_datetime_columns(
         | 4 | d | 2022-01-04 00:00:00 | 2022-02-04 00:00:00 | 2022-03-04 00:00:00 | Asia/Singapore |   Australia/Perth | 2022-02-04 08:00:00 | 2022-03-04 08:00:00 |
         +---+---+---------------------+---------------------+---------------------+----------------+-------------------+---------------------+---------------------+
         ```
+        !!! success "Conclusion: Successfully converted columns to local timezone."
         </div>
 
-        ```{.py .python linenums="1" title="Semi-custom config"}
+        ```{.py .python linenums="1" title="Example 2: Semi-custom config"}
         >>> new_df = add_local_datetime_columns(df, ["c", "d_datetime"])
         >>> new_df.show()
         ```
@@ -626,9 +644,10 @@ def add_local_datetime_columns(
         | 4 | d | 2022-01-04 00:00:00 | 2022-02-04 00:00:00 | 2022-03-04 00:00:00 | Asia/Singapore |   Australia/Perth | 2022-01-04 08:00:00 | 2022-02-04 08:00:00 |
         +---+---+---------------------+---------------------+---------------------+----------------+-------------------+---------------------+---------------------+
         ```
+        !!! success "Conclusion: Successfully converted columns to local timezone."
         </div>
 
-        ```{.py .python linenums="1" title="Full-custom config"}
+        ```{.py .python linenums="1" title="Example 3: Full-custom config"}
         >>> new_df = add_local_datetime_columns(
         ...     dataframe=df,
         ...     columns=["c", "d_datetime"],
@@ -648,9 +667,10 @@ def add_local_datetime_columns(
         | 4 | d | 2022-01-04 00:00:00 | 2022-02-04 00:00:00 | 2022-03-04 00:00:00 | Asia/Singapore |   Australia/Perth | 2022-01-03 13:00:00 | 2022-01-03 21:00:00 | 2022-02-03 13:00:00 | 2022-02-04 08:00:00 |
         +---+---+---------------------+---------------------+---------------------+----------------+-------------------+---------------------+---------------------+---------------------+---------------------+
         ```
+        !!! success "Conclusion: Successfully converted columns to local time zone, from other custom time zone."
         </div>
 
-        ```{.py .python linenums="1" title="Single column"}
+        ```{.py .python linenums="1" title="Example 4: Single column"}
         >>> new_df = add_local_datetime_columns(
         ...     dataframe=df,
         ...     columns="c",
@@ -670,9 +690,10 @@ def add_local_datetime_columns(
         | 4 | d | 2022-01-04 00:00:00 | 2022-02-04 00:00:00 | 2022-03-04 00:00:00 | Asia/Singapore |   Australia/Perth | 2022-01-03 13:00:00 | 2022-01-03 21:00:00 |
         +---+---+---------------------+---------------------+---------------------+----------------+-------------------+---------------------+---------------------+
         ```
+        !!! success "Conclusion: Successfully converted single column from other time zone to local time zone."
         </div>
 
-        ```{.py .python linenums="1" title="All columns"}
+        ```{.py .python linenums="1" title="Example 5: All columns"}
         >>> new_df = add_local_datetime_columns(
         ...     dataframe=df,
         ...     columns="all",
@@ -692,6 +713,7 @@ def add_local_datetime_columns(
         | 4 | d | 2022-01-04 00:00:00 | 2022-02-04 00:00:00 | 2022-03-04 00:00:00 | Asia/Singapore |   Australia/Perth | 2022-02-03 13:00:00 | 2022-02-04 08:00:00 | 2022-03-03 13:00:00 | 2022-03-04 08:00:00 |
         +---+---+---------------------+---------------------+---------------------+----------------+-------------------+---------------------+---------------------+---------------------+---------------------+
         ```
+        !!! success "Conclusion: Successfully converted all date time columns from other time zone to local time zone."
         </div>
 
     ??? tip "See Also"
