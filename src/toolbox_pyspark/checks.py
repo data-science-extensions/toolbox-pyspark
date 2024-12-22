@@ -43,6 +43,7 @@ from warnings import warn
 
 # ## Python Third Party Imports ----
 from pyspark.sql import DataFrame as psDataFrame, SparkSession
+from toolbox_python.checkers import is_type
 from toolbox_python.collection_types import str_collection, str_list
 from typeguard import typechecked
 
@@ -409,7 +410,7 @@ def assert_columns_exists(
         !!! failure "Conclusion: Columns "c" and "d" does not exist."
         </div>
     """
-    columns = [columns] if isinstance(columns, str) else columns
+    columns = [columns] if is_type(columns, str) else columns
     (exist, missing_cols) = _columns_exists(dataframe, columns, match_case)
     if not exist:
         raise AttributeError(
@@ -567,7 +568,7 @@ def warn_columns_missing(
         !!! failure "Conclusion: Columns "c" and "d" does not exist."
         </div>
     """
-    columns = [columns] if isinstance(columns, str) else columns
+    columns = [columns] if is_type(columns, str) else columns
     (exist, missing_cols) = _columns_exists(dataframe, columns, match_case)
     if not exist:
         warn(

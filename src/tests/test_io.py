@@ -19,6 +19,7 @@ from pathlib import Path
 import pytest
 from chispa.dataframe_comparer import assert_df_equality
 from pyspark.sql import DataFrame as psDataFrame, functions as F
+from toolbox_python.checkers import is_type
 
 # ## Local First Party Imports ----
 from tests.setup import PySparkSetup
@@ -113,7 +114,7 @@ class TestReadingAndWriting(PySparkSetup):
             spark_session=self.spark,
             data_format="parquet",
         )
-        assert isinstance(table, psDataFrame)
+        assert is_type(table, psDataFrame)
         result: psDataFrame = table
         expected: psDataFrame = self.ps_df
         assert_df_equality(result, expected)
@@ -127,7 +128,7 @@ class TestReadingAndWriting(PySparkSetup):
             spark_session=self.spark,
             data_format="delta",
         )
-        assert isinstance(table, psDataFrame)
+        assert is_type(table, psDataFrame)
         result: psDataFrame = table
         expected: psDataFrame = self.ps_df
         assert_df_equality(result, expected)
@@ -158,7 +159,7 @@ class TestReadingAndWriting(PySparkSetup):
             .select(self.ps_df.columns)
             .withColumn("a", F.col("a").cast("long"))
         ).orderBy("a")
-        assert isinstance(table, psDataFrame)
+        assert is_type(table, psDataFrame)
         result: psDataFrame = table
         expected: psDataFrame = self.ps_df
         assert_df_equality(result, expected)
@@ -201,7 +202,7 @@ class TestReadingAndWriting(PySparkSetup):
         )
 
         # Test
-        assert isinstance(table, psDataFrame)
+        assert is_type(table, psDataFrame)
         result: psDataFrame = table
         expected: psDataFrame = self.ps_df_extended
         assert_df_equality(result, expected, ignore_nullable=True)
@@ -230,7 +231,7 @@ class TestReadingAndWriting(PySparkSetup):
         )
 
         # Test
-        assert isinstance(table, psDataFrame)
+        assert is_type(table, psDataFrame)
         result: psDataFrame = table
         expected: psDataFrame = self.ps_df_extended
         assert_df_equality(result, expected, ignore_nullable=True)

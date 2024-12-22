@@ -41,11 +41,8 @@ from typing import Union
 # ## Python Third Party Imports ----
 import pandas as pd
 from pandas import DataFrame as pdDataFrame
-from pyspark.sql import (
-    DataFrame as psDataFrame,
-    functions as F,
-    types as T,
-)
+from pyspark.sql import DataFrame as psDataFrame, functions as F, types as T
+from toolbox_python.checkers import is_type
 from toolbox_python.collection_types import str_list, str_tuple
 from toolbox_python.dictionaries import dict_reverse_keys_and_values
 from typeguard import typechecked
@@ -85,7 +82,7 @@ __all__: str_list = [
 
 def _validate_pyspark_datatype(datatype: Union[str, type, T.DataType]):
     datatype = T.FloatType() if datatype == "float" or datatype is float else datatype
-    if isinstance(datatype, str):
+    if is_type(datatype, str):
         datatype = "string" if datatype == "str" else datatype
         datatype = "boolean" if datatype == "bool" else datatype
         datatype = "integer" if datatype == "int" else datatype
@@ -540,7 +537,7 @@ def cast_columns_to_type(
         - [`is_vaid_spark_type()`][toolbox_pyspark.checks.is_vaid_spark_type]
         - [`get_column_types()`][toolbox_pyspark.types.get_column_types]
     """
-    columns = [columns] if isinstance(columns, str) else columns
+    columns = [columns] if is_type(columns, str) else columns
     assert_columns_exists(dataframe, columns)
     datatype = _validate_pyspark_datatype(datatype=datatype)
     return dataframe.withColumns({col: F.col(col).cast(datatype) for col in columns})
@@ -677,7 +674,7 @@ def map_cast_columns_to_type(
     # Ensure all keys are `str`
     keys = (*columns_type_mapping.keys(),)
     for key in keys:
-        if isinstance(key, type):
+        if is_type(key, type):
             if key.__name__ in keys:
                 columns_type_mapping[key.__name__] = list(
                     columns_type_mapping[key.__name__]

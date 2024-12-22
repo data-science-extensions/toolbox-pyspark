@@ -41,6 +41,7 @@ from typing import Literal, Optional, Union
 
 # ## Python Third Party Imports ----
 from pyspark.sql import DataFrame as psDataFrame
+from toolbox_python.checkers import is_type
 from toolbox_python.collection_types import str_collection, str_list
 from typeguard import typechecked
 
@@ -290,7 +291,7 @@ def get_columns(
     """
     if columns is None:
         return dataframe.columns
-    elif isinstance(columns, str):
+    elif is_type(columns, str):
         if "all" in columns:
             if "str" in columns:
                 return [

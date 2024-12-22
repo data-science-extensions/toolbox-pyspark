@@ -43,6 +43,7 @@ from typing import Optional, Union
 
 # ## Python Third Party Imports ----
 from pyspark.sql import Column, DataFrame as psDataFrame, functions as F
+from toolbox_python.checkers import is_type
 from toolbox_python.collection_types import str_collection, str_list
 from typeguard import typechecked
 
@@ -353,7 +354,7 @@ def rename_datetime_columns(
             for col in datetime_cols
             if col.lower().endswith("date") and f"{col}TIME" not in dataframe.columns
         ]
-    elif isinstance(columns, str):
+    elif is_type(columns, str):
         columns = [columns]
     assert_columns_exists(dataframe, columns, True)
     for column in columns:
@@ -761,7 +762,7 @@ def add_local_datetime_columns(
     """
     if columns is None or columns in ["all"]:
         columns = [col for col in dataframe.columns if col.lower().endswith("datetime")]
-    elif isinstance(columns, str):
+    elif is_type(columns, str):
         columns = [columns]
     assert_columns_exists(dataframe, list(columns) + [column_with_target_timezone])
     for column in columns:
@@ -1027,7 +1028,7 @@ def split_datetime_columns(
     """
     if columns is None or columns in ["all"]:
         columns = [col for col in dataframe.columns if "datetime" in col.lower()]
-    elif isinstance(columns, str):
+    elif is_type(columns, str):
         columns = [columns]
     assert_columns_exists(dataframe=dataframe, columns=columns)
     cols_exprs: dict[str, Column] = {}
