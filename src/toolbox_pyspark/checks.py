@@ -584,7 +584,7 @@ def warn_columns_missing(
 
 
 @typechecked
-def is_vaid_spark_type(datatype: str) -> None:
+def is_vaid_spark_type(datatype: str) -> bool:
     """
     !!! note "Summary"
         Check whether a given `#!py datatype` is a correct and valid `#!py pyspark` data type.
@@ -640,7 +640,12 @@ def is_vaid_spark_type(datatype: str) -> None:
         !!! failure "Conclusion: All of these types are invalid."
         </div>
     """
-    if datatype not in VALID_PYSPARK_TYPE_NAMES:
+    return datatype in VALID_PYSPARK_TYPE_NAMES
+
+
+@typechecked
+def assert_valid_spark_type(datatype: str) -> None:
+    if not is_vaid_spark_type(datatype):
         raise AttributeError(
             f"DataType '{datatype}' is not valid.\n"
             f"Must be one of: {VALID_PYSPARK_TYPE_NAMES}"
