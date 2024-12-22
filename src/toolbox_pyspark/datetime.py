@@ -43,7 +43,7 @@ from typing import Optional, Union
 
 # ## Python Third Party Imports ----
 from pyspark.sql import Column, DataFrame as psDataFrame, functions as F
-from toolbox_python.checkers import is_type
+from toolbox_python.checkers import is_all_in, is_in, is_type
 from toolbox_python.collection_types import str_collection, str_list
 from typeguard import typechecked
 
@@ -51,8 +51,6 @@ from typeguard import typechecked
 from toolbox_pyspark.checks import (
     assert_column_exists,
     assert_columns_exists,
-    column_is_type,
-    columns_are_type,
 )
 from toolbox_pyspark.columns import get_columns
 
@@ -63,10 +61,10 @@ from toolbox_pyspark.columns import get_columns
 
 
 __all__: str_list = [
-    "rename_datetime_columns",
     "rename_datetime_column",
-    "add_local_datetime_columns",
+    "rename_datetime_columns",
     "add_local_datetime_column",
+    "add_local_datetime_columns",
     "split_datetime_column",
     "split_datetime_columns",
 ]
@@ -891,9 +889,8 @@ def split_datetime_column(
         - [`split_datetime_columns()`][toolbox_pyspark.datetime.split_datetime_columns]
     """
     assert_column_exists(dataframe, column)
-    if not column_is_type(dataframe, column, "timestamp") or not column_is_type(
-        dataframe, column, "datetime"
-    ):
+    datetime_cols: str_list = get_columns(dataframe, "all_datetime")
+    if not is_in(column, datetime_cols):
         raise TypeError(
             "Column must be type 'timestamp' or 'datetime'.\n"
             f"Current type: {[(col,typ) for col,typ in dataframe.dtypes if col == column]}"
@@ -1082,9 +1079,8 @@ def split_datetime_columns(
     elif is_type(columns, str):
         columns = [columns]
     assert_columns_exists(dataframe, columns)
-    if not columns_are_type(dataframe, columns, "timestamp") or not columns_are_type(
-        dataframe, columns, "datetime"
-    ):
+    datetime_cols: str_list = get_columns(dataframe, "all_datetime")
+    if not is_all_in(columns, datetime_cols):
         raise TypeError(
             "Columns to split must be type 'timestamp' or 'datetime'.\n"
             f"Current types: {[(col,typ) for col,typ in dataframe.dtypes if col in columns]}"

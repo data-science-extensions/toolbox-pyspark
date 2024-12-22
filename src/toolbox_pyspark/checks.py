@@ -42,7 +42,7 @@ from typing import Union
 from warnings import warn
 
 # ## Python Third Party Imports ----
-from pyspark.sql import DataFrame as psDataFrame, SparkSession
+from pyspark.sql import DataFrame as psDataFrame, SparkSession, types as T
 from toolbox_python.checkers import is_type
 from toolbox_python.collection_types import str_collection, str_list
 from typeguard import typechecked
@@ -66,6 +66,7 @@ from toolbox_pyspark.utils.warnings import (
 
 
 __all__: str_list = [
+    "ColumnExistsResult",
     "column_exists",
     "columns_exists",
     "assert_column_exists",
@@ -74,6 +75,7 @@ __all__: str_list = [
     "warn_columns_missing",
     "is_vaid_spark_type",
     "assert_valid_spark_type",
+    "ColumnsAreTypeResult",
     "column_is_type",
     "columns_are_type",
     "assert_column_is_type",
@@ -709,15 +711,19 @@ def _columns_are_type(
     columns = [columns] if is_type(columns, str) else columns
     assert_columns_exists(dataframe, columns, match_case)
     assert_valid_spark_type(datatype)
+    target_type: ALL_PYSPARK_TYPES = _validate_pyspark_datatype(datatype)
     df_dtypes: list[tuple[str, str]] = dataframe.dtypes
-    invalid_types: list[tuple[str, str]] = [
-        (col, dtype)
-        for col, dtype in df_dtypes
+    df_dtypess: list[tuple[str, ALL_PYSPARK_TYPES]] = [
+        (col, _validate_pyspark_datatype(dtype)) for col, dtype in df_dtypes
+    ]
+    invalid_cols: list[tuple[str, str]] = [
+        (col, dtype.simpleString())
+        for col, dtype in df_dtypess
         if (col.upper() if match_case else col)
         in [col.upper() if match_case else col for col in columns]
-        and dtype != datatype
+        and dtype != target_type
     ]
-    return ColumnsAreTypeResult(len(invalid_types) == 0, invalid_types)
+    return ColumnsAreTypeResult(len(invalid_cols) == 0, invalid_cols)
 
 
 @typechecked
