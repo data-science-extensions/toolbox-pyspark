@@ -48,7 +48,12 @@ from toolbox_python.collection_types import str_collection, str_list
 from typeguard import typechecked
 
 # ## Local First Party Imports ----
-from toolbox_pyspark.checks import assert_column_exists, assert_columns_exists
+from toolbox_pyspark.checks import (
+    assert_column_exists,
+    assert_columns_exists,
+    column_is_type,
+    columns_are_type,
+)
 from toolbox_pyspark.columns import get_columns
 
 
@@ -632,8 +637,7 @@ def add_local_datetime_columns(
         </div>
 
         ```{.py .python linenums="1" title="Example 1: Default config"}
-        >>> new_df = add_local_datetime_columns(df)
-        >>> new_df.show()
+        >>> add_local_datetime_columns(df).show()
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
@@ -650,8 +654,7 @@ def add_local_datetime_columns(
         </div>
 
         ```{.py .python linenums="1" title="Example 2: Semi-custom config"}
-        >>> new_df = add_local_datetime_columns(df, ["c", "d_datetime"])
-        >>> new_df.show()
+        >>> add_local_datetime_columns(df, ["c", "d_datetime"]).show()
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
@@ -668,13 +671,12 @@ def add_local_datetime_columns(
         </div>
 
         ```{.py .python linenums="1" title="Example 3: Full-custom config"}
-        >>> new_df = add_local_datetime_columns(
+        >>> add_local_datetime_columns(
         ...     dataframe=df,
         ...     columns=["c", "d_datetime"],
         ...     from_timezone="Australia/Sydney",
         ...     column_with_target_timezone="target",
-        ... )
-        >>> new_df.show()
+        ... ).show()
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
@@ -691,13 +693,12 @@ def add_local_datetime_columns(
         </div>
 
         ```{.py .python linenums="1" title="Example 4: Single column"}
-        >>> new_df = add_local_datetime_columns(
+        >>> add_local_datetime_columns(
         ...     dataframe=df,
         ...     columns="c",
         ...     from_timezone="Australia/Sydney",
         ...     column_with_target_timezone="target",
-        ... )
-        >>> new_df.show()
+        ... ).show()
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
@@ -714,13 +715,12 @@ def add_local_datetime_columns(
         </div>
 
         ```{.py .python linenums="1" title="Example 5: All columns"}
-        >>> new_df = add_local_datetime_columns(
+        >>> add_local_datetime_columns(
         ...     dataframe=df,
         ...     columns="all",
         ...     from_timezone="Australia/Sydney",
         ...     column_with_target_timezone="target",
-        ... )
-        >>> new_df.show()
+        ... ).show()
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
@@ -800,6 +800,8 @@ def split_datetime_column(
             If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
         ColumnDoesNotExistError:
             If `column` does not exist within `#!py dataframe.columns`.
+        TypeError:
+            If the `column` is not type `timestamp` or `datetime`.
 
     Returns:
         (psDataFrame):
@@ -808,31 +810,29 @@ def split_datetime_column(
     ???+ example "Examples"
 
         ```{.py .python linenums="1" title="Set up"}
+        >>> # Imports
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
         >>> from toolbox_pyspark.datetime import split_datetime_column
+        >>>
+        >>> # Instantiate Spark
         >>> spark = SparkSession.builder.getOrCreate()
+        >>>
+        >>> # Create data
         >>> df = spark.createDataFrame(
         ...     pd.DataFrame(
         ...         {
         ...             "a": [1, 2, 3, 4],
         ...             "b": ["a", "b", "c", "d"],
-        ...             "c_datetime": pd.date_range(
-        ...                 start="2022-01-01", periods=4, freq="h"
-        ...             ),
-        ...             "d_datetime": pd.date_range(
-        ...                 start="2022-02-01", periods=4, freq="h"
-        ...             ),
-        ...             "e_datetime": pd.date_range(
-        ...                 start="2022-03-01", periods=4, freq="h"
-        ...             ),
+        ...             "c_datetime": pd.date_range(start="2022-01-01", periods=4, freq="h"),
+        ...             "d_datetime": pd.date_range(start="2022-02-01", periods=4, freq="h"),
+        ...             "e_datetime": pd.date_range(start="2022-03-01", periods=4, freq="h"),
         ...             "TIMEZONE_LOCATION": ["Australia/Perth"] * 4,
         ...         }
         ...     )
         ... )
-        ```
-
-        ```{.py .python linenums="1" title="Check"}
+        >>>
+        >>> # Check
         >>> df.show()
         ```
         <div class="result" markdown>
@@ -848,9 +848,8 @@ def split_datetime_column(
         ```
         </div>
 
-        ```{.py .python linenums="1" title="Default config"}
-        >>> new_df = split_datetime_column(df, "c_datetime")
-        >>> new_df.show()
+        ```{.py .python linenums="1" title="Example 1: Default config"}
+        >>> split_datetime_column(df, "c_datetime").show()
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
@@ -863,12 +862,42 @@ def split_datetime_column(
         | 4 | d | 2022-01-01 03:00:00 | 2022-02-01 03:00:00 | 2022-03-01 03:00:00 |   Australia/Perth | 2022-01-01 | 03:00:00 |
         +---+---+---------------------+---------------------+---------------------+-------------------+------------+----------+
         ```
+        !!! success "Conclusion: Successfully split the column in to it's Date and Time constituents."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 2: Invalid column name"}
+        >>> split_datetime_column(df, "invalid_column")
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        ColumnDoesNotExistError: Column "invalid_column" does not exist in "dataframe".
+        Try one of: ["a", "b", "c_datetime", "d_datetime", "e_datetime", "TIMEZONE_LOCATION"].
+        ```
+        !!! failure "Conclusion: Column does not exist."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 2: Invalid column name"}
+        >>> split_datetime_column(df, "b")
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        TypeError: Column must be type 'timestamp' or 'datetime'.
+        Current type: [('b', 'string')]
+        ```
+        !!! failure "Conclusion: Column is not the correct type for splitting."
         </div>
 
     ??? tip "See Also"
         - [`split_datetime_columns()`][toolbox_pyspark.datetime.split_datetime_columns]
     """
     assert_column_exists(dataframe, column)
+    if not column_is_type(dataframe, column, "timestamp") or not column_is_type(
+        dataframe, column, "datetime"
+    ):
+        raise TypeError(
+            "Column must be type 'timestamp' or 'datetime'.\n"
+            f"Curent type: {[(col,typ) for col,typ in dataframe.dtypes if col == column]}"
+        )
     col_date_name: str = column.upper().replace("DATETIME", "DATE")
     col_time_name: str = column.upper().replace("DATETIME", "TIME")
     col_date_value: Column = (
@@ -898,7 +927,7 @@ def split_datetime_columns(
     Params:
         dataframe (psDataFrame):
             The DataFrame to update.
-        columns (Optional[Union[str, List[str]]], optional):
+        columns (Optional[Union[str, str_collection]], optional):
             The list of columns to update. If not given, it will generate the list of columns from the `#!py dataframe.columns` which contain the text `datetime`.<br>
             Defaults to `#!py None`.
 
@@ -907,6 +936,8 @@ def split_datetime_columns(
             If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
         ColumnDoesNotExistError:
             If the `columns` do not exist within `#!py dataframe.columns`.
+        TypeError:
+            If any of the columns in `columns` are not type `timestamp` or `datetime`.
 
     Returns:
         (psDataFrame):
@@ -915,31 +946,29 @@ def split_datetime_columns(
     ???+ example "Examples"
 
         ```{.py .python linenums="1" title="Set up"}
+        >>> # Imports
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
         >>> from toolbox_pyspark.datetime import split_datetime_columns
+        >>>
+        >>> # Instantiate Spark
         >>> spark = SparkSession.builder.getOrCreate()
+        >>>
+        >>> # Create data
         >>> df = spark.createDataFrame(
         ...     pd.DataFrame(
         ...         {
         ...             "a": [1, 2, 3, 4],
         ...             "b": ["a", "b", "c", "d"],
-        ...             "c_datetime": pd.date_range(
-        ...                 start="2022-01-01", periods=4, freq="h"
-        ...             ),
-        ...             "d_datetime": pd.date_range(
-        ...                 start="2022-02-01", periods=4, freq="h"
-        ...             ),
-        ...             "e_datetime": pd.date_range(
-        ...                 start="2022-03-01", periods=4, freq="h"
-        ...             ),
+        ...             "c_datetime": pd.date_range(start="2022-01-01", periods=4, freq="h"),
+        ...             "d_datetime": pd.date_range(start="2022-02-01", periods=4, freq="h"),
+        ...             "e_datetime": pd.date_range(start="2022-03-01", periods=4, freq="h"),
         ...             "TIMEZONE_LOCATION": ["Australia/Perth"] * 4,
         ...         }
         ...     )
         ... )
-        ```
-
-        ```{.py .python linenums="1" title="Check"}
+        >>>
+        >>> # Check
         >>> df.show()
         ```
         <div class="result" markdown>
@@ -955,9 +984,8 @@ def split_datetime_columns(
         ```
         </div>
 
-        ```{.py .python linenums="1" title="Default config"}
-        >>> new_df = split_datetime_columns(df)
-        >>> new_df.show()
+        ```{.py .python linenums="1" title="Example 1: Default config"}
+        >>> split_datetime_columns(df).show()
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
@@ -970,11 +998,11 @@ def split_datetime_columns(
         | 4 | d | 2022-01-01 03:00:00 | 2022-02-01 03:00:00 | 2022-03-01 03:00:00 |   Australia/Perth | 2022-01-01 | 03:00:00 | 2022-02-01 | 03:00:00 | 2022-03-01 | 03:00:00 |
         +---+---+---------------------+---------------------+---------------------+-------------------+------------+----------+------------+----------+------------+----------+
         ```
+        !!! success "Conclusion: Successfully split all DateTime columns in to their Date and Time constituents."
         </div>
 
-        ```{.py .python linenums="1" title="Custom config"}
-        >>> new_df = split_datetime_columns(df, ["c_datetime", "d_datetime"])
-        >>> new_df.show()
+        ```{.py .python linenums="1" title="Example 2: Custom config"}
+        >>> split_datetime_columns(df, ["c_datetime", "d_datetime"]).show()
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
@@ -987,11 +1015,11 @@ def split_datetime_columns(
         | 4 | d | 2022-01-01 03:00:00 | 2022-02-01 03:00:00 | 2022-03-01 03:00:00 |   Australia/Perth | 2022-01-01 | 03:00:00 | 2022-02-01 | 03:00:00 |
         +---+---+---------------------+---------------------+---------------------+-------------------+------------+----------+------------+----------+
         ```
+        !!! success "Conclusion: Successfully split two columns into their Date and Time constituents."
         </div>
 
-        ```{.py .python linenums="1" title="All columns"}
-        >>> new_df = split_datetime_columns(df, "all")
-        >>> new_df.show()
+        ```{.py .python linenums="1" title="Example 3: All columns"}
+        >>> split_datetime_columns(df, "all").show()
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
@@ -1004,11 +1032,11 @@ def split_datetime_columns(
         | 4 | d | 2022-01-01 03:00:00 | 2022-02-01 03:00:00 | 2022-03-01 03:00:00 |   Australia/Perth | 2022-01-01 | 03:00:00 | 2022-02-01 | 03:00:00 | 2022-03-01 | 03:00:00 |
         +---+---+---------------------+---------------------+---------------------+-------------------+------------+----------+------------+----------+------------+----------+
         ```
+        !!! success "Conclusion: Successfully split all DateTime columns in to their Date and Time constituents."
         </div>
 
-        ```{.py .python linenums="1" title="Single column"}
-        >>> new_df = split_datetime_columns(df, "c_datetime")
-        >>> new_df.show()
+        ```{.py .python linenums="1" title="Example 4: Single column"}
+        >>> split_datetime_columns(df, "c_datetime").show()
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
@@ -1021,6 +1049,29 @@ def split_datetime_columns(
         | 4 | d | 2022-01-01 03:00:00 | 2022-02-01 03:00:00 | 2022-03-01 03:00:00 |   Australia/Perth | 2022-01-01 | 03:00:00 |
         +---+---+---------------------+---------------------+---------------------+-------------------+------------+----------+
         ```
+        !!! success "Conclusion: Successfully split a single column in to it's Date and Time constituents."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 5: Invalid column name"}
+        >>> split_datetime_columns(df, "invalid_column")
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        ColumnDoesNotExistError: Column "invalid_column" does not exist in "dataframe".
+        Try one of: ["a", "b", "c_datetime", "d_datetime", "e_datetime", "TIMEZONE_LOCATION"].
+        ```
+        !!! failure "Conclusion: Column does not exist."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 6: Invalid column type"}
+        >>> split_datetime_columns(df, "b")
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        TypeError: Column must be type 'timestamp' or 'datetime'.
+        Current type: [('b', 'string')]
+        ```
+        !!! failure "Conclusion: Column is not the correct type for splitting."
         </div>
 
     ??? tip "See Also"
@@ -1030,7 +1081,14 @@ def split_datetime_columns(
         columns = [col for col in dataframe.columns if "datetime" in col.lower()]
     elif is_type(columns, str):
         columns = [columns]
-    assert_columns_exists(dataframe=dataframe, columns=columns)
+    assert_columns_exists(dataframe, columns)
+    if not columns_are_type(dataframe, columns, "timestamp") or not columns_are_type(
+        dataframe, columns, "datetime"
+    ):
+        raise TypeError(
+            "Columns to split must be type 'timestamp' or 'datetime'.\n"
+            f"Current types: {[(col,typ) for col,typ in dataframe.dtypes if col in columns]}"
+        )
     cols_exprs: dict[str, Column] = {}
     for column in columns:
         col_date_name: str = column.upper().replace("DATETIME", "DATE")
