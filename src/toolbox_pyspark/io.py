@@ -43,7 +43,7 @@ from typing import Optional
 from pyspark.sql import DataFrame as psDataFrame, SparkSession
 from pyspark.sql.readwriter import DataFrameReader, DataFrameWriter
 from toolbox_python.checkers import is_type
-from toolbox_python.collection_types import str_collection, str_dict
+from toolbox_python.collection_types import str_collection, str_dict, str_list
 from typeguard import typechecked
 
 
@@ -52,7 +52,7 @@ from typeguard import typechecked
 # ---------------------------------------------------------------------------- #
 
 
-__all__: list[str] = [
+__all__: str_list = [
     "read_from_path",
     "write_to_path",
     "transfer_table",
