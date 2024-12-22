@@ -58,6 +58,7 @@ nav:
       - Dimensions: code/dimensions.md
       - Columns: code/columns.md
       - DateTime: code/datetime.md
+      - Cleaning: code/cleaning.md
 
 
 markdown_extensions:

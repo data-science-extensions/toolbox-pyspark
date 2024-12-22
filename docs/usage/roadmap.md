@@ -8,7 +8,7 @@
 | [`dimensions`][toolbox_pyspark.dimensions] | ✅ | [![][issue-shield-dimensions]][issue-url-dimensions]   | [![][milestone-shield-dimensions]][milestone-url-dimensions]   |
 | [`columns`][toolbox_pyspark.columns]       | ✅ | [![][issue-shield-columns]][issue-url-columns]         | [![][milestone-shield-columns]][milestone-url-columns]         |
 | [`datetime`][toolbox_pyspark.datetime]     | ✅ | [![][issue-shield-datetime]][issue-url-datetime]       | [![][milestone-shield-datetime]][milestone-url-datetime]       |
-| `cleaning`                                 | ⬜ | [![][issue-shield-cleaning]][issue-url-cleaning]       | [![][milestone-shield-cleaning]][milestone-url-cleaning]       |
+| [`cleaning`][toolbox_pyspark.cleaning]     | ✅ | [![][issue-shield-cleaning]][issue-url-cleaning]       | [![][milestone-shield-cleaning]][milestone-url-cleaning]       |
 | `delta`                                    | ⬜ | [![][issue-shield-delta]][issue-url-delta]             | [![][milestone-shield-delta]][milestone-url-delta]             |
 | `duplication`                              | ⬜ | [![][issue-shield-duplication]][issue-url-duplication] | [![][milestone-shield-duplication]][milestone-url-duplication] |
 | `schema`                                   | ⬜ | [![][issue-shield-schema]][issue-url-schema]           | [![][milestone-shield-schema]][milestone-url-schema]           |
