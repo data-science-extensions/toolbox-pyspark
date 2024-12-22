@@ -50,7 +50,8 @@ from typeguard import typechecked
 # ## Local First Party Imports ----
 from toolbox_pyspark.constants import VALID_PYSPARK_TYPE_NAMES
 from toolbox_pyspark.io import read_from_path
-from toolbox_pyspark.utils.warnings import AttributeWarning
+from toolbox_pyspark.utils.exceptions import ColumnDoesNotExistError
+from toolbox_pyspark.utils.warnings import ColumnDoesNotExistWarning
 
 
 # ---------------------------------------------------------------------------- #
@@ -279,12 +280,12 @@ def assert_column_exists(
     Raises:
         TypeError:
             If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
-        AttributeError:
+        ColumnDoesNotExistError:
             If `#!py column` does not exist within `#!py dataframe.columns`.
 
     Returns:
         (type(None)):
-            Nothing is returned. Either an `#!py AttributeError` exception is raised, or nothing.
+            Nothing is returned. Either an `#!py ColumnDoesNotExistError` exception is raised, or nothing.
 
     ???+ example "Examples"
 
@@ -318,14 +319,14 @@ def assert_column_exists(
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        Attribute Error: Column "c" does not exist in "dataframe".
+        ColumnDoesNotExistError: Column "c" does not exist in "dataframe".
         Try one of: ["a", "b"].
         ```
         !!! failure "Conclusion: Column does not exist."
         </div>
     """
     if not column_exists(dataframe, column, match_case):
-        raise AttributeError(
+        raise ColumnDoesNotExistError(
             f"Column '{column}' does not exist in 'dataframe'.\n"
             f"Try one of: {dataframe.columns}."
         )
@@ -354,12 +355,12 @@ def assert_columns_exists(
     Raises:
         TypeError:
             If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
-        AttributeError:
+        ColumnDoesNotExistError:
             If the `#!py columns` do not exist within `#!py dataframe.columns`.
 
     Returns:
         (type(None)):
-            Nothing is returned. Either an `#!py AttributeError` exception is raised, or nothing.
+            Nothing is returned. Either an `#!py ColumnDoesNotExistError` exception is raised, or nothing.
 
     ???+ example "Examples"
 
@@ -393,7 +394,7 @@ def assert_columns_exists(
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        Attribute Error: Columns ["c"] do not exist in "dataframe".
+        ColumnDoesNotExistError: Columns ["c"] do not exist in "dataframe".
         Try one of: ["a", "b"].
         ```
         !!! failure "Conclusion: Column "c" does not exist."
@@ -404,7 +405,7 @@ def assert_columns_exists(
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        Attribute Error: Columns ["c", "d"] do not exist in "dataframe".
+        ColumnDoesNotExistError: Columns ["c", "d"] do not exist in "dataframe".
         Try one of: ["a", "b"].
         ```
         !!! failure "Conclusion: Columns "c" and "d" does not exist."
@@ -413,7 +414,7 @@ def assert_columns_exists(
     columns = list(columns) if is_type(columns, str) else columns
     (exist, missing_cols) = _columns_exists(dataframe, columns, match_case)
     if not exist:
-        raise AttributeError(
+        raise ColumnDoesNotExistError(
             f"Columns {missing_cols} do not exist in 'dataframe'.\n"
             f"Try one of: {dataframe.columns}"
         )
@@ -478,7 +479,7 @@ def warn_column_missing(
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        Attribute Warning: Column "c" does not exist in "dataframe".
+        ColumnDoesNotExistWarning: Column "c" does not exist in "dataframe".
         Try one of: ["a", "b"].
         ```
         !!! failure "Conclusion: Column does not exist."
@@ -488,7 +489,7 @@ def warn_column_missing(
         warn(
             f"Column '{column}' does not exist in 'dataframe'.\n"
             f"Try one of: {dataframe.columns}.",
-            AttributeWarning,
+            ColumnDoesNotExistWarning,
         )
 
 
@@ -551,7 +552,7 @@ def warn_columns_missing(
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        Attribute Warning: Columns ["c"] do not exist in "dataframe".
+        ColumnDoesNotExistWarning: Columns ["c"] do not exist in "dataframe".
         Try one of: ["a", "b"].
         ```
         !!! failure "Conclusion: Column "c" does not exist."
@@ -562,7 +563,7 @@ def warn_columns_missing(
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        Attribute Warning: Columns ["c", "d"] do not exist in "dataframe".
+        ColumnDoesNotExistWarning: Columns ["c", "d"] do not exist in "dataframe".
         Try one of: ["a", "b"].
         ```
         !!! failure "Conclusion: Columns "c" and "d" does not exist."
@@ -574,7 +575,7 @@ def warn_columns_missing(
         warn(
             f"Columns {missing_cols} do not exist in 'dataframe'.\n"
             f"Try one of: {dataframe.columns}",
-            AttributeWarning,
+            ColumnDoesNotExistWarning,
         )
 
 

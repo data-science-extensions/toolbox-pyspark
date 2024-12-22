@@ -295,7 +295,7 @@ def cast_column_to_type(
     Raises:
         TypeError:
             If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
-        AttributeError:
+        ColumnDoesNotExistError:
             If `#!py column` does not exist within `#!py dataframe.columns`.
         ParseException:
             If the given `#!py datatype` is not a valid PySpark DataType.
@@ -366,7 +366,7 @@ def cast_column_to_type(
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        AttributeError: Column "x" does not exist in DataFrame.
+        ColumnDoesNotExistError: Column "x" does not exist in DataFrame.
         Try one of: ["a", "b", "c", "d"].
         ```
         !!! failure "Conclusion: Column `x` does not exist as a valid column."
@@ -516,7 +516,7 @@ def cast_columns_to_type(
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        AttributeError: Columns ["x", "y"] do not exist in DataFrame.
+        ColumnDoesNotExistError: Columns ["x", "y"] do not exist in DataFrame.
         Try one of: ["a", "b", "c", "d"].
         ```
         !!! failure "Conclusion: Columns `[x]` does not exist as a valid column."

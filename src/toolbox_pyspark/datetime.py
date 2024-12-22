@@ -97,7 +97,7 @@ def rename_datetime_column(
     Raises:
         TypeError:
             If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
-        AttributeError:
+        ColumnDoesNotExistError:
             If `column` does not exist within `#!py dataframe.columns`.
 
     Returns:
@@ -165,7 +165,7 @@ def rename_datetime_column(
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        Attribute Error: Column "fff" does not exist in "dataframe".
+        ColumnDoesNotExistError: Column "fff" does not exist in "dataframe".
         Try one of: ["a", "b", "c_date", "d_date"].
         ```
         !!! failure "Conclusion: Column does not exist."
@@ -394,7 +394,7 @@ def add_local_datetime_column(
     Raises:
         TypeError:
             If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
-        AttributeError:
+        ColumnDoesNotExistError:
             If `#!py "column"` or `column_with_target_timezone` does not exist within `#!py dataframe.columns`.
         ValueError:
             If the `from_timezone` or `column_with_target_timezone` is not a valid timezone.
@@ -489,7 +489,7 @@ def add_local_datetime_column(
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        AttributeError: Column "invalid_column" does not exist in "dataframe".
+        ColumnDoesNotExistError: Column "invalid_column" does not exist in "dataframe".
         Try one of: ["a", "b", "c", "d", "e", "target", "TIMEZONE_LOCATION"].
         ```
         !!! failure "Conclusion: Column does not exist."
@@ -741,7 +741,7 @@ def add_local_datetime_columns(
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        AttributeError: Column "invalid_column" does not exist in "dataframe".
+        ColumnDoesNotExistError: Column "invalid_column" does not exist in "dataframe".
         Try one of: ["a", "b", "c", "d_datetime", "e_datetime", "target", "TIMEZONE_LOCATION"].
         ```
         !!! failure "Conclusion: Column does not exist."
@@ -798,7 +798,7 @@ def split_datetime_column(
     Raises:
         TypeError:
             If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
-        AttributeError:
+        ColumnDoesNotExistError:
             If `column` does not exist within `#!py dataframe.columns`.
 
     Returns:
