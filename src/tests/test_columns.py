@@ -30,7 +30,7 @@ from toolbox_pyspark.columns import (
     reorder_columns,
 )
 from toolbox_pyspark.utils.exceptions import ColumnDoesNotExistError
-from toolbox_pyspark.utils.warnings import AttributeWarning
+from toolbox_pyspark.utils.warnings import ColumnDoesNotExistWarning
 
 
 # ---------------------------------------------------------------------------- #
@@ -577,7 +577,7 @@ class TestDeleteColumns(PySparkSetup):
 
     def test_delete_columns_7(self) -> None:
         """Single column missing, raises warning"""
-        with pytest.warns(AttributeWarning):
+        with pytest.warns(ColumnDoesNotExistWarning):
             self.df.transform(
                 delete_columns,
                 columns="z",
@@ -586,7 +586,7 @@ class TestDeleteColumns(PySparkSetup):
 
     def test_delete_columns_8(self) -> None:
         """Multiple columns, one missing, raises warning"""
-        with pytest.warns(AttributeWarning):
+        with pytest.warns(ColumnDoesNotExistWarning):
             self.df.transform(
                 delete_columns,
                 columns=["a", "b", "z"],
@@ -595,7 +595,7 @@ class TestDeleteColumns(PySparkSetup):
 
     def test_delete_columns_9(self) -> None:
         """Multiple columns, all missing, raises warning"""
-        with pytest.warns(AttributeWarning):
+        with pytest.warns(ColumnDoesNotExistWarning):
             self.df.transform(
                 delete_columns,
                 columns=["x", "y", "z"],

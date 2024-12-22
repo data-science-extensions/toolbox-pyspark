@@ -16,10 +16,11 @@ from pathlib import Path
 
 # ## Python Third Party Imports ----
 import pytest
+from parameterized import parameterized
 from pyspark.sql import functions as F
 
 # ## Local First Party Imports ----
-from tests.setup import PySparkSetup
+from tests.setup import PySparkSetup, name_func_flat_list
 from toolbox_pyspark.checks import (
     assert_column_exists,
     assert_columns_exists,
@@ -36,7 +37,7 @@ from toolbox_pyspark.utils.exceptions import (
     ColumnDoesNotExistError,
     InvalidPySparkDataTypeError,
 )
-from toolbox_pyspark.utils.warnings import AttributeWarning
+from toolbox_pyspark.utils.warnings import ColumnDoesNotExistWarning
 
 
 # ---------------------------------------------------------------------------- #
@@ -161,25 +162,25 @@ class TestWarnColumnsMissing(PySparkSetup):
         assert warn_column_missing(self.ps_df, "a") is None
 
     def test_warn_column_missing_2(self) -> None:
-        with pytest.warns(AttributeWarning):
+        with pytest.warns(ColumnDoesNotExistWarning):
             warn_column_missing(self.ps_df, "c")
 
     def test_warn_column_missing_3(self) -> None:
         assert warn_column_missing(self.ps_df, "A", False) is None
 
     def test_warn_column_missing_4(self) -> None:
-        with pytest.warns(AttributeWarning):
+        with pytest.warns(ColumnDoesNotExistWarning):
             warn_column_missing(self.ps_df, "A", True)
 
     def test_warn_columns_missing_1(self) -> None:
         assert warn_columns_missing(self.ps_df, ["a", "b"]) is None
 
     def test_warn_columns_missing_2(self) -> None:
-        with pytest.warns(AttributeWarning):
+        with pytest.warns(ColumnDoesNotExistWarning):
             warn_columns_missing(self.ps_df, ["b", "c"])
 
     def test_warn_columns_missing_3(self) -> None:
-        with pytest.warns(AttributeWarning):
+        with pytest.warns(ColumnDoesNotExistWarning):
             warn_columns_missing(
                 self.ps_df.withColumn("c", F.lit("c")).withColumn("d", F.lit("d")),
                 ["b", "c", "d", "e", "f"],
@@ -189,11 +190,11 @@ class TestWarnColumnsMissing(PySparkSetup):
         assert warn_columns_missing(self.ps_df, ["A", "B"], False) is None
 
     def test_warn_columns_missing_5(self) -> None:
-        with pytest.warns(AttributeWarning):
+        with pytest.warns(ColumnDoesNotExistWarning):
             warn_columns_missing(self.ps_df, ["B", "C"], True)
 
     def test_warn_columns_missing_6(self) -> None:
-        with pytest.warns(AttributeWarning):
+        with pytest.warns(ColumnDoesNotExistWarning):
             warn_columns_missing(self.ps_df, ["B", "C", "D", "E"])
 
 
@@ -206,14 +207,20 @@ class TestValidPySparkDataType(PySparkSetup):
     def setUp(self) -> None:
         pass
 
-    def test_is_vaid_spark_type_1(self) -> None:
-        for type_name in VALID_PYSPARK_TYPE_NAMES:
-            assert is_vaid_spark_type(type_name) is None
+    @parameterized.expand(
+        input=VALID_PYSPARK_TYPE_NAMES,
+        name_func=name_func_flat_list,
+    )
+    def test_is_vaid_spark_type_1(self, typ) -> None:
+        assert is_vaid_spark_type(typ) is None
 
-    def test_is_vaid_spark_type_2(self) -> None:
-        for type_name in ["np.ndarray", "pd.DataFrame", "dict"]:
-            with pytest.raises(InvalidPySparkDataTypeError):
-                is_vaid_spark_type(type_name)
+    @parameterized.expand(
+        input=("np.ndarray", "pd.DataFrame", "dict"),
+        name_func=name_func_flat_list,
+    )
+    def test_is_vaid_spark_type_2(self, typ: str) -> None:
+        with pytest.raises(InvalidPySparkDataTypeError):
+            is_vaid_spark_type(typ)
 
 
 # ---------------------------------------------------------------------------- #
