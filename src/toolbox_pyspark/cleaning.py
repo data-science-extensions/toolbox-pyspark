@@ -58,6 +58,10 @@ from typeguard import typechecked
 from toolbox_pyspark.checks import assert_column_exists, assert_columns_exists
 from toolbox_pyspark.columns import get_columns
 from toolbox_pyspark.constants import (
+    LITERAL_LIST_OBJECT_NAMES,
+    LITERAL_NUMPY_ARRAY_NAMES,
+    LITERAL_PANDAS_DATAFRAME_NAMES,
+    LITERAL_PYSPARK_DATAFRAME_NAMES,
     VALID_LIST_OBJECT_NAMES,
     VALID_NUMPY_ARRAY_NAMES,
     VALID_PANDAS_DATAFRAME_NAMES,
@@ -122,12 +126,14 @@ def keep_first_record_by_columns(
     Params:
         dataframe (psDataFrame):
             The DataFrame that you want to filter.
-        columns (Optional[Union[str, List[str], Tuple[str, ...]]], optional):
+        columns (Union[str, str_collection]):
             The single or multiple columns by which you want to extract the distinct values from.
 
     Raises:
         TypeError:
             If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
+        ColumnDoesNotExistError:
+            If the #!py columns do not exist within #!py dataframe.columns.
 
     Returns:
         (psDataFrame):
@@ -136,10 +142,15 @@ def keep_first_record_by_columns(
     ???+ example "Examples"
 
         ```{.py .python linenums="1" title="Set up"}
+        >>> # Imports
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
-        >>> from pyspark_helpers.cleaning import keep_first_record_by_columns
+        >>> from toolbox_pyspark.cleaning import keep_first_record_by_columns
+        >>>
+        >>> # Instantiate Spark
         >>> spark = SparkSession.builder.getOrCreate()
+        >>>
+        >>> # Create data
         >>> df = spark.createDataFrame(
         ...     pd.DataFrame(
         ...         {
@@ -151,13 +162,12 @@ def keep_first_record_by_columns(
         ...         }
         ...     )
         ... )
-        ```
-
-        ```{.py .python linenums="1" title="Check"}
+        >>>
+        >>> # Check
         >>> df.show()
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+---+---+---+---+
         | a | b | c | d | e |
         +---+---+---+---+---+
@@ -169,12 +179,11 @@ def keep_first_record_by_columns(
         ```
         </div>
 
-        ```{.py .python linenums="1" title="Distinct by the `c` column"}
-        >>> new_df = keep_first_record_by_columns(df, "c")
-        >>> print(new_df.show())
+        ```{.py .python linenums="1" title="Example 1: Distinct by the `c` column"}
+        >>> keep_first_record_by_columns(df, "c").show()
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+---+---+---+---+
         | a | b | c | d | e |
         +---+---+---+---+---+
@@ -182,14 +191,14 @@ def keep_first_record_by_columns(
         | 3 | c | 2 | 2 | 2 |
         +---+---+---+---+---+
         ```
+        !!! success "Conclusion: Successfully kept first records by the `c` column."
         </div>
 
-        ```{.py .python linenums="1" title="Distinct by the `d` column"}
-        >>> new_df = keep_first_record_by_columns(df, "d")
-        >>> print(new_df.show())
+        ```{.py .python linenums="1" title="Example 2: Distinct by the `d` column"}
+        >>> keep_first_record_by_columns(df, "d").show()
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+---+---+---+---+
         | a | b | c | d | e |
         +---+---+---+---+---+
@@ -197,14 +206,14 @@ def keep_first_record_by_columns(
         | 2 | b | 1 | 2 | 1 |
         +---+---+---+---+---+
         ```
+        !!! success "Conclusion: Successfully kept first records by the `d` column."
         </div>
 
-        ```{.py .python linenums="1" title="Distinct by the `e` column"}
-        >>> new_df = keep_first_record_by_columns(df, "e")
-        >>> print(new_df.show())
+        ```{.py .python linenums="1" title="Example 3: Distinct by the `e` column"}
+        >>> keep_first_record_by_columns(df, "e").show()
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+---+---+---+---+
         | a | b | c | d | e |
         +---+---+---+---+---+
@@ -213,14 +222,14 @@ def keep_first_record_by_columns(
         | 4 | d | 2 | 2 | 3 |
         +---+---+---+---+---+
         ```
+        !!! success "Conclusion: Successfully kept first records by the `e` column."
         </div>
 
-        ```{.py .python linenums="1" title="Distinct by the `c` & `d` columns"}
-        >>> new_df = keep_first_record_by_columns(df, ["c", "d"])
-        >>> print(new_df.show())
+        ```{.py .python linenums="1" title="Example 4: Distinct by the `c` & `d` columns"}
+        >>> keep_first_record_by_columns(df, ["c", "d"]).show()
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+---+---+---+---+
         | a | b | c | d | e |
         +---+---+---+---+---+
@@ -229,14 +238,14 @@ def keep_first_record_by_columns(
         | 3 | c | 2 | 2 | 2 |
         +---+---+---+---+---+
         ```
+        !!! success "Conclusion: Successfully kept first records by the `c` & `d` columns."
         </div>
 
-        ```{.py .python linenums="1" title="Distinct by the `c` & `e` columns"}
-        >>> new_df = keep_first_record_by_columns(df, ["c", "e"])
-        >>> print(new_df.show())
+        ```{.py .python linenums="1" title="Example 5: Distinct by the `c` & `e` columns"}
+        >>> keep_first_record_by_columns(df, ["c", "e"]).show()
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+---+---+---+---+
         | a | b | c | d | e |
         +---+---+---+---+---+
@@ -245,31 +254,14 @@ def keep_first_record_by_columns(
         | 4 | d | 2 | 2 | 3 |
         +---+---+---+---+---+
         ```
+        !!! success "Conclusion: Successfully kept first records by the `c` & `e` columns."
         </div>
 
-        ```{.py .python linenums="1" title="Distinct by the `d` & `e` columns"}
-        >>> new_df = keep_first_record_by_columns(df, ["d", "e"])
-        >>> print(new_df.show())
+        ```{.py .python linenums="1" title="Example 6: Distinct by the `d` & `e` columns"}
+        >>> keep_first_record_by_columns(df, ["d", "e"]).show()
         ```
         <div class="result" markdown>
-        ```{.txt .text}
-        +---+---+---+---+---+
-        | a | b | c | d | e |
-        +---+---+---+---+---+
-        | 1 | a | 1 | 1 | 1 |
-        | 2 | b | 1 | 2 | 1 |
-        | 3 | c | 2 | 2 | 2 |
-        | 4 | d | 2 | 2 | 3 |
-        +---+---+---+---+---+
-        ```
-        </div>
-
-        ```{.py .python linenums="1" title="Distinct by the `c`, `d` & `e` columns"}
-        >>> new_df = keep_first_record_by_columns(df, ["c", "d", "e"])
-        >>> print(new_df.show())
-        ```
-        <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+---+---+---+---+
         | a | b | c | d | e |
         +---+---+---+---+---+
@@ -279,6 +271,36 @@ def keep_first_record_by_columns(
         | 4 | d | 2 | 2 | 3 |
         +---+---+---+---+---+
         ```
+        !!! success "Conclusion: Successfully kept first records by the `d` & `e` columns."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 7: Distinct by the `c`, `d` & `e` columns"}
+        >>> keep_first_record_by_columns(df, ["c", "d", "e"]).show()
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        +---+---+---+---+---+
+        | a | b | c | d | e |
+        +---+---+---+---+---+
+        | 1 | a | 1 | 1 | 1 |
+        | 2 | b | 1 | 2 | 1 |
+        | 3 | c | 2 | 2 | 2 |
+        | 4 | d | 2 | 2 | 3 |
+        +---+---+---+---+---+
+        ```
+        !!! success "Conclusion: Successfully kept first records by the `c`, `d` & `e` columns."
+        !!! failure "Conclusion: Failure."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 8: Column missing"}
+        >>> keep_first_record_by_columns(df, "f")
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        ColumnDoesNotExistError: Column 'f' does not exist in the DataFrame.
+        Try one of: ["a", "b", "c", "d", "e"]
+        ```
+        !!! failure "Conclusion: Column missing."
         </div>
 
     ??? info "Notes"
@@ -291,6 +313,9 @@ def keep_first_record_by_columns(
                 1. `#!sql ORDER BY` the `#!py columns`.
         1. Filter so that `#!sql RowNum=1`.
         1. Drop the `#!py RowNum` column.
+
+    ???+ tip "See Also"
+        - [`toolbox_pyspark.checks.assert_columns_exists()`][toolbox_pyspark.checks.assert_columns_exists]
     """
     columns = [columns] if is_type(columns, str) else columns
     assert_columns_exists(dataframe, columns)
@@ -316,7 +341,12 @@ def keep_first_record_by_columns(
 @typechecked
 def convert_dataframe(
     dataframe: psDataFrame,
-    return_type: str = "pd",
+    return_type: Union[
+        LITERAL_LIST_OBJECT_NAMES,
+        LITERAL_PANDAS_DATAFRAME_NAMES,
+        LITERAL_PYSPARK_DATAFRAME_NAMES,
+        LITERAL_NUMPY_ARRAY_NAMES,
+    ] = "pd",
 ) -> Optional[Union[psDataFrame, pdDataFrame, npArray, list]]:
     """
     !!! note "Summary"
@@ -387,7 +417,7 @@ def convert_dataframe(
     Params:
         dataframe (psDataFrame):
             The PySpark DataFrame to be converted.
-        return_type (str, optional):
+        return_type (Union[LITERAL_LIST_OBJECT_NAMES, LITERAL_PANDAS_DATAFRAME_NAMES, LITERAL_PYSPARK_DATAFRAME_NAMES, LITERAL_NUMPY_ARRAY_NAMES], optional):
             The desired return type.<br>
             Options:
 
@@ -412,25 +442,29 @@ def convert_dataframe(
     ???+ example "Examples"
 
         ```{.py .python linenums="1" title="Set up"}
+        >>> # Imports
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
-        >>> from pyspark_helpers.cleaning import convert_dataframe
+        >>> from toolbox_pyspark.cleaning import convert_dataframe
+        >>>
+        >>> # Instantiate Spark
         >>> spark = SparkSession.builder.getOrCreate()
+        >>>
+        >>> # Create data
         >>> df = spark.createDataFrame(
         ...     pdDataFrame(
         ...         {
-        ...             "a": range(0,1,2,3),
-        ...             "b": ['a','b','c','d'],
+        ...             "a": [1, 2, 3, 4],
+        ...             "b": ["a", "b", "c", "d"],
         ...         }
         ...     )
         ... )
-        ```
-
-        ```{.py .python linenums="1" title="Check"}
+        >>>
+        >>> # Check
         >>> df.show()
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+---+
         | a | b |
         +---+---+
@@ -441,16 +475,16 @@ def convert_dataframe(
         +---+---+
         ```
 
-        ```{.py .python linenums="1" title="PySpark"}
-        >>> new_df = convert_dataframe(df, 'ps')
+        ```{.py .python linenums="1" title="Example 1: Convert to PySpark"}
+        >>> new_df = convert_dataframe(df, "ps")
         >>> print(type(new_df))
         >>> new_df.show()
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         <class 'pyspark.sql.dataframe.DataFrame'>
         ```
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+---+
         | a | b |
         +---+---+
@@ -460,71 +494,95 @@ def convert_dataframe(
         | 3 | d |
         +---+---+
         ```
+        !!! success "Conclusion: Successfully converted to PySpark."
         </div>
 
-        ```{.py .python linenums="1" title="Pandas"}
-        >>> new_df = convert_dataframe(df, 'pd')
+        ```{.py .python linenums="1" title="Example 2: Convert to Pandas"}
+        >>> new_df = convert_dataframe(df, "pd")
         >>> print(type(new_df))
         >>> print(new_df)
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         <class 'pandas.core.frame.DataFrame'>
         ```
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
            a  b
         0  0  a
         1  1  b
         2  2  c
         3  3  d
         ```
+        !!! success "Conclusion: Successfully converted to Pandas."
         </div>
 
-        ```{.py .python linenums="1" title="Numpy"}
-        >>> new_df = convert_dataframe(df, 'np')
+        ```{.py .python linenums="1" title="Example 3: Convert to Numpy"}
+        >>> new_df = convert_dataframe(df, "np")
         >>> print(type(new_df))
         >>> print(new_df)
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         <class 'numpy.ndarray'>
         ```
-        ```{.txt .text}
-        [[0 'a']
-         [1 'b']
-         [2 'c']
-         [3 'd']]
+        ```{.txt .text title="Terminal"}
+        [[0 "a"]
+         [1 "b"]
+         [2 "c"]
+         [3 "d"]]
         ```
+        !!! success "Conclusion: Successfully converted to Numpy."
         </div>
 
-        ```{.py .python linenums="1" title="List"}
-        >>> new_df = convert_dataframe(df, 'list')
+        ```{.py .python linenums="1" title="Example 4: List"}
+        >>> new_df = convert_dataframe(df, "list")
         >>> print(type(new_df))
         >>> print(new_df)
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         <class 'list'>
         ```
-        ```{.txt .text}
-        [[0, 'a'], [1, 'b'], [2, 'c'], [3, 'd']]
+        ```{.txt .text title="Terminal"}
+        [
+            [0, "a"],
+            [1, "b"],
+            [2, "c"],
+            [3, "d"],
+        ]
         ```
+        !!! success "Conclusion: Successfully converted to List."
         </div>
 
-        ```{.py .python linenums="1" title="Single column as list"}
-        >>> new_df = convert_dataframe(df.select('b'), 'flat_list')
+        ```{.py .python linenums="1" title="Example 5: Convert to single column as list"}
+        >>> new_df = convert_dataframe(df.select("b"), "flat_list")
         >>> print(type(new_df))
         >>> print(new_df)
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         <class 'list'>
         ```
-        ```{.txt .text}
-        ['a', 'b', 'c', 'd']
+        ```{.txt .text title="Terminal"}
+        ["a", "b", "c", "d"]
         ```
+        !!! success "Conclusion: Successfully converted to flat List."
         </div>
 
+        ```{.py .python linenums="1" title="Example 6: Invalid return type"}
+        >>> convert_dataframe(df, "invalid")
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        ValueError: Unknown return type: 'invalid'.
+        Must be one of: ['pd', 'ps', 'np', 'list'].
+        For more info, check the `constants` module.
+        ```
+        !!! failure "Conclusion: Invalid return type."
+        </div>
+
+    ???+ tip "See Also"
+        - [`toolbox_pyspark.constants`][toolbox_pyspark.constants]
     """
     if return_type in VALID_PYSPARK_DATAFRAME_NAMES:
         return dataframe
@@ -540,7 +598,7 @@ def convert_dataframe(
     else:
         raise ValueError(
             f"Unknown return type: '{return_type}'.\n"
-            f"Must be one of: {['pd','ps','np','list']}.\n"
+            f"Must be one of: {['pd', 'ps', 'np', 'list']}.\n"
             f"For more info, check the `constants` module."
         )
 
@@ -550,7 +608,12 @@ def get_column_values(
     dataframe: psDataFrame,
     column: str,
     distinct: bool = True,
-    return_type: str = "pd",
+    return_type: Union[
+        LITERAL_LIST_OBJECT_NAMES,
+        LITERAL_PANDAS_DATAFRAME_NAMES,
+        LITERAL_PYSPARK_DATAFRAME_NAMES,
+        LITERAL_NUMPY_ARRAY_NAMES,
+    ] = "pd",
 ) -> Optional[Union[psDataFrame, pdDataFrame, npArray, list]]:
     """
     !!! note "Summary"
@@ -581,6 +644,8 @@ def get_column_values(
     Raises:
         TypeError:
             If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
+        ValueError:
+            If any of the values parsed to `return_type` are not valid options.
 
     Returns:
         (Optional[Union[psDataFrame, pdDataFrame, npArray, list]]):
@@ -589,27 +654,31 @@ def get_column_values(
     ???+ example "Examples"
 
         ```{.py .python linenums="1" title="Set up"}
+        >>> # Imports
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
-        >>> from pyspark_helpers.cleaning import get_column_values
+        >>> from toolbox_pyspark.cleaning import get_column_values
+        >>>
+        >>> # Instantiate Spark
         >>> spark = SparkSession.builder.getOrCreate()
+        >>>
+        >>> # Create data
         >>> df = spark.createDataFrame(
         ...     pd.DataFrame(
         ...         {
-        ...             "a": [0,1,2,3],
+        ...             "a": [0, 1, 2, 3],
         ...             "b": ["a", "b", "c", "d"],
-        ...             "c": ['c','c','c','c'],
-        ...             "d": ['d','d','d','d'],
+        ...             "c": ["c", "c", "c", "c"],
+        ...             "d": ["d", "d", "d", "d"],
         ...         }
         ...     )
         ... )
-        ```
-
-        ```{.py .python linenums="1" title="Check"}
+        >>>
+        >>> # Check
         >>> df.show()
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+---+---+---+
         | a | b | c | d |
         +---+---+---+---+
@@ -621,53 +690,71 @@ def get_column_values(
         ```
         </div>
 
-        ```{.py .python linenums="1" title="Default params"}
-        >>> values = get_column_values(df, 'c')
+        ```{.py .python linenums="1" title="Example 1: Default params"}
+        >>> values = get_column_values(df, "c")
         >>> print(type(values))
         >>> print(values)
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         <class 'pandas.core.frame.DataFrame'>
         ```
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
           c
         0 c
         ```
+        !!! success "Conclusion: Successfully extracted distinct values from the `c` column, and converted to Pandas."
         </div>
 
-        ```{.py .python linenums="1" title="Not distinct"}
-        >>> values = get_column_values(df, 'c', False)
+        ```{.py .python linenums="1" title="Example 2: Not distinct"}
+        >>> values = get_column_values(df, "c", False)
         >>> print(type(values))
         >>> print(values)
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         <class 'pandas.core.frame.DataFrame'>
         ```
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
           c
         0 c
         1 c
         2 c
         3 c
         ```
+        !!! success "Conclusion: Successfully extracted values from the `c` column, and converted to Pandas."
         </div>
 
-        ```{.py .python linenums="1" title="Flat list"}
-        >>> values = get_column_values(df, 'c', False, 'flat_list')
+        ```{.py .python linenums="1" title="Example 3: Flat list"}
+        >>> values = get_column_values(df, "c", False, "flat_list")
         >>> print(type(values))
         >>> print(values)
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         <class 'list'>
         ```
-        ```{.txt .text}
-        ['c','c','c','c']
+        ```{.txt .text title="Terminal"}
+        ["c", "c", "c", "c"]
         ```
+        !!! success "Conclusion: Successfully extracted values from the `c` column, and converted to flat List."
         </div>
 
+        ```{.py .python linenums="1" title="Example 4: Invalid return type"}
+        >>> get_column_values(df, "c", return_type="invalid")
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        ValueError: Unknown return type: 'invalid'.
+        Must be one of: ['pd', 'ps', 'np', 'list'].
+        For more info, check the `constants` module.
+        ```
+        !!! failure "Conclusion: Invalid return type."
+        </div>
+
+    ???+ tip "See Also"
+        - [`toolbox_pyspark.cleaning.convert_dataframe()`][toolbox_pyspark.cleaning.convert_dataframe]
+        - [`toolbox_pyspark.constants`][toolbox_pyspark.constants]
     """
     df: psDataFrame = dataframe.select(column).filter(
         f"{column} is not null and {column} <> ''"
@@ -682,7 +769,133 @@ def update_nullability(
     columns: Optional[Union[str, str_collection]] = None,
     nullable: bool = True,
 ) -> psDataFrame:
-    # Credit: https://stackoverflow.com/questions/46072411/can-i-change-the-nullability-of-a-column-in-my-spark-dataframe#answer-51821437
+    """
+    !!! note "Summary"
+        Update the nullability of specified columns in a PySpark DataFrame.
+
+    ???+ abstract "Details"
+        This function updates the nullability of the specified columns in a PySpark DataFrame. If no columns are specified, it updates the nullability of all columns.
+
+    Params:
+        dataframe (psDataFrame):
+            The input PySpark DataFrame.
+        columns (Optional[Union[str, str_collection]], optional):
+            The columns for which to update nullability. If not provided, all columns will be updated.<br>
+            Defaults to `#!py None`.
+        nullable (bool, optional):
+            Whether to set the columns as nullable or not.<br>
+            Defaults to `#!py True`.
+
+    Raises:
+        TypeError:
+            If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
+        ColumnDoesNotExistError:
+            If any of the `#!py columns` do not exist within `#!py dataframe.columns`.
+
+    Returns:
+        (psDataFrame):
+            The updated DataFrame with the specified columns' nullability updated.
+
+    ???+ example "Examples"
+
+        ```{.py .python linenums="1" title="Set up"}
+        >>> # Imports
+        >>> import pandas as pd
+        >>> from pyspark.sql import SparkSession
+        >>> from toolbox_pyspark.cleaning import update_nullability
+        >>>
+        >>> # Instantiate Spark
+        >>> spark = SparkSession.builder.getOrCreate()
+        >>>
+        >>> # Create data
+        >>> df = spark.createDataFrame(
+        ...     pd.DataFrame(
+        ...         {
+        ...             "a": [1, 2, 3, 4],
+        ...             "b": ["a", "b", "c", "d"],
+        ...             "c": [1.1, 2.2, 3.3, 4.4],
+        ...         }
+        ...     )
+        ... )
+        >>>
+        >>> # Check
+        >>> df.show()
+        >>> print(df.schema)
+        >>> df.printSchema()
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        +---+---+-----+
+        | a | b |   c |
+        +---+---+-----+
+        | 1 | a | 1.1 |
+        | 2 | b | 2.2 |
+        | 3 | c | 3.3 |
+        | 4 | d | 4.4 |
+        +---+---+-----+
+        ```
+        ```{.txt .text title="Terminal"}
+        StructType(
+            [
+                StructField("a", LongType(), True),
+                StructField("b", StringType(), True),
+                StructField("c", DoubleType(), True),
+            ]
+        )
+        ```
+        ```{.txt .text title="Terminal"}
+        root
+         |-- a: long (nullable = true)
+         |-- b: string (nullable = true)
+         |-- c: double (nullable = true)
+        ```
+        </div>
+
+        ```{.py .python linenums="1" title="Example 1: Update nullability of all columns"}
+        >>> new_df = update_nullability(df, nullable=False)
+        >>> new_df.printSchema()
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        root
+         |-- a: long (nullable = false)
+         |-- b: string (nullable = false)
+         |-- c: double (nullable = false)
+        ```
+        !!! success "Conclusion: Successfully updated nullability of all columns."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 2: Update nullability of specific columns"}
+        >>> new_df = update_nullability(df, columns=["a", "c"], nullable=False)
+        >>> new_df.printSchema()
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        root
+         |-- a: long (nullable = false)
+         |-- b: string (nullable = true)
+         |-- c: double (nullable = false)
+        ```
+        !!! success "Conclusion: Successfully updated nullability of specific columns."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 3: Column does not exist"}
+        >>> update_nullability(df, columns="d", nullable=False)
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        ColumnDoesNotExistError: Column 'd' does not exist in the DataFrame.
+        Try one of: ["a", "b", "c"]
+        ```
+        !!! failure "Conclusion: Column does not exist."
+        </div>
+
+    ??? success "Credit"
+        All credit goes to: https://stackoverflow.com/questions/46072411/can-i-change-the-nullability-of-a-column-in-my-spark-dataframe#answer-51821437.
+
+    ???+ tip "See Also"
+        - [`toolbox_pyspark.checks.assert_columns_exists()`][toolbox_pyspark.checks.assert_columns_exists]
+    """
     columns = get_columns(dataframe, columns)
     assert_columns_exists(dataframe=dataframe, columns=columns)
     schema: T.StructType = dataframe.schema
