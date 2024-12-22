@@ -48,7 +48,11 @@ from toolbox_python.dictionaries import dict_reverse_keys_and_values
 from typeguard import typechecked
 
 # ## Local First Party Imports ----
-from toolbox_pyspark.checks import assert_column_exists, assert_columns_exists
+from toolbox_pyspark.checks import (
+    _validate_pyspark_datatype,
+    assert_column_exists,
+    assert_columns_exists,
+)
 from toolbox_pyspark.constants import (
     VALID_DATAFRAME_NAMES,
     VALID_PYSPARK_DATAFRAME_NAMES,
@@ -74,27 +78,6 @@ __all__: str_list = [
 #     Functions                                                             ####
 #                                                                              #
 # ---------------------------------------------------------------------------- #
-
-
-# ---------------------------------------------------------------------------- #
-#  Private functions                                                        ####
-# ---------------------------------------------------------------------------- #
-
-
-def _validate_pyspark_datatype(datatype: Union[str, type, T.DataType]):
-    datatype = T.FloatType() if datatype == "float" or datatype is float else datatype
-    if is_type(datatype, str):
-        datatype = "string" if datatype == "str" else datatype
-        datatype = "boolean" if datatype == "bool" else datatype
-        datatype = "integer" if datatype == "int" else datatype
-        datatype = "timestamp" if datatype == "datetime" else datatype
-        try:
-            datatype = eval(datatype)
-        except NameError:
-            datatype = T._parse_datatype_string(s=datatype)  # type:ignore
-    if type(datatype).__name__ == "type":
-        datatype = T._type_mappings.get(datatype)()  # type:ignore
-    return datatype
 
 
 # ---------------------------------------------------------------------------- #

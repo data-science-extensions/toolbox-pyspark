@@ -48,7 +48,7 @@ from toolbox_python.collection_types import str_collection, str_list
 from typeguard import typechecked
 
 # ## Local First Party Imports ----
-from toolbox_pyspark.constants import VALID_PYSPARK_TYPE_NAMES
+from toolbox_pyspark.constants import ALL_PYSPARK_TYPES, VALID_PYSPARK_TYPE_NAMES
 from toolbox_pyspark.io import read_from_path
 from toolbox_pyspark.utils.exceptions import (
     ColumnDoesNotExistError,
@@ -679,6 +679,24 @@ class ColumnsAreTypeResult:
     def __iter__(self):
         for field in fields(self):
             yield getattr(self, field.name)
+
+
+def _validate_pyspark_datatype(
+    datatype: Union[str, type, T.DataType]
+) -> ALL_PYSPARK_TYPES:
+    datatype = T.FloatType() if datatype == "float" or datatype is float else datatype
+    if is_type(datatype, str):
+        datatype = "string" if datatype == "str" else datatype
+        datatype = "boolean" if datatype == "bool" else datatype
+        datatype = "integer" if datatype == "int" else datatype
+        datatype = "timestamp" if datatype == "datetime" else datatype
+        try:
+            datatype = eval(datatype)
+        except NameError:
+            datatype = T._parse_datatype_string(s=datatype)  # type:ignore
+    if type(datatype).__name__ == "type":
+        datatype = T._type_mappings.get(datatype)()  # type:ignore
+    return datatype
 
 
 @typechecked
