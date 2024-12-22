@@ -896,7 +896,7 @@ def split_datetime_column(
     ):
         raise TypeError(
             "Column must be type 'timestamp' or 'datetime'.\n"
-            f"Curent type: {[(col,typ) for col,typ in dataframe.dtypes if col == column]}"
+            f"Current type: {[(col,typ) for col,typ in dataframe.dtypes if col == column]}"
         )
     col_date_name: str = column.upper().replace("DATETIME", "DATE")
     col_time_name: str = column.upper().replace("DATETIME", "TIME")
