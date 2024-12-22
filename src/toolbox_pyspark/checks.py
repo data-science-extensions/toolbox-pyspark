@@ -414,7 +414,7 @@ def assert_columns_exists(
         !!! failure "Conclusion: Columns "c" and "d" does not exist."
         </div>
     """
-    columns = list(columns) if is_type(columns, str) else columns
+    columns = [columns] if is_type(columns, str) else columns
     (exist, missing_cols) = _columns_exists(dataframe, columns, match_case)
     if not exist:
         raise ColumnDoesNotExistError(
@@ -448,7 +448,7 @@ def warn_column_missing(
 
     Returns:
         (type(None)):
-            Nothing is returned. Either an `#!py AttributeWarning` exception is raised, or nothing.
+            Nothing is returned. Either an `#!py ColumnDoesNotExistWarning` exception is raised, or nothing.
 
     ???+ example "Examples"
 
@@ -521,7 +521,7 @@ def warn_columns_missing(
 
     Returns:
         (type(None)):
-            Nothing is returned. Either an `#!py AttributeWarning` exception is raised, or nothing.
+            Nothing is returned. Either an `#!py ColumnDoesNotExistWarning` exception is raised, or nothing.
 
     ???+ example "Examples"
 
@@ -572,7 +572,7 @@ def warn_columns_missing(
         !!! failure "Conclusion: Columns "c" and "d" does not exist."
         </div>
     """
-    columns = list(columns) if is_type(columns, str) else columns
+    columns = [columns] if is_type(columns, str) else columns
     (exist, missing_cols) = _columns_exists(dataframe, columns, match_case)
     if not exist:
         warn(
@@ -673,7 +673,7 @@ def _columns_are_type(
     datatype: str,
     match_case: bool = False,
 ) -> ColumnsAreTypeResult:
-    columns = list(columns) if is_type(columns, str) else columns
+    columns = [columns] if is_type(columns, str) else columns
     assert_columns_exists(dataframe, columns, match_case)
     assert_valid_spark_type(datatype)
     df_dtypes: list[tuple[str, str]] = dataframe.dtypes

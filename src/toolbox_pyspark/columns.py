@@ -325,7 +325,7 @@ def get_columns(
             else:
                 return dataframe.columns
         else:
-            return list(columns)
+            return [columns]
     else:
         return list(columns)
 
@@ -1168,7 +1168,7 @@ def delete_columns(
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        AttributeWarning: Columns missing from "dataframe": ["z"].
+        ColumnDoesNotExistWarning: Columns missing from "dataframe": ["z"].
         Will still proceed to delete columns that do exist.
         ```
         ```{.txt .text title="Terminal"}
@@ -1196,7 +1196,7 @@ def delete_columns(
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        AttributeWarning: Columns missing from "dataframe": ["z"].
+        ColumnDoesNotExistWarning: Columns missing from "dataframe": ["z"].
         Will still proceed to delete columns that do exist.
         ```
         ```{.txt .text title="Terminal"}
@@ -1224,7 +1224,7 @@ def delete_columns(
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        AttributeWarning: Columns missing from "dataframe": ["x", "y", "z"].
+        ColumnDoesNotExistWarning: Columns missing from "dataframe": ["x", "y", "z"].
         Will still proceed to delete columns that do exist.
         ```
         ```{.txt .text title="Terminal"}

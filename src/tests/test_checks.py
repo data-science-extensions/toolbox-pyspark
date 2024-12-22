@@ -24,6 +24,7 @@ from tests.setup import PySparkSetup, name_func_flat_list
 from toolbox_pyspark.checks import (
     assert_column_exists,
     assert_columns_exists,
+    assert_valid_spark_type,
     column_exists,
     columns_exists,
     is_vaid_spark_type,
@@ -212,15 +213,22 @@ class TestValidPySparkDataType(PySparkSetup):
         name_func=name_func_flat_list,
     )
     def test_is_vaid_spark_type_1(self, typ) -> None:
-        assert is_vaid_spark_type(typ) is None
+        assert is_vaid_spark_type(typ) is True
 
     @parameterized.expand(
         input=("np.ndarray", "pd.DataFrame", "dict"),
         name_func=name_func_flat_list,
     )
-    def test_is_vaid_spark_type_2(self, typ: str) -> None:
+    def test_is_vaid_spark_type_2(self, typ) -> None:
+        assert is_vaid_spark_type(typ) is False
+
+    @parameterized.expand(
+        input=("np.ndarray", "pd.DataFrame", "dict"),
+        name_func=name_func_flat_list,
+    )
+    def test_assert_vaid_spark_type_3(self, typ: str) -> None:
         with pytest.raises(InvalidPySparkDataTypeError):
-            is_vaid_spark_type(typ)
+            assert_valid_spark_type(typ)
 
 
 # ---------------------------------------------------------------------------- #

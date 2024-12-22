@@ -212,7 +212,7 @@ def add_key_from_columns(
         !!! failure "Conclusion: Invalid column selection."
         </div>
     """
-    columns = list(columns) if is_type(columns, str) else columns
+    columns = [columns] if is_type(columns, str) else columns
     assert_columns_exists(dataframe, columns)
     join_character = join_character or ""
     key_name = key_name or f"key_{'_'.join([col.upper() for col in columns])}"
