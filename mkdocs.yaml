@@ -19,7 +19,6 @@ theme:
   coverpage_icon: ./assets/images/spark.svg
   custom_dir: docs/overrides
   palette:
-    # primary: teal
     primary: blue grey
     accent: indigo
   features:
