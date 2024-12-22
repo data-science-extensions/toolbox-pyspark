@@ -110,7 +110,7 @@ def create_empty_dataframe(spark_session: SparkSession) -> psDataFrame:
 @typechecked
 def keep_first_record_by_columns(
     dataframe: psDataFrame,
-    columns: Optional[str_collection],
+    columns: Union[str, str_collection],
 ) -> psDataFrame:
     """
     !!! note "Summary"
@@ -679,7 +679,7 @@ def get_column_values(
 @typechecked
 def update_nullability(
     dataframe: psDataFrame,
-    columns: Optional[str_collection] = None,
+    columns: Optional[Union[str, str_collection]] = None,
     nullable: bool = True,
 ) -> psDataFrame:
     # Credit: https://stackoverflow.com/questions/46072411/can-i-change-the-nullability-of-a-column-in-my-spark-dataframe#answer-51821437
@@ -816,7 +816,7 @@ def trim_spaces_from_column(
 @typechecked
 def trim_spaces_from_columns(
     dataframe: psDataFrame,
-    columns: Optional[str_collection] = None,
+    columns: Optional[Union[str, str_collection]] = None,
 ) -> psDataFrame:
     """
     !!! note "Summary"
@@ -1232,7 +1232,7 @@ def apply_function_to_column(
 @typechecked
 def apply_function_to_columns(
     dataframe: psDataFrame,
-    columns: str_collection,
+    columns: Union[str, str_collection],
     function: str = "upper",
     *function_args,
     **function_kwargs,
