@@ -16,11 +16,11 @@ There are 12 modules used in this package, which covers 41 functions
 | [`keys`][toolbox_pyspark.keys]             | The `keys` module is used for creating new columns to act as keys (primary and foreign), to be used for joins with other tables, or to create relationships within downstream applications, like PowerBI.
 | [`scale`][toolbox_pyspark.scale]           | The `scale` module is used for rounding a column (or columns) to a given rounding accuracy.
 | [`dimensions`][toolbox_pyspark.dimensions] | The `dimensions` module is used for checking the dimensions of `pyspark` `dataframe`'s.
+| [`columns`][toolbox_pyspark.columns]       | The `columns` module is used to fetch columns from a given DataFrame using convenient syntax.
+| [`datetime`][toolbox_pyspark.datetime]     | The `datetime` module is used for fixing column names that contain datetime data, adding conversions to local datetimes, and for splitting a column in to their date and time components.
 <!--
 | [`cleaning`][toolbox_pyspark.cleaning]     | The `cleaning` module is used to clean, fix, and fetch various aspects on a given DataFrame.
-| [`columns`][toolbox_pyspark.columns]       | The `columns` module is used to fetch columns from a given DataFrame using convenient syntax.
 | [`constants`][toolbox_pyspark.constants]   | The `constants` module is used to hold the definitions of all constant values used across the package.
-| [`datetime`][toolbox_pyspark.datetime]     | The `datetime` module is used for fixing column names that contain datetime data, adding conversions to local datetimes, and for splitting a column in to their date and time components.
 | [`delta`][toolbox_pyspark.delta]           | The `delta` module is for various processes related to Delta Lake tables. Including optimising tables, merging tables, retrieving table history, and transferring between locations.
 | [`schema`][toolbox_pyspark.schema]         | The `schema` module is used for checking, validating, and viewing any schema differences between two different tables, either from in-memory variables, or pointing to locations on disk.
 -->
@@ -58,6 +58,12 @@ There are 12 modules used in this package, which covers 41 functions
 |                                            | [`reorder_columns()`][toolbox_pyspark.columns.reorder_columns] |
 |                                            | [`delete_columns()`][toolbox_pyspark.columns.delete_columns] |
 |                                            | |
+| [`datetime`][toolbox_pyspark.datetime]     | [`rename_datetime_columns()`][toolbox_pyspark.datetime.rename_datetime_columns] |
+|                                            | [`rename_datetime_column()`][toolbox_pyspark.datetime.rename_datetime_column] |
+|                                            | [`add_local_datetime_columns()`][toolbox_pyspark.datetime.add_local_datetime_columns] |
+|                                            | [`add_local_datetime_column()`][toolbox_pyspark.datetime.add_local_datetime_column] |
+|                                            | [`split_datetime_column()`][toolbox_pyspark.datetime.split_datetime_column] |
+|                                            | [`split_datetime_columns()`][toolbox_pyspark.datetime.split_datetime_columns] |
 <!--
 | [`schema`][toolbox_pyspark.schema]         | [`view_schema_differences()`][toolbox_pyspark.schema.view_schema_differences] |
 |                                            | [`check_schemas_match()`][toolbox_pyspark.schema.check_schemas_match] |
@@ -75,12 +81,6 @@ There are 12 modules used in this package, which covers 41 functions
 |                                            | |
 | [`constants`][toolbox_pyspark.constants]   | |
 |                                            | |
-| [`datetime`][toolbox_pyspark.datetime]     | [`rename_datetime_columns()`][toolbox_pyspark.datetime.rename_datetime_columns] |
-|                                            | [`rename_datetime_column()`][toolbox_pyspark.datetime.rename_datetime_column] |
-|                                            | [`add_local_datetime_columns()`][toolbox_pyspark.datetime.add_local_datetime_columns] |
-|                                            | [`add_local_datetime_column()`][toolbox_pyspark.datetime.add_local_datetime_column] |
-|                                            | [`split_datetime_column()`][toolbox_pyspark.datetime.split_datetime_column] |
-|                                            | [`split_datetime_columns()`][toolbox_pyspark.datetime.split_datetime_columns] |
 |                                            | |
 | [`delta`][toolbox_pyspark.delta]           | [`load_table()`][toolbox_pyspark.delta.load_table] |
 |                                            | [`count_rows()`][toolbox_pyspark.delta.count_rows] |

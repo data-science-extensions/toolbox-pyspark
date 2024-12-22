@@ -25,6 +25,7 @@ from toolbox_pyspark.types import (
     get_column_types,
     map_cast_columns_to_type,
 )
+from toolbox_pyspark.utils.exceptions import InvalidDataFrameNameError
 
 
 # ---------------------------------------------------------------------------- #
@@ -57,7 +58,7 @@ class TestDataframeColumnTypes(PySparkSetup):
 
     def test_get_column_types_3(self) -> None:
         """Raise error"""
-        with pytest.raises(AttributeError):
+        with pytest.raises(InvalidDataFrameNameError):
             get_column_types(self.ps_df_types, "test")
 
 

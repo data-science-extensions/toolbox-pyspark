@@ -185,6 +185,7 @@ disable = [
     "R1711", # useless-return
     "R1716", # chained-comparison
     "R1723", # no-else-break
+    "R1734", # use-list-literal
     "R1735", # use-dict-literal
     "E0602", # undefined-variable
     "E0606", # possibly-used-before-assignment

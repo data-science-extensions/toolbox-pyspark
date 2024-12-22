@@ -41,6 +41,7 @@ from typing import Literal, Optional, Union
 
 # ## Python Third Party Imports ----
 from pyspark.sql import DataFrame as psDataFrame
+from toolbox_python.checkers import is_type
 from toolbox_python.collection_types import str_collection, str_list
 from typeguard import typechecked
 
@@ -290,34 +291,34 @@ def get_columns(
     """
     if columns is None:
         return dataframe.columns
-    elif isinstance(columns, str):
+    elif is_type(columns, str):
         if "all" in columns:
             if "str" in columns:
                 return [
-                    col for col, typ in dataframe.dtypes if typ in ["str", "string"]
+                    col for col, typ in dataframe.dtypes if typ in ("str", "string")
                 ]
             elif "int" in columns:
                 return [
-                    col for col, typ in dataframe.dtypes if typ in ["int", "integer"]
+                    col for col, typ in dataframe.dtypes if typ in ("int", "integer")
                 ]
             elif "numeric" in columns:
                 return [
                     col
                     for col, typ in dataframe.dtypes
-                    if typ in ["int", "integer", "float", "double", "long"]
+                    if typ in ("int", "integer", "float", "double", "long")
                     or "decimal" in typ
                 ]
             elif "float" in columns or "double" in columns or "decimal" in columns:
                 return [
                     col
                     for col, typ in dataframe.dtypes
-                    if typ in ["float", "double", "long"] or "decimal" in typ
+                    if typ in ("float", "double", "long") or "decimal" in typ
                 ]
             elif "datetime" in columns or "timestamp" in columns:
                 return [
                     col
                     for col, typ in dataframe.dtypes
-                    if typ in ["datetime", "timestamp"]
+                    if typ in ("datetime", "timestamp")
                 ]
             elif "date" in columns:
                 return [col for col, typ in dataframe.dtypes if typ in ["date"]]
@@ -1018,8 +1019,8 @@ def delete_columns(
 
             | Option | Result |
             |--------|--------|
-            | `#!py "raise"` | An `#!py AttributeError` exception will be raised
-            | `#!py "warn"` | An `#!py AttributeWarning` warning will be raised
+            | `#!py "raise"` | An `#!py ColumnDoesNotExistError` exception will be raised
+            | `#!py "warn"` | An `#!py ColumnDoesNotExistWarning` warning will be raised
             | `#!py "pass"` | Nothing will be raised
 
             Defaults to `#!py "pass"`.
@@ -1113,7 +1114,7 @@ def delete_columns(
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        AttributeError: Columns ["z"] do not exist in "dataframe".
+        ColumnDoesNotExistError: Columns ["z"] do not exist in "dataframe".
         Try one of: ["a", "b", "c", "d"]
         ```
         !!! success "Conclusion: Success."
@@ -1131,7 +1132,7 @@ def delete_columns(
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        AttributeError: Columns ["z"] do not exist in "dataframe".
+        ColumnDoesNotExistError: Columns ["z"] do not exist in "dataframe".
         Try one of: ["a", "b", "c", "d"]
         ```
         !!! success "Conclusion: Success."
@@ -1149,7 +1150,7 @@ def delete_columns(
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        AttributeError: Columns ["x", "y", "z"] do not exist in "dataframe".
+        ColumnDoesNotExistError: Columns ["x", "y", "z"] do not exist in "dataframe".
         Try one of: ["a", "b", "c", "d"]
         ```
         !!! success "Conclusion: Success."
@@ -1167,7 +1168,7 @@ def delete_columns(
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        AttributeWarning: Columns missing from "dataframe": ["z"].
+        ColumnDoesNotExistWarning: Columns missing from "dataframe": ["z"].
         Will still proceed to delete columns that do exist.
         ```
         ```{.txt .text title="Terminal"}
@@ -1195,7 +1196,7 @@ def delete_columns(
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        AttributeWarning: Columns missing from "dataframe": ["z"].
+        ColumnDoesNotExistWarning: Columns missing from "dataframe": ["z"].
         Will still proceed to delete columns that do exist.
         ```
         ```{.txt .text title="Terminal"}
@@ -1223,7 +1224,7 @@ def delete_columns(
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        AttributeWarning: Columns missing from "dataframe": ["x", "y", "z"].
+        ColumnDoesNotExistWarning: Columns missing from "dataframe": ["x", "y", "z"].
         Will still proceed to delete columns that do exist.
         ```
         ```{.txt .text title="Terminal"}

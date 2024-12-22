@@ -57,6 +57,7 @@ nav:
       - Scale: code/scale.md
       - Dimensions: code/dimensions.md
       - Columns: code/columns.md
+      - DateTime: code/datetime.md
 
 
 markdown_extensions:

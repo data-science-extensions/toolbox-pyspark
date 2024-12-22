@@ -41,6 +41,7 @@ from typing import Optional, Union
 
 # ## Python Third Party Imports ----
 from pyspark.sql import DataFrame as psDataFrame, functions as F
+from toolbox_python.checkers import is_type
 from toolbox_python.collection_types import str_collection, str_list
 from typeguard import typechecked
 
@@ -452,7 +453,7 @@ def round_columns(
         columns = [
             col for col, typ in dataframe.dtypes if typ.split("(")[0] in VALID_TYPES
         ]
-    elif isinstance(columns, str):
+    elif is_type(columns, str):
         columns = [columns]
     assert_columns_exists(dataframe, columns)
     invalid_cols: list[tuple[str, str]] = [

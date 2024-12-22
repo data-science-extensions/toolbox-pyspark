@@ -41,21 +41,23 @@ from typing import Union
 # ## Python Third Party Imports ----
 import pandas as pd
 from pandas import DataFrame as pdDataFrame
-from pyspark.sql import (
-    DataFrame as psDataFrame,
-    functions as F,
-    types as T,
-)
+from pyspark.sql import DataFrame as psDataFrame, functions as F, types as T
+from toolbox_python.checkers import is_type
 from toolbox_python.collection_types import str_list, str_tuple
 from toolbox_python.dictionaries import dict_reverse_keys_and_values
 from typeguard import typechecked
 
 # ## Local First Party Imports ----
-from toolbox_pyspark.checks import assert_column_exists, assert_columns_exists
+from toolbox_pyspark.checks import (
+    _validate_pyspark_datatype,
+    assert_column_exists,
+    assert_columns_exists,
+)
 from toolbox_pyspark.constants import (
     VALID_DATAFRAME_NAMES,
     VALID_PYSPARK_DATAFRAME_NAMES,
 )
+from toolbox_pyspark.utils.exceptions import InvalidDataFrameNameError
 
 
 # ---------------------------------------------------------------------------- #
@@ -76,27 +78,6 @@ __all__: str_list = [
 #     Functions                                                             ####
 #                                                                              #
 # ---------------------------------------------------------------------------- #
-
-
-# ---------------------------------------------------------------------------- #
-#  Private functions                                                        ####
-# ---------------------------------------------------------------------------- #
-
-
-def _validate_pyspark_datatype(datatype: Union[str, type, T.DataType]):
-    datatype = T.FloatType() if datatype == "float" or datatype is float else datatype
-    if isinstance(datatype, str):
-        datatype = "string" if datatype == "str" else datatype
-        datatype = "boolean" if datatype == "bool" else datatype
-        datatype = "integer" if datatype == "int" else datatype
-        datatype = "timestamp" if datatype == "datetime" else datatype
-        try:
-            datatype = eval(datatype)
-        except NameError:
-            datatype = T._parse_datatype_string(s=datatype)  # type:ignore
-    if type(datatype).__name__ == "type":
-        datatype = T._type_mappings.get(datatype)()  # type:ignore
-    return datatype
 
 
 # ---------------------------------------------------------------------------- #
@@ -151,7 +132,7 @@ def get_column_types(
     Raises:
         TypeError:
             If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
-        AttributeError:
+        InvalidPySparkDataTypeError:
             If the given value parsed to `#!py output_type` is not one of the given valid types.
 
     Returns:
@@ -234,14 +215,14 @@ def get_column_types(
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        AttributeError: Invalid value for `output_type`: "foo".
+        InvalidDataFrameNameError: Invalid value for `output_type`: "foo".
         Must be one of: ["pandas.DataFrame", "pandas", "pd.DataFrame", "pd.df", "pddf", "pdDataFrame", "pdDF", "pd", "spark.DataFrame", "pyspark.DataFrame", "pyspark", "spark", "ps.DataFrame", "ps.df", "psdf", "psDataFrame", "psDF", "ps"]
         ```
         !!! failure "Conclusion: Invalid input."
         </div>
     """
     if output_type not in VALID_DATAFRAME_NAMES:
-        raise AttributeError(
+        raise InvalidDataFrameNameError(
             f"Invalid value for `output_type`: '{output_type}'.\n"
             f"Must be one of: {VALID_DATAFRAME_NAMES}"
         )
@@ -298,7 +279,7 @@ def cast_column_to_type(
     Raises:
         TypeError:
             If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
-        AttributeError:
+        ColumnDoesNotExistError:
             If `#!py column` does not exist within `#!py dataframe.columns`.
         ParseException:
             If the given `#!py datatype` is not a valid PySpark DataType.
@@ -369,7 +350,7 @@ def cast_column_to_type(
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        AttributeError: Column "x" does not exist in DataFrame.
+        ColumnDoesNotExistError: Column "x" does not exist in DataFrame.
         Try one of: ["a", "b", "c", "d"].
         ```
         !!! failure "Conclusion: Column `x` does not exist as a valid column."
@@ -519,7 +500,7 @@ def cast_columns_to_type(
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        AttributeError: Columns ["x", "y"] do not exist in DataFrame.
+        ColumnDoesNotExistError: Columns ["x", "y"] do not exist in DataFrame.
         Try one of: ["a", "b", "c", "d"].
         ```
         !!! failure "Conclusion: Columns `[x]` does not exist as a valid column."
@@ -540,7 +521,7 @@ def cast_columns_to_type(
         - [`is_vaid_spark_type()`][toolbox_pyspark.checks.is_vaid_spark_type]
         - [`get_column_types()`][toolbox_pyspark.types.get_column_types]
     """
-    columns = [columns] if isinstance(columns, str) else columns
+    columns = [columns] if is_type(columns, str) else columns
     assert_columns_exists(dataframe, columns)
     datatype = _validate_pyspark_datatype(datatype=datatype)
     return dataframe.withColumns({col: F.col(col).cast(datatype) for col in columns})
@@ -677,7 +658,7 @@ def map_cast_columns_to_type(
     # Ensure all keys are `str`
     keys = (*columns_type_mapping.keys(),)
     for key in keys:
-        if isinstance(key, type):
+        if is_type(key, type):
             if key.__name__ in keys:
                 columns_type_mapping[key.__name__] = list(
                     columns_type_mapping[key.__name__]

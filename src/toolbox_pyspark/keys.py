@@ -42,10 +42,8 @@
 from typing import Optional, Union
 
 # ## Python Third Party Imports ----
-from pyspark.sql import (
-    DataFrame as psDataFrame,
-    functions as F,
-)
+from pyspark.sql import DataFrame as psDataFrame, functions as F
+from toolbox_python.checkers import is_type
 from toolbox_python.collection_types import str_collection, str_list
 from typeguard import typechecked
 
@@ -104,7 +102,7 @@ def add_key_from_columns(
     Raises:
         TypeError:
             If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
-        AttributeError:
+        ColumnDoesNotExistError:
             If any of the `columns` do not exist within `dataframe.columns`.
 
     Returns:
@@ -214,7 +212,7 @@ def add_key_from_columns(
         !!! failure "Conclusion: Invalid column selection."
         </div>
     """
-    columns = [columns] if isinstance(columns, str) else columns
+    columns = [columns] if is_type(columns, str) else columns
     assert_columns_exists(dataframe, columns)
     join_character = join_character or ""
     key_name = key_name or f"key_{'_'.join([col.upper() for col in columns])}"
@@ -259,7 +257,7 @@ def add_keys_from_columns(
     Raises:
         TypeError:
             If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
-        AttributeError:
+        ColumnDoesNotExistError:
             If any of the `columns` do not exist within `dataframe.columns`.
 
     Returns:
@@ -342,12 +340,12 @@ def add_keys_from_columns(
         </div>
     """
     join_character = join_character or ""
-    if isinstance(collection_of_columns, dict):
+    if is_type(collection_of_columns, dict):
         for key_name, columns in collection_of_columns.items():
             dataframe = add_key_from_columns(
                 dataframe, columns, join_character, key_name
             )
-    elif isinstance(collection_of_columns, (tuple, list)):
+    elif is_type(collection_of_columns, (tuple, list)):
         for columns in collection_of_columns:
             dataframe = add_key_from_columns(dataframe, columns, join_character)
     return dataframe

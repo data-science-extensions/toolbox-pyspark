@@ -39,9 +39,11 @@
 
 # ## Python StdLib Imports ----
 from functools import partial
+from typing import Union
 from warnings import warn
 
 # ## Python Third Party Imports ----
+from pyspark.sql import types as T
 from pyspark.sql.types import _all_atomic_types as pyspark_atomic_types
 from toolbox_python.collection_types import str_list
 
@@ -53,14 +55,16 @@ from toolbox_pyspark.utils.whitespaces import WhitespaceCharacters, WhitespaceCh
 #  Exports                                                                  ####
 # ---------------------------------------------------------------------------- #
 
-
 __all__: str_list = [
     "ALL_WHITESPACE_CHARACTERS",
     "WHITESPACE_CHARACTERS",
     "VALID_PYSPARK_TYPES",
     "VALID_PYSPARK_TYPE_NAMES",
+    "ALL_PYSPARK_TYPES",
     "VALID_PANDAS_DATAFRAME_NAMES",
     "VALID_PYSPARK_DATAFRAME_NAMES",
+    "VALID_NUMPY_ARRAY_NAMES",
+    "VALID_LIST_OBJECT_NAMES",
     "VALID_DATAFRAME_NAMES",
     "_DEFAULT_DEPRECATION_WARNING_CLASS",
     "_DEFAULT_DEPRECATION_WARNING",
@@ -131,8 +135,32 @@ WHITESPACE_CHARACTERS = WhitespaceCharacters(
 # For a full list of valid types, see: https://spark.apache.org/docs/latest/sql-ref-datatypes.html
 VALID_PYSPARK_TYPES = list(pyspark_atomic_types.values())
 VALID_PYSPARK_TYPE_NAMES: str_list = sorted(
-    list(pyspark_atomic_types.keys()) + ["str", "int", "bool"]
+    list(pyspark_atomic_types.keys()) + ["str", "int", "bool", "datetime"]
 )
+ALL_PYSPARK_TYPES = Union[
+    T.DataType,
+    T.NullType,
+    T.CharType,
+    T.StringType,
+    T.VarcharType,
+    T.BinaryType,
+    T.BooleanType,
+    T.DateType,
+    T.TimestampType,
+    T.TimestampNTZType,
+    T.DecimalType,
+    T.DoubleType,
+    T.FloatType,
+    T.ByteType,
+    T.IntegerType,
+    T.LongType,
+    T.DayTimeIntervalType,
+    T.YearMonthIntervalType,
+    T.ShortType,
+    T.ArrayType,
+    T.MapType,
+    T.StructType,
+]
 
 
 # ---------------------------------------------------------------------------- #
