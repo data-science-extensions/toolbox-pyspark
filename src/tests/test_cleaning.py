@@ -58,6 +58,7 @@ from toolbox_pyspark.constants import (
 
 
 class TestCreateEmptyDataFrame(PySparkSetup):
+
     def setUp(self) -> None:
         pass
 
@@ -80,6 +81,7 @@ class TestCreateEmptyDataFrame(PySparkSetup):
 
 
 class TestKeepFirstRecordByColumns(PySparkSetup):
+
     def setUp(self) -> None:
         pass
 
@@ -125,6 +127,7 @@ class TestKeepFirstRecordByColumns(PySparkSetup):
 
 
 class TestDataFrameToType(PySparkSetup):
+
     def setUp(self) -> None:
         pass
 
@@ -176,6 +179,7 @@ class TestDataFrameToType(PySparkSetup):
 
 
 class TestGetColumnValues(PySparkSetup):
+
     def setUp(self) -> None:
         pass
 
@@ -208,6 +212,7 @@ class TestGetColumnValues(PySparkSetup):
 
 
 class TestUpdateNullability(PySparkSetup):
+
     def setUp(self) -> None:
         self.table = self.ps_df_extended
 
@@ -238,6 +243,7 @@ class TestUpdateNullability(PySparkSetup):
 
 
 class TestTrimSpacesFromListOfColumns(PySparkSetup):
+
     def setUp(self) -> None:
         pass
 
@@ -339,6 +345,7 @@ class TestTrimSpacesFromListOfColumns(PySparkSetup):
 
 
 class TestApplyFunctionToColumn(PySparkSetup):
+
     def setUp(self) -> None:
         pass
 
@@ -414,6 +421,7 @@ class TestApplyFunctionToColumn(PySparkSetup):
 
 
 class TestApplyFunctionToListOfColumns(PySparkSetup):
+
     def setUp(self) -> None:
         pass
 
@@ -535,6 +543,7 @@ class TestApplyFunctionToListOfColumns(PySparkSetup):
 
 
 class TestCleanOneTableFromAnotherTable(PySparkSetup):
+
     def setUp(self) -> None:
         self.left_table = self.ps_df_duplication
         self.right_table = self.ps_df_duplication.where("a in ('1','2')")
