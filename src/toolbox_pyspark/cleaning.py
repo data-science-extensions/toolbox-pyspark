@@ -342,10 +342,11 @@ def keep_first_record_by_columns(
 def convert_dataframe(
     dataframe: psDataFrame,
     return_type: Union[
-        LITERAL_LIST_OBJECT_NAMES,
-        LITERAL_PANDAS_DATAFRAME_NAMES,
         LITERAL_PYSPARK_DATAFRAME_NAMES,
+        LITERAL_PANDAS_DATAFRAME_NAMES,
         LITERAL_NUMPY_ARRAY_NAMES,
+        LITERAL_LIST_OBJECT_NAMES,
+        str,
     ] = "pd",
 ) -> Optional[Union[psDataFrame, pdDataFrame, npArray, list]]:
     """
@@ -417,7 +418,7 @@ def convert_dataframe(
     Params:
         dataframe (psDataFrame):
             The PySpark DataFrame to be converted.
-        return_type (Union[LITERAL_LIST_OBJECT_NAMES, LITERAL_PANDAS_DATAFRAME_NAMES, LITERAL_PYSPARK_DATAFRAME_NAMES, LITERAL_NUMPY_ARRAY_NAMES], optional):
+        return_type (Union[LITERAL_LIST_OBJECT_NAMES, LITERAL_PANDAS_DATAFRAME_NAMES, LITERAL_PYSPARK_DATAFRAME_NAMES, LITERAL_NUMPY_ARRAY_NAMES, str], optional):
             The desired return type.<br>
             Options:
 
@@ -609,10 +610,11 @@ def get_column_values(
     column: str,
     distinct: bool = True,
     return_type: Union[
-        LITERAL_LIST_OBJECT_NAMES,
-        LITERAL_PANDAS_DATAFRAME_NAMES,
         LITERAL_PYSPARK_DATAFRAME_NAMES,
+        LITERAL_PANDAS_DATAFRAME_NAMES,
         LITERAL_NUMPY_ARRAY_NAMES,
+        LITERAL_LIST_OBJECT_NAMES,
+        str,
     ] = "pd",
 ) -> Optional[Union[psDataFrame, pdDataFrame, npArray, list]]:
     """
@@ -630,7 +632,7 @@ def get_column_values(
         distinct (bool, optional):
             If `#!py True`, return distinct (unique) values.<br>
             Defaults to `#!py True`.
-        return_type (str, optional):
+        return_type (Union[LITERAL_LIST_OBJECT_NAMES, LITERAL_PANDAS_DATAFRAME_NAMES, LITERAL_PYSPARK_DATAFRAME_NAMES, LITERAL_NUMPY_ARRAY_NAMES, str], optional):
             The desired return type.<br>
             Options:
 
