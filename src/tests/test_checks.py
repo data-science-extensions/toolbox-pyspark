@@ -32,6 +32,10 @@ from toolbox_pyspark.checks import (
 )
 from toolbox_pyspark.constants import VALID_PYSPARK_TYPE_NAMES
 from toolbox_pyspark.io import write_to_path
+from toolbox_pyspark.utils.exceptions import (
+    ColumnDoesNotExistError,
+    InvalidPySparkDataTypeError,
+)
 from toolbox_pyspark.utils.warnings import AttributeWarning
 
 
@@ -108,25 +112,25 @@ class TestAssertColumnsExists(PySparkSetup):
         assert assert_column_exists(self.ps_df, "a") is None
 
     def test_assert_column_exists_2(self) -> None:
-        with pytest.raises(AttributeError):
+        with pytest.raises(ColumnDoesNotExistError):
             assert_column_exists(self.ps_df, "c")
 
     def test_assert_column_exists_3(self) -> None:
         assert assert_column_exists(self.ps_df, "A", False) is None
 
     def test_assert_column_exists_4(self) -> None:
-        with pytest.raises(AttributeError):
+        with pytest.raises(ColumnDoesNotExistError):
             assert_column_exists(self.ps_df, "A", True)
 
     def test_assert_columns_exists_1(self) -> None:
         assert assert_columns_exists(self.ps_df, ["a", "b"]) is None
 
     def test_assert_columns_exists_2(self) -> None:
-        with pytest.raises(AttributeError):
+        with pytest.raises(ColumnDoesNotExistError):
             assert_columns_exists(self.ps_df, ["b", "c"])
 
     def test_assert_columns_exists_3(self) -> None:
-        with pytest.raises(AttributeError):
+        with pytest.raises(ColumnDoesNotExistError):
             assert_columns_exists(
                 self.ps_df.withColumn("c", F.lit("c")).withColumn("d", F.lit("d")),
                 ["b", "c", "d", "e", "f"],
@@ -136,11 +140,11 @@ class TestAssertColumnsExists(PySparkSetup):
         assert assert_columns_exists(self.ps_df, ["A", "B"], False) is None
 
     def test_assert_columns_exists_5(self) -> None:
-        with pytest.raises(AttributeError):
+        with pytest.raises(ColumnDoesNotExistError):
             assert_columns_exists(self.ps_df, ["B", "C"], True)
 
     def test_assert_columns_exists_6(self) -> None:
-        with pytest.raises(AttributeError):
+        with pytest.raises(ColumnDoesNotExistError):
             assert_columns_exists(self.ps_df, ["B", "C", "D", "E"])
 
 
@@ -208,7 +212,7 @@ class TestValidPySparkDataType(PySparkSetup):
 
     def test_is_vaid_spark_type_2(self) -> None:
         for type_name in ["np.ndarray", "pd.DataFrame", "dict"]:
-            with pytest.raises(AttributeError):
+            with pytest.raises(InvalidPySparkDataTypeError):
                 is_vaid_spark_type(type_name)
 
 

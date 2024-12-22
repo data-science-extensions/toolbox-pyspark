@@ -53,6 +53,7 @@ from toolbox_pyspark.constants import (
     VALID_DATAFRAME_NAMES,
     VALID_PYSPARK_DATAFRAME_NAMES,
 )
+from toolbox_pyspark.utils.exceptions import InvalidDataFrameNameError
 
 
 # ---------------------------------------------------------------------------- #
@@ -148,7 +149,7 @@ def get_column_types(
     Raises:
         TypeError:
             If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
-        AttributeError:
+        InvalidPySparkDataTypeError:
             If the given value parsed to `#!py output_type` is not one of the given valid types.
 
     Returns:
@@ -231,14 +232,14 @@ def get_column_types(
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        AttributeError: Invalid value for `output_type`: "foo".
+        InvalidDataFrameNameError: Invalid value for `output_type`: "foo".
         Must be one of: ["pandas.DataFrame", "pandas", "pd.DataFrame", "pd.df", "pddf", "pdDataFrame", "pdDF", "pd", "spark.DataFrame", "pyspark.DataFrame", "pyspark", "spark", "ps.DataFrame", "ps.df", "psdf", "psDataFrame", "psDF", "ps"]
         ```
         !!! failure "Conclusion: Invalid input."
         </div>
     """
     if output_type not in VALID_DATAFRAME_NAMES:
-        raise AttributeError(
+        raise InvalidDataFrameNameError(
             f"Invalid value for `output_type`: '{output_type}'.\n"
             f"Must be one of: {VALID_DATAFRAME_NAMES}"
         )

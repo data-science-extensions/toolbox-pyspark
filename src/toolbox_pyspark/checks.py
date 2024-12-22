@@ -50,7 +50,10 @@ from typeguard import typechecked
 # ## Local First Party Imports ----
 from toolbox_pyspark.constants import VALID_PYSPARK_TYPE_NAMES
 from toolbox_pyspark.io import read_from_path
-from toolbox_pyspark.utils.exceptions import ColumnDoesNotExistError
+from toolbox_pyspark.utils.exceptions import (
+    ColumnDoesNotExistError,
+    InvalidPySparkDataTypeError,
+)
 from toolbox_pyspark.utils.warnings import ColumnDoesNotExistWarning
 
 
@@ -597,12 +600,12 @@ def is_vaid_spark_type(datatype: str) -> bool:
     Raises:
         TypeError:
             If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
-        AttributeError:
+        InvalidPySparkDataTypeError:
             If the given `#!py datatype` is not a valid `#!py pyspark` data type.
 
     Returns:
         (type(None)):
-            Nothing is returned. Either an `#!py AttributeError` exception is raised, or nothing.
+            Nothing is returned. Either an `#!py InvalidPySparkDataTypeError` exception is raised, or nothing.
 
     ???+ example "Examples"
 
@@ -627,15 +630,15 @@ def is_vaid_spark_type(datatype: str) -> bool:
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        AttributeError: DataType 'np.ndarray' is not valid.
+        InvalidPySparkDataTypeError: DataType 'np.ndarray' is not valid.
         Must be one of: ["binary", "bool", "boolean", "byte", "char", "date", "decimal", "double", "float", "int", "integer", "long", "short", "str", "string", "timestamp", "timestamp_ntz", "varchar", "void"]
         ```
         ```{.txt .text title="Terminal"}
-        AttributeError: DataType 'pd.DataFrame' is not valid.
+        InvalidPySparkDataTypeError: DataType 'pd.DataFrame' is not valid.
         Must be one of: ["binary", "bool", "boolean", "byte", "char", "date", "decimal", "double", "float", "int", "integer", "long", "short", "str", "string", "timestamp", "timestamp_ntz", "varchar", "void"]
         ```
         ```{.txt .text title="Terminal"}
-        AttributeError: DataType 'dict' is not valid.
+        InvalidPySparkDataTypeError: DataType 'dict' is not valid.
         Must be one of: ["binary", "bool", "boolean", "byte", "char", "date", "decimal", "double", "float", "int", "integer", "long", "short", "str", "string", "timestamp", "timestamp_ntz", "varchar", "void"]
         ```
         !!! failure "Conclusion: All of these types are invalid."
@@ -647,7 +650,7 @@ def is_vaid_spark_type(datatype: str) -> bool:
 @typechecked
 def assert_valid_spark_type(datatype: str) -> None:
     if not is_vaid_spark_type(datatype):
-        raise AttributeError(
+        raise InvalidPySparkDataTypeError(
             f"DataType '{datatype}' is not valid.\n"
             f"Must be one of: {VALID_PYSPARK_TYPE_NAMES}"
         )

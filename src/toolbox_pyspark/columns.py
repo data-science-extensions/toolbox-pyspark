@@ -1019,8 +1019,8 @@ def delete_columns(
 
             | Option | Result |
             |--------|--------|
-            | `#!py "raise"` | An `#!py AttributeError` exception will be raised
-            | `#!py "warn"` | An `#!py AttributeWarning` warning will be raised
+            | `#!py "raise"` | An `#!py ColumnDoesNotExistError` exception will be raised
+            | `#!py "warn"` | An `#!py ColumnDoesNotExistWarning` warning will be raised
             | `#!py "pass"` | Nothing will be raised
 
             Defaults to `#!py "pass"`.
@@ -1114,7 +1114,7 @@ def delete_columns(
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        AttributeError: Columns ["z"] do not exist in "dataframe".
+        ColumnDoesNotExistError: Columns ["z"] do not exist in "dataframe".
         Try one of: ["a", "b", "c", "d"]
         ```
         !!! success "Conclusion: Success."
@@ -1132,7 +1132,7 @@ def delete_columns(
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        AttributeError: Columns ["z"] do not exist in "dataframe".
+        ColumnDoesNotExistError: Columns ["z"] do not exist in "dataframe".
         Try one of: ["a", "b", "c", "d"]
         ```
         !!! success "Conclusion: Success."
@@ -1150,7 +1150,7 @@ def delete_columns(
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        AttributeError: Columns ["x", "y", "z"] do not exist in "dataframe".
+        ColumnDoesNotExistError: Columns ["x", "y", "z"] do not exist in "dataframe".
         Try one of: ["a", "b", "c", "d"]
         ```
         !!! success "Conclusion: Success."

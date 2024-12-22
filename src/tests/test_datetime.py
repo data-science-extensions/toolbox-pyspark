@@ -26,6 +26,7 @@ from toolbox_pyspark.datetime import (
     split_datetime_column,
     split_datetime_columns,
 )
+from toolbox_pyspark.utils.exceptions import ColumnDoesNotExistError
 
 
 # ---------------------------------------------------------------------------- #
@@ -52,7 +53,7 @@ class TestDateTimeColumnNames(PySparkSetup):
 
     def test_rename_datetime_columns_2(self) -> None:
         "single error"
-        with pytest.raises(AttributeError):
+        with pytest.raises(ColumnDoesNotExistError):
             _ = rename_datetime_column(self.ps_df_timestamp, "test")
 
     def test_rename_datetime_columns_3(self) -> None:
@@ -90,7 +91,7 @@ class TestDateTimeColumnNames(PySparkSetup):
 
     def test_rename_datetime_columns_7(self) -> None:
         "defined list with error"
-        with pytest.raises(AttributeError):
+        with pytest.raises(ColumnDoesNotExistError):
             _ = rename_datetime_columns(
                 dataframe=self.ps_df_timestamp, columns=["c_date", "test"]
             )

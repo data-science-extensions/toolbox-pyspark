@@ -214,7 +214,7 @@ def rename_datetime_columns(
     Raises:
         TypeError:
             If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
-        AttributeError:
+        ColumnDoesNotExistError:
             If the `columns` do not exist within `#!py dataframe.columns`.
 
     Returns:
@@ -580,7 +580,7 @@ def add_local_datetime_columns(
     Raises:
         TypeError:
             If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
-        AttributeError:
+        ColumnDoesNotExistError:
             If the `columns` do not exist within `#!py dataframe.columns`.
         ValueError:
             If the `from_timezone` or `column_with_target_timezone` is not a valid timezone.
