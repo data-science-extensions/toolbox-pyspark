@@ -666,6 +666,11 @@ def assert_valid_spark_type(datatype: str) -> None:
         )
 
 
+# ---------------------------------------------------------------------------- #
+#  Column Types                                                             ####
+# ---------------------------------------------------------------------------- #
+
+
 @dataclass
 class ColumnsAreTypeResult:
     result: bool
