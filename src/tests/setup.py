@@ -18,7 +18,7 @@ import os
 import sys
 from pathlib import Path
 from string import ascii_letters
-from typing import Callable
+from typing import Callable, Union
 from unittest import TestCase
 
 # ## Python Third Party Imports ----

@@ -4,3 +4,7 @@ class AttributeWarning(Warning):
 
 class ColumnDoesNotExistWarning(Warning):
     pass
+
+
+class InvalidPySparkDataTypeWarning(Warning):
+    pass

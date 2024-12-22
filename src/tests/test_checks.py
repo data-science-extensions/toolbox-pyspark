@@ -13,23 +13,31 @@
 # ## Python StdLib Imports ----
 import shutil
 from pathlib import Path
+from typing import Literal, Optional, Union
 
 # ## Python Third Party Imports ----
 import pytest
 from parameterized import parameterized
-from pyspark.sql import functions as F
+from toolbox_python.checkers import is_type
+from toolbox_python.collection_types import str_collection, str_list
 
 # ## Local First Party Imports ----
-from tests.setup import PySparkSetup, name_func_flat_list
+from tests.setup import PySparkSetup, name_func_flat_list, name_func_predefined_name
 from toolbox_pyspark.checks import (
     assert_column_exists,
+    assert_column_is_type,
+    assert_columns_are_type,
     assert_columns_exists,
     assert_valid_spark_type,
     column_exists,
+    column_is_type,
+    columns_are_type,
     columns_exists,
     is_vaid_spark_type,
     table_exists,
+    warn_column_invalid_type,
     warn_column_missing,
+    warn_columns_invalid_type,
     warn_columns_missing,
 )
 from toolbox_pyspark.constants import VALID_PYSPARK_TYPE_NAMES
@@ -38,7 +46,10 @@ from toolbox_pyspark.utils.exceptions import (
     ColumnDoesNotExistError,
     InvalidPySparkDataTypeError,
 )
-from toolbox_pyspark.utils.warnings import ColumnDoesNotExistWarning
+from toolbox_pyspark.utils.warnings import (
+    ColumnDoesNotExistWarning,
+    InvalidPySparkDataTypeWarning,
+)
 
 
 # ---------------------------------------------------------------------------- #
@@ -49,154 +60,173 @@ from toolbox_pyspark.utils.warnings import ColumnDoesNotExistWarning
 
 
 # ---------------------------------------------------------------------------- #
-#  TestColumnExists                                                         ####
+#  Column Existence                                                         ####
 # ---------------------------------------------------------------------------- #
 
 
-class TestColumnExists(PySparkSetup):
+class TestColumnExistence(PySparkSetup):
+
     def setUp(self) -> None:
         pass
 
-    def test_column_exists_1(self) -> None:
-        assert column_exists(self.ps_df, "a") is True
+    @parameterized.expand(
+        input=(
+            ("exists", True, "a"),
+            ("missing", False, "z"),
+            ("exists_ignorecase", True, "a", False),
+            ("exists_matchcase", False, "A", True),
+        ),
+        name_func=name_func_predefined_name,
+    )
+    def test_column_exists(
+        self,
+        test_name: str,
+        expected: bool,
+        col: str,
+        match_case: Optional[bool] = None,
+    ) -> None:
+        if match_case:
+            result: bool = column_exists(self.ps_df_extended, col, match_case)
+        else:
+            result: bool = column_exists(self.ps_df_extended, col)
+        assert result == expected
 
-    def test_column_exists_2(self) -> None:
-        assert column_exists(self.ps_df, "c") is False
+    @parameterized.expand(
+        input=(
+            ("exists", True, ["a", "b"]),
+            ("missing", False, ["b", "z"]),
+            ("missing_2", False, ["b", "z", "x"]),
+            ("exists_ignorecase", True, ["A", "B"], False),
+            ("exists_matchcase", False, ["A", "B"], True),
+        ),
+        name_func=name_func_predefined_name,
+    )
+    def test_columns_exist(
+        self,
+        test_name: str,
+        expected: bool,
+        cols: str_list,
+        match_case: Optional[bool] = None,
+    ) -> None:
+        if match_case:
+            result: bool = columns_exists(self.ps_df_extended, cols, match_case)
+        else:
+            result: bool = columns_exists(self.ps_df_extended, cols)
+        assert result == expected
 
-    def test_column_exists_3(self) -> None:
-        assert column_exists(self.ps_df, "A", True) is False
+    @parameterized.expand(
+        input=(
+            ("exists", None, "a"),
+            ("missing", "raises", "z"),
+            ("exists_matchcase", "raises", "A", True),
+            ("exists_matchcase_2", None, "a", True),
+            ("exists_ignorecase", None, "A", False),
+        ),
+        name_func=name_func_predefined_name,
+    )
+    def test_assert_column_exists(
+        self,
+        test_name: str,
+        expected: Optional[Literal["raises"]],
+        col: str,
+        match_case: Optional[bool] = None,
+    ) -> None:
+        if expected == "raises" and match_case:
+            with pytest.raises(ColumnDoesNotExistError):
+                assert_column_exists(self.ps_df_extended, col, match_case)
+        elif expected == "raises":
+            with pytest.raises(ColumnDoesNotExistError):
+                assert_column_exists(self.ps_df_extended, col)
+        elif match_case:
+            assert assert_column_exists(self.ps_df_extended, col, match_case) is None
+        else:
+            assert assert_column_exists(self.ps_df_extended, col) is None
 
-    def test_column_exists_4(self) -> None:
-        assert column_exists(self.ps_df, "a", False) is True
+    @parameterized.expand(
+        input=(
+            ("exists", None, ["a", "b"]),
+            ("missing", "raises", ["b", "z"]),
+            ("missing_2", "raises", ["b", "z", "x"]),
+            ("exists_matchcase", "raises", ["A", "B"], True),
+            ("exists_matchcase_2", None, ["a", "b"], True),
+            ("exists_ignorecase", None, ["A", "B"], False),
+        ),
+        name_func=name_func_predefined_name,
+    )
+    def test_assert_columns_exists(
+        self,
+        test_name: str,
+        expected: Optional[Literal["raises"]],
+        cols: str_collection,
+        match_case: Optional[bool] = None,
+    ) -> None:
+        if expected == "raises" and match_case:
+            with pytest.raises(ColumnDoesNotExistError):
+                assert_columns_exists(self.ps_df_extended, cols, match_case)
+        elif expected == "raises":
+            with pytest.raises(ColumnDoesNotExistError):
+                assert_columns_exists(self.ps_df_extended, cols)
+        elif match_case:
+            assert assert_columns_exists(self.ps_df_extended, cols, match_case) is None
+        else:
+            assert assert_columns_exists(self.ps_df_extended, cols) is None
 
+    @parameterized.expand(
+        input=(
+            ("exists", None, "a"),
+            ("missing", "warns", "z"),
+            ("exists_matchcase", "warns", "A", True),
+            ("exists_matchcase_2", None, "a", True),
+            ("exists_ignorecase", None, "A", False),
+        ),
+        name_func=name_func_predefined_name,
+    )
+    def test_warn_column_missing(
+        self,
+        test_name: str,
+        expected: Optional[Literal["warns"]],
+        col: str,
+        match_case: Optional[bool] = None,
+    ) -> None:
+        if expected == "warns" and match_case:
+            with pytest.warns(ColumnDoesNotExistWarning):
+                warn_column_missing(self.ps_df_extended, col, match_case)
+        elif expected == "warns":
+            with pytest.warns(ColumnDoesNotExistWarning):
+                warn_column_missing(self.ps_df_extended, col)
+        elif match_case:
+            assert warn_column_missing(self.ps_df_extended, col, match_case) is None
+        else:
+            assert warn_column_missing(self.ps_df_extended, col) is None
 
-# ---------------------------------------------------------------------------- #
-#  TestColumnsExists                                                        ####
-# ---------------------------------------------------------------------------- #
-
-
-class TestColumnsExists(PySparkSetup):
-    def setUp(self) -> None:
-        pass
-
-    def test_columns_exists_1(self) -> None:
-        assert columns_exists(self.ps_df, ["a", "b"]) is True
-
-    def test_columns_exists_2(self) -> None:
-        assert columns_exists(self.ps_df, ["b", "c"]) is False
-
-    def test_columns_exists_3(self) -> None:
-        assert (
-            columns_exists(
-                self.ps_df.withColumn("c", F.lit("c")).withColumn("d", F.lit("d")),
-                ["b", "c", "d", "e", "f"],
-            )
-            is False
-        )
-
-    def test_columns_exists_4(self) -> None:
-        assert columns_exists(self.ps_df, ["A", "B"], False) is True
-
-    def test_columns_exists_6(self) -> None:
-        assert columns_exists(self.ps_df, ["A", "B"], True) is False
-
-
-# ---------------------------------------------------------------------------- #
-#  TestAssertColumnExists                                                   ####
-# ---------------------------------------------------------------------------- #
-
-
-class TestAssertColumnsExists(PySparkSetup):
-    def setUp(self) -> None:
-        pass
-
-    def test_assert_column_exists_1(self) -> None:
-        assert assert_column_exists(self.ps_df, "a") is None
-
-    def test_assert_column_exists_2(self) -> None:
-        with pytest.raises(ColumnDoesNotExistError):
-            assert_column_exists(self.ps_df, "c")
-
-    def test_assert_column_exists_3(self) -> None:
-        assert assert_column_exists(self.ps_df, "A", False) is None
-
-    def test_assert_column_exists_4(self) -> None:
-        with pytest.raises(ColumnDoesNotExistError):
-            assert_column_exists(self.ps_df, "A", True)
-
-    def test_assert_columns_exists_1(self) -> None:
-        assert assert_columns_exists(self.ps_df, ["a", "b"]) is None
-
-    def test_assert_columns_exists_2(self) -> None:
-        with pytest.raises(ColumnDoesNotExistError):
-            assert_columns_exists(self.ps_df, ["b", "c"])
-
-    def test_assert_columns_exists_3(self) -> None:
-        with pytest.raises(ColumnDoesNotExistError):
-            assert_columns_exists(
-                self.ps_df.withColumn("c", F.lit("c")).withColumn("d", F.lit("d")),
-                ["b", "c", "d", "e", "f"],
-            )
-
-    def test_assert_columns_exists_4(self) -> None:
-        assert assert_columns_exists(self.ps_df, ["A", "B"], False) is None
-
-    def test_assert_columns_exists_5(self) -> None:
-        with pytest.raises(ColumnDoesNotExistError):
-            assert_columns_exists(self.ps_df, ["B", "C"], True)
-
-    def test_assert_columns_exists_6(self) -> None:
-        with pytest.raises(ColumnDoesNotExistError):
-            assert_columns_exists(self.ps_df, ["B", "C", "D", "E"])
-
-
-## --------------------------------------------------------------------------- #
-##  TestWarnColumnMissing                                                   ####
-## --------------------------------------------------------------------------- #
-
-
-class TestWarnColumnsMissing(PySparkSetup):
-    def setUp(self) -> None:
-        pass
-
-    def test_warn_column_missing_1(self) -> None:
-        assert warn_column_missing(self.ps_df, "a") is None
-
-    def test_warn_column_missing_2(self) -> None:
-        with pytest.warns(ColumnDoesNotExistWarning):
-            warn_column_missing(self.ps_df, "c")
-
-    def test_warn_column_missing_3(self) -> None:
-        assert warn_column_missing(self.ps_df, "A", False) is None
-
-    def test_warn_column_missing_4(self) -> None:
-        with pytest.warns(ColumnDoesNotExistWarning):
-            warn_column_missing(self.ps_df, "A", True)
-
-    def test_warn_columns_missing_1(self) -> None:
-        assert warn_columns_missing(self.ps_df, ["a", "b"]) is None
-
-    def test_warn_columns_missing_2(self) -> None:
-        with pytest.warns(ColumnDoesNotExistWarning):
-            warn_columns_missing(self.ps_df, ["b", "c"])
-
-    def test_warn_columns_missing_3(self) -> None:
-        with pytest.warns(ColumnDoesNotExistWarning):
-            warn_columns_missing(
-                self.ps_df.withColumn("c", F.lit("c")).withColumn("d", F.lit("d")),
-                ["b", "c", "d", "e", "f"],
-            )
-
-    def test_warn_columns_missing_4(self) -> None:
-        assert warn_columns_missing(self.ps_df, ["A", "B"], False) is None
-
-    def test_warn_columns_missing_5(self) -> None:
-        with pytest.warns(ColumnDoesNotExistWarning):
-            warn_columns_missing(self.ps_df, ["B", "C"], True)
-
-    def test_warn_columns_missing_6(self) -> None:
-        with pytest.warns(ColumnDoesNotExistWarning):
-            warn_columns_missing(self.ps_df, ["B", "C", "D", "E"])
+    @parameterized.expand(
+        input=(
+            ("exists", None, ["a", "b"]),
+            ("missing", "warns", ["b", "z"]),
+            ("missing_2", "warns", ["b", "z", "x"]),
+            ("exists_matchcase", "warns", ["A", "B"], True),
+            ("exists_matchcase_2", None, ["a", "b"], True),
+            ("exists_ignorecase", None, ["A", "B"], False),
+        ),
+        name_func=name_func_predefined_name,
+    )
+    def test_warn_columns_missing(
+        self,
+        test_name: str,
+        expected: Optional[Literal["warns"]],
+        cols: str_collection,
+        match_case: Optional[bool] = None,
+    ) -> None:
+        if expected == "warns" and match_case:
+            with pytest.warns(ColumnDoesNotExistWarning):
+                warn_columns_missing(self.ps_df_extended, cols, match_case)
+        elif expected == "warns":
+            with pytest.warns(ColumnDoesNotExistWarning):
+                warn_columns_missing(self.ps_df_extended, cols)
+        elif match_case:
+            assert warn_columns_missing(self.ps_df_extended, cols, match_case) is None
+        else:
+            assert warn_columns_missing(self.ps_df_extended, cols) is None
 
 
 # ---------------------------------------------------------------------------- #
@@ -205,6 +235,7 @@ class TestWarnColumnsMissing(PySparkSetup):
 
 
 class TestValidPySparkDataType(PySparkSetup):
+
     def setUp(self) -> None:
         pass
 
@@ -229,6 +260,267 @@ class TestValidPySparkDataType(PySparkSetup):
     def test_assert_vaid_spark_type_3(self, typ: str) -> None:
         with pytest.raises(InvalidPySparkDataTypeError):
             assert_valid_spark_type(typ)
+
+
+# ---------------------------------------------------------------------------- #
+#  Type checks                                                              ####
+# ---------------------------------------------------------------------------- #
+
+
+class TestColumnTypes(PySparkSetup):
+
+    def setUp(self) -> None:
+        pass
+
+    @parameterized.expand(
+        input=(
+            ("success_int", True, "c", "int"),
+            ("success_string", True, "d", "string"),
+            ("success_float", True, "e", "float"),
+            ("success_double", True, "f", "double"),
+            ("success_date", True, "g", "date"),
+            ("success_timestamp", True, "h", "timestamp"),
+            ("failure_string", False, "c", "string"),
+            ("failure_float", False, "d", "float"),
+            ("failure_missingcolumn_matchcase", "raises_column", "C", "string", True),
+            ("failure_missingcolumn_ignorecase", "raises_column", "x", "string", False),
+            ("failure_invalidtype", "raises_type", "c", "error"),
+        ),
+        name_func=name_func_predefined_name,
+    )
+    def test_column_is_type(
+        self,
+        test_name: str,
+        expected: Union[bool, Literal["raises_column", "raises_type"]],
+        column: str,
+        datatype: str,
+        match_case: Optional[bool] = None,
+    ) -> None:
+        if is_type(expected, bool) and match_case:
+            assert (
+                column_is_type(self.ps_df_types, column, datatype, match_case)
+                == expected
+            )
+        elif is_type(expected, bool):
+            assert column_is_type(self.ps_df_types, column, datatype) == expected
+        elif expected == "raises_column" and match_case:
+            with pytest.raises(ColumnDoesNotExistError):
+                column_is_type(self.ps_df_types, column, datatype, match_case)
+        elif expected == "raises_column":
+            with pytest.raises(ColumnDoesNotExistError):
+                column_is_type(self.ps_df_types, column, datatype)
+        elif expected == "raises_type" and match_case:
+            with pytest.raises(InvalidPySparkDataTypeError):
+                column_is_type(self.ps_df_types, column, datatype, match_case)
+
+    @parameterized.expand(
+        input=(
+            ("success_int", True, "c", "int"),
+            ("success_string", True, ["b", "d"], "string"),
+            ("success_float", True, ("e",), "float"),
+            (
+                "failure_missingcolumn_matchcase",
+                "raises_column",
+                ["b", "C"],
+                "string",
+                True,
+            ),
+            (
+                "failure_missingcolumn_ignorecase",
+                "raises_column",
+                ("a", "x"),
+                "string",
+                False,
+            ),
+            ("failure_invalidtype", "raises_type", "c", "error"),
+        ),
+        name_func=name_func_predefined_name,
+    )
+    def test_columns_are_type(
+        self,
+        test_name: str,
+        expected: Union[bool, Literal["raises_column", "raises_type"]],
+        columns: str_collection,
+        datatype: str,
+        match_case: Optional[bool] = None,
+    ) -> None:
+        if is_type(expected, bool) and match_case:
+            assert (
+                columns_are_type(self.ps_df_types, columns, datatype, match_case)
+                == expected
+            )
+        elif is_type(expected, bool):
+            assert columns_are_type(self.ps_df_types, columns, datatype) == expected
+        elif expected == "raises_column" and match_case:
+            with pytest.raises(ColumnDoesNotExistError):
+                columns_are_type(self.ps_df_types, columns, datatype, match_case)
+        elif expected == "raises_column":
+            with pytest.raises(ColumnDoesNotExistError):
+                columns_are_type(self.ps_df_types, columns, datatype)
+        elif expected == "raises_type":
+            with pytest.raises(InvalidPySparkDataTypeError):
+                columns_are_type(self.ps_df_types, columns, datatype)
+
+    @parameterized.expand(
+        input=(
+            ("success_int", None, "c", "int"),
+            ("success_string", None, "d", "string"),
+            ("success_float", None, "e", "float"),
+            ("success_double", None, "f", "double"),
+            ("success_date", None, "g", "date"),
+            ("success_timestamp", None, "h", "timestamp"),
+            ("columnerror_missing", "raises_column", "x", "string"),
+            ("columnerror_matchcase", "raises_column", "C", "int", True),
+            ("success_int_ignorecase", None, "C", "int", False),
+            ("typeerror_invalid_ignorecase", "raises_type", "c", "error"),
+            ("typeerror_wrongtype_matchcase", "raises_type", "c", "string", True),
+        ),
+        name_func=name_func_predefined_name,
+    )
+    def test_assert_column_is_type(
+        self,
+        test_name: str,
+        expected: Optional[Literal["raises_column", "raises_type"]],
+        column: str,
+        datatype: str,
+        match_case: Optional[bool] = None,
+    ) -> None:
+        if expected == "raises_column" and match_case:
+            with pytest.raises(ColumnDoesNotExistError):
+                assert_column_is_type(self.ps_df_types, column, datatype, match_case)
+        elif expected == "raises_column":
+            with pytest.raises(ColumnDoesNotExistError):
+                assert_column_is_type(self.ps_df_types, column, datatype)
+        elif expected == "raises_type" and match_case:
+            with pytest.raises(InvalidPySparkDataTypeError):
+                assert_column_is_type(self.ps_df_types, column, datatype, match_case)
+        elif expected == "raises_type":
+            with pytest.raises(InvalidPySparkDataTypeError):
+                assert_column_is_type(self.ps_df_types, column, datatype)
+        elif match_case:
+            assert (
+                assert_column_is_type(self.ps_df_types, column, datatype, match_case)
+                is None
+            )
+        else:
+            assert assert_column_is_type(self.ps_df_types, column, datatype) is None
+
+    @parameterized.expand(
+        input=(
+            ("success_bigint", None, "c", "int"),
+            ("success_string", None, ["b", "d"], "string"),
+            ("success_int", None, ("c",), "int", True),
+            ("columnerror_bigint", "raises_column", ["a", "c", "x"], "int"),
+            ("columnerror_string", "raises_column", ("b", "D", "x"), "string", True),
+            ("typeerror_ignorecase", "raises_type", ("a", "b", "d"), "string"),
+            ("typeerror_matchcase", "raises_type", ("a", "c"), "error", True),
+        ),
+        name_func=name_func_predefined_name,
+    )
+    def test_assert_columns_are_type(
+        self,
+        test_name: str,
+        expected: Optional[Literal["raises_column", "raises_type"]],
+        columns: str_collection,
+        datatype: str,
+        match_case: Optional[bool] = None,
+    ) -> None:
+        if expected == "raises_column" and match_case:
+            with pytest.raises(ColumnDoesNotExistError):
+                assert_columns_are_type(self.ps_df_types, columns, datatype, match_case)
+        elif expected == "raises_column":
+            with pytest.raises(ColumnDoesNotExistError):
+                assert_columns_are_type(self.ps_df_types, columns, datatype)
+        elif expected == "raises_type" and match_case:
+            with pytest.raises(InvalidPySparkDataTypeError):
+                assert_columns_are_type(self.ps_df_types, columns, datatype, match_case)
+        elif expected == "raises_type":
+            with pytest.raises(InvalidPySparkDataTypeError):
+                assert_columns_are_type(self.ps_df_types, columns, datatype)
+        elif match_case:
+            assert (
+                assert_columns_are_type(self.ps_df_types, columns, datatype, match_case)
+                is None
+            )
+        else:
+            assert assert_columns_are_type(self.ps_df_types, columns, datatype) is None
+
+    @parameterized.expand(
+        input=(
+            ("success_int", None, "c", "int"),
+            ("success_string", None, "d", "string"),
+            ("success_float", None, "e", "float"),
+            ("success_double", None, "f", "double"),
+            ("success_date", None, "g", "date"),
+            ("success_timestamp", None, "h", "timestamp"),
+            ("failure_missingcolumn_matchcase", "raises_column", "C", "string", True),
+            ("failure_missingcolumn_ignorecase", "raises_column", "x", "string", False),
+            ("failure_invalidtype", "raises_type", "c", "error"),
+            ("warning_int", "warns", "c", "string"),
+        ),
+        name_func=name_func_predefined_name,
+    )
+    def test_warn_column_invalid_type(
+        self,
+        test_name: str,
+        expected: Optional[Literal["warns", "raises_column", "raises_type"]],
+        column: str,
+        datatype: str,
+        match_case: Optional[bool] = None,
+    ) -> None:
+        if expected is None:
+            assert warn_column_invalid_type(self.ps_df_types, column, datatype) is None
+        elif expected == "raises_column" and match_case:
+            with pytest.raises(ColumnDoesNotExistError):
+                warn_column_invalid_type(self.ps_df_types, column, datatype, match_case)
+        elif expected == "raises_column":
+            with pytest.raises(ColumnDoesNotExistError):
+                warn_column_invalid_type(self.ps_df_types, column, datatype)
+        elif expected == "raises_type":
+            with pytest.raises(InvalidPySparkDataTypeError):
+                warn_column_invalid_type(self.ps_df_types, column, datatype)
+        elif expected == "warns":
+            with pytest.warns(InvalidPySparkDataTypeWarning):
+                warn_column_invalid_type(self.ps_df_types, column, datatype)
+
+    @parameterized.expand(
+        input=(
+            ("success_int", None, "c", "int"),
+            ("success_string", None, ["b", "d"], "string"),
+            ("success_float", None, ("e",), "float"),
+            ("failure_missingcolumn_matchcase", "raises_column", "C", "string", True),
+            ("failure_missingcolumn_ignorecase", "raises_column", "x", "string", False),
+            ("failure_invalidtype", "raises_type", "c", "error"),
+            ("warning_int", "warns", "c", "string"),
+        ),
+        name_func=name_func_predefined_name,
+    )
+    def test_warn_columns_invalid_type(
+        self,
+        test_name: str,
+        expected: Optional[Literal["warns", "raises_column", "raises_type"]],
+        columns: str_collection,
+        datatype: str,
+        match_case: Optional[bool] = None,
+    ) -> None:
+        if expected is None:
+            assert (
+                warn_columns_invalid_type(self.ps_df_types, columns, datatype) is None
+            )
+        elif expected == "raises_column" and match_case:
+            with pytest.raises(ColumnDoesNotExistError):
+                warn_columns_invalid_type(
+                    self.ps_df_types, columns, datatype, match_case
+                )
+        elif expected == "raises_column":
+            with pytest.raises(ColumnDoesNotExistError):
+                warn_columns_invalid_type(self.ps_df_types, columns, datatype)
+        elif expected == "raises_type":
+            with pytest.raises(InvalidPySparkDataTypeError):
+                warn_columns_invalid_type(self.ps_df_types, columns, datatype)
+        elif expected == "warns":
+            with pytest.warns(InvalidPySparkDataTypeWarning):
+                warn_columns_invalid_type(self.ps_df_types, columns, datatype)
 
 
 # ---------------------------------------------------------------------------- #

@@ -54,7 +54,10 @@ from toolbox_pyspark.utils.exceptions import (
     ColumnDoesNotExistError,
     InvalidPySparkDataTypeError,
 )
-from toolbox_pyspark.utils.warnings import ColumnDoesNotExistWarning
+from toolbox_pyspark.utils.warnings import (
+    ColumnDoesNotExistWarning,
+    InvalidPySparkDataTypeWarning,
+)
 
 
 # ---------------------------------------------------------------------------- #
@@ -70,6 +73,13 @@ __all__: str_list = [
     "warn_column_missing",
     "warn_columns_missing",
     "is_vaid_spark_type",
+    "assert_valid_spark_type",
+    "column_is_type",
+    "columns_are_type",
+    "assert_column_is_type",
+    "assert_columns_are_type",
+    "warn_column_invalid_type",
+    "warn_columns_invalid_type",
     "table_exists",
 ]
 
@@ -1032,6 +1042,38 @@ def assert_columns_are_type(
         raise InvalidPySparkDataTypeError(
             f"Columns {[col for col, _ in invalid_types]} are types {[typ for _, typ in invalid_types]}, "
             f"which are not the required type: '{datatype}'."
+        )
+
+
+@typechecked
+def warn_column_invalid_type(
+    dataframe: psDataFrame,
+    column: str,
+    datatype: str,
+    match_case: bool = False,
+) -> None:
+    result, invalid_types = _columns_are_type(dataframe, column, datatype, match_case)
+    if not result:
+        warn(
+            f"Column '{column}' is type '{invalid_types[0][1]}', "
+            f"which is not the required type: '{datatype}'.",
+            InvalidPySparkDataTypeWarning,
+        )
+
+
+@typechecked
+def warn_columns_invalid_type(
+    dataframe: psDataFrame,
+    columns: Union[str, str_collection],
+    datatype: str,
+    match_case: bool = False,
+) -> None:
+    result, invalid_types = _columns_are_type(dataframe, columns, datatype, match_case)
+    if not result:
+        warn(
+            f"Columns {[col for col, _ in invalid_types]} are types {[typ for _, typ in invalid_types]}, "
+            f"which are not the required type: '{datatype}'.",
+            InvalidPySparkDataTypeWarning,
         )
 
 
