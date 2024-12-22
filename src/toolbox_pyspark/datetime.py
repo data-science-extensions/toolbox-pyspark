@@ -48,10 +48,7 @@ from toolbox_python.collection_types import str_collection, str_list
 from typeguard import typechecked
 
 # ## Local First Party Imports ----
-from toolbox_pyspark.checks import (
-    assert_column_exists,
-    assert_columns_exists,
-)
+from toolbox_pyspark.checks import assert_column_exists, assert_columns_exists
 from toolbox_pyspark.columns import get_columns
 
 

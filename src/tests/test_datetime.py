@@ -316,8 +316,13 @@ class TestLocalDateTimeColumns(PySparkSetup):
 
 
 class TestSplitDateTimeColumns(PySparkSetup):
+
     def setUp(self) -> None:
         pass
+
+    def test_split_datetime_column_1(self) -> None:
+        with pytest.raises(TypeError):
+            split_datetime_column(self.ps_df_datetime, "b")
 
     def test_split_datetime_columns_1(self) -> None:
         """Basic check"""
@@ -429,3 +434,8 @@ class TestSplitDateTimeColumns(PySparkSetup):
             }
         )
         assert_df_equality(result, expected)
+
+    def test_split_datetime_columns_7(self) -> None:
+        """Single column, error"""
+        with pytest.raises(TypeError):
+            split_datetime_columns(self.ps_df_datetime, "b")
