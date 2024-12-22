@@ -355,7 +355,7 @@ def rename_datetime_columns(
             if col.lower().endswith("date") and f"{col}TIME" not in dataframe.columns
         ]
     elif is_type(columns, str):
-        columns = [columns]
+        columns = list(columns)
     assert_columns_exists(dataframe, columns, True)
     for column in columns:
         dataframe = rename_datetime_column(dataframe, column)
@@ -763,7 +763,7 @@ def add_local_datetime_columns(
     if columns is None or columns in ["all"]:
         columns = [col for col in dataframe.columns if col.lower().endswith("datetime")]
     elif is_type(columns, str):
-        columns = [columns]
+        columns = list(columns)
     assert_columns_exists(dataframe, list(columns) + [column_with_target_timezone])
     for column in columns:
         dataframe = add_local_datetime_column(
@@ -1029,7 +1029,7 @@ def split_datetime_columns(
     if columns is None or columns in ["all"]:
         columns = [col for col in dataframe.columns if "datetime" in col.lower()]
     elif is_type(columns, str):
-        columns = [columns]
+        columns = list(columns)
     assert_columns_exists(dataframe=dataframe, columns=columns)
     cols_exprs: dict[str, Column] = {}
     for column in columns:

@@ -410,7 +410,7 @@ def assert_columns_exists(
         !!! failure "Conclusion: Columns "c" and "d" does not exist."
         </div>
     """
-    columns = [columns] if is_type(columns, str) else columns
+    columns = list(columns) if is_type(columns, str) else columns
     (exist, missing_cols) = _columns_exists(dataframe, columns, match_case)
     if not exist:
         raise AttributeError(
@@ -568,7 +568,7 @@ def warn_columns_missing(
         !!! failure "Conclusion: Columns "c" and "d" does not exist."
         </div>
     """
-    columns = [columns] if is_type(columns, str) else columns
+    columns = list(columns) if is_type(columns, str) else columns
     (exist, missing_cols) = _columns_exists(dataframe, columns, match_case)
     if not exist:
         warn(

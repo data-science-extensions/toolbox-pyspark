@@ -454,7 +454,7 @@ def round_columns(
             col for col, typ in dataframe.dtypes if typ.split("(")[0] in VALID_TYPES
         ]
     elif is_type(columns, str):
-        columns = [columns]
+        columns = list(columns)
     assert_columns_exists(dataframe, columns)
     invalid_cols: list[tuple[str, str]] = [
         (col, typ.split("(")[0])

@@ -537,7 +537,7 @@ def cast_columns_to_type(
         - [`is_vaid_spark_type()`][toolbox_pyspark.checks.is_vaid_spark_type]
         - [`get_column_types()`][toolbox_pyspark.types.get_column_types]
     """
-    columns = [columns] if is_type(columns, str) else columns
+    columns = list(columns) if is_type(columns, str) else columns
     assert_columns_exists(dataframe, columns)
     datatype = _validate_pyspark_datatype(datatype=datatype)
     return dataframe.withColumns({col: F.col(col).cast(datatype) for col in columns})

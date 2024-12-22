@@ -325,7 +325,7 @@ def get_columns(
             else:
                 return dataframe.columns
         else:
-            return [columns]
+            return list(columns)
     else:
         return list(columns)
 
