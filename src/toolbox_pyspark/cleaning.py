@@ -1013,14 +1013,14 @@ def trim_spaces_from_column(
 
     ??? info "Notes"
 
-        ??? info "Justification"
+        ???+ info "Justification"
             - The main reason for this function is because when the data was exported from the Legacy WMS's, there's a _whole bunch_ of trailing spaces in the data fields. My theory is because of the data type in the source system. That is, if it's originally stored as 'char' type, then it will maintain the data length. This issues doesn't seem to be affecting the `varchar` fields. Nonetheless, this function will strip the white spaces from the data; thus reducing the total size of the data stored therein.
             - The reason why it is necessary to write this out as a custom function, instead of using the [`F.trim()`][trim] function from the PySpark library directly is due to the deficiencies of the Java [`trim()`](https://docs.oracle.com/javase/8/docs/api/java/lang/String.html#trim) function. More specifically, there are 13 different whitespace characters available in our ascii character set. The Java function only cleans about 6 of these. So therefore, we define this function which iterates through all 13 whitespace characters, and formats them in to a regular expression, to then parse it to the [`F.regexp_replace()`][regexp_replace] function to be replaced with an empty string (`""`). Therefore, all 13 characters will be replaced, the strings will be cleaned and trimmed ready for further processing.
 
             [trim]: https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.functions.trim.html
             [regexp_replace]: https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.functions.regexp_replace.html
 
-        ??? info "Regex definition: '^[...]+|[...]+$'
+        ???+ info "Regex definition: `^[...]+|[...]+$`"
             - 1st Alternative: '^[...]+'
                 - '^' asserts position at start of a line
                 - Match a single character present in the list below '[...]'
