@@ -62,6 +62,8 @@ __all__: str_list = [
     "VALID_PYSPARK_TYPES",
     "VALID_PYSPARK_TYPE_NAMES",
     "ALL_PYSPARK_TYPES",
+    "VALID_PYAPARK_JOIN_TYPES",
+    "ALL_PYSPARK_JOIN_TYPES",
     "LITERAL_PANDAS_DATAFRAME_NAMES",
     "LITERAL_PYSPARK_DATAFRAME_NAMES",
     "LITERAL_NUMPY_ARRAY_NAMES",
@@ -90,7 +92,7 @@ __all__: str_list = [
 
 # For full list of characters: https://en.wikipedia.org/wiki/Whitespace_character
 # in the below tuples: ('name','unicode','ascii')
-ALL_WHITESPACE_CHARACTERS = [
+ALL_WHITESPACE_CHARACTERS: list[tuple[str, str, int]] = [
     ("character tabulation", "U+0009", 9),
     ("line feed", "U+000A", 10),
     ("line tabulation", "U+000B", 11),
@@ -166,6 +168,28 @@ ALL_PYSPARK_TYPES = Union[
     T.MapType,
     T.StructType,
 ]
+
+VALID_PYAPARK_JOIN_TYPES = Literal[
+    "inner",
+    "cross",
+    "outer",
+    "full",
+    "fullouter",
+    "full_outer",
+    "left",
+    "leftouter",
+    "left_outer",
+    "right",
+    "rightouter",
+    "right_outer",
+    "semi",
+    "leftsemi",
+    "left_semi",
+    "anti",
+    "leftanti",
+    "left_anti",
+]
+ALL_PYSPARK_JOIN_TYPES = set(get_args(VALID_PYAPARK_JOIN_TYPES))
 
 
 # ---------------------------------------------------------------------------- #
