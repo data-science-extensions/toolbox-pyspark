@@ -103,7 +103,7 @@ def add_key_from_columns(
         TypeError:
             If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
         ColumnDoesNotExistError:
-            If any of the `columns` do not exist within `dataframe.columns`.
+            If any of the `#!py columns` do not exist within `#!py dataframe.columns`.
 
     Returns:
         (psDataFrame):
@@ -258,7 +258,7 @@ def add_keys_from_columns(
         TypeError:
             If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
         ColumnDoesNotExistError:
-            If any of the `columns` do not exist within `dataframe.columns`.
+            If any of the `#!py columns` do not exist within `#!py dataframe.columns`.
 
     Returns:
         (psDataFrame):

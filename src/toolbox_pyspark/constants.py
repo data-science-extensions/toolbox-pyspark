@@ -39,13 +39,13 @@
 
 # ## Python StdLib Imports ----
 from functools import partial
-from typing import Union
+from typing import Literal, Union, get_args
 from warnings import warn
 
 # ## Python Third Party Imports ----
 from pyspark.sql import types as T
 from pyspark.sql.types import _all_atomic_types as pyspark_atomic_types
-from toolbox_python.collection_types import str_list
+from toolbox_python.collection_types import str_list, str_set
 
 # ## Local First Party Imports ----
 from toolbox_pyspark.utils.whitespaces import WhitespaceCharacters, WhitespaceChatacter
@@ -55,12 +55,19 @@ from toolbox_pyspark.utils.whitespaces import WhitespaceCharacters, WhitespaceCh
 #  Exports                                                                  ####
 # ---------------------------------------------------------------------------- #
 
+
 __all__: str_list = [
     "ALL_WHITESPACE_CHARACTERS",
     "WHITESPACE_CHARACTERS",
     "VALID_PYSPARK_TYPES",
     "VALID_PYSPARK_TYPE_NAMES",
     "ALL_PYSPARK_TYPES",
+    "VALID_PYAPARK_JOIN_TYPES",
+    "ALL_PYSPARK_JOIN_TYPES",
+    "LITERAL_PANDAS_DATAFRAME_NAMES",
+    "LITERAL_PYSPARK_DATAFRAME_NAMES",
+    "LITERAL_NUMPY_ARRAY_NAMES",
+    "LITERAL_LIST_OBJECT_NAMES",
     "VALID_PANDAS_DATAFRAME_NAMES",
     "VALID_PYSPARK_DATAFRAME_NAMES",
     "VALID_NUMPY_ARRAY_NAMES",
@@ -85,7 +92,7 @@ __all__: str_list = [
 
 # For full list of characters: https://en.wikipedia.org/wiki/Whitespace_character
 # in the below tuples: ('name','unicode','ascii')
-ALL_WHITESPACE_CHARACTERS = [
+ALL_WHITESPACE_CHARACTERS: list[tuple[str, str, int]] = [
     ("character tabulation", "U+0009", 9),
     ("line feed", "U+000A", 10),
     ("line tabulation", "U+000B", 11),
@@ -162,13 +169,35 @@ ALL_PYSPARK_TYPES = Union[
     T.StructType,
 ]
 
+VALID_PYAPARK_JOIN_TYPES = Literal[
+    "inner",
+    "cross",
+    "outer",
+    "full",
+    "fullouter",
+    "full_outer",
+    "left",
+    "leftouter",
+    "left_outer",
+    "right",
+    "rightouter",
+    "right_outer",
+    "semi",
+    "leftsemi",
+    "left_semi",
+    "anti",
+    "leftanti",
+    "left_anti",
+]
+ALL_PYSPARK_JOIN_TYPES = set(get_args(VALID_PYAPARK_JOIN_TYPES))
+
 
 # ---------------------------------------------------------------------------- #
 #  DataFrames                                                               ####
 # ---------------------------------------------------------------------------- #
 
 
-VALID_PANDAS_DATAFRAME_NAMES: str_list = [
+LITERAL_PANDAS_DATAFRAME_NAMES = Literal[
     "pandas.DataFrame",
     "pandas",
     "pd.DataFrame",
@@ -179,7 +208,7 @@ VALID_PANDAS_DATAFRAME_NAMES: str_list = [
     "pd",
 ]
 
-VALID_PYSPARK_DATAFRAME_NAMES: str_list = [
+LITERAL_PYSPARK_DATAFRAME_NAMES = Literal[
     "spark.DataFrame",
     "pyspark.DataFrame",
     "pyspark",
@@ -192,7 +221,7 @@ VALID_PYSPARK_DATAFRAME_NAMES: str_list = [
     "ps",
 ]
 
-VALID_NUMPY_ARRAY_NAMES: str_list = [
+LITERAL_NUMPY_ARRAY_NAMES = Literal[
     "numpy.array",
     "np.array",
     "np",
@@ -203,10 +232,15 @@ VALID_NUMPY_ARRAY_NAMES: str_list = [
     "np.a",
 ]
 
-VALID_LIST_OBJECT_NAMES: str_list = ["list", "lst", "l", "flat_list", "flatten_list"]
+LITERAL_LIST_OBJECT_NAMES = Literal["list", "lst", "l", "flat_list", "flatten_list"]
 
-VALID_DATAFRAME_NAMES: str_list = (
-    VALID_PANDAS_DATAFRAME_NAMES + VALID_PYSPARK_DATAFRAME_NAMES
+VALID_PANDAS_DATAFRAME_NAMES = set(get_args(LITERAL_PANDAS_DATAFRAME_NAMES))
+VALID_PYSPARK_DATAFRAME_NAMES = set(get_args(LITERAL_PYSPARK_DATAFRAME_NAMES))
+VALID_NUMPY_ARRAY_NAMES = set(get_args(LITERAL_NUMPY_ARRAY_NAMES))
+VALID_LIST_OBJECT_NAMES = set(get_args(LITERAL_LIST_OBJECT_NAMES))
+
+VALID_DATAFRAME_NAMES: str_set = VALID_PANDAS_DATAFRAME_NAMES.union(
+    VALID_PYSPARK_DATAFRAME_NAMES
 )
 
 
