@@ -553,7 +553,7 @@ class TestCleanOneTableFromAnotherTable(PySparkSetup):
         result = drop_matching_rows(
             left_table=self.left_table,
             right_table=self.right_table,
-            keys=["a"],
+            on_keys=["a"],
         )
         expected = self.left_table.where("a not in ('1','2')")
         assert_df_equality(result, expected)
@@ -563,7 +563,7 @@ class TestCleanOneTableFromAnotherTable(PySparkSetup):
         result = drop_matching_rows(
             left_table=self.left_table,
             right_table=self.right_table,
-            keys="a",
+            on_keys="a",
         )
         expected = self.left_table.where("a not in ('1','2')")
         assert_df_equality(result, expected)
@@ -573,7 +573,7 @@ class TestCleanOneTableFromAnotherTable(PySparkSetup):
         result = drop_matching_rows(
             left_table=self.left_table,
             right_table=self.right_table,
-            keys=["a", "b"],
+            on_keys=["a", "b"],
         )
         expected = self.left_table.where("a not in ('1','2')")
         assert_df_equality(result, expected)
@@ -583,7 +583,7 @@ class TestCleanOneTableFromAnotherTable(PySparkSetup):
         result = self.left_table.transform(
             func=drop_matching_rows,
             right_table=self.right_table,
-            keys=["a"],
+            on_keys=["a"],
             where_clause="n <> 'd'",
         )
         expected = self.left_table.where("a not in ('1','2') and n <> 'd'")

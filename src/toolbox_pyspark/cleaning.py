@@ -65,6 +65,7 @@ from toolbox_pyspark.constants import (
     VALID_LIST_OBJECT_NAMES,
     VALID_NUMPY_ARRAY_NAMES,
     VALID_PANDAS_DATAFRAME_NAMES,
+    VALID_PYAPARK_JOIN_TYPES,
     VALID_PYSPARK_DATAFRAME_NAMES,
     WHITESPACE_CHARACTERS as WHITESPACES,
 )
@@ -1746,8 +1747,8 @@ def apply_function_to_columns(
 def drop_matching_rows(
     left_table: psDataFrame,
     right_table: psDataFrame,
-    keys: str_collection,
-    join_type: str = "left_anti",
+    on_keys: Union[str, str_collection],
+    join_type: VALID_PYAPARK_JOIN_TYPES = "left_anti",
     where_clause: Optional[str] = None,
 ) -> psDataFrame:
     """
@@ -1763,10 +1764,10 @@ def drop_matching_rows(
         left_table (psDataFrame):
             The DataFrame _from which_ you will be deleting the records.
         right_table (psDataFrame):
-            The DataFrame _from which_ to check for existing records. If any matching `keys` are existing on both the `right_table` and the `left_table`, then those records will be deleted from the `left_table`.
-        keys (Union[str, List[str], Tuple[str, ...]]):
+            The DataFrame _from which_ to check for existing records. If any matching `on_keys` are existing on both the `right_table` and the `left_table`, then those records will be deleted from the `left_table`.
+        on_keys (Union[str, str_collection]):
             The matching keys between the two tables. These keys (aka columns) must be existing on both the `left_table` and the `right_table`.
-        join_type (str, optional):
+        join_type (VALID_PYAPARK_JOIN_TYPES, optional):
             The type of join to use for this process. For the best performance, keep it as the default value.<br>
             Defaults to `#!py "left_anti"`.
         where_clause (Optional[str], optional):
@@ -1945,9 +1946,12 @@ def drop_matching_rows(
     ??? tip "See Also"
         - [`assert_columns_exists()`][toolbox_pyspark.checks.assert_columns_exists]
     """
+    on_keys = [on_keys] if is_type(on_keys, str) else on_keys
+    assert_columns_exists(left_table, on_keys, False)
+    assert_columns_exists(right_table, on_keys, False)
     return (
         left_table.alias("left")
-        .join(right_table.alias("right"), on=keys, how=join_type)
+        .join(right_table.alias("right"), on=on_keys, how=join_type)
         .where("1=1" if where_clause is None else where_clause)
         .select([f"left.{col}" for col in left_table.columns])
     )
