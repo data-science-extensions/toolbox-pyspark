@@ -98,7 +98,7 @@ def rename_datetime_column(
         TypeError:
             If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
         ColumnDoesNotExistError:
-            If `column` does not exist within `#!py dataframe.columns`.
+            If the `#!py column` does not exist within `#!py dataframe.columns`.
 
     Returns:
         (psDataFrame):
@@ -215,7 +215,7 @@ def rename_datetime_columns(
         TypeError:
             If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
         ColumnDoesNotExistError:
-            If the `columns` do not exist within `#!py dataframe.columns`.
+            If any of the `#!py columns` do not exist within `#!py dataframe.columns`.
 
     Returns:
         (psDataFrame):
@@ -581,7 +581,7 @@ def add_local_datetime_columns(
         TypeError:
             If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
         ColumnDoesNotExistError:
-            If the `columns` do not exist within `#!py dataframe.columns`.
+            If any of the `#!py columns` do not exist within `#!py dataframe.columns`.
         ValueError:
             If the `from_timezone` or `column_with_target_timezone` is not a valid timezone.
 
@@ -794,7 +794,7 @@ def split_datetime_column(
         TypeError:
             If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
         ColumnDoesNotExistError:
-            If `column` does not exist within `#!py dataframe.columns`.
+            If the `#!py column` does not exist within `#!py dataframe.columns`.
         TypeError:
             If the `column` is not type `timestamp` or `datetime`.
 
@@ -929,7 +929,7 @@ def split_datetime_columns(
         TypeError:
             If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
         ColumnDoesNotExistError:
-            If the `columns` do not exist within `#!py dataframe.columns`.
+            If any of the `#!py columns` do not exist within `#!py dataframe.columns`.
         TypeError:
             If any of the columns in `columns` are not type `timestamp` or `datetime`.
 

@@ -1025,6 +1025,12 @@ def delete_columns(
 
             Defaults to `#!py "pass"`.
 
+    Raises:
+        TypeError:
+            If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
+        ColumnDoesNotExistError:
+            If any of the `#!py columns` do not exist within `#!py dataframe.columns`.
+
     Returns:
         (psDataFrame):
             The updated `#!py dataframe`, with the columns listed in `#!py columns` having been removed.

@@ -280,7 +280,7 @@ def cast_column_to_type(
         TypeError:
             If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
         ColumnDoesNotExistError:
-            If `#!py column` does not exist within `#!py dataframe.columns`.
+            If the `#!py column` does not exist within `#!py dataframe.columns`.
         ParseException:
             If the given `#!py datatype` is not a valid PySpark DataType.
 
