@@ -1261,8 +1261,8 @@ def trim_spaces_from_columns(
 def apply_function_to_column(
     dataframe: psDataFrame,
     column: str,
-    *function_args,
     function: str = "upper",
+    *function_args,
     **function_kwargs,
 ) -> psDataFrame:
     """
@@ -1501,8 +1501,8 @@ def apply_function_to_column(
 def apply_function_to_columns(
     dataframe: psDataFrame,
     columns: Union[str, str_collection],
-    *function_args,
     function: str = "upper",
+    *function_args,
     **function_kwargs,
 ) -> psDataFrame:
     """
