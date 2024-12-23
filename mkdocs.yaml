@@ -49,6 +49,7 @@ nav:
       - Roadmap: usage/roadmap.md
   - Modules:
       - code/index.md
+      - Constants: code/constants.md
       - IO: code/io.md
       - Checks: code/checks.md
       - Types: code/types.md
