@@ -8,22 +8,22 @@ There are 12 modules used in this package, which covers 41 functions
 
 ### Module Descriptions
 
-| Module                                      | Description |
-|---------------------------------------------|-------------|
-| [`constants`][toolbox_pyspark.constants]    | The `constants` module is used to hold the definitions of all constant values used across the package.
-| [`io`][toolbox_pyspark.io]                  | The `io` module is used for reading and writing tables to/from directories.
-| [`checks`][toolbox_pyspark.checks]          | The `checks` module is used to check and validate various attributed about a given `pyspark` dataframe.
-| [`types`][toolbox_pyspark.types]            | The `types` module is used to get, check, and change a datafames column data types.
-| [`keys`][toolbox_pyspark.keys]              | The `keys` module is used for creating new columns to act as keys (primary and foreign), to be used for joins with other tables, or to create relationships within downstream applications, like PowerBI.
-| [`scale`][toolbox_pyspark.scale]            | The `scale` module is used for rounding a column (or columns) to a given rounding accuracy.
-| [`dimensions`][toolbox_pyspark.dimensions]  | The `dimensions` module is used for checking the dimensions of `pyspark` `dataframe`'s.
-| [`columns`][toolbox_pyspark.columns]        | The `columns` module is used to fetch columns from a given DataFrame using convenient syntax.
-| [`datetime`][toolbox_pyspark.datetime]      | The `datetime` module is used for fixing column names that contain datetime data, adding conversions to local datetimes, and for splitting a column in to their date and time components.
-| [`cleaning`][toolbox_pyspark.cleaning]      | The `cleaning` module is used to clean, fix, and fetch various aspects on a given DataFrame.
-| [`duplication][toolbox_pyspark.duplication] | The `duplication` module is used for duplicating data from an existing `dataframe`, or unioning multiple `dataframe`'s together.
+| Module                                       | Description |
+|----------------------------------------------|-------------|
+| [`constants`][toolbox_pyspark.constants]     | The `constants` module is used to hold the definitions of all constant values used across the package.
+| [`io`][toolbox_pyspark.io]                   | The `io` module is used for reading and writing tables to/from directories.
+| [`checks`][toolbox_pyspark.checks]           | The `checks` module is used to check and validate various attributed about a given `pyspark` dataframe.
+| [`types`][toolbox_pyspark.types]             | The `types` module is used to get, check, and change a datafames column data types.
+| [`keys`][toolbox_pyspark.keys]               | The `keys` module is used for creating new columns to act as keys (primary and foreign), to be used for joins with other tables, or to create relationships within downstream applications, like PowerBI.
+| [`scale`][toolbox_pyspark.scale]             | The `scale` module is used for rounding a column (or columns) to a given rounding accuracy.
+| [`dimensions`][toolbox_pyspark.dimensions]   | The `dimensions` module is used for checking the dimensions of `pyspark` `dataframe`'s.
+| [`columns`][toolbox_pyspark.columns]         | The `columns` module is used to fetch columns from a given DataFrame using convenient syntax.
+| [`datetime`][toolbox_pyspark.datetime]       | The `datetime` module is used for fixing column names that contain datetime data, adding conversions to local datetimes, and for splitting a column in to their date and time components.
+| [`cleaning`][toolbox_pyspark.cleaning]       | The `cleaning` module is used to clean, fix, and fetch various aspects on a given DataFrame.
+| [`duplication`][toolbox_pyspark.duplication] | The `duplication` module is used for duplicating data from an existing `dataframe`, or unioning multiple `dataframe`'s together.
 <!--
-| [`delta`][toolbox_pyspark.delta]            | The `delta` module is for various processes related to Delta Lake tables. Including optimising tables, merging tables, retrieving table history, and transferring between locations.
-| [`schema`][toolbox_pyspark.schema]          | The `schema` module is used for checking, validating, and viewing any schema differences between two different tables, either from in-memory variables, or pointing to locations on disk.
+| [`delta`][toolbox_pyspark.delta]             | The `delta` module is for various processes related to Delta Lake tables. Including optimising tables, merging tables, retrieving table history, and transferring between locations.
+| [`schema`][toolbox_pyspark.schema]           | The `schema` module is used for checking, validating, and viewing any schema differences between two different tables, either from in-memory variables, or pointing to locations on disk.
 -->
 
 
