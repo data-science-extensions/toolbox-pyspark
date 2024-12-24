@@ -1,17 +1,17 @@
-| Module                                     | Completed | Issue | Milestone |
-|--------------------------------------------|-----------|-------|-----------|
-| [`io`][toolbox_pyspark.io]                 | ✅ | [![][issue-shield-io]][issue-url-io]                   | [![][milestone-shield-io]][milestone-url-io]                   |
-| [`checks`][toolbox_pyspark.checks]         | ✅ | [![][issue-shield-checks]][issue-url-checks]           | [![][milestone-shield-checks]][milestone-url-checks]           |
-| [`types`][toolbox_pyspark.types]           | ✅ | [![][issue-shield-types]][issue-url-types]             | [![][milestone-shield-types]][milestone-url-types]             |
-| [`keys`][toolbox_pyspark.keys]             | ✅ | [![][issue-shield-keys]][issue-url-keys]               | [![][milestone-shield-keys]][milestone-url-keys]               |
-| [`scale`][toolbox_pyspark.scale]           | ✅ | [![][issue-shield-scale]][issue-url-scale]             | [![][milestone-shield-scale]][milestone-url-scale]             |
-| [`dimensions`][toolbox_pyspark.dimensions] | ✅ | [![][issue-shield-dimensions]][issue-url-dimensions]   | [![][milestone-shield-dimensions]][milestone-url-dimensions]   |
-| [`columns`][toolbox_pyspark.columns]       | ✅ | [![][issue-shield-columns]][issue-url-columns]         | [![][milestone-shield-columns]][milestone-url-columns]         |
-| [`datetime`][toolbox_pyspark.datetime]     | ✅ | [![][issue-shield-datetime]][issue-url-datetime]       | [![][milestone-shield-datetime]][milestone-url-datetime]       |
-| [`cleaning`][toolbox_pyspark.cleaning]     | ✅ | [![][issue-shield-cleaning]][issue-url-cleaning]       | [![][milestone-shield-cleaning]][milestone-url-cleaning]       |
-| `delta`                                    | ⬜ | [![][issue-shield-delta]][issue-url-delta]             | [![][milestone-shield-delta]][milestone-url-delta]             |
-| `duplication`                              | ⬜ | [![][issue-shield-duplication]][issue-url-duplication] | [![][milestone-shield-duplication]][milestone-url-duplication] |
-| `schema`                                   | ⬜ | [![][issue-shield-schema]][issue-url-schema]           | [![][milestone-shield-schema]][milestone-url-schema]           |
+| Module                                       | Completed | Issue | Milestone |
+|----------------------------------------------|-----------|-------|-----------|
+| [`io`][toolbox_pyspark.io]                   | ✅ | [![][issue-shield-io]][issue-url-io]                   | [![][milestone-shield-io]][milestone-url-io]                   |
+| [`checks`][toolbox_pyspark.checks]           | ✅ | [![][issue-shield-checks]][issue-url-checks]           | [![][milestone-shield-checks]][milestone-url-checks]           |
+| [`types`][toolbox_pyspark.types]             | ✅ | [![][issue-shield-types]][issue-url-types]             | [![][milestone-shield-types]][milestone-url-types]             |
+| [`keys`][toolbox_pyspark.keys]               | ✅ | [![][issue-shield-keys]][issue-url-keys]               | [![][milestone-shield-keys]][milestone-url-keys]               |
+| [`scale`][toolbox_pyspark.scale]             | ✅ | [![][issue-shield-scale]][issue-url-scale]             | [![][milestone-shield-scale]][milestone-url-scale]             |
+| [`dimensions`][toolbox_pyspark.dimensions]   | ✅ | [![][issue-shield-dimensions]][issue-url-dimensions]   | [![][milestone-shield-dimensions]][milestone-url-dimensions]   |
+| [`columns`][toolbox_pyspark.columns]         | ✅ | [![][issue-shield-columns]][issue-url-columns]         | [![][milestone-shield-columns]][milestone-url-columns]         |
+| [`datetime`][toolbox_pyspark.datetime]       | ✅ | [![][issue-shield-datetime]][issue-url-datetime]       | [![][milestone-shield-datetime]][milestone-url-datetime]       |
+| [`cleaning`][toolbox_pyspark.cleaning]       | ✅ | [![][issue-shield-cleaning]][issue-url-cleaning]       | [![][milestone-shield-cleaning]][milestone-url-cleaning]       |
+| [`duplication`][toolbox_pyspark.duplication] | ✅ | [![][issue-shield-duplication]][issue-url-duplication] | [![][milestone-shield-duplication]][milestone-url-duplication] |
+| `delta`                                      | ⬜ | [![][issue-shield-delta]][issue-url-delta]             | [![][milestone-shield-delta]][milestone-url-delta]             |
+| `schema`                                     | ⬜ | [![][issue-shield-schema]][issue-url-schema]           | [![][milestone-shield-schema]][milestone-url-schema]           |
 
 [issue-shield-io]: https://img.shields.io/github/issues/detail/state/data-science-extensions/toolbox-pyspark/7
 [issue-shield-checks]: https://img.shields.io/github/issues/detail/state/data-science-extensions/toolbox-pyspark/14
