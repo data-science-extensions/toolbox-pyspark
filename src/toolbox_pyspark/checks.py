@@ -296,7 +296,7 @@ def assert_column_exists(
         TypeError:
             If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
         ColumnDoesNotExistError:
-            If `#!py column` does not exist within `#!py dataframe.columns`.
+            If the `#!py column` does not exist within `#!py dataframe.columns`.
 
     Returns:
         (type(None)):
@@ -371,7 +371,7 @@ def assert_columns_exists(
         TypeError:
             If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
         ColumnDoesNotExistError:
-            If the `#!py columns` do not exist within `#!py dataframe.columns`.
+            If any of the `#!py columns` do not exist within `#!py dataframe.columns`.
 
     Returns:
         (type(None)):

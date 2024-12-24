@@ -64,10 +64,6 @@ There are 12 modules used in this package, which covers 41 functions
 |                                            | [`add_local_datetime_column()`][toolbox_pyspark.datetime.add_local_datetime_column] |
 |                                            | [`split_datetime_column()`][toolbox_pyspark.datetime.split_datetime_column] |
 |                                            | [`split_datetime_columns()`][toolbox_pyspark.datetime.split_datetime_columns] |
-<!--
-| [`schema`][toolbox_pyspark.schema]         | [`view_schema_differences()`][toolbox_pyspark.schema.view_schema_differences] |
-|                                            | [`check_schemas_match()`][toolbox_pyspark.schema.check_schemas_match] |
-|                                            | |
 | [`cleaning`][toolbox_pyspark.cleaning]     | [`create_empty_dataframe()`][toolbox_pyspark.cleaning.create_empty_dataframe] |
 |                                            | [`keep_first_record_by_columns()`][toolbox_pyspark.cleaning.keep_first_record_by_columns] |
 |                                            | [`convert_dataframe()`][toolbox_pyspark.cleaning.convert_dataframe] |
@@ -78,6 +74,10 @@ There are 12 modules used in this package, which covers 41 functions
 |                                            | [`apply_function_to_column()`][toolbox_pyspark.cleaning.apply_function_to_column] |
 |                                            | [`apply_function_to_columns()`][toolbox_pyspark.cleaning.apply_function_to_columns] |
 |                                            | [`drop_matching_rows()`][toolbox_pyspark.cleaning.drop_matching_rows] |
+<!--
+| [`schema`][toolbox_pyspark.schema]         | [`view_schema_differences()`][toolbox_pyspark.schema.view_schema_differences] |
+|                                            | [`check_schemas_match()`][toolbox_pyspark.schema.check_schemas_match] |
+|                                            | |
 |                                            | |
 | [`constants`][toolbox_pyspark.constants]   | |
 |                                            | |
