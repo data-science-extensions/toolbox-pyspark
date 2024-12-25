@@ -258,9 +258,7 @@ def round_column(
         </div>
     """
     assert_column_exists(dataframe, column)
-    col_type: str = [
-        typ.split("(")[0] for col, typ in dataframe.dtypes if col == column
-    ][0]
+    col_type: str = [typ.split("(")[0] for col, typ in dataframe.dtypes if col == column][0]
     if col_type not in VALID_TYPES:
         raise TypeError(
             f"Column is not the correct type. Please check.\n"
@@ -450,9 +448,7 @@ def round_columns(
         </div>
     """
     if columns is None or columns in ["all", "all_float"]:
-        columns = [
-            col for col, typ in dataframe.dtypes if typ.split("(")[0] in VALID_TYPES
-        ]
+        columns = [col for col, typ in dataframe.dtypes if typ.split("(")[0] in VALID_TYPES]
     elif is_type(columns, str):
         columns = [columns]
     assert_columns_exists(dataframe, columns)

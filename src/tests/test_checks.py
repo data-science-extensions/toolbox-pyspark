@@ -297,10 +297,7 @@ class TestColumnTypes(PySparkSetup):
         match_case: Optional[bool] = None,
     ) -> None:
         if is_type(expected, bool) and match_case:
-            assert (
-                column_is_type(self.ps_df_types, column, datatype, match_case)
-                == expected
-            )
+            assert column_is_type(self.ps_df_types, column, datatype, match_case) == expected
         elif is_type(expected, bool):
             assert column_is_type(self.ps_df_types, column, datatype) == expected
         elif expected == "raises_column" and match_case:
@@ -346,8 +343,7 @@ class TestColumnTypes(PySparkSetup):
     ) -> None:
         if is_type(expected, bool) and match_case:
             assert (
-                columns_are_type(self.ps_df_types, columns, datatype, match_case)
-                == expected
+                columns_are_type(self.ps_df_types, columns, datatype, match_case) == expected
             )
         elif is_type(expected, bool):
             assert columns_are_type(self.ps_df_types, columns, datatype) == expected
@@ -399,8 +395,7 @@ class TestColumnTypes(PySparkSetup):
                 assert_column_is_type(self.ps_df_types, column, datatype)
         elif match_case:
             assert (
-                assert_column_is_type(self.ps_df_types, column, datatype, match_case)
-                is None
+                assert_column_is_type(self.ps_df_types, column, datatype, match_case) is None
             )
         else:
             assert assert_column_is_type(self.ps_df_types, column, datatype) is None
@@ -504,14 +499,10 @@ class TestColumnTypes(PySparkSetup):
         match_case: Optional[bool] = None,
     ) -> None:
         if expected is None:
-            assert (
-                warn_columns_invalid_type(self.ps_df_types, columns, datatype) is None
-            )
+            assert warn_columns_invalid_type(self.ps_df_types, columns, datatype) is None
         elif expected == "raises_column" and match_case:
             with pytest.raises(ColumnDoesNotExistError):
-                warn_columns_invalid_type(
-                    self.ps_df_types, columns, datatype, match_case
-                )
+                warn_columns_invalid_type(self.ps_df_types, columns, datatype, match_case)
         elif expected == "raises_column":
             with pytest.raises(ColumnDoesNotExistError):
                 warn_columns_invalid_type(self.ps_df_types, columns, datatype)

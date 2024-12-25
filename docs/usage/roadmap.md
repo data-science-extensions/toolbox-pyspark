@@ -10,8 +10,8 @@
 | [`datetime`][toolbox_pyspark.datetime]       | ✅ | [![][issue-shield-datetime]][issue-url-datetime]       | [![][milestone-shield-datetime]][milestone-url-datetime]       |
 | [`cleaning`][toolbox_pyspark.cleaning]       | ✅ | [![][issue-shield-cleaning]][issue-url-cleaning]       | [![][milestone-shield-cleaning]][milestone-url-cleaning]       |
 | [`duplication`][toolbox_pyspark.duplication] | ✅ | [![][issue-shield-duplication]][issue-url-duplication] | [![][milestone-shield-duplication]][milestone-url-duplication] |
+| [`schema`][toolbox_pyspark.schema]           | ✅ | [![][issue-shield-schema]][issue-url-schema]           | [![][milestone-shield-schema]][milestone-url-schema]           |
 | `delta`                                      | ⬜ | [![][issue-shield-delta]][issue-url-delta]             | [![][milestone-shield-delta]][milestone-url-delta]             |
-| `schema`                                     | ⬜ | [![][issue-shield-schema]][issue-url-schema]           | [![][milestone-shield-schema]][milestone-url-schema]           |
 
 [issue-shield-io]: https://img.shields.io/github/issues/detail/state/data-science-extensions/toolbox-pyspark/7
 [issue-shield-checks]: https://img.shields.io/github/issues/detail/state/data-science-extensions/toolbox-pyspark/14

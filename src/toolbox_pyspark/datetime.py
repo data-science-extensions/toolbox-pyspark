@@ -516,9 +516,7 @@ def add_local_datetime_column(
         - [`assert_columns_exists()`][toolbox_pyspark.checks.assert_columns_exists]
         - [`add_local_datetime_columns()`][toolbox_pyspark.datetime.add_local_datetime_columns]
     """
-    assert_columns_exists(
-        dataframe=dataframe, columns=[column, column_with_target_timezone]
-    )
+    assert_columns_exists(dataframe=dataframe, columns=[column, column_with_target_timezone])
     require_utc: bool = f"{column}_UTC" not in dataframe.columns
     require_local: bool = f"{column}_LOCAL" not in dataframe.columns
     if from_timezone is not None:
@@ -894,9 +892,7 @@ def split_datetime_column(
         )
     col_date_name: str = column.upper().replace("DATETIME", "DATE")
     col_time_name: str = column.upper().replace("DATETIME", "TIME")
-    col_date_value: Column = (
-        F.date_format(column, "yyyy-MM-dd").cast("string").cast("date")
-    )
+    col_date_value: Column = F.date_format(column, "yyyy-MM-dd").cast("string").cast("date")
     col_time_value: Column = F.date_format(column, "HH:mm:ss").cast("string")
     return dataframe.withColumns(
         {

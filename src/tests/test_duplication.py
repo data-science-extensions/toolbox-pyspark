@@ -16,10 +16,7 @@ from chispa.dataframe_comparer import assert_df_equality
 # ## Local First Party Imports ----
 from tests.setup import PySparkSetup
 from toolbox_pyspark.dimensions import get_dims
-from toolbox_pyspark.duplication import (
-    duplicate_union_dataframe,
-    union_all,
-)
+from toolbox_pyspark.duplication import duplicate_union_dataframe, union_all
 
 
 # ---------------------------------------------------------------------------- #

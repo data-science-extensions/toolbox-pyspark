@@ -34,6 +34,7 @@ theme:
     - toc.follow
     - content.action.edit
     - content.action.view
+    - content.code.annotate
   logo: ./assets/images/spark.svg
   icon:
     repo: material/gitlab
@@ -60,6 +61,7 @@ nav:
       - DateTime: code/datetime.md
       - Cleaning: code/cleaning.md
       - Duplication: code/duplication.md
+      - Schema: code/schema.md
 
 
 markdown_extensions:

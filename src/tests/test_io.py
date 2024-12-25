@@ -235,7 +235,5 @@ class TestReadingAndWriting(PySparkSetup):
         result: psDataFrame = table
         expected: psDataFrame = self.ps_df_extended
         assert_df_equality(result, expected, ignore_nullable=True)
-        partitions: list[str] = os.listdir(
-            f"{self.write_path}/ps_df_extended_transferred2"
-        )
+        partitions: list[str] = os.listdir(f"{self.write_path}/ps_df_extended_transferred2")
         assert len([obj for obj in partitions if "=" in obj]) > 0

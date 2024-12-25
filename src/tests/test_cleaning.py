@@ -186,9 +186,7 @@ class TestGetColumnValues(PySparkSetup):
     def test_get_column_values_1(self) -> None:
         result = get_column_values(self.ps_df_extended, "c")
         expected = (
-            self.ps_df_extended.select("c")
-            .filter("c is not null and c <> ''")
-            .distinct()
+            self.ps_df_extended.select("c").filter("c is not null and c <> ''").distinct()
         )
         expected = convert_dataframe(expected, "pd")
         pd.testing.assert_frame_equal(result, expected)
@@ -277,22 +275,14 @@ class TestTrimSpacesFromListOfColumns(PySparkSetup):
     def test_trim_spaces_from_columns_4(self) -> None:
         """Multiple columns"""
         result = trim_spaces_from_columns(self.ps_df_trimming, ["d", "e"])
-        expected = self.ps_df_trimming.withColumns(
-            {col: F.trim(col) for col in ["d", "e"]}
-        )
+        expected = self.ps_df_trimming.withColumns({col: F.trim(col) for col in ["d", "e"]})
         assert_df_equality(result, expected)
 
     def test_trim_spaces_from_columns_5(self) -> None:
         """Default params"""
         result = trim_spaces_from_columns(self.ps_df_trimming)
-        expected = self.ps_df_trimming.withColumn(
-            "a", F.col("a").cast("string")
-        ).withColumns(
-            {
-                col: F.trim(col)
-                for col, typ in self.ps_df_trimming.dtypes
-                if typ == "string"
-            }
+        expected = self.ps_df_trimming.withColumn("a", F.col("a").cast("string")).withColumns(
+            {col: F.trim(col) for col, typ in self.ps_df_trimming.dtypes if typ == "string"}
         )
         assert_df_equality(result, expected)
 
@@ -332,14 +322,8 @@ class TestTrimSpacesFromListOfColumns(PySparkSetup):
             self.ps_df_trimming.withColumn("a", F.col("a").cast("string")),
             columns=columns,
         )
-        expected = self.ps_df_trimming.withColumn(
-            "a", F.col("a").cast("string")
-        ).withColumns(
-            {
-                col: F.trim(col)
-                for col, typ in self.ps_df_trimming.dtypes
-                if typ == "string"
-            }
+        expected = self.ps_df_trimming.withColumn("a", F.col("a").cast("string")).withColumns(
+            {col: F.trim(col) for col, typ in self.ps_df_trimming.dtypes if typ == "string"}
         )
         assert_df_equality(result, expected)
 
