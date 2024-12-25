@@ -110,7 +110,7 @@ def duplicate_union_dataframe(
         >>> # Imports
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
-        >>> from toolbox_python.duplication import duplicate_union_dataframe
+        >>> from toolbox_pyspark.duplication import duplicate_union_dataframe
         >>>
         >>> # Instantiate Spark
         >>> spark = SparkSession.builder.getOrCreate()
@@ -299,7 +299,7 @@ def union_all(dfs: list[psDataFrame]) -> psDataFrame:
         >>> # Imports
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
-        >>> from toolbox_python.duplication import duplicate_union_dataframe
+        >>> from toolbox_pyspark.duplication import duplicate_union_dataframe
         >>>
         >>> # Instantiate Spark
         >>> spark = SparkSession.builder.getOrCreate()
