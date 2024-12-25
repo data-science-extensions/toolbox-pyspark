@@ -396,28 +396,35 @@ def check_schemas_match(
             If the value parse'd to `method` is not a valid option.
 
     Returns:
-        (Union[List[Tuple[str, Dict[str, StructField]]], bool]):
+        (Union[list[tuple[str, dict[str, StructField]]], bool]):
             If `return_object` is `#!py "results"`, then this will be a `#!py list` of `#!py tuple`'s of `#!py dict`'s containing the details of the schema differences. If `return_object` is `#!py "check"`, then it will only be a `#!py bool` object about whether the schemas match or not.
 
     ???+ example "Examples"
 
         ```{.py .python linenums="1" title="Set up"}
+        >>> # Imports
         >>> from pprint import pprint
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession, functions as F
-        >>> from toolbox_python.schema import check_schemas_match
-        >>> from toolbox_python.io import write_to_path
-        >>> from toolbox_python.checks import table_exists
+        >>> from toolbox_pyspark.schema import check_schemas_match
+        >>> from toolbox_pyspark.io import write_to_path
+        >>> from toolbox_pyspark.checks import table_exists
+        >>>
+        >>> # Instantiate Spark
         >>> spark = SparkSession.builder.getOrCreate()
+        >>>
+        >>> # Create data
         >>> df1 = spark.createDataFrame(
-        ...     pd.DataFrame({
-        ...         'a': [0,1,2,3],
-        ...         'b': ['a','b','c','d'],
-        ...         'c': ['1','1','1','1'],
-        ...         'd': ['2','2','2','2'],
-        ...         'e': ['3','3','3','3'],
-        ...         'f': ['4','4','4','4'],
-        ...     })
+        ...     pd.DataFrame(
+        ...         {
+        ...             "a": [0, 1, 2, 3],
+        ...             "b": ["a", "b", "c", "d"],
+        ...             "c": ["1", "1", "1", "1"],
+        ...             "d": ["2", "2", "2", "2"],
+        ...             "e": ["3", "3", "3", "3"],
+        ...             "f": ["4", "4", "4", "4"],
+        ...         }
+        ...     )
         ... )
         >>> df2 = (
         ...     df1.withColumn("c", F.col("c").cast("int"))
@@ -431,7 +438,7 @@ def check_schemas_match(
         ...     path="./test",
         ...     data_format="parquet",
         ...     mode="overwrite",
-        ...     options={"overwriteSchema": "true"},
+        ...     write_options={"overwriteSchema": "true"},
         ... )
         >>> write_to_path(
         ...     table=df2,
@@ -439,11 +446,10 @@ def check_schemas_match(
         ...     path="./test",
         ...     data_format="parquet",
         ...     mode="overwrite",
-        ...     options={"overwriteSchema": "true"},
+        ...     write_options={"overwriteSchema": "true"},
         ... )
-        ```
-
-        ```{.py .python linenums="1" title="Check"}
+        >>>
+        >>> # Check
         >>> pprint(df1.dtypes)
         >>> print(df1.show())
         >>> print(table_exists("left", "./test", "parquet", spark))
@@ -452,15 +458,17 @@ def check_schemas_match(
         >>> print(table_exists("right", "./test", "parquet", spark))
         ```
         <div class="result" markdown>
-        ```{.py .python}
-        [('a', 'bigint'),
-         ('b', 'string'),
-         ('c', 'string'),
-         ('d', 'string'),
-         ('e', 'string'),
-         ('f', 'string')]
+        ```{.txt .text title="Terminal"}
+        [
+            ("a", "bigint"),
+            ("b", "string"),
+            ("c", "string"),
+            ("d", "string"),
+            ("e", "string"),
+            ("f", "string"),
+        ]
         ```
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+---+---+---+---+---+
         | a | b | c | d | e | f |
         +---+---+---+---+---+---+
@@ -470,18 +478,20 @@ def check_schemas_match(
         | 3 | d | 1 | 2 | 3 | 4 |
         +---+---+---+---+---+---+
         ```
-        ```{.py .python}
+        ```{.txt .text title="Terminal"}
         True
         ```
-        ```{.py .python}
-        [('a', 'bigint'),
-         ('b', 'string'),
-         ('c', 'int'),
-         ('d', 'string'),
-         ('f', 'string'),
-         ('g', 'string')]
+        ```{.txt .text title="Terminal"}
+        [
+            ("a", "bigint"),
+            ("b", "string"),
+            ("c", "int"),
+            ("d", "string"),
+            ("f", "string"),
+            ("g", "string"),
+        ]
         ```
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+---+---+------+---+---+
         | a | b | c |    d | f | g |
         +---+---+---+------+---+---+
@@ -491,12 +501,12 @@ def check_schemas_match(
         | 3 | d | 1 | null | 4 | 2 |
         +---+---+---+------+---+---+
         ```
-        ```{.py .python}
+        ```{.txt .text title="Terminal"}
         True
         ```
         </div>
 
-        ```{.py .python linenums="1" title="Check matching"}
+        ```{.py .python linenums="1" title="Example 1: Check matching"}
         >>> diff = check_schemas_match(
         ...     method="table_table",
         ...     left_table=df1,
@@ -510,12 +520,13 @@ def check_schemas_match(
         >>> print(diff)
         ```
         <div class="result" markdown>
-        ```{.py .python}
+        ```{.txt .text title="Terminal"}
         True
         ```
+        !!! success "Conclusion: Schemas match."
         </div>
 
-        ```{.py .python linenums="1" title="Check not matching"}
+        ```{.py .python linenums="1" title="Example 2: Check not matching"}
         >>> diff = check_schemas_match(
         ...     method="table_table",
         ...     left_table=df1,
@@ -529,12 +540,13 @@ def check_schemas_match(
         >>> print(diff)
         ```
         <div class="result" markdown>
-        ```{.py .python}
+        ```{.txt .text title="Terminal"}
         False
         ```
+        !!! failure "Conclusion: Schemas do not match."
         </div>
 
-        ```{.py .python linenums="1" title="Show only `add`"}
+        ```{.py .python linenums="1" title="Example 3: Show only `add`"}
         >>> diff = check_schemas_match(
         ...     method="table_table",
         ...     left_table=df1,
@@ -548,7 +560,7 @@ def check_schemas_match(
         >>> print(diff)
         ```
         <div class="result" markdown>
-        ```{.py .python}
+        ```{.txt .text title="Terminal"}
         [
             (
                 "add",
@@ -556,9 +568,10 @@ def check_schemas_match(
             ),
         ]
         ```
+        !!! failure "Conclusion: Schemas do not match because the `e` field was added."
         </div>
 
-        ```{.py .python linenums="1" title="Show `add` and `remove`"}
+        ```{.py .python linenums="1" title="Example 4: Show `add` and `remove`"}
         >>> diff = check_schemas_match(
         ...     method="table_table",
         ...     left_table=df1,
@@ -572,7 +585,7 @@ def check_schemas_match(
         >>> print(diff)
         ```
         <div class="result" markdown>
-        ```{.py .python}
+        ```{.txt .text title="Terminal"}
         [
             (
                 "add",
@@ -584,9 +597,10 @@ def check_schemas_match(
             ),
         ]
         ```
+        !!! failure "Conclusion: Schemas do not match because the `e` field was added and the `g` field was removed."
         </div>
 
-        ```{.py .python linenums="1" title="Show all changes"}
+        ```{.py .python linenums="1" title="Example 5: Show all changes"}
         >>> diff = check_schemas_match(
         ...     method="table_table",
         ...     left_table=df1,
@@ -600,7 +614,7 @@ def check_schemas_match(
         >>> print(diff)
         ```
         <div class="result" markdown>
-        ```{.py .python}
+        ```{.txt .text title="Terminal"}
         [
             (
                 "add",
@@ -626,9 +640,10 @@ def check_schemas_match(
             ),
         ]
         ```
+        !!! failure "Conclusion: Schemas do not match because the `e` field was added, the `g` field was removed, the `c` field had its data type changed, and the `c` field had its nullability changed."
         </div>
 
-        ```{.py .python linenums="1" title="Check where right-hand side is a `path`"}
+        ```{.py .python linenums="1" title="Example 6: Check where right-hand side is a `path`"}
         >>> diff = check_schemas_match(
         ...     method="path_table",
         ...     spark_session=spark,
@@ -645,7 +660,7 @@ def check_schemas_match(
         >>> print(diff)
         ```
         <div class="result" markdown>
-        ```{.py .python}
+        ```{.txt .text title="Terminal"}
         [
             (
                 "add",
@@ -653,9 +668,10 @@ def check_schemas_match(
             ),
         ]
         ```
+        !!! failure "Conclusion: Schemas do not match because the `e` field was added."
         </div>
 
-        ```{.py .python linenums="1" title="Check where both sides are a `path`"}
+        ```{.py .python linenums="1" title="Example 7: Check where both sides are a `path`"}
         >>> diff = check_schemas_match(
         ...     method="path_path",
         ...     spark_session=spark,
@@ -674,7 +690,7 @@ def check_schemas_match(
         >>> print(diff)
         ```
         <div class="result" markdown>
-        ```{.py .python}
+        ```{.txt .text title="Terminal"}
         [
             (
                 "remove",
@@ -682,42 +698,78 @@ def check_schemas_match(
             ),
         ]
         ```
+        !!! failure "Conclusion: Schemas do not match because the `g` field was removed."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 8: Invalid `method` parameter"}
+        >>> diff = check_schemas_match(
+        ...     method="invalid",
+        ...     left_table=df1,
+        ...     right_table=df2,
+        ...     include_add_field=True,
+        ...     include_change_field=True,
+        ...     include_remove_field=True,
+        ...     include_change_nullable=True,
+        ...     return_object="check",
+        ... )
+        ```
+        <div class="result" markdown>
+        ```{.py .python .title="Terminal"}
+        AttributeError: Invalid value for `method`: 'invalid'
+        Please use one of the following options:
+        - For `by_table_and_table`, use one of the following values: ['table', 'table_table', 'tables', 'by_table', 'by_table_and_table', 'table_and_table']
+        - For `by_table_and_path`, use one of the following values: ['table_and_path', 'table_path', 'by_table_and_path']
+        - For `by_path_and_table`, use one of the following values: ['path_and_table', 'path_table', 'by_path_and_table']
+        - For `by_path_and_path`, use one of the following values: ['path_and_path', 'path_path', 'by_path_and_path', 'path', 'paths']
+        ```
+        !!! failure "Conclusion: Invalid `method` parameter."
         </div>
 
     ???+ info "Notes"
 
         ???+ info "Options available in the `method` parameter"
-            - The options available in the `method` parameter include:
-                - If the objects on both the left-hand side and the right-hand side are both `dataframes` already loaded to memory, use one of the following values:
-                    - `#!py "table"`
-                    - `#!py "table_table"`
-                    - `#!py "tables"`
-                    - `#!py "by_table"`
-                    - `#!py "by_table_and_table"`
-                    - `#!py "table_and_table"`
-                - If the object on the left-hand side is a `dataframe` already loaded to memory, but the object on the right-hand side is a table sitting on a path somewhere, use one of the following values:
-                    - `#!py "table_and_path"`
-                    - `#!py "table_path"`
-                    - `#!py "by_table_and_path"`
-                - If the object on the left-hand side is a table sitting on a path somewhere, but the object on the right-hand side is a `dataframe` already loaded to memory, use one of the following values:
-                    - `#!py "path_and_table"`
-                    - `#!py "path_table"`
-                    - `#!py "by_path_and_table"`
-                - If the objects on both the left-hand side and the right-hand side are both tables sitting on a path somewhere, then use one of the following values:
-                    - `#!py "path_and_path"`
-                    - `#!py "path_path"`
-                    - `#!py "by_path_and_path"`
-                    - `#!py "path"`
-                    - `#!py "paths"`
+
+            The options available in the `method` parameter include:
+
+            - If the objects on both the left-hand side and the right-hand side are both `dataframes` already loaded to memory, use one of the following values:
+                <div class="mdx-three-columns" markdown>
+                - `#!py "table"`
+                - `#!py "table_table"`
+                - `#!py "tables"`
+                - `#!py "by_table"`
+                - `#!py "by_table_and_table"`
+                - `#!py "table_and_table"`
+                </div>
+            - If the object on the left-hand side is a `dataframe` already loaded to memory, but the object on the right-hand side is a table sitting on a path somewhere, use one of the following values:
+                <div class="mdx-three-columns" markdown>
+                - `#!py "table_and_path"`
+                - `#!py "table_path"`
+                - `#!py "by_table_and_path"`
+                </div>
+            - If the object on the left-hand side is a table sitting on a path somewhere, but the object on the right-hand side is a `dataframe` already loaded to memory, use one of the following values:
+                <div class="mdx-three-columns" markdown>
+                - `#!py "path_and_table"`
+                - `#!py "path_table"`
+                - `#!py "by_path_and_table"`
+                </div>
+            - If the objects on both the left-hand side and the right-hand side are both tables sitting on a path somewhere, then use one of the following values:
+                <div class="mdx-three-columns" markdown>
+                - `#!py "path_and_path"`
+                - `#!py "path_path"`
+                - `#!py "by_path_and_path"`
+                - `#!py "path"`
+                - `#!py "paths"`
+                </div>
 
         ???+ info "Details about the return object when we set the parameter `#!py return_object="results"`"
+
             - When we set the parameter `#!py return_object="results"`, then we will get an object returned from this function.
             - That object will be a `#!py list` of `#!py tuple`'s, each `#!py tuple` is only two-elements long, where the first element is a `#!py str` object, and the second is a `#!py dict` where the keys are `#!py str` and the values are a `#!py StructField` object.
             - For each of the `#!py tuple` elements, the first element (the `#!py str` object) describes what the `#!py tuple` is there for. It will be one of four words: `#!py "add"`, `#!py "remove"`, `#!py "change_type"`, or `#!py "change_nullable"`.
             - You can change whether these options are included in the schema check by changing the other parameters: `#!py include_change_field`, `#!py include_add_field`, `#!py include_remove_field`, `#!py include_change_nullable`.
             - The structure of the list will look like this:
 
-            ```py
+            ```{.py .python .title="The structure of the returned object"}
             [
                 (
                     "add",  # (1)!
@@ -768,9 +820,11 @@ def check_schemas_match(
     """
 
     valid_methods = ValidMethods()
+    msg: str = "If using the '{meth}' method, then '{name}' cannot be 'None'."
 
     if method in valid_methods.by_table_and_table:
-        assert left_table is not None and right_table is not None
+        assert left_table is not None, msg.format(meth=method, name="left_table")
+        assert right_table is not None, msg.format(meth=method, name="right_table")
         return _check_schemas_match_by_table_and_table(
             left_table=left_table,
             right_table=right_table,
@@ -781,12 +835,10 @@ def check_schemas_match(
             return_object=return_object,
         )
     elif method in valid_methods.by_table_and_path:
-        assert (
-            left_table is not None
-            and right_table_path is not None
-            and right_table_name is not None
-            and spark_session is not None
-        )
+        assert left_table is not None, msg.format(meth=method, name="left_table")
+        assert right_table_path is not None, msg.format(meth=method, name="right_table_path")
+        assert right_table_name is not None, msg.format(meth=method, name="right_table_name")
+        assert spark_session is not None, msg.format(meth=method, name="spark_session")
         return _check_schemas_match_by_table_and_path(
             left_table=left_table,
             right_table_path=right_table_path,
@@ -800,12 +852,10 @@ def check_schemas_match(
             return_object=return_object,
         )
     elif method in valid_methods.by_path_and_table:
-        assert (
-            left_table_path is not None
-            and left_table_name is not None
-            and right_table is not None
-            and spark_session is not None
-        )
+        assert left_table_path is not None, msg.format(meth=method, name="left_table_path")
+        assert left_table_name is not None, msg.format(meth=method, name="left_table_name")
+        assert right_table is not None, msg.format(meth=method, name="right_table")
+        assert spark_session is not None, msg.format(meth=method, name="spark_session")
         return _check_schemas_match_by_path_and_table(
             left_table_path=left_table_path,
             left_table_name=left_table_name,
@@ -819,13 +869,11 @@ def check_schemas_match(
             return_object=return_object,
         )
     elif method in valid_methods.by_path_and_path:
-        assert (
-            left_table_path is not None
-            and left_table_name is not None
-            and right_table_path is not None
-            and right_table_name is not None
-            and spark_session is not None
-        )
+        assert left_table_path is not None, msg.format(meth=method, name="left_table_path")
+        assert left_table_name is not None, msg.format(meth=method, name="left_table_name")
+        assert right_table_path is not None, msg.format(meth=method, name="right_table_path")
+        assert right_table_name is not None, msg.format(meth=method, name="right_table_name")
+        assert spark_session is not None, msg.format(meth=method, name="spark_session")
         return _check_schemas_match_by_path_and_path(
             left_table_path=left_table_path,
             left_table_name=left_table_name,
@@ -1009,8 +1057,8 @@ def view_schema_differences(
         View the schemas between two different tables.
 
     ???+ abstract "Details"
-        The primary differences between [`check_schemas_match()`][toolbox_python.schema.check_schemas_match] and [`view_schema_differences()`][toolbox_python.schema.view_schema_differences] is that [`check_...()`][toolbox_python.schema.check_schemas_match] returns either a `#!py bool` result, or the actual details of the schema differences, whilst [`view_...()`][toolbox_python.schema.view_schema_differences] may also return the actual details object, but it will also print the result to the terminal for you to review.<br>
-        For full details of all the parameters and all the options, including nuances and detailed explanations and thorough examples, please check the [`check_schemas_match()`][toolbox_python.schema.check_schemas_match] function.
+        The primary differences between [`check_schemas_match()`][toolbox_pyspark.schema.check_schemas_match] and [`view_schema_differences()`][toolbox_pyspark.schema.view_schema_differences] is that [`check_...()`][toolbox_pyspark.schema.check_schemas_match] returns either a `#!py bool` result, or the actual details of the schema differences, whilst [`view_...()`][toolbox_pyspark.schema.view_schema_differences] may also return the actual details object, but it will also print the result to the terminal for you to review.<br>
+        For full details of all the parameters and all the options, including nuances and detailed explanations and thorough examples, please check the [`check_schemas_match()`][toolbox_pyspark.schema.check_schemas_match] function.
 
     Params:
         method (str, optional):
@@ -1071,28 +1119,35 @@ def view_schema_differences(
             If the value parse'd to `method` is not a valid option.
 
     Returns:
-        (Optional[List[Tuple[str, Dict[str, StructField]]]]):
+        (Optional[list[tuple[str, dict[str, StructField]]]]):
             If `#!py view_type="return"`, then this will be a `#!py list` of `#!py tuple`'s of `#!py dict`'s containing the details of the schema differences. If `#!py view_type!="return"` (or if `#!py view_type="return"`, but there are actually no differences in the schema), then nothing is returned; only printed to terminal.
 
     ???+ example "Examples"
 
         ```{.py .python linenums="1" title="Set up"}
+        >>> # Imports
         >>> from pprint import pprint
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession, functions as F
-        >>> from toolbox_python.schema import view_schema_differences
-        >>> from toolbox_python.io import write_to_path
-        >>> from toolbox_python.checks import table_exists
+        >>> from toolbox_pyspark.schema import view_schema_differences
+        >>> from toolbox_pyspark.io import write_to_path
+        >>> from toolbox_pyspark.checks import table_exists
+        >>>
+        >>> # Instantiate Spark
         >>> spark = SparkSession.builder.getOrCreate()
+        >>>
+        >>> # Create data
         >>> df1 = spark.createDataFrame(
-        ...     pd.DataFrame({
-        ...         'a': [0,1,2,3],
-        ...         'b': ['a','b','c','d'],
-        ...         'c': ['1','1','1','1'],
-        ...         'd': ['2','2','2','2'],
-        ...         'e': ['3','3','3','3'],
-        ...         'f': ['4','4','4','4'],
-        ...     })
+        ...     pd.DataFrame(
+        ...         {
+        ...             "a": [0, 1, 2, 3],
+        ...             "b": ["a", "b", "c", "d"],
+        ...             "c": ["1", "1", "1", "1"],
+        ...             "d": ["2", "2", "2", "2"],
+        ...             "e": ["3", "3", "3", "3"],
+        ...             "f": ["4", "4", "4", "4"],
+        ...         }
+        ...     )
         ... )
         >>> df2 = (
         ...     df1.withColumn("c", F.col("c").cast("int"))
@@ -1106,7 +1161,7 @@ def view_schema_differences(
         ...     path="./test",
         ...     data_format="parquet",
         ...     mode="overwrite",
-        ...     options={"overwriteSchema": "true"},
+        ...     write_options={"overwriteSchema": "true"},
         ... )
         >>> write_to_path(
         ...     table=df2,
@@ -1114,11 +1169,10 @@ def view_schema_differences(
         ...     path="./test",
         ...     data_format="parquet",
         ...     mode="overwrite",
-        ...     options={"overwriteSchema": "true"},
+        ...     write_options={"overwriteSchema": "true"},
         ... )
-        ```
-
-        ```{.py .python linenums="1" title="Check"}
+        >>>
+        >>> # Check
         >>> pprint(df1.dtypes)
         >>> print(df1.show())
         >>> print(table_exists("left", "./test", "parquet", spark))
@@ -1127,15 +1181,17 @@ def view_schema_differences(
         >>> print(table_exists("right", "./test", "parquet", spark))
         ```
         <div class="result" markdown>
-        ```{.py .python}
-        [('a', 'bigint'),
-         ('b', 'string'),
-         ('c', 'string'),
-         ('d', 'string'),
-         ('e', 'string'),
-         ('f', 'string')]
+        ```{.txt .text title="Terminal"}
+        [
+            ("a", "bigint"),
+            ("b", "string"),
+            ("c", "string"),
+            ("d", "string"),
+            ("e", "string"),
+            ("f", "string"),
+        ]
         ```
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+---+---+---+---+---+
         | a | b | c | d | e | f |
         +---+---+---+---+---+---+
@@ -1145,18 +1201,20 @@ def view_schema_differences(
         | 3 | d | 1 | 2 | 3 | 4 |
         +---+---+---+---+---+---+
         ```
-        ```{.py .python}
+        ```{.txt .text title="Terminal"}
         True
         ```
-        ```{.py .python}
-        [('a', 'bigint'),
-         ('b', 'string'),
-         ('c', 'int'),
-         ('d', 'string'),
-         ('f', 'string'),
-         ('g', 'string')]
+        ```{.txt .text title="Terminal"}
+        [
+            ("a", "bigint"),
+            ("b", "string"),
+            ("c", "int"),
+            ("d", "string"),
+            ("f", "string"),
+            ("g", "string"),
+        ]
         ```
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         +---+---+---+------+---+---+
         | a | b | c |    d | f | g |
         +---+---+---+------+---+---+
@@ -1166,12 +1224,12 @@ def view_schema_differences(
         | 3 | d | 1 | null | 4 | 2 |
         +---+---+---+------+---+---+
         ```
-        ```{.py .python}
+        ```{.txt .text title="Terminal"}
         True
         ```
         </div>
 
-        ```{.py .python linenums="1" title="Check matching"}
+        ```{.py .python linenums="1" title="Example 1: Check matching"}
         >>> view_schema_differences(
         ...     method="table_table",
         ...     left_table=df1,
@@ -1185,12 +1243,13 @@ def view_schema_differences(
         >>> print(diff)
         ```
         <div class="result" markdown>
-        ```{.py .python}
+        ```{.txt .text title="Terminal"}
         None
         ```
+        !!! success "Conclusion: Schemas match."
         </div>
 
-        ```{.py .python linenums="1" title="Check print"}
+        ```{.py .python linenums="1" title="Example 2: Check print"}
         >>> view_schema_differences(
         ...     method="table_table",
         ...     left_table=df1,
@@ -1203,12 +1262,13 @@ def view_schema_differences(
         ... )
         ```
         <div class="result" markdown>
-        ```{.py .python}
+        ```{.txt .text title="Terminal"}
         [('add', {'left': StructField('e', StringType(), True)})]
         ```
+        !!! failure "Conclusion: Schemas do not match because the `e` field was added."
         </div>
 
-        ```{.py .python linenums="1" title="Check pprint"}
+        ```{.py .python linenums="1" title="Example 3: Check pprint"}
         >>> view_schema_differences(
         ...     method="table_table",
         ...     left_table=df1,
@@ -1221,7 +1281,7 @@ def view_schema_differences(
         ... )
         ```
         <div class="result" markdown>
-        ```{.py .python}
+        ```{.txt .text title="Terminal"}
         [('add', {'left': StructField('e', StringType(), False)}),
          ('remove', {'right': StructField('g', StringType(), False)}),
          ('change_type',
@@ -1231,9 +1291,10 @@ def view_schema_differences(
           {'left': StructField('c', StringType(), False),
            'right': StructField('c', IntegerType(), True)})]
         ```
+        !!! failure "Conclusion: Schemas do not match because the `e` field was added, the `g` field was removed, the `c` field had its data type changed, and the `c` field had its nullability changed."
         </div>
 
-        ```{.py .python linenums="1" title="Check with right-hand side as a `path`"}
+        ```{.py .python linenums="1" title="Example 4: Check with right-hand side as a `path`"}
         >>> view_schema_differences(
         ...     method="table_table",
         ...     spark_session=spark,
@@ -1249,12 +1310,13 @@ def view_schema_differences(
         ... )
         ```
         <div class="result" markdown>
-        ```{.py .python}
+        ```{.txt .text title="Terminal"}
         [('add', {'left': StructField('e', StringType(), True)})]
         ```
+        !!! failure "Conclusion: Schemas do not match because the `e` field was added."
         </div>
 
-        ```{.py .python linenums="1" title="Check with both sides being a `path`"}
+        ```{.py .python linenums="1" title="Example 5: Check with both sides being a `path`"}
         >>> view_schema_differences(
         ...     method="table_table",
         ...     spark_session=spark,
@@ -1272,13 +1334,38 @@ def view_schema_differences(
         ... )
         ```
         <div class="result" markdown>
-        ```{.py .python}
+        ```{.txt .text title="Terminal"}
         [('remove', {'right': StructField('g', StringType(), True)})]
         ```
+        !!! failure "Conclusion: Schemas do not match because the `g` field was removed."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 6: Invalid `method` parameter"}
+        >>> view_schema_differences(
+        ...     method="table_table_table",
+        ...     left_table=df1,
+        ...     right_table=df2,
+        ...     include_add_field=True,
+        ...     include_change_field=True,
+        ...     include_remove_field=True,
+        ...     include_change_nullable=True,
+        ...     view_type="return",
+        ... )
+        ```
+        <div class="result" markdown>
+        ```{.py .python}
+        AttributeError: Invalid value for `method`: 'table_table_table'
+        Please use one of the following options:
+        - For `by_table_and_table`, use one of the following values: ['table', 'table_table', 'tables', 'by_table', 'by_table_and_table', 'table_and_table']
+        - For `by_table_and_path`, use one of the following values: ['table_and_path', 'table_path', 'by_table_and_path']
+        - For `by_path_and_table`, use one of the following values: ['path_and_table', 'path_table', 'by_path_and_table']
+        - For `by_path_and_path`, use one of the following values: ['path_and_path', 'path_path', 'by_path_and_path', 'path', 'paths']
+        ```
+        !!! failure "Conclusion: Invalid `method` parameter."
         </div>
 
     ??? tip "See Also"
-        - [`check_schemas_match()`][toolbox_python.schema.check_schemas_match]
+        - [`check_schemas_match()`][toolbox_pyspark.schema.check_schemas_match]
     """
 
     valid_methods: ValidMethods = ValidMethods()
