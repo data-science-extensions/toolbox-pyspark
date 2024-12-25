@@ -349,9 +349,7 @@ def write_to_path(
     if write_options:
         writer.options(**write_options)
     if partition_cols is not None:
-        partition_cols = (
-            [partition_cols] if is_type(partition_cols, str) else partition_cols
-        )
+        partition_cols = [partition_cols] if is_type(partition_cols, str) else partition_cols
         writer = writer.partitionBy(list(partition_cols))
     writer.save(f"{path}{'/' if not path.endswith('/') else ''}{name}")
 

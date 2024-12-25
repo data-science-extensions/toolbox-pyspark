@@ -95,6 +95,7 @@ setuptools = "75.*"
 
 [tool.black]
 color = true
+line-length = 95
 exclude = '''
 /(
     \.git

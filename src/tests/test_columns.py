@@ -167,9 +167,7 @@ class TestGetColumnsByLikeness(PySparkSetup):
     )
     def test_get_column_by_likeness__startswith(self, starts_with: str) -> None:
         result = get_columns_by_likeness(self.df, starts_with=starts_with)
-        expected = [
-            col.upper() for col in self.df.columns if col.startswith(starts_with)
-        ]
+        expected = [col.upper() for col in self.df.columns if col.startswith(starts_with)]
         assert result == expected
 
     @parameterized.expand(
@@ -263,9 +261,7 @@ class TestGetColumnsByLikeness(PySparkSetup):
         expected = [
             col.upper()
             for col in self.df.columns
-            if col.startswith(starts_with)
-            and contains in col
-            and col.endswith(ends_with)
+            if col.startswith(starts_with) and contains in col and col.endswith(ends_with)
         ]
         assert result == expected
 
@@ -286,9 +282,7 @@ class TestGetColumnsByLikeness(PySparkSetup):
         expected = [
             col
             for col in self.df.columns
-            if col.startswith(starts_with)
-            and contains in col
-            and col.endswith(ends_with)
+            if col.startswith(starts_with) and contains in col and col.endswith(ends_with)
         ]
         assert result == expected
 
@@ -475,8 +469,7 @@ class TestReorderColumns(PySparkSetup):
             reorder_columns, new_order=new_order, missing_columns_last=True
         )
         expected = self.ps_df_with_keys.select(
-            new_order
-            + [col for col in self.ps_df_with_keys.columns if col not in new_order]
+            new_order + [col for col in self.ps_df_with_keys.columns if col not in new_order]
         )
         assert_df_equality(result, expected)
 
@@ -491,9 +484,7 @@ class TestReorderColumns(PySparkSetup):
 
     def test_reorder_columns_6(self) -> None:
         """Key columns last"""
-        result = self.ps_df_with_keys.transform(
-            reorder_columns, key_columns_position="last"
-        )
+        result = self.ps_df_with_keys.transform(reorder_columns, key_columns_position="last")
         expected = self.ps_df_with_keys.select(
             [col for col in self.ps_df_with_keys.columns if not col.startswith("key")]
             + [col for col in self.ps_df_with_keys.columns if col.startswith("key")]
@@ -502,9 +493,7 @@ class TestReorderColumns(PySparkSetup):
 
     def test_reorder_columns_7(self) -> None:
         """Key columns first"""
-        result = self.ps_df_with_keys.transform(
-            reorder_columns, key_columns_position="first"
-        )
+        result = self.ps_df_with_keys.transform(reorder_columns, key_columns_position="first")
         expected = self.ps_df_with_keys.select(
             [col for col in self.ps_df_with_keys.columns if col.startswith("key")]
             + [col for col in self.ps_df_with_keys.columns if not col.startswith("key")]
@@ -513,9 +502,7 @@ class TestReorderColumns(PySparkSetup):
 
     def test_reorder_columns_8(self) -> None:
         """Key columns any order"""
-        result = self.ps_df_with_keys.transform(
-            reorder_columns, key_columns_position=None
-        )
+        result = self.ps_df_with_keys.transform(reorder_columns, key_columns_position=None)
         expected = self.ps_df_with_keys
         assert_df_equality(result, expected)
 

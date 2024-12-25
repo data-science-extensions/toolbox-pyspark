@@ -102,9 +102,7 @@ class PySparkSetup(TestCase):
     def setup_environ(cls) -> PySparkSetup:
         os.environ["PYSPARK_PYTHON"] = sys.executable
         os.environ["PYSPARK_DRIVER_PYTHON"] = sys.executable
-        os.environ["HADOOP_HOME"] = str(
-            Path(".venv").joinpath("bin", "pyspark").absolute()
-        )
+        os.environ["HADOOP_HOME"] = str(Path(".venv").joinpath("bin", "pyspark").absolute())
         return cls
 
     @classmethod
@@ -314,15 +312,9 @@ class PySparkSetup(TestCase):
                 {
                     "a": [1, 2, 3, 4],
                     "b": ["a", "b", "c", "d"],
-                    "c_datetime": pd.date_range(
-                        start="2022-01-01", periods=4, freq="h"
-                    ),
-                    "d_datetime": pd.date_range(
-                        start="2022-02-01", periods=4, freq="h"
-                    ),
-                    "e_datetime": pd.date_range(
-                        start="2022-03-01", periods=4, freq="h"
-                    ),
+                    "c_datetime": pd.date_range(start="2022-01-01", periods=4, freq="h"),
+                    "d_datetime": pd.date_range(start="2022-02-01", periods=4, freq="h"),
+                    "e_datetime": pd.date_range(start="2022-03-01", periods=4, freq="h"),
                     "TIMEZONE_LOCATION": ["Australia/Perth"] * 4,
                 }
             )

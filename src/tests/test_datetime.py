@@ -342,12 +342,8 @@ class TestSplitDateTimeColumns(PySparkSetup):
         result = split_datetime_column(self.ps_df_datetime, "c_datetime")
         expected = self.ps_df_datetime.withColumns(
             {
-                "C_DATE": F.expr(
-                    f"cast(date_format(c_datetime, 'yyyy-MM-dd') as date)"
-                ),
-                "C_TIME": F.expr(
-                    f"cast(date_format(c_datetime, 'HH:mm:ss') as string)"
-                ),
+                "C_DATE": F.expr(f"cast(date_format(c_datetime, 'yyyy-MM-dd') as date)"),
+                "C_TIME": F.expr(f"cast(date_format(c_datetime, 'HH:mm:ss') as string)"),
             }
         )
         assert_df_equality(result, expected)
@@ -361,12 +357,8 @@ class TestSplitDateTimeColumns(PySparkSetup):
                 continue
             col_date_name = f"{column.upper().replace('DATETIME','DATE')}"
             col_time_name = f"{column.upper().replace('DATETIME','TIME')}"
-            col_date_value = F.expr(
-                f"cast(date_format({column}, 'yyyy-MM-dd') as date)"
-            )
-            col_time_value = F.expr(
-                f"cast(date_format({column}, 'HH:mm:ss') as string)"
-            )
+            col_date_value = F.expr(f"cast(date_format({column}, 'yyyy-MM-dd') as date)")
+            col_time_value = F.expr(f"cast(date_format({column}, 'HH:mm:ss') as string)")
             cols_exprs[col_date_name] = col_date_value
             cols_exprs[col_time_name] = col_time_value
         expected = self.ps_df_datetime.withColumns(cols_exprs)
@@ -382,12 +374,8 @@ class TestSplitDateTimeColumns(PySparkSetup):
         for column in ["c_datetime", "d_datetime"]:
             col_date_name = f"{column.upper().replace('DATETIME','DATE')}"
             col_time_name = f"{column.upper().replace('DATETIME','TIME')}"
-            col_date_value = F.expr(
-                f"cast(date_format({column}, 'yyyy-MM-dd') as date)"
-            )
-            col_time_value = F.expr(
-                f"cast(date_format({column}, 'HH:mm:ss') as string)"
-            )
+            col_date_value = F.expr(f"cast(date_format({column}, 'yyyy-MM-dd') as date)")
+            col_time_value = F.expr(f"cast(date_format({column}, 'HH:mm:ss') as string)")
             cols_exprs[col_date_name] = col_date_value
             cols_exprs[col_time_name] = col_time_value
         expected = self.ps_df_datetime.withColumns(cols_exprs)
@@ -409,12 +397,8 @@ class TestSplitDateTimeColumns(PySparkSetup):
                 continue
             col_date_name = f"{column.upper().replace('DATETIME','DATE')}"
             col_time_name = f"{column.upper().replace('DATETIME','TIME')}"
-            col_date_value = F.expr(
-                f"cast(date_format({column}, 'yyyy-MM-dd') as date)"
-            )
-            col_time_value = F.expr(
-                f"cast(date_format({column}, 'HH:mm:ss') as string)"
-            )
+            col_date_value = F.expr(f"cast(date_format({column}, 'yyyy-MM-dd') as date)")
+            col_time_value = F.expr(f"cast(date_format({column}, 'HH:mm:ss') as string)")
             cols_exprs[col_date_name] = col_date_value
             cols_exprs[col_time_name] = col_time_value
         expected = self.ps_df_datetime.withColumns(cols_exprs)
@@ -425,12 +409,8 @@ class TestSplitDateTimeColumns(PySparkSetup):
         result = split_datetime_columns(self.ps_df_datetime, "c_datetime")
         expected = self.ps_df_datetime.withColumns(
             {
-                "C_DATE": F.expr(
-                    f"cast(date_format(c_datetime, 'yyyy-MM-dd') as date)"
-                ),
-                "C_TIME": F.expr(
-                    f"cast(date_format(c_datetime, 'HH:mm:ss') as string)"
-                ),
+                "C_DATE": F.expr(f"cast(date_format(c_datetime, 'yyyy-MM-dd') as date)"),
+                "C_TIME": F.expr(f"cast(date_format(c_datetime, 'HH:mm:ss') as string)"),
             }
         )
         assert_df_equality(result, expected)

@@ -116,9 +116,7 @@ def _columns_exists(
 ) -> ColumnExistsResult:
     cols: str_collection = columns if match_case else [col.upper() for col in columns]
     df_cols: str_list = (
-        dataframe.columns
-        if match_case
-        else [df_col.upper() for df_col in dataframe.columns]
+        dataframe.columns if match_case else [df_col.upper() for df_col in dataframe.columns]
     )
     missing_cols: str_list = [col for col in cols if col not in df_cols]
     return ColumnExistsResult(len(missing_cols) == 0, missing_cols)
@@ -684,7 +682,7 @@ class ColumnsAreTypeResult:
 
 
 def _validate_pyspark_datatype(
-    datatype: Union[str, type, T.DataType]
+    datatype: Union[str, type, T.DataType],
 ) -> ALL_PYSPARK_TYPES:
     datatype = T.FloatType() if datatype == "float" or datatype is float else datatype
     if is_type(datatype, str):

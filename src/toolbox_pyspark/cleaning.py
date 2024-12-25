@@ -907,9 +907,7 @@ def update_nullability(
     for struct_field in schema:
         if struct_field.name in columns:
             struct_field.nullable = nullable
-    return dataframe.sparkSession.createDataFrame(
-        data=dataframe.rdd, schema=dataframe.schema
-    )
+    return dataframe.sparkSession.createDataFrame(data=dataframe.rdd, schema=dataframe.schema)
 
 
 # ---------------------------------------------------------------------------- #
@@ -1246,9 +1244,7 @@ def trim_spaces_from_columns(
     assert_columns_exists(dataframe=dataframe, columns=columns, match_case=True)
     space_chars: str_list = WHITESPACES.to_list("chr")  # type:ignore
     regexp: str = f"^[{''.join(space_chars)}]+|[{''.join(space_chars)}]+$"
-    cols_exprs: dict[str, Column] = {
-        col: F.regexp_replace(col, regexp, "") for col in columns
-    }
+    cols_exprs: dict[str, Column] = {col: F.regexp_replace(col, regexp, "") for col in columns}
     return dataframe.withColumns(cols_exprs)
 
 

@@ -294,19 +294,14 @@ def get_columns(
     elif is_type(columns, str):
         if "all" in columns:
             if "str" in columns:
-                return [
-                    col for col, typ in dataframe.dtypes if typ in ("str", "string")
-                ]
+                return [col for col, typ in dataframe.dtypes if typ in ("str", "string")]
             elif "int" in columns:
-                return [
-                    col for col, typ in dataframe.dtypes if typ in ("int", "integer")
-                ]
+                return [col for col, typ in dataframe.dtypes if typ in ("int", "integer")]
             elif "numeric" in columns:
                 return [
                     col
                     for col, typ in dataframe.dtypes
-                    if typ in ("int", "integer", "float", "double", "long")
-                    or "decimal" in typ
+                    if typ in ("int", "integer", "float", "double", "long") or "decimal" in typ
                 ]
             elif "float" in columns or "double" in columns or "decimal" in columns:
                 return [
@@ -316,9 +311,7 @@ def get_columns(
                 ]
             elif "datetime" in columns or "timestamp" in columns:
                 return [
-                    col
-                    for col, typ in dataframe.dtypes
-                    if typ in ("datetime", "timestamp")
+                    col for col, typ in dataframe.dtypes if typ in ("datetime", "timestamp")
                 ]
             elif "date" in columns:
                 return [col for col, typ in dataframe.dtypes if typ in ["date"]]
@@ -976,9 +969,7 @@ def reorder_columns(
         if missing_columns_last:
             cols += [col for col in df_cols if col not in new_order]
     else:
-        non_key_cols: str_list = [
-            col for col in df_cols if not col.lower().startswith("key_")
-        ]
+        non_key_cols: str_list = [col for col in df_cols if not col.lower().startswith("key_")]
         key_cols: str_list = [col for col in df_cols if col.lower().startswith("key_")]
         if key_columns_position == "first":
             cols = key_cols + non_key_cols

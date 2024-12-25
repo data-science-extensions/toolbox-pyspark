@@ -342,9 +342,7 @@ def add_keys_from_columns(
     join_character = join_character or ""
     if is_type(collection_of_columns, dict):
         for key_name, columns in collection_of_columns.items():
-            dataframe = add_key_from_columns(
-                dataframe, columns, join_character, key_name
-            )
+            dataframe = add_key_from_columns(dataframe, columns, join_character, key_name)
     elif is_type(collection_of_columns, (tuple, list)):
         for columns in collection_of_columns:
             dataframe = add_key_from_columns(dataframe, columns, join_character)
