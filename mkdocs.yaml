@@ -34,6 +34,7 @@ theme:
     - toc.follow
     - content.action.edit
     - content.action.view
+    - content.code.annotate
   logo: ./assets/images/spark.svg
   icon:
     repo: material/gitlab
