@@ -21,9 +21,9 @@ There are 12 modules used in this package, which covers 41 functions
 | [`datetime`][toolbox_pyspark.datetime]       | The `datetime` module is used for fixing column names that contain datetime data, adding conversions to local datetimes, and for splitting a column in to their date and time components.
 | [`cleaning`][toolbox_pyspark.cleaning]       | The `cleaning` module is used to clean, fix, and fetch various aspects on a given DataFrame.
 | [`duplication`][toolbox_pyspark.duplication] | The `duplication` module is used for duplicating data from an existing `dataframe`, or unioning multiple `dataframe`'s together.
+| [`schema`][toolbox_pyspark.schema]           | The `schema` module is used for checking, validating, and viewing any schema differences between two different tables, either from in-memory variables, or pointing to locations on disk.
 <!--
 | [`delta`][toolbox_pyspark.delta]             | The `delta` module is for various processes related to Delta Lake tables. Including optimising tables, merging tables, retrieving table history, and transferring between locations.
-| [`schema`][toolbox_pyspark.schema]           | The `schema` module is used for checking, validating, and viewing any schema differences between two different tables, either from in-memory variables, or pointing to locations on disk.
 -->
 
 
@@ -33,21 +33,21 @@ There are 12 modules used in this package, which covers 41 functions
 |----------------------------------------------|----------|
 | [`constants`][toolbox_pyspark.constants]     | |
 |                                              | |
-| [`io`][toolbox_pyspark.io]                   | [`read_from_path()`][toolbox_pyspark.io.read_from_path]
-|                                              | [`write_to_path()`][toolbox_pyspark.io.write_to_path]
-|                                              | [`transfer_table()`][toolbox_pyspark.io.transfer_table]
+| [`io`][toolbox_pyspark.io]                   | [`read_from_path()`][toolbox_pyspark.io.read_from_path] |
+|                                              | [`write_to_path()`][toolbox_pyspark.io.write_to_path] |
+|                                              | [`transfer_table()`][toolbox_pyspark.io.transfer_table] |
 |                                              | |
-| [`checks`][toolbox_pyspark.checks]           | [`column_exists()`][toolbox_pyspark.checks.column_exists]
-|                                              | [`columns_exists()`][toolbox_pyspark.checks.columns_exists]
-|                                              | [`is_vaid_spark_type()`][toolbox_pyspark.checks.is_vaid_spark_type]
-|                                              | [`table_exists()`][toolbox_pyspark.checks.table_exists]
+| [`checks`][toolbox_pyspark.checks]           | [`column_exists()`][toolbox_pyspark.checks.column_exists] |
+|                                              | [`columns_exists()`][toolbox_pyspark.checks.columns_exists] |
+|                                              | [`is_vaid_spark_type()`][toolbox_pyspark.checks.is_vaid_spark_type] |
+|                                              | [`table_exists()`][toolbox_pyspark.checks.table_exists] |
 |                                              | |
-| [`types`][toolbox_pyspark.types]             | [`get_column_types()`][toolbox_pyspark.types.get_column_types]
-|                                              | [`cast_column_to_type()`][toolbox_pyspark.types.cast_column_to_type]
-|                                              | [`cast_columns_to_type()`][toolbox_pyspark.types.cast_columns_to_type]
-|                                              | [`map_cast_columns_to_type()`][toolbox_pyspark.types.map_cast_columns_to_type]
-| [`keys`][toolbox_pyspark.keys]               | [`add_keys_from_columns()`][toolbox_pyspark.keys.add_keys_from_columns]
-|                                              | [`add_key_from_columns()`][toolbox_pyspark.keys.add_key_from_columns]
+| [`types`][toolbox_pyspark.types]             | [`get_column_types()`][toolbox_pyspark.types.get_column_types] |
+|                                              | [`cast_column_to_type()`][toolbox_pyspark.types.cast_column_to_type] |
+|                                              | [`cast_columns_to_type()`][toolbox_pyspark.types.cast_columns_to_type] |
+|                                              | [`map_cast_columns_to_type()`][toolbox_pyspark.types.map_cast_columns_to_type] |
+| [`keys`][toolbox_pyspark.keys]               | [`add_keys_from_columns()`][toolbox_pyspark.keys.add_keys_from_columns] |
+|                                              | [`add_key_from_columns()`][toolbox_pyspark.keys.add_key_from_columns] |
 |                                              | |
 | [`scale`][toolbox_pyspark.scale]             | [`round_column()`][toolbox_pyspark.scale.round_column] |
 |                                              | [`round_columns()`][toolbox_pyspark.scale.round_columns] |
@@ -80,11 +80,12 @@ There are 12 modules used in this package, which covers 41 functions
 |                                              | [`drop_matching_rows()`][toolbox_pyspark.cleaning.drop_matching_rows] |
 |                                              | |
 | [`duplication`][toolbox_pyspark.duplication] | [`duplicate_union_dataframe()`][toolbox_pyspark.duplication.duplicate_union_dataframe] |
-|                                              | [`union_all()`][toolbox_pyspark.duplication.union_all]
-<!--
-| [`schema`][toolbox_pyspark.schema]           | [`view_schema_differences()`][toolbox_pyspark.schema.view_schema_differences] |
-|                                              | [`check_schemas_match()`][toolbox_pyspark.schema.check_schemas_match] |
+|                                              | [`union_all()`][toolbox_pyspark.duplication.union_all] |
 |                                              | |
+| [`schema`][toolbox_pyspark.schema]           | [`check_schemas_match()`][toolbox_pyspark.schema.check_schemas_match] |
+|                                              | [`view_schema_differences()`][toolbox_pyspark.schema.view_schema_differences] |
+|                                              | |
+<!--
 | [`delta`][toolbox_pyspark.delta]             | [`load_table()`][toolbox_pyspark.delta.load_table] |
 |                                              | [`count_rows()`][toolbox_pyspark.delta.count_rows] |
 |                                              | [`get_history()`][toolbox_pyspark.delta.get_history] |
