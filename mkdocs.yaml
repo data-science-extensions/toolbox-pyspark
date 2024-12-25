@@ -60,6 +60,7 @@ nav:
       - DateTime: code/datetime.md
       - Cleaning: code/cleaning.md
       - Duplication: code/duplication.md
+      - Schema: code/schema.md
 
 
 markdown_extensions:
