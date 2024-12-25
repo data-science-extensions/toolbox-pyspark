@@ -107,11 +107,10 @@ def duplicate_union_dataframe(
     ???+ example "Examples"
 
         ```{.py .python linenums="1" title="Set up"}
-        >>>
         >>> # Imports
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
-        >>> from pyspark_helpers.duplication import duplicate_union_dataframe
+        >>> from toolbox_python.duplication import duplicate_union_dataframe
         >>>
         >>> # Instantiate Spark
         >>> spark = SparkSession.builder.getOrCreate()
@@ -245,9 +244,7 @@ def duplicate_union_dataframe(
         for value in by_list:
             if value in values_in_col:  # type: ignore
                 continue
-            new_df = new_df.unionAll(
-                dataframe.withColumn(new_column_name, F.lit(value))
-            )
+            new_df = new_df.unionAll(dataframe.withColumn(new_column_name, F.lit(value)))
         return new_df
 
     def _self_union_dataframe_with_column_missing(
@@ -302,7 +299,7 @@ def union_all(dfs: list[psDataFrame]) -> psDataFrame:
         >>> # Imports
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
-        >>> from pyspark_helpers.duplication import duplicate_union_dataframe
+        >>> from toolbox_python.duplication import duplicate_union_dataframe
         >>>
         >>> # Instantiate Spark
         >>> spark = SparkSession.builder.getOrCreate()
