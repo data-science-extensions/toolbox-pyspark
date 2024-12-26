@@ -116,6 +116,10 @@ def load_table(
     Returns:
         (DeltaTable):
             The loaded [`DeltaTable`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaTable).
+
+    ??? tip "See also"
+        - [`DeltaTable`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaTable
+        - [`DeltaTable.forPath()`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaTable.forPath)
     """
     return DeltaTable.forPath(
         sparkSession=spark_session,
@@ -162,6 +166,11 @@ def count_rows(
     Returns:
         (int):
             The number of rows on `table`.
+
+    ??? tip "See also"
+        - [`DeltaTable`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaTable)
+        - [`DeltaTable.toDF()`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaTable.toDF)
+        - [`pyspark.sql.DataFrame.count()`](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrame.count.html)
     """
     if is_type(table, str):
         assert path is not None, "If `table` is a `str`, then `path` cannot be `None`."
@@ -206,6 +215,10 @@ def get_history(
     Returns:
         (psDataFrame):
             The transaction history for a given [`DeltaTable`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaTable).
+
+    ??? tip "See also"
+        - [`DeltaTable`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaTable)
+        - [`DeltaTable.history()`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaTable.history)
     """
     if is_type(table, str):
         assert path is not None, "If `table` is a `str`, then `path` cannot be `None`."
@@ -440,6 +453,16 @@ def optimise_table(
         - https://docs.databricks.com/spark/latest/spark-sql/language-manual/delta-optimize.html
         - https://stackoverflow.com/questions/65320949/parquet-vs-delta-format-in-azure-data-lake-gen-2-store?_sm_au_=iVV4WjsV0q7WQktrJfsTkK7RqJB10
         - https://www.i-programmer.info/news/197-data-mining/12582-databricks-delta-adds-faster-parquet-import.html#:~:text=Databricks%20says%20Delta%20is%2010,data%20management%2C%20and%20query%20serving.
+
+    ??? tip "See also"
+        - [`SparkSession`](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.SparkSession.html)
+        - [`SparkSession.sql()`](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.SparkSession.sql.html)
+        - [pyspark.sql.DataFrame](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrame.html)
+        - [`DeltaTable`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaTable)
+        - [`DeltaTable.forPath()`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaTable.forPath)
+        - [`DeltaTable.optimize()`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaTable.optimize)
+        - [`DeltaTable.executeZOrderBy()`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaTable.executeZOrderBy)
+        - [`DeltaTable.executeCompaction()`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaTable.executeCompaction)
     """
     if method == "api":
         return _optimise_table_api(
@@ -546,6 +569,18 @@ def retry_optimise_table(
     Returns:
         (Union[psDataFrame, None]):
             Either `#!py None` or the statistics/details from the optimised delta table.
+
+    ??? tip "See also"
+        - [`stamina.retry()`](https://stamina.hynek.me/en/stable/)
+        - [`optimise_table()`][toolbox_pyspark.delta.optimise_table]
+        - [`SparkSession`](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.SparkSession.html)
+        - [`SparkSession.sql()`](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.SparkSession.sql.html)
+        - [pyspark.sql.DataFrame](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrame.html)
+        - [`DeltaTable`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaTable)
+        - [`DeltaTable.forPath()`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaTable.forPath)
+        - [`DeltaTable.optimize()`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaTable.optimize)
+        - [`DeltaTable.executeZOrderBy()`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaTable.executeZOrderBy)
+        - [`DeltaTable.executeCompaction()`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaTable.executeCompaction)
     """
 
     @retry(
@@ -718,6 +753,16 @@ def merge_spark_to_delta(
         - https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaMergeBuilder
         - https://spark.apache.org/docs/3.0.0-preview/sql-ref-null-semantics.html
         - https://docs.delta.io/latest/delta-update.html#upsert-into-a-table-using-merge
+
+    ???+ tip "See also"
+        - [`load_table()`][toolbox_pyspark.delta.load_table]
+        - [`assert_columns_exists()`][toolbox_pyspark.delta.assert_columns_exists]
+        - [`get_columns()`][toolbox_pyspark.delta.get_columns]
+        - [`SparkSession`](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.SparkSession.html)
+        - [`SparkSession.sql()`](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.SparkSession.sql.html)
+        - [`DeltaMergeBuilder`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaMergeBuilder)
+        - [`DeltaTable`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaTable)
+        - [`DeltaTable.history()`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaTable.history)
     """
 
     # Set up
@@ -936,6 +981,14 @@ def merge_delta_to_delta(
 
     ??? tip "See Also"
         - [`merge_spark_to_delta()`][toolbox_pyspark.delta.merge_spark_to_delta]
+        - [`load_table()`][toolbox_pyspark.delta.load_table]
+        - [`assert_columns_exists()`][toolbox_pyspark.delta.assert_columns_exists]
+        - [`get_columns()`][toolbox_pyspark.delta.get_columns]
+        - [`SparkSession`](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.SparkSession.html)
+        - [`SparkSession.sql()`](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.SparkSession.sql.html)
+        - [`DeltaMergeBuilder`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaMergeBuilder)
+        - [`DeltaTable`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaTable)
+        - [`DeltaTable.history()`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaTable.history)
     """
     from_table: DeltaTable = load_table(
         name=from_table_name,
@@ -985,7 +1038,7 @@ def retry_merge_spark_to_delta(
 
         Particularly useful for when you are trying to run this optimisation over a cluster, and when parallelisaiton is causing multiple processes to occur over the same DeltaTable at the same time.
 
-        For more info on the Retry process, see: [`stamina.retry`](https://stamina.hynek.me/en/stable/).
+        For more info on the Retry process, see: [`stamina.retry()`](https://stamina.hynek.me/en/stable/).
 
     Params:
         from_table (psDataFrame):
@@ -1078,27 +1131,28 @@ def retry_merge_spark_to_delta(
             - If length of `from_keys` does not match the length of `to_keys`
 
     ???+ info "Notes"
-        The main objective of this function is to:
 
-        1. For any records _existing_ in Spark but _missing_ in Delta, then INSERT those records from Spark to Delta. Using the [`.whenNotMatchedInsertAll()`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaMergeBuilder.whenNotMatchedInsertAll) method.
-        1. For any records _existing_ in both Spark and Delta, check if they have been _updated_ in Spark and if so then UPDATE those matching records in the Delta. Using the [`.whenMatchedUpdateAll()`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaMergeBuilder.whenMatchedUpdateAll) method.
-        1. Conditionally, check whether or not to actually apply #2 above by comparing the `editdate_col_name` field between the two tables.
+        ???+ info "The main objective of this function is to:"
 
-        Note:
+            1. For any records _existing_ in Spark but _missing_ in Delta, then INSERT those records from Spark to Delta. Using the [`.whenNotMatchedInsertAll()`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaMergeBuilder.whenNotMatchedInsertAll) method.
+            1. For any records _existing_ in both Spark and Delta, check if they have been _updated_ in Spark and if so then UPDATE those matching records in the Delta. Using the [`.whenMatchedUpdateAll()`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaMergeBuilder.whenMatchedUpdateAll) method.
+            1. Conditionally, check whether or not to actually apply #2 above by comparing the `editdate_col_name` field between the two tables.
 
-        1. The `from_keys` and the `to_keys` will logically be the same values MOST of the time.
-            - Very rarely will they ever be different; however, they are added here as separate parameters to facilitate this future functionality.
-        1. If `from_keys` and `to_keys` are type `#!py list`, then their length must be the same.
-        1. Conditional logic is applied during the [`.whenMatchedUpdateAll()`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaMergeBuilder.whenMatchedUpdateAll) method to avoid re-updating data in the Delta location which has actually updated from the SpSpark table.
-        1. There is an additional `#!sql ifnull()` conditional check added to the [`.whenMatchedUpdateAll()`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaMergeBuilder.whenMatchedUpdateAll) method for converting any values in the _target_ table to `#!py timestamp(0)` when their value is actually `#!sql null`.
-            - The history to this check is that when these data were originally added to BigDaS, the column `EditDate` did not exist.
-            - Therefore, when they were first inserted, all the values in `EditDate` were `#!sql null`.
-            - As time progressed, the records have slowly been updating, and therefore the `EditDate` values have been changing.
-            - Due to nuances and semantics around how Spark handles `null` values, whenever this previous check was run including columns with values `#!sql null`, it would inevitably return `#!sql null`.
-            - As such, these rows were not identified as able to be matched, therefore the optimiser skipped them.
-            - However, we actually did want them to be matched; because the rows had actually been updated on the _source_ table.
-            - Therefore, we add this `#!sql ifnull()` check to capture this edge case, and then push through and update the record on the _target_ table.
-        1. The parameter `enable_automatic_schema_evolution` was added because it is possible for the upstream tables to be adding new columns as they evolve. Therefore, it is necessary for this function to handle schema evolution automatically.
+        ???+ info "Pay particular attention to:"
+
+            1. The `from_keys` and the `to_keys` will logically be the same values MOST of the time.
+                - Very rarely will they ever be different; however, they are added here as separate parameters to facilitate this future functionality.
+            1. If `from_keys` and `to_keys` are type `#!py list`, then their length must be the same.
+            1. Conditional logic is applied during the [`.whenMatchedUpdateAll()`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaMergeBuilder.whenMatchedUpdateAll) method to avoid re-updating data in the Delta location which has actually updated from the SpSpark table.
+            1. There is an additional `#!sql ifnull()` conditional check added to the [`.whenMatchedUpdateAll()`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaMergeBuilder.whenMatchedUpdateAll) method for converting any values in the _target_ table to `#!py timestamp(0)` when their value is actually `#!sql null`.
+                - The history to this check is that when these data were originally added to BigDaS, the column `EditDate` did not exist.
+                - Therefore, when they were first inserted, all the values in `EditDate` were `#!sql null`.
+                - As time progressed, the records have slowly been updating, and therefore the `EditDate` values have been changing.
+                - Due to nuances and semantics around how Spark handles `null` values, whenever this previous check was run including columns with values `#!sql null`, it would inevitably return `#!sql null`.
+                - As such, these rows were not identified as able to be matched, therefore the optimiser skipped them.
+                - However, we actually did want them to be matched; because the rows had actually been updated on the _source_ table.
+                - Therefore, we add this `#!sql ifnull()` check to capture this edge case, and then push through and update the record on the _target_ table.
+            1. The parameter `enable_automatic_schema_evolution` was added because it is possible for the upstream tables to be adding new columns as they evolve. Therefore, it is necessary for this function to handle schema evolution automatically.
 
     ???+ question "References"
         - https://docs.databricks.com/delta/delta-update.html#language-python
@@ -1106,6 +1160,18 @@ def retry_merge_spark_to_delta(
         - https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaMergeBuilder
         - https://spark.apache.org/docs/3.0.0-preview/sql-ref-null-semantics.html
         - https://docs.delta.io/latest/delta-update.html#upsert-into-a-table-using-merge
+
+    ???+ tip "See also"
+        - [`stamina.retry()`](https://stamina.hynek.me/en/stable/)
+        - [`merge_spark_to_delta()`][toolbox_pyspark.delta.merge_spark_to_delta]
+        - [`load_table()`][toolbox_pyspark.delta.load_table]
+        - [`assert_columns_exists()`][toolbox_pyspark.delta.assert_columns_exists]
+        - [`get_columns()`][toolbox_pyspark.delta.get_columns]
+        - [`SparkSession`](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.SparkSession.html)
+        - [`SparkSession.sql()`](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.SparkSession.sql.html)
+        - [`DeltaMergeBuilder`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaMergeBuilder)
+        - [`DeltaTable`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaTable)
+        - [`DeltaTable.history()`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaTable.history)
     """
 
     @retry(
