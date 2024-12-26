@@ -68,11 +68,14 @@ __all__: str_list = [
     "load_table",
     "count_rows",
     "get_history",
+    "is_partitioned",
+    "get_partition_columns",
     "optimise_table",
     "retry_optimise_table",
     "merge_spark_to_delta",
     "merge_delta_to_delta",
     "retry_merge_spark_to_delta",
+    "DeltaLoader",
 ]
 
 
