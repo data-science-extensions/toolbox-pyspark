@@ -22,9 +22,7 @@ There are 12 modules used in this package, which covers 41 functions
 | [`cleaning`][toolbox_pyspark.cleaning]       | The `cleaning` module is used to clean, fix, and fetch various aspects on a given DataFrame.
 | [`duplication`][toolbox_pyspark.duplication] | The `duplication` module is used for duplicating data from an existing `dataframe`, or unioning multiple `dataframe`'s together.
 | [`schema`][toolbox_pyspark.schema]           | The `schema` module is used for checking, validating, and viewing any schema differences between two different tables, either from in-memory variables, or pointing to locations on disk.
-<!--
 | [`delta`][toolbox_pyspark.delta]             | The `delta` module is for various processes related to Delta Lake tables. Including optimising tables, merging tables, retrieving table history, and transferring between locations.
--->
 
 
 ### Functions by Module
@@ -85,7 +83,6 @@ There are 12 modules used in this package, which covers 41 functions
 | [`schema`][toolbox_pyspark.schema]           | [`check_schemas_match()`][toolbox_pyspark.schema.check_schemas_match] |
 |                                              | [`view_schema_differences()`][toolbox_pyspark.schema.view_schema_differences] |
 |                                              | |
-<!--
 | [`delta`][toolbox_pyspark.delta]             | [`load_table()`][toolbox_pyspark.delta.load_table] |
 |                                              | [`count_rows()`][toolbox_pyspark.delta.count_rows] |
 |                                              | [`get_history()`][toolbox_pyspark.delta.get_history] |
@@ -96,7 +93,6 @@ There are 12 modules used in this package, which covers 41 functions
 |                                              | [`retry_merge_spark_to_delta()`][toolbox_pyspark.delta.retry_merge_spark_to_delta] |
 |                                              | [`DeltaLoader()`][toolbox_pyspark.delta.DeltaLoader] |
 |                                              | |
--->
 
 
 ## Testing
