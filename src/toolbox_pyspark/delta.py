@@ -235,6 +235,39 @@ def is_partitioned(
     path: Optional[str] = None,
     spark_session: Optional[SparkSession] = None,
 ) -> bool:
+    """
+    !!! note "Summary"
+        Check whether a given [`DeltaTable`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaTable) is partitioned.
+
+    ???+ abstract "Details"
+        Under the hood, this function will retrieve the table details and check the `partitionColumns` attribute to determine if the table is partitioned.
+
+    Params:
+        table (Union[str, DeltaTable]):
+            The table to check.<br>
+            If it is a [`DeltaTable`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaTable), then it will immediately use that.<br>
+            If it is a `#!py str`, then it will use that as the name of the table from where to load the [`DeltaTable`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaTable) from.
+        path (Optional[str], optional):
+            If `table` is a `#!py str`, then `path` is mandatory, and is used as the `path` location for where to find the [`DeltaTable`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaTable) to load from.<br>
+            Defaults to `#!py None`.
+        spark_session (Optional[SparkSession], optional):
+            If `table` is `#!py str`, then `spark_session` is mandatory. This is the [`SparkSession`](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.SparkSession.html) to use for loading the [`DeltaTable`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaTable).<br>
+            Defaults to `#!py None`.
+
+    Raises:
+        TypeError:
+            If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
+        AssertionError:
+            If `table` is a `str`, then `path` and `spark_session` cannot be `None`.
+
+    Returns:
+        (bool):
+            `#!py True` if the table is partitioned, `#!py False` otherwise.
+
+    ??? tip "See also"
+        - [`DeltaTable`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaTable)
+        - [`DeltaTable.detail()`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaTable.detail)
+    """
     if is_type(table, str):
         assert path is not None, "If `table` is a `str`, then `path` cannot be `None`."
         assert (
@@ -254,6 +287,39 @@ def get_partition_columns(
     path: Optional[str] = None,
     spark_session: Optional[SparkSession] = None,
 ) -> Optional[str_list]:
+    """
+    !!! note "Summary"
+        Retrieve the partition columns for a given [`DeltaTable`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaTable).
+
+    ???+ abstract "Details"
+        Under the hood, this function will retrieve the table details and return the `partitionColumns` attribute if the table is partitioned.
+
+    Params:
+        table (Union[str, DeltaTable]):
+            The table to check.<br>
+            If it is a [`DeltaTable`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaTable), then it will immediately use that.<br>
+            If it is a `#!py str`, then it will use that as the name of the table from where to load the [`DeltaTable`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaTable) from.
+        path (Optional[str], optional):
+            If `table` is a `#!py str`, then `path` is mandatory, and is used as the `path` location for where to find the [`DeltaTable`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaTable) to load from.<br>
+            Defaults to `#!py None`.
+        spark_session (Optional[SparkSession], optional):
+            If `table` is `#!py str`, then `spark_session` is mandatory. This is the [`SparkSession`](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.SparkSession.html) to use for loading the [`DeltaTable`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaTable).<br>
+            Defaults to `#!py None`.
+
+    Raises:
+        TypeError:
+            If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
+        AssertionError:
+            If `table` is a `str`, then `path` and `spark_session` cannot be `None`.
+
+    Returns:
+        (Optional[str_list]):
+            The list of partition columns if the table is partitioned, `#!py None` otherwise.
+
+    ??? tip "See also"
+        - [`DeltaTable`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaTable)
+        - [`DeltaTable.detail()`](https://docs.delta.io/latest/api/python/index.html#delta.tables.DeltaTable.detail)
+    """
     if is_type(table, str):
         assert path is not None, "If `table` is a `str`, then `path` cannot be `None`."
         assert (
@@ -1234,6 +1300,90 @@ def retry_merge_spark_to_delta(
 
 
 class DeltaLoader:
+    """
+    !!! note "Summary"
+        A class to load and inspect Delta Lake tables from a specified root directory.
+
+    ???+ abstract "Details"
+        The `DeltaLoader` class provides methods to load Delta Lake tables from a specified root directory and inspect the contents of these tables. It uses the `dbutils` library if available to list folders, otherwise it falls back to using the `os` library.
+
+    Params:
+        root (str):
+            The root directory where the Delta Lake tables are stored.
+        spark (SparkSession):
+            The Spark session to use for loading the Delta Lake tables.
+        dbutils (optional):
+            The `dbutils` library to use for listing folders. If not provided, the `os` library will be used.<br>
+            Defaults to `None`.
+
+    Methods:
+        load(folder_name: str) -> psDataFrame:
+            Load a Delta Lake table from the specified folder.
+
+        folders() -> str_list:
+            List the folders in the root directory.
+
+        inspect() -> psDataFrame:
+            Inspect the Delta Lake tables in the root directory and return a DataFrame with information about each table.
+
+    ???+ example "Examples"
+
+        ```{.py .python linenums="1" title="Set up"}
+        >>> # Imports
+        >>> from pyspark.sql import SparkSession
+        >>> from toolbox_pyspark.delta import DeltaLoader
+        >>>
+        >>> # Instantiate Spark
+        >>> spark = SparkSession.builder.getOrCreate()
+        >>>
+        >>> # Create DeltaLoader instance
+        >>> delta_loader = DeltaLoader(root="/path/to/delta/tables", spark=spark)
+        ```
+
+        ```{.py .python linenums="1" title="Example 1: Load a table"}
+        >>> df = delta_loader.load("folder_name")
+        >>> df.show()
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        +---+---+---+
+        | a | b | c |
+        +---+---+---+
+        | 1 | 2 | 3 |
+        | 4 | 5 | 6 |
+        +---+---+---+
+        ```
+        !!! success "Conclusion: Successfully loaded the table from the specified folder."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 2: List folders"}
+        >>> folders = delta_loader.folders
+        >>> print(folders)
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        ['folder1', 'folder2', 'folder3']
+        ```
+        !!! success "Conclusion: Successfully listed the folders in the root directory."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 3: Inspect tables"}
+        >>> inspection_df = delta_loader.inspect()
+        >>> inspection_df.show()
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        +---------+-------------+---------------------+-------+
+        | Folder  | TimeElement | TimeStamp           | Count |
+        +---------+-------------+---------------------+-------+
+        | folder1 | EDITDATE    | 2023-01-01 00:00:00 |   100 |
+        | folder2 | ADDDATE     | 2023-01-02 00:00:00 |   200 |
+        | folder3 | None        | None                |   300 |
+        +---------+-------------+---------------------+-------+
+        ```
+        !!! success "Conclusion: Successfully inspected the Delta Lake tables."
+        </div>
+    """
 
     def __init__(self, root: str, spark: SparkSession, dbutils=None) -> None:
         self._root: str = root
@@ -1241,6 +1391,51 @@ class DeltaLoader:
         self._dbutils = dbutils
 
     def load(self, folder_name: str) -> psDataFrame:
+        """
+        !!! note "Summary"
+            Load a Delta Lake table from the specified folder.
+
+        ???+ abstract "Details"
+            This method loads a Delta Lake table from the specified folder within the root directory. It uses the `read_from_path` function to read the data in Delta format.
+
+        Params:
+            folder_name (str):
+                The name of the folder from which to load the Delta Lake table.
+
+        Returns:
+            (psDataFrame):
+                The loaded Delta Lake table as a PySpark DataFrame.
+
+        ???+ example "Examples"
+
+            ```{.py .python linenums="1" title="Set up"}
+            >>> # Imports
+            >>> from pyspark.sql import SparkSession
+            >>> from toolbox_pyspark.delta import DeltaLoader
+            >>>
+            >>> # Instantiate Spark
+            >>> spark = SparkSession.builder.getOrCreate()
+            >>>
+            >>> # Create DeltaLoader instance
+            >>> delta_loader = DeltaLoader(root="/path/to/delta/tables", spark=spark)
+            ```
+
+            ```{.py .python linenums="1" title="Example 1: Load a table"}
+            >>> df = delta_loader.load("folder_name")
+            >>> df.show()
+            ```
+            <div class="result" markdown>
+            ```{.txt .text title="Terminal"}
+            +---+---+---+
+            | a | b | c |
+            +---+---+---+
+            | 1 | 2 | 3 |
+            | 4 | 5 | 6 |
+            +---+---+---+
+            ```
+            !!! success "Conclusion: Successfully loaded the table from the specified folder."
+            </div>
+        """
         return read_from_path(
             folder_name,
             self._root,
@@ -1250,6 +1445,42 @@ class DeltaLoader:
 
     @property
     def folders(self) -> str_list:
+        """
+        !!! note "Summary"
+            List the folders in the root directory.
+
+        ???+ abstract "Details"
+            This property lists the folders in the root directory specified during the instantiation of the `DeltaLoader` class. It uses the `dbutils` library if available to list folders, otherwise it falls back to using the `os` library.
+
+        Returns:
+            (str_list):
+                A list of folder names in the root directory.
+
+        ???+ example "Examples"
+
+            ```{.py .python linenums="1" title="Set up"}
+            >>> # Imports
+            >>> from pyspark.sql import SparkSession
+            >>> from toolbox_pyspark.delta import DeltaLoader
+            >>>
+            >>> # Instantiate Spark
+            >>> spark = SparkSession.builder.getOrCreate()
+            >>>
+            >>> # Create DeltaLoader instance
+            >>> delta_loader = DeltaLoader(root="/path/to/delta/tables", spark=spark)
+            ```
+
+            ```{.py .python linenums="1" title="Example 1: List folders"}
+            >>> folders = delta_loader.folders
+            >>> print(folders)
+            ```
+            <div class="result" markdown>
+            ```{.txt .text title="Terminal"}
+            ['folder1', 'folder2', 'folder3']
+            ```
+            !!! success "Conclusion: Successfully listed the folders in the root directory."
+            </div>
+        """
         if self._dbutils is not None:
             return [
                 folder.name.replace("/", "")
@@ -1259,6 +1490,48 @@ class DeltaLoader:
             return os.listdir(self._root)
 
     def inspect(self) -> psDataFrame:
+        """
+        !!! note "Summary"
+            Inspect the Delta Lake tables in the root directory and return a DataFrame with information about each table.
+
+        ???+ abstract "Details"
+            This method inspects the Delta Lake tables in the root directory specified during the instantiation of the `DeltaLoader` class. It loads each table, checks for specific columns (`EDITDATE` and `ADDDATE`), and collects information about each table, including the folder name, the time element, the latest timestamp, and the row count.
+
+        Returns:
+            (psDataFrame):
+                A DataFrame with information about each Delta Lake table in the root directory.
+
+        ???+ example "Examples"
+
+            ```{.py .python linenums="1" title="Set up"}
+            >>> # Imports
+            >>> from pyspark.sql import SparkSession
+            >>> from toolbox_pyspark.delta import DeltaLoader
+            >>>
+            >>> # Instantiate Spark
+            >>> spark = SparkSession.builder.getOrCreate()
+            >>>
+            >>> # Create DeltaLoader instance
+            >>> delta_loader = DeltaLoader(root="/path/to/delta/tables", spark=spark)
+            ```
+
+            ```{.py .python linenums="1" title="Example 1: Inspect tables"}
+            >>> inspection_df = delta_loader.inspect()
+            >>> inspection_df.show()
+            ```
+            <div class="result" markdown>
+            ```{.txt .text title="Terminal"}
+            +---------+-------------+---------------------+-------+
+            | Folder  | TimeElement | TimeStamp           | Count |
+            +---------+-------------+---------------------+-------+
+            | folder1 | EDITDATE    | 2023-01-01 00:00:00 |   100 |
+            | folder2 | ADDDATE     | 2023-01-02 00:00:00 |   200 |
+            | folder3 | None        | None                |   300 |
+            +---------+-------------+---------------------+-------+
+            ```
+            !!! success "Conclusion: Successfully inspected the Delta Lake tables."
+            </div>
+        """
         data = []
         for folder in self.folders:
             df: psDataFrame = self.load(folder)
