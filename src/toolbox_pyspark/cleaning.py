@@ -839,7 +839,7 @@ def update_nullability(
         | 4 | d | 4.4 |
         +---+---+-----+
         ```
-        ```{.txt .text title="Terminal"}
+        ```{.sh .shell title="Terminal"}
         StructType(
             [
                 StructField("a", LongType(), True),

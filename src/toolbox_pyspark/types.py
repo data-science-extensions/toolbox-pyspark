@@ -104,7 +104,7 @@ def get_column_types(
 
             For `#!py pandas`, use one of:
 
-            ```{.py .python}
+            ```{.sh .shell  title="Terminal"}
             [
                 "pandas", "pandas.DataFrame",
                 "pd.df",  "pd.DataFrame",
@@ -117,7 +117,7 @@ def get_column_types(
 
             For `#!py pyspark` use one of:
 
-            ```{.py .python}
+            ```{.sh .shell  title="Terminal"}
             [
                 "pyspark", "spark.DataFrame",
                 "spark",   "pyspark.DataFrame",
@@ -170,7 +170,7 @@ def get_column_types(
         >>> print(df.dtypes)
         ```
         <div class="result" markdown>
-        ```{.txt .text title="Terminal"}
+        ```{.sh .shell title="Terminal"}
         [
             ("a", "bigint"),
             ("b", "string"),
@@ -264,7 +264,7 @@ def cast_column_to_type(
             Must be a valid `#!py pyspark` DataType.
 
             Use one of the following:
-            ```{.py .python}
+            ```{.sh .shell  title="Terminal"}
             [
                 "string",  "char",
                 "varchar", "binary",
@@ -400,7 +400,7 @@ def cast_columns_to_type(
             Must be a valid PySpark DataType.
 
             Use one of the following:
-                ```{.py .python}
+                ```{.sh .shell  title="Terminal"}
                 [
                     "string",  "char",
                     "varchar", "binary",

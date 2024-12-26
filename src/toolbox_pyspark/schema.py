@@ -458,7 +458,7 @@ def check_schemas_match(
         >>> print(table_exists("right", "./test", "parquet", spark))
         ```
         <div class="result" markdown>
-        ```{.txt .text title="Terminal"}
+        ```{.sh .shell title="Terminal"}
         [
             ("a", "bigint"),
             ("b", "string"),
@@ -478,10 +478,10 @@ def check_schemas_match(
         | 3 | d | 1 | 2 | 3 | 4 |
         +---+---+---+---+---+---+
         ```
-        ```{.txt .text title="Terminal"}
+        ```{.sh .shell title="Terminal"}
         True
         ```
-        ```{.txt .text title="Terminal"}
+        ```{.sh .shell title="Terminal"}
         [
             ("a", "bigint"),
             ("b", "string"),
@@ -501,7 +501,7 @@ def check_schemas_match(
         | 3 | d | 1 | null | 4 | 2 |
         +---+---+---+------+---+---+
         ```
-        ```{.txt .text title="Terminal"}
+        ```{.sh .shell title="Terminal"}
         True
         ```
         </div>
@@ -520,7 +520,7 @@ def check_schemas_match(
         >>> print(diff)
         ```
         <div class="result" markdown>
-        ```{.txt .text title="Terminal"}
+        ```{.sh .shell title="Terminal"}
         True
         ```
         !!! success "Conclusion: Schemas match."
@@ -540,7 +540,7 @@ def check_schemas_match(
         >>> print(diff)
         ```
         <div class="result" markdown>
-        ```{.txt .text title="Terminal"}
+        ```{.sh .shell title="Terminal"}
         False
         ```
         !!! failure "Conclusion: Schemas do not match."
@@ -560,7 +560,7 @@ def check_schemas_match(
         >>> print(diff)
         ```
         <div class="result" markdown>
-        ```{.txt .text title="Terminal"}
+        ```{.sh .shell title="Terminal"}
         [
             (
                 "add",
@@ -585,7 +585,7 @@ def check_schemas_match(
         >>> print(diff)
         ```
         <div class="result" markdown>
-        ```{.txt .text title="Terminal"}
+        ```{.sh .shell title="Terminal"}
         [
             (
                 "add",
@@ -614,7 +614,7 @@ def check_schemas_match(
         >>> print(diff)
         ```
         <div class="result" markdown>
-        ```{.txt .text title="Terminal"}
+        ```{.sh .shell title="Terminal"}
         [
             (
                 "add",
@@ -660,7 +660,7 @@ def check_schemas_match(
         >>> print(diff)
         ```
         <div class="result" markdown>
-        ```{.txt .text title="Terminal"}
+        ```{.sh .shell title="Terminal"}
         [
             (
                 "add",
@@ -690,7 +690,7 @@ def check_schemas_match(
         >>> print(diff)
         ```
         <div class="result" markdown>
-        ```{.txt .text title="Terminal"}
+        ```{.sh .shell title="Terminal"}
         [
             (
                 "remove",
@@ -1181,7 +1181,7 @@ def view_schema_differences(
         >>> print(table_exists("right", "./test", "parquet", spark))
         ```
         <div class="result" markdown>
-        ```{.txt .text title="Terminal"}
+        ```{.sh .shell title="Terminal"}
         [
             ("a", "bigint"),
             ("b", "string"),
@@ -1201,10 +1201,10 @@ def view_schema_differences(
         | 3 | d | 1 | 2 | 3 | 4 |
         +---+---+---+---+---+---+
         ```
-        ```{.txt .text title="Terminal"}
+        ```{.sh .shell title="Terminal"}
         True
         ```
-        ```{.txt .text title="Terminal"}
+        ```{.sh .shell title="Terminal"}
         [
             ("a", "bigint"),
             ("b", "string"),
@@ -1224,7 +1224,7 @@ def view_schema_differences(
         | 3 | d | 1 | null | 4 | 2 |
         +---+---+---+------+---+---+
         ```
-        ```{.txt .text title="Terminal"}
+        ```{.sh .shell title="Terminal"}
         True
         ```
         </div>
@@ -1243,7 +1243,7 @@ def view_schema_differences(
         >>> print(diff)
         ```
         <div class="result" markdown>
-        ```{.txt .text title="Terminal"}
+        ```{.sh .shell title="Terminal"}
         None
         ```
         !!! success "Conclusion: Schemas match."
@@ -1262,7 +1262,7 @@ def view_schema_differences(
         ... )
         ```
         <div class="result" markdown>
-        ```{.txt .text title="Terminal"}
+        ```{.sh .shell title="Terminal"}
         [('add', {'left': StructField('e', StringType(), True)})]
         ```
         !!! failure "Conclusion: Schemas do not match because the `e` field was added."
@@ -1281,7 +1281,7 @@ def view_schema_differences(
         ... )
         ```
         <div class="result" markdown>
-        ```{.txt .text title="Terminal"}
+        ```{.sh .shell title="Terminal"}
         [('add', {'left': StructField('e', StringType(), False)}),
          ('remove', {'right': StructField('g', StringType(), False)}),
          ('change_type',
@@ -1310,7 +1310,7 @@ def view_schema_differences(
         ... )
         ```
         <div class="result" markdown>
-        ```{.txt .text title="Terminal"}
+        ```{.sh .shell title="Terminal"}
         [('add', {'left': StructField('e', StringType(), True)})]
         ```
         !!! failure "Conclusion: Schemas do not match because the `e` field was added."
@@ -1334,7 +1334,7 @@ def view_schema_differences(
         ... )
         ```
         <div class="result" markdown>
-        ```{.txt .text title="Terminal"}
+        ```{.sh .shell title="Terminal"}
         [('remove', {'right': StructField('g', StringType(), True)})]
         ```
         !!! failure "Conclusion: Schemas do not match because the `g` field was removed."
@@ -1353,7 +1353,7 @@ def view_schema_differences(
         ... )
         ```
         <div class="result" markdown>
-        ```{.py .python}
+        ```{.sh .shell  title="Terminal"}
         AttributeError: Invalid value for `method`: 'table_table_table'
         Please use one of the following options:
         - For `by_table_and_table`, use one of the following values: ['table', 'table_table', 'tables', 'by_table', 'by_table_and_table', 'table_and_table']
