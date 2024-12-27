@@ -129,6 +129,11 @@ testpaths = [
     "src/tests",
 ]
 
+[tool.coverage.run]
+omit = [
+    "src/toolbox_pyspark/delta.py",  #<-- Not able to test Delta methods due to Scala package requirements
+]
+
 [tool.mypy]
 ignore_missing_imports = true
 allow_redefinition = true
