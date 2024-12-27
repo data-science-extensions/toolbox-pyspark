@@ -241,7 +241,7 @@ def columns_exists(
         >>> columns_exists(df, ["a", "b"])
         ```
         <div class="result" markdown>
-        ```{.txt .text title="Terminal"}
+        ```{.sh .shell title="Terminal"}
         True
         ```
         !!! success "Conclusion: All columns exist."
@@ -251,7 +251,7 @@ def columns_exists(
         >>> columns_exists(df, ["b", "d"])
         ```
         <div class="result" markdown>
-        ```{.txt .text title="Terminal"}
+        ```{.sh .shell title="Terminal"}
         False
         ```
         !!! failure "Conclusion: One column is missing."
@@ -261,7 +261,7 @@ def columns_exists(
         >>> columns_exists(df, ["c", "d"])
         ```
         <div class="result" markdown>
-        ```{.txt .text title="Terminal"}
+        ```{.sh .shell title="Terminal"}
         False
         ```
         !!! failure "Conclusion: All columns are missing."
@@ -396,7 +396,7 @@ def assert_columns_exists(
         >>> assert_columns_exists(df, ["a", "b"])
         ```
         <div class="result" markdown>
-        ```{.txt .text title="Terminal"}
+        ```{.sh .shell title="Terminal"}
         None
         ```
         !!! success "Conclusion: Columns exist."

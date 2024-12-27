@@ -129,7 +129,7 @@ def get_dims(
         >>> print(get_dims(dataframe=df, use_names=True, use_commas=True))
         ```
         <div class="result" markdown>
-        ```{.py .python}
+        ```{.sh .shell  title="Terminal"}
         {"rows": "5,000", "cols": "2"}
         ```
         </div>
@@ -138,7 +138,7 @@ def get_dims(
         >>> print(get_dims(dataframe=df, use_names=True, use_commas=False))
         ```
         <div class="result" markdown>
-        ```{.py .python}
+        ```{.sh .shell  title="Terminal"}
         {"rows": 5000, "cols": 2}
         ```
         </div>
@@ -147,7 +147,7 @@ def get_dims(
         >>> print(get_dims(dataframe=df, use_names=False, use_commas=True))
         ```
         <div class="result" markdown>
-        ```{.py .python}
+        ```{.sh .shell  title="Terminal"}
         ("5,000", "2")
         ```
         </div>
@@ -156,7 +156,7 @@ def get_dims(
         >>> print(get_dims(dataframe=df, use_names=False, use_commas=False))
         ```
         <div class="result" markdown>
-        ```{.py .python}
+        ```{.sh .shell  title="Terminal"}
         (5000, 2)
         ```
         </div>

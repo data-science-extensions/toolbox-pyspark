@@ -62,6 +62,7 @@ nav:
       - Cleaning: code/cleaning.md
       - Duplication: code/duplication.md
       - Schema: code/schema.md
+      - Delta: code/delta.md
 
 
 markdown_extensions:
