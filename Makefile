@@ -100,7 +100,9 @@ check-pycln:
 check-mkdocs:
 	poetry run mkdocs build --site-dir="temp"
 	if [ -d "temp" ]; then rm -rf temp; fi
-check: check-black check-pycln check-isort check-codespell check-pylint check-mkdocs check-pytest
+check-complexity:
+	poetry run radon cc --show-complexity --total-average ./src/$(PACKAGE_NAME)
+check: check-black check-pycln check-isort check-codespell check-pylint check-complexity check-mkdocs check-pytest
 # check: check-black check-mypy check-pycln check-isort check-codespell check-pylint check-mkdocs check-pytest
 lint-check: lint check
 

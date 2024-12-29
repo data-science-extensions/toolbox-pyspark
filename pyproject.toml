@@ -92,6 +92,7 @@ parameterized = "0.*"
 chispa = "0.*"
 types-protobuf = "5.*"
 setuptools = "75.*"
+radon = "6.*"
 
 [tool.black]
 color = true
