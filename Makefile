@@ -142,6 +142,18 @@ git-switch-to-docs-branch:
 	git checkout -B docs-site --track origin/docs-site
 
 
+#* Changelog
+.PHONY: changelog
+build-changelog:
+	chmod +x ./src/cli/changelog.sh
+	./src/cli/changelog.sh > ./CHANGELOG.md
+commit-changelog:
+	git add ./CHANGELOG.md
+	git commit --message="Update changelog [skip ci]"
+	git push --force --no-verify
+	git status
+
+
 #* Deploy Package
 # See: https://github.com/monim67/poetry-bumpversion
 .PHONY: deployment
