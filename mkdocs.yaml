@@ -47,7 +47,7 @@ nav:
   - Home: index.md
   - Usage:
       - Overview: usage/overview.md
-      - Roadmap: usage/roadmap.md
+      - Application: usage/application.md
   - Modules:
       - code/index.md
       - Constants: code/constants.md
@@ -63,6 +63,10 @@ nav:
       - Duplication: code/duplication.md
       - Schema: code/schema.md
       - Delta: code/delta.md
+      - Utils:
+        - Exceptions: code/utils/exceptions.md
+        - Warnings: code/utils/warnings.md
+        - Whitespaces: code/utils/whitespaces.md
 
 
 markdown_extensions:
