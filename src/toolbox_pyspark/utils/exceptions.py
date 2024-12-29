@@ -8,3 +8,7 @@ class InvalidPySparkDataTypeError(Exception):
 
 class InvalidDataFrameNameError(Exception):
     pass
+
+
+class PySparkVersionError(Exception):
+    pass

@@ -100,7 +100,9 @@ check-pycln:
 check-mkdocs:
 	poetry run mkdocs build --site-dir="temp"
 	if [ -d "temp" ]; then rm -rf temp; fi
-check: check-black check-pycln check-isort check-codespell check-pylint check-mkdocs check-pytest
+check-complexity:
+	poetry run radon cc --show-complexity --total-average ./src/$(PACKAGE_NAME)
+check: check-black check-pycln check-isort check-codespell check-pylint check-complexity check-mkdocs check-pytest
 # check: check-black check-mypy check-pycln check-isort check-codespell check-pylint check-mkdocs check-pytest
 lint-check: lint check
 
@@ -140,6 +142,18 @@ git-switch-to-main-branch:
 	git checkout -B main --track origin/main
 git-switch-to-docs-branch:
 	git checkout -B docs-site --track origin/docs-site
+
+
+#* Changelog
+.PHONY: changelog
+build-changelog:
+	chmod +x ./src/cli/changelog.sh
+	./src/cli/changelog.sh > ./CHANGELOG.md
+commit-changelog:
+	git add ./CHANGELOG.md
+	git commit --message="Update changelog [skip ci]"
+	git push --force --no-verify
+	git status
 
 
 #* Deploy Package

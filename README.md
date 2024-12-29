@@ -1,14 +1,14 @@
 <h1 align="center"><u><code>toolbox-pyspark</code></u></h1>
 
 <p align="center">
-<a href="https://github.com/data-science-extensions/toolbox-pyspark/releases">
-    <img src="https://img.shields.io/github/v/release/data-science-extensions/toolbox-pyspark?logo=github" alt="github-release"></a>
 <a href="https://pypi.org/project/toolbox-pyspark">
     <img src="https://img.shields.io/pypi/implementation/toolbox-pyspark?logo=pypi&logoColor=ffde57" alt="implementation"></a>
 <a href="https://pypi.org/project/toolbox-pyspark">
-    <img src="https://img.shields.io/pypi/v/toolbox-pyspark?label=version&logo=pyspark&logoColor=ffde57&color=blue" alt="version"></a>
-<a href="https://pypi.org/project/toolbox-pyspark">
     <img src="https://img.shields.io/pypi/pyversions/toolbox-pyspark?logo=python&logoColor=ffde57" alt="python-versions"></a>
+<a href="https://pypi.org/project/toolbox-pyspark">
+    <img src="https://img.shields.io/pypi/v/toolbox-pyspark?label=version&logo=pypi&logoColor=ffde57&color=blue" alt="version"></a>
+<a href="https://github.com/data-science-extensions/toolbox-pyspark/releases">
+    <img src="https://img.shields.io/github/v/release/data-science-extensions/toolbox-pyspark?logo=github" alt="github-release"></a>
 <br>
 <a href="https://github.com/data-science-extensions/toolbox-pyspark/actions/workflows/ci.yml">
     <img src="https://img.shields.io/static/v1?label=os&message=ubuntu+|+macos+|+windows&color=blue&logo=ubuntu&logoColor=green" alt="os"></a>

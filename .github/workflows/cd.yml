@@ -172,11 +172,46 @@ jobs:
           files: ./cov-report/xml/cov-report.xml
           verbose: true
 
+  build-changelog:
+
+      name: Build Changelog
+      needs: test
+      if: ${{ always() && needs.test.result == 'success' }}
+      runs-on: ubuntu-latest
+
+      permissions:
+        contents: write  #<-- to allow push changes to the repository
+
+      steps:
+
+        - name: Checkout repository
+          id: checkout-repository
+          uses: actions/checkout@v4
+          with:
+            ref: main
+
+        - name: Setup Git
+          id: setup-git
+          env:
+            GITHUB_ACTOR: ${{ github.actor }}
+          run: |
+            make configure-git
+            make git-switch-to-main-branch
+            make git-refresh-current-branch
+
+        - name: Build changelog
+          id: build-changelog
+          run: make build-changelog
+
+        - name: Commit changelog
+          id: commit-changelog
+          run: make commit-changelog
+
   build-package:
 
       name: Build Package
-      needs: test
-      if: ${{ always() && needs.test.result == 'success' }}
+      needs: build-changelog
+      if: ${{ always() && needs.build-changelog.result == 'success' }}
       runs-on: ubuntu-latest
 
       permissions:
