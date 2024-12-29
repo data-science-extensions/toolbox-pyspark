@@ -135,6 +135,11 @@ omit = [
     "src/toolbox_pyspark/delta.py",  #<-- Not able to test Delta methods due to Scala package requirements
 ]
 
+[tool.coverage.report]
+exclude_also = [
+    "raise PySparkVersionError",  #<-- Not able to test PySpark version on Local or GitHub Actions CI/CD.
+]
+
 [tool.mypy]
 ignore_missing_imports = true
 allow_redefinition = true
