@@ -55,7 +55,7 @@ repos:
 
   # Run MyPy type checks
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: "v1.13.0"
+    rev: "v1.14.1"
     hooks:
       - id: mypy
         files: src/toolbox_pyspark
@@ -73,7 +73,7 @@ repos:
 
   # Find any outdated syntax and replace with modern equivalents
   - repo: https://github.com/asottile/pyupgrade
-    rev: "v3.19.0"
+    rev: "v3.19.1"
     hooks:
       - id: pyupgrade
         name: Upgrade Python features
@@ -92,7 +92,7 @@ repos:
 
   # Remove unused import statements
   - repo: https://github.com/hadialqattan/pycln
-    rev: "v2.4.0"
+    rev: "v2.5.0"
     hooks:
       - id: pycln
         args:

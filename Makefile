@@ -47,6 +47,8 @@ install-poetry:
 	poetry config --list
 poetry-lock:
 	poetry lock
+poetry-check:
+	poetry check
 install:
 	poetry lock
 	poetry install --no-interaction --only main
@@ -65,7 +67,7 @@ install-dev-test:
 install-all:
 	poetry lock
 	poetry install --no-interaction --with dev,docs,test
-update-packages: poetry-lock install-all
+update-packages: install-all poetry-check
 
 
 #* Linting
