@@ -527,7 +527,7 @@ class TestTableExists(PySparkSetup):
         self.data_format = "parquet"
         self.clean_up = True
         write_to_path(
-            table=self.ps_df,
+            data_frame=self.ps_df,
             name=self.table_name,
             path=self.write_path,
             data_format=self.data_format,

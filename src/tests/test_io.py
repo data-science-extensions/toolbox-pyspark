@@ -23,7 +23,7 @@ from toolbox_python.checkers import is_type
 
 # ## Local First Party Imports ----
 from tests.setup import PySparkSetup
-from toolbox_pyspark.io import read_from_path, transfer_table, write_to_path
+from toolbox_pyspark.io import read_from_path, transfer_table_by_path, write_to_path
 
 
 # ---------------------------------------------------------------------------- #
@@ -57,7 +57,7 @@ class TestReadingAndWriting(PySparkSetup):
     def test_1_write_to_path_1(self) -> None:
         """Test writing parquet"""
         write_to_path(
-            table=self.ps_df,
+            data_frame=self.ps_df,
             name="ps_df_parquet",
             path=self.write_path,
             data_format="parquet",
@@ -71,7 +71,7 @@ class TestReadingAndWriting(PySparkSetup):
     def test_1_write_to_path_2(self) -> None:
         """Test writing delta"""
         write_to_path(
-            table=self.ps_df,
+            data_frame=self.ps_df,
             name="ps_df_delta",
             path=self.write_path,
             data_format="delta",
@@ -84,7 +84,7 @@ class TestReadingAndWriting(PySparkSetup):
     def test_1_write_to_path_3(self) -> None:
         """Test writing csv"""
         write_to_path(
-            table=self.ps_df,
+            data_frame=self.ps_df,
             name="ps_df_csv",
             path=self.write_path,
             data_format="csv",
@@ -98,7 +98,7 @@ class TestReadingAndWriting(PySparkSetup):
     def test_1_write_to_path_4(self) -> None:
         """Test writing to partitioned parquet"""
         write_to_path(
-            table=self.ps_df,
+            data_frame=self.ps_df,
             name="ps_df_parquet_partitioned",
             path=self.write_path,
             data_format="parquet",
@@ -170,7 +170,7 @@ class TestReadingAndWriting(PySparkSetup):
 
         # Write new table
         write_to_path(
-            table=self.ps_df_extended,
+            data_frame=self.ps_df_extended,
             name="ps_df_extended",
             path=self.write_path,
             data_format="parquet",
@@ -182,7 +182,7 @@ class TestReadingAndWriting(PySparkSetup):
         )
 
         # Transfer new table
-        transfer_table(
+        transfer_table_by_path(
             spark_session=self.spark,
             from_table_path=self.write_path,
             from_table_name="ps_df_extended",
@@ -210,7 +210,7 @@ class TestReadingAndWriting(PySparkSetup):
     def test_3_transfer_table_2(self) -> None:
 
         # Transfer new table
-        transfer_table(
+        transfer_table_by_path(
             spark_session=self.spark,
             from_table_path=self.write_path,
             from_table_name="ps_df_extended",

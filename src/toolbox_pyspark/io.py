@@ -205,7 +205,7 @@ def read_from_path(
 
 @typechecked
 def write_to_path(
-    table: psDataFrame,
+    data_frame: psDataFrame,
     name: str,
     path: str,
     data_format: Optional[str] = "delta",
@@ -218,8 +218,8 @@ def write_to_path(
         For a given `table`, write it out to a specified `path` with name `name` and format `format`.
 
     Params:
-        table (psDataFrame):
-            The table to be written. Must be a valid `pyspark` DataFrame ([`pyspark.sql.DataFrame`](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrame.html)).
+        data_frame (psDataFrame):
+            The DataFrame to be written. Must be a valid `pyspark` DataFrame ([`pyspark.sql.DataFrame`](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrame.html)).
         name (str):
             The name of the table where it will be written.
         path (str):
@@ -298,7 +298,7 @@ def write_to_path(
 
         ```{.py .python linenums="1" title="Example 1: Write to CSV"}
         >>> write_to_path(
-        ...     table=df,
+        ...     data_frame=df,
         ...     name="df.csv",
         ...     path="./test",
         ...     data_format="csv",
@@ -322,7 +322,7 @@ def write_to_path(
 
         ```{.py .python linenums="1" title="Example 2: Write to Parquet"}
         >>> write_to_path(
-        ...     table=df,
+        ...     data_frame=df,
         ...     name="df.parquet",
         ...     path="./test",
         ...     data_format="parquet",
@@ -345,7 +345,7 @@ def write_to_path(
     """
     write_options: str_dict = write_options or dict()
     data_format: str = data_format or "parquet"
-    writer: DataFrameWriter = table.write.mode(mode).format(data_format)
+    writer: DataFrameWriter = data_frame.write.mode(mode).format(data_format)
     if write_options:
         writer.options(**write_options)
     if partition_cols is not None:
@@ -355,7 +355,7 @@ def write_to_path(
 
 
 @typechecked
-def transfer_table(
+def transfer_table_by_path(
     spark_session: SparkSession,
     from_table_path: str,
     from_table_name: str,
@@ -453,7 +453,7 @@ def transfer_table(
         </div>
 
         ```{.py .python linenums="1" title="Example 1: Transfer CSV"}
-        >>> transfer_table(
+        >>> transfer_table_by_path(
         ...     spark_session=spark,
         ...     from_table_path="./test",
         ...     from_table_name="table.csv",
@@ -481,7 +481,7 @@ def transfer_table(
         </div>
 
         ```{.py .python linenums="1" title="Example 2: Transfer Parquet"}
-        >>> transfer_table(
+        >>> transfer_table_by_path(
         ...     spark_session=spark,
         ...     from_table_path="./test",
         ...     from_table_name="table.parquet",
@@ -508,7 +508,7 @@ def transfer_table(
         </div>
 
         ```{.py .python linenums="1" title="Example 3: Transfer CSV to Parquet"}
-        >>> transfer_table(
+        >>> transfer_table_by_path(
         ...     spark_session=spark,
         ...     from_table_path="./test",
         ...     from_table_name="table.csv",
@@ -544,7 +544,7 @@ def transfer_table(
         read_options=from_table_options,
     )
     write_to_path(
-        table=from_table,
+        data_frame=from_table,
         name=to_table_name,
         path=to_table_path,
         data_format=to_table_format,
