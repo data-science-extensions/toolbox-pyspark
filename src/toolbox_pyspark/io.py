@@ -339,6 +339,43 @@ def read_from_path(
         ```
         !!! success "Conclusion: Successfully read Parquet."
         </div>
+
+        ```{.py .python linenums="1" title="Example 3: Invalid Path"}
+        >>> df_invalid_path = read_from_path(
+        ...     name="invalid_table.csv",
+        ...     path="./invalid_path",
+        ...     spark_session=spark,
+        ...     data_format="csv",
+        ...     options={"header": "true"},
+        ... )
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        Py4JJavaError: An error occurred while calling o45.load.
+        ```
+        !!! failure "Conclusion: Failed to read from invalid path."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 4: Invalid Format"}
+        >>> df_invalid_format = read_from_path(
+        ...     name="table.csv",
+        ...     path="./test",
+        ...     spark_session=spark,
+        ...     data_format="invalid_format",
+        ...     options={"header": "true"},
+        ... )
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        Py4JJavaError: An error occurred while calling o45.load.
+        ```
+        !!! failure "Conclusion: Failed to read due to invalid format."
+        </div>
+
+    ??? tip "See Also"
+        - [`load_from_path`][toolbox_pyspark.io.load_from_path]
+        - [`read`][toolbox_pyspark.io.read]
+        - [`load`][toolbox_pyspark.io.load]
     """
 
     # Set default options ----
@@ -501,6 +538,45 @@ def write_to_path(
         ```
         !!! success "Conclusion: Successfully written to Parquet."
         </div>
+
+        ```{.py .python linenums="1" title="Example 3: Invalid Path"}
+        >>> write_to_path(
+        ...     data_frame=df,
+        ...     name="df.csv",
+        ...     path="./invalid_path",
+        ...     data_format="csv",
+        ...     mode="overwrite",
+        ...     options={"header": "true"},
+        ... )
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        Py4JJavaError: An error occurred while calling o45.save.
+        ```
+        !!! failure "Conclusion: Failed to write to invalid path."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 4: Invalid Format"}
+        >>> write_to_path(
+        ...     data_frame=df,
+        ...     name="df.csv",
+        ...     path="./test",
+        ...     data_format="invalid_format",
+        ...     mode="overwrite",
+        ...     options={"header": "true"},
+        ... )
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        Py4JJavaError: An error occurred while calling o45.save.
+        ```
+        !!! failure "Conclusion: Failed to write due to invalid format."
+        </div>
+
+    ??? tip "See Also"
+        - [`save_to_path`][toolbox_pyspark.io.save_to_path]
+        - [`write`][toolbox_pyspark.io.write]
+        - [`save`][toolbox_pyspark.io.save]
     """
 
     # Set default options ----
@@ -708,6 +784,51 @@ def transfer_by_path(
         ```
         !!! success "Conclusion: Successfully transferred CSV to Parquet."
         </div>
+
+        ```{.py .python linenums="1" title="Example 4: Invalid Source Path"}
+        >>> transfer_by_path(
+        ...     spark_session=spark,
+        ...     from_table_path="./invalid_path",
+        ...     from_table_name="table.csv",
+        ...     from_table_format="csv",
+        ...     to_table_path="./other",
+        ...     to_table_name="table.csv",
+        ...     to_table_format="csv",
+        ...     from_table_options={"header": "true"},
+        ...     to_table_mode="overwrite",
+        ...     to_table_options={"header": "true"},
+        ... )
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        Py4JJavaError: An error occurred while calling o45.load.
+        ```
+        !!! failure "Conclusion: Failed to transfer due to invalid source path."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 5: Invalid Target Format"}
+        >>> transfer_by_path(
+        ...     spark_session=spark,
+        ...     from_table_path="./test",
+        ...     from_table_name="table.csv",
+        ...     from_table_format="csv",
+        ...     to_table_path="./other",
+        ...     to_table_name="table.csv",
+        ...     to_table_format="invalid_format",
+        ...     from_table_options={"header": "true"},
+        ...     to_table_mode="overwrite",
+        ...     to_table_options={"header": "true"},
+        ... )
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        Py4JJavaError: An error occurred while calling o45.save.
+        ```
+        !!! failure "Conclusion: Failed to transfer due to invalid target format."
+        </div>
+
+    ??? tip "See Also"
+        - [`transfer`][toolbox_pyspark.io.transfer]
     """
 
     # Read from source ----
