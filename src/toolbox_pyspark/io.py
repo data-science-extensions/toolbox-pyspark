@@ -37,13 +37,13 @@
 
 
 # ## Python StdLib Imports ----
-from typing import Optional
+from typing import Literal, Optional, get_args
 
 # ## Python Third Party Imports ----
 from pyspark.sql import DataFrame as psDataFrame, SparkSession
 from pyspark.sql.readwriter import DataFrameReader, DataFrameWriter
 from toolbox_python.checkers import is_type
-from toolbox_python.collection_types import str_collection, str_dict, str_list
+from toolbox_python.collection_types import str_collection, str_dict, str_list, str_tuple
 from typeguard import typechecked
 
 
@@ -57,6 +57,67 @@ __all__: str_list = [
     "write_to_path",
     "transfer_table",
 ]
+
+
+## --------------------------------------------------------------------------- #
+##  Constants                                                               ####
+## --------------------------------------------------------------------------- #
+
+
+SPARK_FORMATS = Literal[
+    # Built-in formats
+    "parquet",
+    "orc",
+    "json",
+    "csv",
+    "text",
+    "avro",
+    # Database formats (requires JDBC drivers)
+    "jdbc",
+    "oracle",
+    "mysql",
+    "postgresql",
+    "mssql",
+    "db2",
+    # Other formats (requires dependencies)
+    "delta",  # <-- Requires: `io.delta:delta-core` dependency and `delata-spark` package
+    "xml",  # <-- Requires: `com.databricks:spark-xml` dependency and `spark-xml` package
+    "excel",  # <-- Requires: `com.crealytics:spark-excel` dependency and `spark-excel` package
+    "hive",  # <-- Requires: Hive support
+    "mongodb",  # <-- Requires: `org.mongodb.spark:mongo-spark-connector` dependency and `mongo-spark-connector` package
+    "cassandra",  # <-- Requires: `com.datastax.spark:spark-cassandra-connector` dependency and `spark-cassandra-connector` package
+    "elasticsearch",  # <-- Requires: `org.elasticsearch:elasticsearch-hadoop` dependency and `elasticsearch-hadoop` package
+]
+"""
+The valid formats that can be used to read/write data in Spark.
+
+PySpark's built-in data source formats:
+- `parquet`
+- `orc`
+- `json`
+- `csv`
+- `text`
+- `avro`
+
+Database formats (with proper JDBC drivers):
+- `jdbc`
+- `oracle`
+- `mysql`
+- `postgresql`
+- `mssql`
+- `db2`
+
+Other formats with additional dependencies:
+- `delta` (requires: `io.delta:delta-core` dependency and `delata-spark` package)
+- `xml` (requires: `com.databricks:spark-xml` dependency and `spark-xml` package)
+- `excel` (requires: `com.crealytics:spark-excel` dependency and `spark-excel` package)
+- `hive` (requires: Hive support)
+- `mongodb` (requires: `org.mongodb.spark:mongo-spark-connector` dependency and `mongo-spark-connector` package)
+- `cassandra` (requires: `com.datastax.spark:spark-cassandra-connector` dependency and `spark-cassandra-connector` package)
+- `elasticsearch` (requires: `org.elasticsearch:elasticsearch-hadoop` dependency and `elasticsearch-hadoop` package)
+"""
+VALID_SPARK_FORMATS: str_tuple = get_args(SPARK_FORMATS)
+VALID_SPARK_FORMATS.__doc__ = SPARK_FORMATS.__doc__
 
 
 # ---------------------------------------------------------------------------- #
@@ -73,10 +134,10 @@ __all__: str_list = [
 
 @typechecked
 def read_from_path(
+    spark_session: SparkSession,
     name: str,
     path: str,
-    spark_session: SparkSession,
-    data_format: Optional[str] = "delta",
+    data_format: Optional[SPARK_FORMATS] = "parquet",
     read_options: Optional[str_dict] = None,
 ) -> psDataFrame:
     """
@@ -84,13 +145,13 @@ def read_from_path(
         Read an object from a given `path` in to memory as a `pyspark` dataframe.
 
     Params:
+        spark_session (SparkSession):
+            The Spark session to use for the reading.
         name (str):
             The name of the table to read in.
         path (str):
             The path from which it will be read.
-        spark_session (SparkSession):
-            The Spark session to use for the reading.
-        data_format (Optional[str], optional):
+        data_format (Optional[SPARK_FORMATS], optional):
             The format of the object at location `path`.<br>
             Defaults to `#!py "delta"`.
         read_options (Dict[str, str], optional):
@@ -208,7 +269,7 @@ def write_to_path(
     data_frame: psDataFrame,
     name: str,
     path: str,
-    data_format: Optional[str] = "delta",
+    data_format: Optional[SPARK_FORMATS] = "parquet",
     mode: Optional[str] = None,
     write_options: Optional[str_dict] = None,
     partition_cols: Optional[str_collection] = None,
@@ -224,7 +285,7 @@ def write_to_path(
             The name of the table where it will be written.
         path (str):
             The path location for where to save the table.
-        data_format (Optional[str], optional):
+        data_format (Optional[SPARK_FORMATS], optional):
             The format that the `table` will be written to.<br>
             Defaults to `#!py "delta"`.
         mode (Optional[str], optional):
@@ -359,11 +420,11 @@ def transfer_table_by_path(
     spark_session: SparkSession,
     from_table_path: str,
     from_table_name: str,
-    from_table_format: str,
     to_table_path: str,
     to_table_name: str,
-    to_table_format: str,
+    from_table_format: Optional[SPARK_FORMATS] = "parquet",
     from_table_options: Optional[str_dict] = None,
+    to_table_format: Optional[SPARK_FORMATS] = "parquet",
     to_table_mode: Optional[str] = None,
     to_table_options: Optional[str_dict] = None,
     to_table_partition_cols: Optional[str_collection] = None,
@@ -382,13 +443,13 @@ def transfer_table_by_path(
             The path from which the table will be read.
         from_table_name (str):
             The name of the table to be read.
-        from_table_format (str):
-            The format of the data at the reading location.
         to_table_path (str):
             The location where to save the table to.
         to_table_name (str):
             The name of the table where it will be saved.
-        to_table_format (str):
+        from_table_format (Optional[SPARK_FORMATS], optional):
+            The format of the data at the reading location.
+        to_table_format (Optional[SPARK_FORMATS], optional):
             The format of the saved table.
         from_table_options (Dict[str, str], optional):
             Any additional obtions to parse to the Spark reader.<br>
