@@ -43,8 +43,16 @@ from typing import Literal, Optional, get_args
 from pyspark.sql import DataFrame as psDataFrame, SparkSession
 from pyspark.sql.readwriter import DataFrameReader, DataFrameWriter
 from toolbox_python.checkers import is_type
-from toolbox_python.collection_types import str_collection, str_dict, str_list, str_tuple
+from toolbox_python.collection_types import (
+    str_collection,
+    str_dict,
+    str_list,
+    str_tuple,
+)
 from typeguard import typechecked
+
+# ## Local First Party Imports ----
+from toolbox_pyspark.utils.exceptions import ValidationError
 
 
 # ---------------------------------------------------------------------------- #
@@ -53,9 +61,23 @@ from typeguard import typechecked
 
 
 __all__: str_list = [
+    "SPARK_FORMATS",
+    "VALID_SPARK_FORMATS",
     "read_from_path",
     "write_to_path",
-    "transfer_table",
+    "transfer_table_by_path",
+    "read_from_table",
+    "write_to_table",
+    "transfer_table_by_table",
+    "read",
+    "write",
+    "transfer",
+    "load_from_path",
+    "save_to_path",
+    "load_from_table",
+    "save_to_table",
+    "load",
+    "save",
 ]
 
 
@@ -906,3 +928,17 @@ def transfer(
             to_table_options=to_options,
             to_table_partition_cols=to_partition_cols,
         )
+
+
+# ---------------------------------------------------------------------------- #
+#                                                                              #
+#     Aliases                                                               ####
+#                                                                              #
+# ---------------------------------------------------------------------------- #
+
+load_from_path = read_from_path
+save_to_path = write_to_path
+load_from_table = read_from_table
+save_to_table = write_to_table
+load = read
+save = write
