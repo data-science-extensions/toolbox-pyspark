@@ -534,3 +534,5 @@ class TestReadingAndWriting_ByTable(PySparkSetup):
             read_from_table(spark_session=self.spark, name="schema/table")
         with pytest.raises(ValidationError):
             read_from_table(spark_session=self.spark, name="source.schema.table")
+        with pytest.raises(ValidationError):
+            read_from_table(spark_session=self.spark, name="schema.table", schema="source")
