@@ -66,6 +66,12 @@ class TestReadingAndWriting(PySparkSetup):
                 "overwriteSchema": "true",
             },
         )
+        assert_table_exists(
+            spark_session=self.spark,
+            name="ps_df_parquet",
+            path=self.write_path,
+            data_format="parquet",
+        )
 
     @pytest.mark.skip("`delta` package currently causing issues...")
     def test_1_write_to_path_2(self) -> None:
@@ -79,6 +85,12 @@ class TestReadingAndWriting(PySparkSetup):
             write_options={
                 "overwriteSchema": "true",
             },
+        )
+        assert_table_exists(
+            spark_session=self.spark,
+            name="ps_df_delta",
+            path=self.write_path,
+            data_format="delta",
         )
 
     def test_1_write_to_path_3(self) -> None:
@@ -94,6 +106,12 @@ class TestReadingAndWriting(PySparkSetup):
                 "header": "true",
             },
         )
+        assert_table_exists(
+            spark_session=self.spark,
+            name="ps_df_csv",
+            path=self.write_path,
+            data_format="csv",
+        )
 
     def test_1_write_to_path_4(self) -> None:
         """Test writing to partitioned parquet"""
@@ -104,6 +122,12 @@ class TestReadingAndWriting(PySparkSetup):
             data_format="parquet",
             mode="overwrite",
             partition_cols=["a"],
+        )
+        assert_table_exists(
+            name="ps_df_parquet_partitioned",
+            path=self.write_path,
+            data_format="parquet",
+            spark_session=self.spark,
         )
 
     def test_2_read_from_path_1(self) -> None:
