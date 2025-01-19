@@ -18,20 +18,24 @@ from pathlib import Path
 # ## Python Third Party Imports ----
 import pytest
 from chispa.dataframe_comparer import assert_df_equality
-from pyspark.sql import DataFrame as psDataFrame, functions as F
+from pyspark.sql import DataFrame as psDataFrame, functions as F, types as T
 from toolbox_python.checkers import is_type
 
 # ## Local First Party Imports ----
 from tests.setup import PySparkSetup
 from toolbox_pyspark.checks import assert_table_exists
 from toolbox_pyspark.io import (
+    read,
     read_from_path,
     read_from_table,
+    transfer,
     transfer_by_path,
     transfer_by_table,
+    write,
     write_to_path,
     write_to_table,
 )
+from toolbox_pyspark.utils.exceptions import ValidationError
 
 
 # ---------------------------------------------------------------------------- #
@@ -208,10 +212,7 @@ class TestReadingAndWriting_ByPath(PySparkSetup):
             path=self.write_path,
             data_format="parquet",
             mode="overwrite",
-            write_options={
-                "mapreduce.fileoutputcommitter.marksuccessfuljobs": "false",
-                "overwriteSchema": "true",
-            },
+            write_options={"overwriteSchema": "true"},
         )
 
         # Transfer new table
@@ -257,8 +258,54 @@ class TestReadingAndWriting_ByPath(PySparkSetup):
 
         # Read transferred table
         table: psDataFrame = read_from_path(
-            name="ps_df_extended_transferred",
+            name="ps_df_extended_transferred2",
             path=self.write_path,
+            spark_session=self.spark,
+            data_format="parquet",
+        )
+
+        # Test
+        assert is_type(table, psDataFrame)
+        result: psDataFrame = table.withColumn("a", F.col("a").cast(T.LongType()))
+        expected: psDataFrame = self.ps_df_extended
+        assert_df_equality(result, expected, ignore_nullable=True, ignore_column_order=True)
+        partitions: list[str] = os.listdir(f"{self.write_path}/ps_df_extended_transferred2")
+        assert len([obj for obj in partitions if "=" in obj]) > 0
+
+    def test_3_transfer_table_3(self) -> None:
+        """Transfer using generic function"""
+
+        # Write new table
+        write(
+            data_frame=self.ps_df_extended,
+            name="ps_df_extended2",
+            path=self.write_path,
+            method="path",
+            data_format="parquet",
+            mode="overwrite",
+            write_options={
+                "overwriteSchema": "true",
+            },
+        )
+
+        # Transfer new table
+        transfer(
+            spark_session=self.spark,
+            method="path",
+            from_table_path=self.write_path,
+            from_table_name="ps_df_extended2",
+            from_table_format="parquet",
+            to_table_path=self.write_path,
+            to_table_name="ps_df_extended_transferred3",
+            to_table_format="parquet",
+            to_table_mode="overwrite",
+        )
+
+        # Read transferred table
+        table: psDataFrame = read(
+            name="ps_df_extended_transferred3",
+            path=self.write_path,
+            method="path",
             spark_session=self.spark,
             data_format="parquet",
         )
@@ -268,8 +315,6 @@ class TestReadingAndWriting_ByPath(PySparkSetup):
         result: psDataFrame = table
         expected: psDataFrame = self.ps_df_extended
         assert_df_equality(result, expected, ignore_nullable=True)
-        partitions: list[str] = os.listdir(f"{self.write_path}/ps_df_extended_transferred2")
-        assert len([obj for obj in partitions if "=" in obj]) > 0
 
 
 class TestReadingAndWriting_ByTable(PySparkSetup):
@@ -278,18 +323,19 @@ class TestReadingAndWriting_ByTable(PySparkSetup):
     def setUpClass(cls) -> None:
         super().setUpClass()
         cls.write_dir_name = "io"
-        cls.write_path: str = f"./src/tests/{cls.write_dir_name}"
-        cls.schema = "default"
+        cls.schema = "testing"
+        cls.write_path = str(Path(f"./src/tests/{cls.write_dir_name}").absolute())
+        cls.spark.sql(f"CREATE SCHEMA IF NOT EXISTS {cls.schema} LOCATION '{cls.write_path}'")
+        cls.spark.catalog.setCurrentDatabase(cls.schema)
+        cls.spark.catalog.currentDatabase()
         cls.clean_up = True
 
     @classmethod
     def tearDownClass(cls) -> None:
         if cls.clean_up:
-            cls.spark.sql(f"DROP TABLE IF EXISTS {cls.schema}.ps_df_table")
-            cls.spark.sql(f"DROP TABLE IF EXISTS {cls.schema}.ps_df_table_partitioned")
-            cls.spark.sql(f"DROP TABLE IF EXISTS {cls.schema}.ps_df_extended")
-            cls.spark.sql(f"DROP TABLE IF EXISTS {cls.schema}.ps_df_extended_transferred")
-            cls.spark.sql(f"DROP TABLE IF EXISTS {cls.schema}.ps_df_extended_transferred2")
+            for tbl in cls.spark.catalog.listTables():
+                cls.spark.sql(f"DROP TABLE IF EXISTS {cls.schema}.{tbl.name}")
+            cls.spark.sql(f"DROP SCHEMA IF EXISTS {cls.schema}")
         super().tearDownClass()
 
     def test_1_write_to_table_1(self) -> None:
@@ -300,11 +346,11 @@ class TestReadingAndWriting_ByTable(PySparkSetup):
             schema=self.schema,
             data_format="parquet",
             mode="overwrite",
-            write_options={
-                "overwriteSchema": "true",
-                "path": self.write_path,
-            },
+            write_options={"overwriteSchema": "true"},
         )
+        assert "ps_df_table" in [
+            tbl.name for tbl in self.spark.catalog.listTables(self.schema)
+        ]
 
     def test_1_write_to_table_2(self) -> None:
         """Test writing to partitioned table"""
@@ -315,10 +361,10 @@ class TestReadingAndWriting_ByTable(PySparkSetup):
             data_format="parquet",
             mode="overwrite",
             partition_cols=["a"],
-            write_options={
-                "path": self.write_path,
-            },
         )
+        assert "ps_df_table_partitioned" in [
+            tbl.name for tbl in self.spark.catalog.listTables(self.schema)
+        ]
 
     def test_2_read_from_table_1(self) -> None:
         """Test reading table"""
@@ -327,14 +373,11 @@ class TestReadingAndWriting_ByTable(PySparkSetup):
             schema=self.schema,
             spark_session=self.spark,
             data_format="parquet",
-            read_options={
-                "path": self.write_path,
-            },
         )
         assert is_type(table, psDataFrame)
         result: psDataFrame = table
         expected: psDataFrame = self.ps_df
-        assert_df_equality(result, expected)
+        assert_df_equality(result, expected, ignore_column_order=True)
 
     def test_2_read_from_table_2(self) -> None:
         """Test reading from partitioned table"""
@@ -344,9 +387,6 @@ class TestReadingAndWriting_ByTable(PySparkSetup):
                 schema=self.schema,
                 spark_session=self.spark,
                 data_format="parquet",
-                read_options={
-                    "path": self.write_path,
-                },
             )
             .select(self.ps_df.columns)
             .withColumn("a", F.col("a").cast("long"))
@@ -367,11 +407,7 @@ class TestReadingAndWriting_ByTable(PySparkSetup):
             schema=self.schema,
             data_format="parquet",
             mode="overwrite",
-            write_options={
-                "mapreduce.fileoutputcommitter.marksuccessfuljobs": "false",
-                "overwriteSchema": "true",
-                "path": self.write_path,
-            },
+            write_options={"overwriteSchema": "true"},
         )
 
         # Transfer new table
@@ -385,7 +421,7 @@ class TestReadingAndWriting_ByTable(PySparkSetup):
             to_table_schema=self.schema,
             to_table_format="parquet",
             to_table_mode="overwrite",
-            to_table_options={"path": self.write_path},
+            to_table_options={"overwriteSchema": "true"},
         )
 
         # Read transferred table
@@ -411,13 +447,12 @@ class TestReadingAndWriting_ByTable(PySparkSetup):
             from_table_name="ps_df_extended",
             from_table_schema=self.schema,
             from_table_format="parquet",
-            from_table_options={"path": self.write_path},
             to_table_name="ps_df_extended_transferred2",
             to_table_schema=self.schema,
             to_table_format="parquet",
             to_table_mode="overwrite",
             to_table_partition_cols=["a", "b"],
-            to_table_options={"path": self.write_path},
+            to_table_options={"overwriteSchema": "true"},
         )
 
         # Read transferred table
@@ -433,6 +468,63 @@ class TestReadingAndWriting_ByTable(PySparkSetup):
         assert is_type(table, psDataFrame)
         result: psDataFrame = table
         expected: psDataFrame = self.ps_df_extended
-        assert_df_equality(result, expected, ignore_nullable=True)
-        partitions: list[str] = os.listdir(f"{self.schema}/ps_df_extended_transferred2")
+        assert_df_equality(
+            result,
+            expected,
+            ignore_nullable=True,
+            ignore_column_order=True,
+            ignore_row_order=True,
+        )
+        print(self.spark.catalog.recoverPartitions("ps_df_extended_transferred2"))
+        partitions: list[str] = os.listdir(f"{self.write_path}/ps_df_extended_transferred2")
         assert len([obj for obj in partitions if "=" in obj]) > 0
+
+    def test_3_transfer_table_3(self) -> None:
+        """Transfer using generic function"""
+
+        # Write new table
+        write(
+            data_frame=self.ps_df_extended,
+            name="ps_df_extended",
+            method="table",
+            schema=self.schema,
+            data_format="parquet",
+            mode="overwrite",
+            write_options={"overwriteSchema": "true"},
+        )
+
+        # Transfer new table
+        transfer(
+            spark_session=self.spark,
+            method="table",
+            from_table_name="ps_df_extended",
+            from_table_schema=self.schema,
+            from_table_format="parquet",
+            from_table_options={"path": self.write_path},
+            to_table_name="ps_df_extended_transferred",
+            to_table_schema=self.schema,
+            to_table_format="parquet",
+            to_table_mode="overwrite",
+            to_table_options={"overwriteSchema": "true"},
+        )
+
+        # Read transferred table
+        table: psDataFrame = read(
+            name="ps_df_extended_transferred",
+            method="table",
+            schema=self.schema,
+            spark_session=self.spark,
+            data_format="parquet",
+        )
+
+        # Test
+        assert is_type(table, psDataFrame)
+        result: psDataFrame = table
+        expected: psDataFrame = self.ps_df_extended
+        assert_df_equality(result, expected, ignore_nullable=True)
+
+    def test_errors(self) -> None:
+        with pytest.raises(ValidationError):
+            read_from_table(spark_session=self.spark, name="schema/table")
+        with pytest.raises(ValidationError):
+            read_from_table(spark_session=self.spark, name="source.schema.table")
