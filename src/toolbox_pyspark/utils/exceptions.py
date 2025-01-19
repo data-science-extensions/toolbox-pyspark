@@ -12,3 +12,7 @@ class InvalidDataFrameNameError(Exception):
 
 class PySparkVersionError(Exception):
     pass
+
+
+class ValidationError(Exception):
+    pass

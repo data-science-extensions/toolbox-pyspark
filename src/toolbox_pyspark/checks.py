@@ -49,7 +49,7 @@ from typeguard import typechecked
 
 # ## Local First Party Imports ----
 from toolbox_pyspark.constants import ALL_PYSPARK_TYPES, VALID_PYSPARK_TYPE_NAMES
-from toolbox_pyspark.io import read_from_path
+from toolbox_pyspark.io import SPARK_FORMATS, read_from_path
 from toolbox_pyspark.utils.exceptions import (
     ColumnDoesNotExistError,
     InvalidPySparkDataTypeError,
@@ -1113,7 +1113,7 @@ def warn_columns_invalid_type(
 def table_exists(
     name: str,
     path: str,
-    data_format: str,
+    data_format: SPARK_FORMATS,
     spark_session: SparkSession,
 ) -> bool:
     """
@@ -1202,3 +1202,15 @@ def table_exists(
     except Exception:
         return False
     return True
+
+
+@typechecked
+def assert_table_exists(
+    name: str,
+    path: str,
+    data_format: SPARK_FORMATS,
+    spark_session: SparkSession,
+) -> None:
+    assert table_exists(
+        name=name, path=path, data_format=data_format, spark_session=spark_session
+    )

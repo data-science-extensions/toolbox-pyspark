@@ -57,7 +57,7 @@ class TestCheckSchemas(PySparkSetup):
 
     def setUp(self) -> None:
         write_to_path(
-            table=self.ps_df_schema_left,
+            data_frame=self.ps_df_schema_left,
             name="left",
             path=self.write_path,
             data_format="parquet",
@@ -65,7 +65,7 @@ class TestCheckSchemas(PySparkSetup):
             write_options={"overwriteSchema": "true"},
         )
         write_to_path(
-            table=self.ps_df_schema_right,
+            data_frame=self.ps_df_schema_right,
             name="right",
             path=self.write_path,
             data_format="parquet",
@@ -277,7 +277,7 @@ class TestViewSchemas(PySparkSetup):
 
     def setUp(self) -> None:
         write_to_path(
-            table=self.ps_df_schema_left,
+            data_frame=self.ps_df_schema_left,
             name="left",
             path=self.write_path,
             data_format="parquet",
@@ -285,7 +285,7 @@ class TestViewSchemas(PySparkSetup):
             write_options={"overwriteSchema": "true"},
         )
         write_to_path(
-            table=self.ps_df_schema_right,
+            data_frame=self.ps_df_schema_right,
             name="right",
             path=self.write_path,
             data_format="parquet",
