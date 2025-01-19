@@ -86,6 +86,7 @@ __all__: str_list = [
 ## --------------------------------------------------------------------------- #
 
 
+### Data formats ----
 SPARK_FORMATS = Literal[
     # Built-in formats
     "parquet",
@@ -139,7 +140,55 @@ Other formats with additional dependencies:
 - `elasticsearch` (requires: `org.elasticsearch:elasticsearch-hadoop` dependency and `elasticsearch-hadoop` package)
 """
 VALID_SPARK_FORMATS: str_tuple = get_args(SPARK_FORMATS)
-VALID_SPARK_FORMATS.__doc__ = SPARK_FORMATS.__doc__
+"""
+The valid formats that can be used to read/write data in Spark.
+
+PySpark's built-in data source formats:
+- `parquet`
+- `orc`
+- `json`
+- `csv`
+- `text`
+- `avro`
+
+Database formats (with proper JDBC drivers):
+- `jdbc`
+- `oracle`
+- `mysql`
+- `postgresql`
+- `mssql`
+- `db2`
+
+Other formats with additional dependencies:
+- `delta` (requires: `io.delta:delta-core` dependency and `delata-spark` package)
+- `xml` (requires: `com.databricks:spark-xml` dependency and `spark-xml` package)
+- `excel` (requires: `com.crealytics:spark-excel` dependency and `spark-excel` package)
+- `hive` (requires: Hive support)
+- `mongodb` (requires: `org.mongodb.spark:mongo-spark-connector` dependency and `mongo-spark-connector` package)
+- `cassandra` (requires: `com.datastax.spark:spark-cassandra-connector` dependency and `spark-cassandra-connector` package)
+- `elasticsearch` (requires: `org.elasticsearch:elasticsearch-hadoop` dependency and `elasticsearch-hadoop` package)
+"""
+
+
+### Write modes ----
+WRITE_MODES = Literal["append", "overwrite", "ignore", "error", "errorifexists"]
+"""
+The valid modes you can use for writing data frames
+- `append`
+- `overwrite`
+- `ignore`
+- `error`
+- `errorifexists`
+"""
+VALID_WRITE_MODES: str_tuple = get_args(WRITE_MODES)
+"""
+The valid modes you can use for writing data frames
+- `append`
+- `overwrite`
+- `ignore`
+- `error`
+- `errorifexists`
+"""
 
 
 # ---------------------------------------------------------------------------- #
@@ -307,7 +356,7 @@ def write_to_path(
     name: str,
     path: str,
     data_format: Optional[SPARK_FORMATS] = "parquet",
-    mode: Optional[str] = None,
+    mode: Optional[WRITE_MODES] = None,
     write_options: Optional[str_dict] = None,
     partition_cols: Optional[str_collection] = None,
 ) -> None:
@@ -325,7 +374,7 @@ def write_to_path(
         data_format (Optional[SPARK_FORMATS], optional):
             The format that the `table` will be written to.<br>
             Defaults to `#!py "delta"`.
-        mode (Optional[str], optional):
+        mode (Optional[WRITE_MODES], optional):
             The behaviour for when the data already exists.<br>
             For more info, check the `pyspark` docs: [`pyspark.sql.DataFrameWriter.mode`](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrameWriter.mode.html).<br>
             Defaults to `#!py None`.
@@ -478,7 +527,7 @@ def transfer_by_path(
     from_table_format: Optional[SPARK_FORMATS] = "parquet",
     from_table_options: Optional[str_dict] = None,
     to_table_format: Optional[SPARK_FORMATS] = "parquet",
-    to_table_mode: Optional[str] = None,
+    to_table_mode: Optional[WRITE_MODES] = None,
     to_table_options: Optional[str_dict] = None,
     to_table_partition_cols: Optional[str_collection] = None,
 ) -> None:
@@ -508,7 +557,7 @@ def transfer_by_path(
             Any additional obtions to parse to the Spark reader.<br>
             For more info, check the `pyspark` docs: [`pyspark.sql.DataFrameReader.options`](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrameReader.options.html).<br>
             Defaults to `#! dict()`.
-        to_table_mode (Optional[str], optional):
+        to_table_mode (Optional[WRITE_MODES], optional):
             The behaviour for when the data already exists.<br>
             For more info, check the `pyspark` docs: [`pyspark.sql.DataFrameWriter.mode`](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrameWriter.mode.html).<br>
             Defaults to `#!py None`.
@@ -729,7 +778,7 @@ def write_to_table(
     name: str,
     schema: Optional[str] = None,
     data_format: Optional[SPARK_FORMATS] = "parquet",
-    mode: Optional[str] = None,
+    mode: Optional[WRITE_MODES] = None,
     write_options: Optional[str_dict] = None,
     partition_cols: Optional[str_collection] = None,
 ) -> None:
@@ -773,7 +822,7 @@ def transfer_by_table(
     from_table_options: Optional[str_dict] = None,
     to_table_schema: Optional[str] = None,
     to_table_format: Optional[SPARK_FORMATS] = "parquet",
-    to_table_mode: Optional[str] = None,
+    to_table_mode: Optional[WRITE_MODES] = None,
     to_table_options: Optional[str_dict] = None,
     to_table_partition_cols: Optional[str_collection] = None,
 ) -> None:
@@ -852,7 +901,7 @@ def write(
     path: Optional[str] = None,
     schema: Optional[str] = None,
     data_format: Optional[SPARK_FORMATS] = "parquet",
-    mode: Optional[str] = None,
+    mode: Optional[WRITE_MODES] = None,
     write_options: Optional[str_dict] = None,
     partition_cols: Optional[str_collection] = None,
 ) -> None:
@@ -896,7 +945,7 @@ def transfer(
     to_path: Optional[str] = None,
     to_schema: Optional[str] = None,
     to_format: Optional[SPARK_FORMATS] = "parquet",
-    to_mode: Optional[str] = None,
+    to_mode: Optional[WRITE_MODES] = None,
     to_options: Optional[str_dict] = None,
     to_partition_cols: Optional[str_collection] = None,
 ) -> None:
