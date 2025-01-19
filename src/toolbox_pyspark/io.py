@@ -775,3 +775,134 @@ def transfer_table_by_table(
         write_options=to_table_options,
         partition_cols=to_table_partition_cols,
     )
+
+
+# ---------------------------------------------------------------------------- #
+#                                                                              #
+#     Combined Functions                                                    ####
+#                                                                              #
+# ---------------------------------------------------------------------------- #
+
+
+## --------------------------------------------------------------------------- #
+##  Read                                                                    ####
+## --------------------------------------------------------------------------- #
+
+
+@typechecked
+def read(
+    spark_session: SparkSession,
+    name: str,
+    method: Literal["table", "path"],
+    path: Optional[str] = None,
+    schema: Optional[str] = None,
+    data_format: Optional[SPARK_FORMATS] = "parquet",
+    read_options: Optional[str_dict] = None,
+) -> psDataFrame:
+    if method == "table":
+        return read_from_table(
+            spark_session=spark_session,
+            name=name,
+            schema=schema,
+            data_format=data_format,
+            read_options=read_options,
+        )
+    if method == "path":
+        return read_from_path(
+            spark_session=spark_session,
+            name=name,
+            path=path,
+            data_format=data_format,
+            read_options=read_options,
+        )
+
+
+## --------------------------------------------------------------------------- #
+##  Write                                                                   ####
+## --------------------------------------------------------------------------- #
+
+
+@typechecked
+def write(
+    data_frame: psDataFrame,
+    name: str,
+    method: Literal["table", "path"],
+    path: Optional[str] = None,
+    schema: Optional[str] = None,
+    data_format: Optional[SPARK_FORMATS] = "parquet",
+    mode: Optional[str] = None,
+    write_options: Optional[str_dict] = None,
+    partition_cols: Optional[str_collection] = None,
+) -> None:
+    if method == "table":
+        write_to_table(
+            data_frame=data_frame,
+            name=name,
+            schema=schema,
+            data_format=data_format,
+            mode=mode,
+            write_options=write_options,
+            partition_cols=partition_cols,
+        )
+    if method == "path":
+        write_to_path(
+            data_frame=data_frame,
+            name=name,
+            path=path,
+            data_format=data_format,
+            mode=mode,
+            write_options=write_options,
+            partition_cols=partition_cols,
+        )
+
+
+## --------------------------------------------------------------------------- #
+##  Transfer                                                                ####
+## --------------------------------------------------------------------------- #
+
+
+@typechecked
+def transfer(
+    spark_session: SparkSession,
+    from_name: str,
+    to_name: str,
+    method: Literal["table", "path"],
+    from_path: Optional[str] = None,
+    from_schema: Optional[str] = None,
+    from_format: Optional[SPARK_FORMATS] = "parquet",
+    from_options: Optional[str_dict] = None,
+    to_path: Optional[str] = None,
+    to_schema: Optional[str] = None,
+    to_format: Optional[SPARK_FORMATS] = "parquet",
+    to_mode: Optional[str] = None,
+    to_options: Optional[str_dict] = None,
+    to_partition_cols: Optional[str_collection] = None,
+) -> None:
+    if method == "table":
+        transfer_table_by_table(
+            spark_session=spark_session,
+            from_table_name=from_name,
+            to_table_name=to_name,
+            from_table_schema=from_schema,
+            from_table_format=from_format,
+            from_table_options=from_options,
+            to_table_schema=to_schema,
+            to_table_format=to_format,
+            to_table_mode=to_mode,
+            to_table_options=to_options,
+            to_table_partition_cols=to_partition_cols,
+        )
+    if method == "path":
+        transfer_table_by_path(
+            spark_session=spark_session,
+            from_table_path=from_path,
+            from_table_name=from_name,
+            from_table_format=from_format,
+            to_table_path=to_path,
+            to_table_name=to_name,
+            to_table_format=to_format,
+            from_table_options=from_options,
+            to_table_mode=to_mode,
+            to_table_options=to_options,
+            to_table_partition_cols=to_partition_cols,
+        )
