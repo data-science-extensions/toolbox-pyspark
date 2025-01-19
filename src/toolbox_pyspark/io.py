@@ -65,10 +65,10 @@ __all__: str_list = [
     "VALID_SPARK_FORMATS",
     "read_from_path",
     "write_to_path",
-    "transfer_table_by_path",
+    "transfer_by_path",
     "read_from_table",
     "write_to_table",
-    "transfer_table_by_table",
+    "transfer_by_table",
     "read",
     "write",
     "transfer",
@@ -469,7 +469,7 @@ def write_to_path(
 
 
 @typechecked
-def transfer_table_by_path(
+def transfer_by_path(
     spark_session: SparkSession,
     from_table_path: str,
     from_table_name: str,
@@ -537,7 +537,7 @@ def transfer_table_by_path(
         >>> # Imports
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
-        >>> from toolbox_pyspark.io import transfer_table
+        >>> from toolbox_pyspark.io import transfer_by_path
         >>> from toolbox_pyspark.checks import table_exists
         >>>
         >>> # Instantiate Spark
@@ -567,7 +567,7 @@ def transfer_table_by_path(
         </div>
 
         ```{.py .python linenums="1" title="Example 1: Transfer CSV"}
-        >>> transfer_table_by_path(
+        >>> transfer_by_path(
         ...     spark_session=spark,
         ...     from_table_path="./test",
         ...     from_table_name="table.csv",
@@ -595,7 +595,7 @@ def transfer_table_by_path(
         </div>
 
         ```{.py .python linenums="1" title="Example 2: Transfer Parquet"}
-        >>> transfer_table_by_path(
+        >>> transfer_by_path(
         ...     spark_session=spark,
         ...     from_table_path="./test",
         ...     from_table_name="table.parquet",
@@ -622,7 +622,7 @@ def transfer_table_by_path(
         </div>
 
         ```{.py .python linenums="1" title="Example 3: Transfer CSV to Parquet"}
-        >>> transfer_table_by_path(
+        >>> transfer_by_path(
         ...     spark_session=spark,
         ...     from_table_path="./test",
         ...     from_table_name="table.csv",
@@ -764,7 +764,7 @@ def write_to_table(
 
 
 @typechecked
-def transfer_table_by_table(
+def transfer_by_table(
     spark_session: SparkSession,
     from_table_name: str,
     to_table_name: str,
@@ -901,7 +901,7 @@ def transfer(
     to_partition_cols: Optional[str_collection] = None,
 ) -> None:
     if method == "table":
-        transfer_table_by_table(
+        transfer_by_table(
             spark_session=spark_session,
             from_table_name=from_name,
             to_table_name=to_name,
@@ -915,7 +915,7 @@ def transfer(
             to_table_partition_cols=to_partition_cols,
         )
     if method == "path":
-        transfer_table_by_path(
+        transfer_by_path(
             spark_session=spark_session,
             from_table_path=from_path,
             from_table_name=from_name,
