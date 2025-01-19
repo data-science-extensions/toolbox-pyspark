@@ -646,3 +646,132 @@ def transfer_table_by_path(
         write_options=to_table_options,
         partition_cols=to_table_partition_cols,
     )
+
+
+# ---------------------------------------------------------------------------- #
+#                                                                              #
+#     Table functions                                                       ####
+#                                                                              #
+# ---------------------------------------------------------------------------- #
+
+
+def _validate_table_name(table: str) -> None:
+    if "/" in table:
+        raise ValidationError(f"Invalid table. Cannot contain `/`: `{table}`")
+    if len(table.split(".")) != 2:
+        raise ValidationError(
+            f"Invalid table. Should be in the format `schema.table`: {table}"
+        )
+
+
+## --------------------------------------------------------------------------- #
+##  Read                                                                    ####
+## --------------------------------------------------------------------------- #
+
+
+@typechecked
+def read_from_table(
+    spark_session: SparkSession,
+    name: str,
+    schema: Optional[str] = None,
+    data_format: Optional[SPARK_FORMATS] = "parquet",
+    read_options: Optional[str_dict] = None,
+) -> psDataFrame:
+
+    # Set default options ----
+    data_format: str = data_format or "parquet"
+    table: str = name if not schema else f"{schema}.{name}"
+
+    # Validate that `table` is in the correct format ----
+    _validate_table_name(table)
+
+    # Initialise reader (including data format) ----
+    reader: DataFrameReader = spark_session.read.format(data_format)
+
+    # Add options (if exists) ----
+    if read_options:
+        reader.options(**read_options)
+
+    # Load DataFrame ----
+    return reader.table(table)
+
+
+## --------------------------------------------------------------------------- #
+##  Write                                                                   ####
+## --------------------------------------------------------------------------- #
+
+
+@typechecked
+def write_to_table(
+    data_frame: psDataFrame,
+    name: str,
+    schema: Optional[str] = None,
+    data_format: Optional[SPARK_FORMATS] = "parquet",
+    mode: Optional[str] = None,
+    write_options: Optional[str_dict] = None,
+    partition_cols: Optional[str_collection] = None,
+) -> None:
+
+    # Set default options ----
+    write_options: str_dict = write_options or dict()
+    data_format: str = data_format or "parquet"
+    table: str = name if not schema else f"{schema}.{name}"
+
+    # Validate that `table` is in the correct format ----
+    _validate_table_name(table)
+
+    # Initialise writer (including data format) ----
+    writer: DataFrameWriter = data_frame.write.mode(mode).format(data_format)
+
+    # Add options (if exists) ----
+    if write_options:
+        writer.options(**write_options)
+
+    # Add partition (if exists) ----
+    if partition_cols is not None:
+        partition_cols = [partition_cols] if is_type(partition_cols, str) else partition_cols
+        writer = writer.partitionBy(list(partition_cols))
+
+    # Write table ----
+    writer.saveAsTable(table)
+
+
+## --------------------------------------------------------------------------- #
+##  Transfer                                                                ####
+## --------------------------------------------------------------------------- #
+
+
+@typechecked
+def transfer_table_by_table(
+    spark_session: SparkSession,
+    from_table_name: str,
+    to_table_name: str,
+    from_table_schema: Optional[str] = None,
+    from_table_format: Optional[SPARK_FORMATS] = "parquet",
+    from_table_options: Optional[str_dict] = None,
+    to_table_schema: Optional[str] = None,
+    to_table_format: Optional[SPARK_FORMATS] = "parquet",
+    to_table_mode: Optional[str] = None,
+    to_table_options: Optional[str_dict] = None,
+    to_table_partition_cols: Optional[str_collection] = None,
+) -> None:
+
+    # Read from source ----
+    source_table: psDataFrame = read_from_table(
+        name=from_table_name,
+        schema=from_table_schema,
+        spark_session=spark_session,
+        data_format=from_table_format,
+        read_options=from_table_options,
+    )
+
+    # Write to target ----
+    write_to_table(
+        data_frame=source_table,
+        name=to_table_name,
+        schema=to_table_schema,
+        data_format=to_table_format,
+        mode=to_table_mode,
+        write_options=to_table_options,
+        partition_cols=to_table_partition_cols,
+    )
