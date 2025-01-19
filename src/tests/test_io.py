@@ -268,7 +268,13 @@ class TestReadingAndWriting_ByPath(PySparkSetup):
         assert is_type(table, psDataFrame)
         result: psDataFrame = table.withColumn("a", F.col("a").cast(T.LongType()))
         expected: psDataFrame = self.ps_df_extended
-        assert_df_equality(result, expected, ignore_nullable=True, ignore_column_order=True)
+        assert_df_equality(
+            result,
+            expected,
+            ignore_nullable=True,
+            ignore_column_order=True,
+            ignore_row_order=True,
+        )
         partitions: list[str] = os.listdir(f"{self.write_path}/ps_df_extended_transferred2")
         assert len([obj for obj in partitions if "=" in obj]) > 0
 
