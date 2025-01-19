@@ -54,8 +54,8 @@
             </div>
         </aside>
         <h2>
-            <span class="text">122 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">122<span class="text"> run</span></button>
+            <span class="text">125 statements &nbsp;</span>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">125<span class="text"> run</span></button>
             <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">0<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">0<span class="text"> excluded</span></button>
         </h2>
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="z_1e017140feec0b31_cleaning_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.10">coverage.py v7.6.10</a>,
-            created at 2024-12-29 05:21 +0000
+            created at 2025-01-19 20:46 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -131,7 +131,7 @@
     <p class="pln"><span class="n"><a id="t49" href="#t49">49</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t50" href="#t50">50</a></span><span class="t"><span class="com"># ## Local First Party Imports ----</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t51" href="#t51">51</a></span><span class="t"><span class="key">from</span> <span class="nam">toolbox_pyspark</span><span class="op">.</span><span class="nam">constants</span> <span class="key">import</span> <span class="nam">ALL_PYSPARK_TYPES</span><span class="op">,</span> <span class="nam">VALID_PYSPARK_TYPE_NAMES</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t52" href="#t52">52</a></span><span class="t"><span class="key">from</span> <span class="nam">toolbox_pyspark</span><span class="op">.</span><span class="nam">io</span> <span class="key">import</span> <span class="nam">read_from_path</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t52" href="#t52">52</a></span><span class="t"><span class="key">from</span> <span class="nam">toolbox_pyspark</span><span class="op">.</span><span class="nam">io</span> <span class="key">import</span> <span class="nam">SPARK_FORMATS</span><span class="op">,</span> <span class="nam">read_from_path</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t53" href="#t53">53</a></span><span class="t"><span class="key">from</span> <span class="nam">toolbox_pyspark</span><span class="op">.</span><span class="nam">utils</span><span class="op">.</span><span class="nam">exceptions</span> <span class="key">import</span> <span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t54" href="#t54">54</a></span><span class="t">    <span class="nam">ColumnDoesNotExistError</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t55" href="#t55">55</a></span><span class="t">    <span class="nam">InvalidPySparkDataTypeError</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
@@ -1195,7 +1195,7 @@
     <p class="run"><span class="n"><a id="t1113" href="#t1113">1113</a></span><span class="t"><span class="key">def</span> <span class="nam">table_exists</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1114" href="#t1114">1114</a></span><span class="t">    <span class="nam">name</span><span class="op">:</span> <span class="nam">str</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1115" href="#t1115">1115</a></span><span class="t">    <span class="nam">path</span><span class="op">:</span> <span class="nam">str</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t1116" href="#t1116">1116</a></span><span class="t">    <span class="nam">data_format</span><span class="op">:</span> <span class="nam">str</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t1116" href="#t1116">1116</a></span><span class="t">    <span class="nam">data_format</span><span class="op">:</span> <span class="nam">SPARK_FORMATS</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1117" href="#t1117">1117</a></span><span class="t">    <span class="nam">spark_session</span><span class="op">:</span> <span class="nam">SparkSession</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1118" href="#t1118">1118</a></span><span class="t"><span class="op">)</span> <span class="op">-></span> <span class="nam">bool</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t1119" href="#t1119">1119</a></span><span class="t">    <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
@@ -1284,6 +1284,18 @@
     <p class="run"><span class="n"><a id="t1202" href="#t1202">1202</a></span><span class="t">    <span class="key">except</span> <span class="nam">Exception</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1203" href="#t1203">1203</a></span><span class="t">        <span class="key">return</span> <span class="key">False</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t1204" href="#t1204">1204</a></span><span class="t">    <span class="key">return</span> <span class="key">True</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t1205" href="#t1205">1205</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t1206" href="#t1206">1206</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t1207" href="#t1207">1207</a></span><span class="t"><span class="op">@</span><span class="nam">typechecked</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t1208" href="#t1208">1208</a></span><span class="t"><span class="key">def</span> <span class="nam">assert_table_exists</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t1209" href="#t1209">1209</a></span><span class="t">    <span class="nam">name</span><span class="op">:</span> <span class="nam">str</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t1210" href="#t1210">1210</a></span><span class="t">    <span class="nam">path</span><span class="op">:</span> <span class="nam">str</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t1211" href="#t1211">1211</a></span><span class="t">    <span class="nam">data_format</span><span class="op">:</span> <span class="nam">SPARK_FORMATS</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t1212" href="#t1212">1212</a></span><span class="t">    <span class="nam">spark_session</span><span class="op">:</span> <span class="nam">SparkSession</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t1213" href="#t1213">1213</a></span><span class="t"><span class="op">)</span> <span class="op">-></span> <span class="key">None</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t1214" href="#t1214">1214</a></span><span class="t">    <span class="key">assert</span> <span class="nam">table_exists</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t1215" href="#t1215">1215</a></span><span class="t">        <span class="nam">name</span><span class="op">=</span><span class="nam">name</span><span class="op">,</span> <span class="nam">path</span><span class="op">=</span><span class="nam">path</span><span class="op">,</span> <span class="nam">data_format</span><span class="op">=</span><span class="nam">data_format</span><span class="op">,</span> <span class="nam">spark_session</span><span class="op">=</span><span class="nam">spark_session</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t1216" href="#t1216">1216</a></span><span class="t">    <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
 </main>
 <footer>
     <div class="content">
@@ -1293,7 +1305,7 @@
             <a class="nav" href="z_1e017140feec0b31_cleaning_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.10">coverage.py v7.6.10</a>,
-            created at 2024-12-29 05:21 +0000
+            created at 2025-01-19 20:46 +0000
         </p>
     </div>
 </footer>
