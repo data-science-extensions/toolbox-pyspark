@@ -881,6 +881,107 @@ def read_from_table(
     data_format: Optional[SPARK_FORMATS] = "parquet",
     read_options: Optional[str_dict] = None,
 ) -> psDataFrame:
+    """
+    !!! note "Summary"
+        Read a table from a given `schema` and `name` into memory as a `pyspark` dataframe.
+
+    ???+ abstract "Details"
+        - If `schema` is `#!py None`, then we would expect the `name` to contain both the schema and the table name in the same. Like: `schema.name`, for example `production.orders`.
+        - Else, if `schema` is not `#! None`, then we would expect the `schema` to (quite logically) contain the name of the schema, and the `name` to contain the name of the table.
+
+    Params:
+        spark_session (SparkSession):
+            The Spark session to use for the reading.
+        name (str):
+            The name of the table to read in.
+        schema (Optional[str], optional):
+            The schema of the table to read in.<br>
+            Defaults to `#!py None`.
+        data_format (Optional[SPARK_FORMATS], optional):
+            The format of the table.<br>
+            Defaults to `#!py "parquet"`.
+        read_options (Dict[str, str], optional):
+            Any additional options to parse to the Spark reader.<br>
+            For more info, check the `pyspark` docs: [`pyspark.sql.DataFrameReader.options`](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrameReader.options.html).<br>
+            Defaults to `#!py dict()`.
+
+    Raises:
+        TypeError:
+            If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
+        ValidationError:
+            If `name` contains `/`, or is structured with three elements like: `source.schema.table`.
+
+    Returns:
+        (psDataFrame):
+            The loaded dataframe.
+
+    ???+ example "Examples"
+
+        ```{.py .python linenums="1" title="Set up"}
+        >>> # Imports
+        >>> import pandas as pd
+        >>> from pyspark.sql import SparkSession
+        >>> from toolbox_pyspark.io import read_from_table
+        >>>
+        >>> # Instantiate Spark
+        >>> spark = SparkSession.builder.getOrCreate()
+        >>>
+        >>> # Create data
+        >>> df = pd.DataFrame(
+        ...     {
+        ...         "a": [1, 2, 3, 4],
+        ...         "b": ["a", "b", "c", "d"],
+        ...         "c": [1, 1, 1, 1],
+        ...         "d": ["2", "2", "2", "2"],
+        ...     }
+        ... )
+        >>> df.to_parquet("./test/table.parquet")
+        >>> spark.read.parquet("./test/table.parquet").createOrReplaceTempView("test_table")
+        ```
+
+        ```{.py .python linenums="1" title="Example 1: Read Table"}
+        >>> df_table = read_from_table(
+        ...     name="test_table",
+        ...     spark_session=spark,
+        ...     data_format="parquet",
+        ... )
+        >>>
+        >>> df_table.show()
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        +---+---+---+---+
+        | a | b | c | d |
+        +---+---+---+---+
+        | 1 | a | 1 | 2 |
+        | 2 | b | 1 | 2 |
+        | 3 | c | 1 | 2 |
+        | 4 | d | 1 | 2 |
+        +---+---+---+---+
+        ```
+        !!! success "Conclusion: Successfully read table."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 2: Invalid table structure"}
+        >>> df_table = read_from_table(
+        ...     name="schema.test_table",
+        ...     schema="source",
+        ...     spark_session=spark,
+        ...     data_format="parquet",
+        ... )
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        Invalid table. Should be in the format `schema.table`: `source.schema.test_table`.
+        ```
+        !!! failure "Conclusion: Failed to write to table due to invalid table structure."
+        </div>
+
+    ??? tip "See Also"
+        - [`save_to_table`][toolbox_pyspark.io.save_to_table]
+        - [`write`][toolbox_pyspark.io.write]
+        - [`save`][toolbox_pyspark.io.save]
+    """
 
     # Set default options ----
     data_format: str = data_format or "parquet"
@@ -915,6 +1016,140 @@ def write_to_table(
     write_options: Optional[str_dict] = None,
     partition_cols: Optional[str_collection] = None,
 ) -> None:
+    """
+    !!! note "Summary"
+        For a given `data_frame`, write it out to a specified `schema` and `name` with format `data_format`.
+
+    ???+ abstract "Details"
+        - If `schema` is `#!py None`, then we would expect the `name` to contain both the schema and the table name in the same. Like: `schema.name`, for example `production.orders`.
+        - Else, if `schema` is not `#! None`, then we would expect the `schema` to (quite logically) contain the name of the schema, and the `name` to contain the name of the table.
+
+    Params:
+        data_frame (psDataFrame):
+            The DataFrame to be written. Must be a valid `pyspark` DataFrame ([`pyspark.sql.DataFrame`](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrame.html)).
+        name (str):
+            The name of the table where it will be written.
+        schema (Optional[str], optional):
+            The schema of the table where it will be written.<br>
+            Defaults to `#!py None`.
+        data_format (Optional[SPARK_FORMATS], optional):
+            The format that the `data_frame` will be written to.<br>
+            Defaults to `#!py "parquet"`.
+        mode (Optional[WRITE_MODES], optional):
+            The behaviour for when the data already exists.<br>
+            For more info, check the `pyspark` docs: [`pyspark.sql.DataFrameWriter.mode`](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrameWriter.mode.html).<br>
+            Defaults to `#!py None`.
+        write_options (Dict[str, str], optional):
+            Any additional settings to parse to the writer class.<br>
+            Like, for example:
+
+            - If you are writing to a Delta object, and wanted to overwrite the schema: `#!py {"overwriteSchema": "true"}`.
+            - If you're writing to a CSV file, and wanted to specify the header row: `#!py {"header": "true"}`.
+
+            For more info, check the `pyspark` docs: [`pyspark.sql.DataFrameWriter.options`](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrameWriter.options.html).<br>
+            Defaults to `#!py dict()`.
+        partition_cols (Optional[Union[str_collection, str]], optional):
+            The column(s) that the table should partition by.<br>
+            Defaults to `#!py None`.
+
+    Raises:
+        TypeError:
+            If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
+        ValidationError:
+            If `name` contains `/`, or is structured with three elements like: `source.schema.table`.
+
+    Returns:
+        (type(None)):
+            Nothing is returned.
+
+    ???+ tip "Note"
+        You know that this function is successful if the table exists at the specified location, and there are no errors thrown.
+
+    ???+ example "Examples"
+
+        ```{.py .python linenums="1" title="Set up"}
+        >>> # Imports
+        >>> import pandas as pd
+        >>> from pyspark.sql import SparkSession
+        >>> from toolbox_pyspark.io import write_to_table
+        >>> from toolbox_pyspark.checks import table_exists
+        >>>
+        >>> # Instantiate Spark
+        >>> spark = SparkSession.builder.getOrCreate()
+        >>>
+        >>> # Create data
+        >>> df = spark.createDataFrame(
+        ...     pd.DataFrame(
+        ...         {
+        ...             "a": [1, 2, 3, 4],
+        ...             "b": ["a", "b", "c", "d"],
+        ...             "c": [1, 1, 1, 1],
+        ...             "d": ["2", "2", "2", "2"],
+        ...         }
+        ...     )
+        ... )
+        ```
+
+        ```{.py .python linenums="1" title="Check"}
+        >>> df.show()
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        +---+---+---+---+
+        | a | b | c | d |
+        +---+---+---+---+
+        | 1 | a | 1 | 2 |
+        | 2 | b | 1 | 2 |
+        | 3 | c | 1 | 2 |
+        | 4 | d | 1 | 2 |
+        +---+---+---+---+
+        ```
+        </div>
+
+        ```{.py .python linenums="1" title="Example 1: Write to Table"}
+        >>> write_to_table(
+        ...     data_frame=df,
+        ...     name="test_table",
+        ...     schema="default",
+        ...     data_format="parquet",
+        ...     mode="overwrite",
+        ... )
+        >>>
+        >>> table_exists(
+        ...     name="test_table",
+        ...     schema="default",
+        ...     data_format="parquet",
+        ...     spark_session=df.sparkSession,
+        ... )
+        ```
+        <div class="result" markdown>
+        ```{.sh .shell title="Terminal"}
+        True
+        ```
+        !!! success "Conclusion: Successfully written to table."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 2: Invalid table structure"}
+        >>> write_to_table(
+        ...     data_frame=df,
+        ...     name="schema.test_table",
+        ...     schema="source",
+        ...     data_format="parquet",
+        ...     mode="overwrite",
+        ... )
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        Invalid table. Should be in the format `schema.table`: `source.schema.test_table`.
+        ```
+        !!! failure "Conclusion: Failed to write to table due to invalid table structure."
+        </div>
+
+    ??? tip "See Also"
+        - [`save_to_table`][toolbox_pyspark.io.save_to_table]
+        - [`write`][toolbox_pyspark.io.write]
+        - [`save`][toolbox_pyspark.io.save]
+    """
 
     # Set default options ----
     write_options: str_dict = write_options or dict()
@@ -959,6 +1194,132 @@ def transfer_by_table(
     to_table_options: Optional[str_dict] = None,
     to_table_partition_cols: Optional[str_collection] = None,
 ) -> None:
+    """
+    !!! note "Summary"
+        Copy a table from one schema and name to another schema and name.
+
+    ???+ abstract "Details"
+        This is a blind transfer. There is no validation, no alteration, no adjustments made at all. Simply read directly from one table and move immediately to another table straight away.
+
+    Params:
+        spark_session (SparkSession):
+            The spark session to use for the transfer. Necessary in order to instantiate the reading process.
+        from_table_name (str):
+            The name of the table to be read.
+        to_table_name (str):
+            The name of the table where it will be saved.
+        from_table_schema (Optional[str], optional):
+            The schema of the table to be read.<br>
+            Defaults to `#!py None`.
+        from_table_format (Optional[SPARK_FORMATS], optional):
+            The format of the data at the reading location.<br>
+            Defaults to `#!py "parquet"`.
+        from_table_options (Dict[str, str], optional):
+            Any additional options to parse to the Spark reader.<br>
+            For more info, check the `pyspark` docs: [`pyspark.sql.DataFrameReader.options`](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrameReader.options.html).<br>
+            Defaults to `#!py dict()`.
+        to_table_schema (Optional[str], optional):
+            The schema of the table where it will be saved.<br>
+            Defaults to `#!py None`.
+        to_table_format (Optional[SPARK_FORMATS], optional):
+            The format of the saved table.<br>
+            Defaults to `#!py "parquet"`.
+        to_table_mode (Optional[WRITE_MODES], optional):
+            The behaviour for when the data already exists.<br>
+            For more info, check the `pyspark` docs: [`pyspark.sql.DataFrameWriter.mode`](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrameWriter.mode.html).<br>
+            Defaults to `#!py None`.
+        to_table_options (Dict[str, str], optional):
+            Any additional settings to parse to the writer class.<br>
+            For more info, check the `pyspark` docs: [`pyspark.sql.DataFrameWriter.options`](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrameWriter.options.html).<br>
+            Defaults to `#!py dict()`.
+        to_table_partition_cols (Optional[Union[str_collection, str]], optional):
+            The column(s) that the table should partition by.<br>
+            Defaults to `#!py None`.
+
+    Raises:
+        TypeError:
+            If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
+
+    Returns:
+        (type(None)):
+            Nothing is returned.
+
+    ???+ tip "Note"
+        You know that this function is successful if the table exists at the specified location, and there are no errors thrown.
+
+    ???+ example "Examples"
+
+        ```{.py .python linenums="1" title="Set up"}
+        >>> # Imports
+        >>> import pandas as pd
+        >>> from pyspark.sql import SparkSession
+        >>> from toolbox_pyspark.io import transfer_by_table
+        >>> from toolbox_pyspark.checks import table_exists
+        >>>
+        >>> # Instantiate Spark
+        >>> spark = SparkSession.builder.getOrCreate()
+        >>>
+        >>> # Create data
+        >>> df = pd.DataFrame(
+        ...     {
+        ...         "a": [1, 2, 3, 4],
+        ...         "b": ["a", "b", "c", "d"],
+        ...         "c": [1, 1, 1, 1],
+        ...         "d": ["2", "2", "2", "2"],
+        ...     }
+        ... )
+        >>> df.to_parquet("./test/table.parquet")
+        >>> spark.read.parquet("./test/table.parquet").createOrReplaceTempView("test_table")
+        ```
+
+        ```{.py .python linenums="1" title="Example 1: Transfer Table"}
+        >>> transfer_by_table(
+        ...     spark_session=spark,
+        ...     from_table_name="test_table",
+        ...     from_table_schema="default",
+        ...     from_table_format="parquet",
+        ...     to_table_name="new_table",
+        ...     to_table_schema="default",
+        ...     to_table_format="parquet",
+        ...     to_table_mode="overwrite",
+        ... )
+        >>>
+        >>> table_exists(
+        ...     name="new_table",
+        ...     schema="default",
+        ...     data_format="parquet",
+        ...     spark_session=spark,
+        ... )
+        ```
+        <div class="result" markdown>
+        ```{.sh .shell title="Terminal"}
+        True
+        ```
+        !!! success "Conclusion: Successfully transferred table."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 2: Invalid table structure"}
+        >>> transfer_by_table(
+        ...     spark_session=spark,
+        ...     from_table_name="schema.test_table",
+        ...     from_table_schema="source",
+        ...     from_table_format="parquet",
+        ...     to_table_name="new_table",
+        ...     to_table_schema="default",
+        ...     to_table_format="parquet",
+        ...     to_table_mode="overwrite",
+        ... )
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        Invalid table. Should be in the format `schema.table`: `source.schema.test_table`.
+        ```
+        !!! failure "Conclusion: Failed to transfer table due to invalid table structure."
+        </div>
+
+    ??? tip "See Also"
+        - [`transfer`][toolbox_pyspark.io.transfer]
+    """
 
     # Read from source ----
     source_table: psDataFrame = read_from_table(
@@ -1003,6 +1364,162 @@ def read(
     data_format: Optional[SPARK_FORMATS] = "parquet",
     read_options: Optional[str_dict] = None,
 ) -> psDataFrame:
+    """
+    !!! note "Summary"
+        Read a table or file from a given `path` or `schema` and `name` into memory as a `pyspark` dataframe.
+
+    ???+ abstract "Details"
+        This function serves as a unified interface for reading data into a `pyspark` dataframe. Depending on the `method` parameter, it will either read from a file path or a table.
+
+        - If `method` is `#!py "path"`, the function will use the `read_from_path` function to read the data from the specified `path` and `name`.
+        - If `method` is `#!py "table"`, the function will use the `read_from_table` function to read the data from the specified `schema` and `name`.
+
+    Params:
+        spark_session (SparkSession):
+            The Spark session to use for the reading.
+        name (str):
+            The name of the table or file to read in.
+        method (Literal["table", "path"]):
+            The method to use for reading the data. Either `#!py "table"` or `#!py "path"`.
+        path (Optional[str], optional):
+            The path from which the file will be read. Required if `method` is `#!py "path"`.<br>
+            Defaults to `#!py None`.
+        schema (Optional[str], optional):
+            The schema of the table to read in. Required if `method` is `#!py "table"`.<br>
+            Defaults to `#!py None`.
+        data_format (Optional[SPARK_FORMATS], optional):
+            The format of the data.<br>
+            Defaults to `#!py "parquet"`.
+        read_options (Dict[str, str], optional):
+            Any additional options to parse to the Spark reader.<br>
+            For more info, check the `pyspark` docs: [`pyspark.sql.DataFrameReader.options`](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrameReader.options.html).<br>
+            Defaults to `#!py dict()`.
+
+    Raises:
+        TypeError:
+            If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
+        ValidationError:
+            If `name` contains `/`, or is structured with three elements like: `source.schema.table`.
+
+    Returns:
+        (psDataFrame):
+            The loaded dataframe.
+
+    ???+ example "Examples"
+
+        ```{.py .python linenums="1" title="Set up"}
+        >>> # Imports
+        >>> import pandas as pd
+        >>> from pyspark.sql import SparkSession
+        >>> from toolbox_pyspark.io import read
+        >>>
+        >>> # Instantiate Spark
+        >>> spark = SparkSession.builder.getOrCreate()
+        >>>
+        >>> # Create data
+        >>> df = pd.DataFrame(
+        ...     {
+        ...         "a": [1, 2, 3, 4],
+        ...         "b": ["a", "b", "c", "d"],
+        ...         "c": [1, 1, 1, 1],
+        ...         "d": ["2", "2", "2", "2"],
+        ...     }
+        ... )
+        >>> df.to_csv("./test/table.csv")
+        >>> df.to_parquet("./test/table.parquet")
+        >>> spark.read.parquet("./test/table.parquet").createOrReplaceTempView("test_table")
+        ```
+
+        ```{.py .python linenums="1" title="Example 1: Read from Path"}
+        >>> df_path = read(
+        ...     spark_session=spark,
+        ...     name="table.csv",
+        ...     method="path",
+        ...     path="./test",
+        ...     data_format="csv",
+        ...     read_options={"header": "true"},
+        ... )
+        >>>
+        >>> df_path.show()
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        +---+---+---+---+
+        | a | b | c | d |
+        +---+---+---+---+
+        | 1 | a | 1 | 2 |
+        | 2 | b | 1 | 2 |
+        | 3 | c | 1 | 2 |
+        | 4 | d | 1 | 2 |
+        +---+---+---+---+
+        ```
+        !!! success "Conclusion: Successfully read from path."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 2: Read from Table"}
+        >>> df_table = read(
+        ...     spark_session=spark,
+        ...     name="test_table",
+        ...     method="table",
+        ...     schema="default",
+        ...     data_format="parquet",
+        ... )
+        >>>
+        >>> df_table.show()
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        +---+---+---+---+
+        | a | b | c | d |
+        +---+---+---+---+
+        | 1 | a | 1 | 2 |
+        | 2 | b | 1 | 2 |
+        | 3 | c | 1 | 2 |
+        | 4 | d | 1 | 2 |
+        +---+---+---+---+
+        ```
+        !!! success "Conclusion: Successfully read from table."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 3: Invalid Path"}
+        >>> df_invalid_path = read(
+        ...     spark_session=spark,
+        ...     name="invalid_table.csv",
+        ...     method="path",
+        ...     path="./invalid_path",
+        ...     data_format="csv",
+        ...     read_options={"header": "true"},
+        ... )
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        Py4JJavaError: An error occurred while calling o45.load.
+        ```
+        !!! failure "Conclusion: Failed to read from invalid path."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 4: Invalid Table Structure"}
+        >>> df_invalid_table = read(
+        ...     spark_session=spark,
+        ...     name="schema.invalid_table",
+        ...     method="table",
+        ...     schema="source",
+        ...     data_format="parquet",
+        ... )
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        Invalid table. Should be in the format `schema.table`: `source.schema.invalid_table`.
+        ```
+        !!! failure "Conclusion: Failed to read from invalid table structure."
+        </div>
+
+    ??? tip "See Also"
+        - [`read_from_path`][toolbox_pyspark.io.read_from_path]
+        - [`read_from_table`][toolbox_pyspark.io.read_from_table]
+        - [`load`][toolbox_pyspark.io.load]
+    """
+
     if method == "table":
         return read_from_table(
             spark_session=spark_session,
@@ -1038,6 +1555,193 @@ def write(
     write_options: Optional[str_dict] = None,
     partition_cols: Optional[str_collection] = None,
 ) -> None:
+    """
+    !!! note "Summary"
+        Write a dataframe to a specified `path` or `schema` and `name` with format `data_format`.
+
+    ???+ abstract "Details"
+        This function serves as a unified interface for writing data from a `pyspark` dataframe. Depending on the `method` parameter, it will either write to a file path or a table.
+
+        - If `method` is `#!py "path"`, the function will use the `write_to_path` function to write the data to the specified `path` and `name`.
+        - If `method` is `#!py "table"`, the function will use the `write_to_table` function to write the data to the specified `schema` and `name`.
+
+    Params:
+        data_frame (psDataFrame):
+            The DataFrame to be written. Must be a valid `pyspark` DataFrame ([`pyspark.sql.DataFrame`](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrame.html)).
+        name (str):
+            The name of the table or file where it will be written.
+        method (Literal["table", "path"]):
+            The method to use for writing the data. Either `#!py "table"` or `#!py "path"`.
+        path (Optional[str], optional):
+            The path location for where to save the table. Required if `method` is `#!py "path"`.<br>
+            Defaults to `#!py None`.
+        schema (Optional[str], optional):
+            The schema of the table where it will be written. Required if `method` is `#!py "table"`.<br>
+            Defaults to `#!py None`.
+        data_format (Optional[SPARK_FORMATS], optional):
+            The format that the `data_frame` will be written to.<br>
+            Defaults to `#!py "parquet"`.
+        mode (Optional[WRITE_MODES], optional):
+            The behaviour for when the data already exists.<br>
+            For more info, check the `pyspark` docs: [`pyspark.sql.DataFrameWriter.mode`](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrameWriter.mode.html).<br>
+            Defaults to `#!py None`.
+        write_options (Dict[str, str], optional):
+            Any additional settings to parse to the writer class.<br>
+            Like, for example:
+
+            - If you are writing to a Delta object, and wanted to overwrite the schema: `#!py {"overwriteSchema": "true"}`.
+            - If you're writing to a CSV file, and wanted to specify the header row: `#!py {"header": "true"}`.
+
+            For more info, check the `pyspark` docs: [`pyspark.sql.DataFrameWriter.options`](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrameWriter.options.html).<br>
+            Defaults to `#!py dict()`.
+        partition_cols (Optional[Union[str_collection, str]], optional):
+            The column(s) that the table should partition by.<br>
+            Defaults to `#!py None`.
+
+    Raises:
+        TypeError:
+            If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
+        ValidationError:
+            If `name` contains `/`, or is structured with three elements like: `source.schema.table`.
+
+    Returns:
+        (type(None)):
+            Nothing is returned.
+
+    ???+ tip "Note"
+        You know that this function is successful if the table or file exists at the specified location, and there are no errors thrown.
+
+    ???+ example "Examples"
+
+        ```{.py .python linenums="1" title="Set up"}
+        >>> # Imports
+        >>> import pandas as pd
+        >>> from pyspark.sql import SparkSession
+        >>> from toolbox_pyspark.io import write
+        >>> from toolbox_pyspark.checks import table_exists
+        >>>
+        >>> # Instantiate Spark
+        >>> spark = SparkSession.builder.getOrCreate()
+        >>>
+        >>> # Create data
+        >>> df = spark.createDataFrame(
+        ...     pd.DataFrame(
+        ...         {
+        ...             "a": [1, 2, 3, 4],
+        ...             "b": ["a", "b", "c", "d"],
+        ...             "c": [1, 1, 1, 1],
+        ...             "d": ["2", "2", "2", "2"],
+        ...         }
+        ...     )
+        ... )
+        ```
+
+        ```{.py .python linenums="1" title="Check"}
+        >>> df.show()
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        +---+---+---+---+
+        | a | b | c | d |
+        +---+---+---+---+
+        | 1 | a | 1 | 2 |
+        | 2 | b | 1 | 2 |
+        | 3 | c | 1 | 2 |
+        | 4 | d | 1 | 2 |
+        +---+---+---+---+
+        ```
+        </div>
+
+        ```{.py .python linenums="1" title="Example 1: Write to Path"}
+        >>> write(
+        ...     data_frame=df,
+        ...     name="df.csv",
+        ...     method="path",
+        ...     path="./test",
+        ...     data_format="csv",
+        ...     mode="overwrite",
+        ...     write_options={"header": "true"},
+        ... )
+        >>>
+        >>> table_exists(
+        ...     name="df.csv",
+        ...     path="./test",
+        ...     data_format="csv",
+        ...     spark_session=df.sparkSession,
+        ... )
+        ```
+        <div class="result" markdown>
+        ```{.sh .shell title="Terminal"}
+        True
+        ```
+        !!! success "Conclusion: Successfully written to path."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 2: Write to Table"}
+        >>> write(
+        ...     data_frame=df,
+        ...     name="test_table",
+        ...     method="table",
+        ...     schema="default",
+        ...     data_format="parquet",
+        ...     mode="overwrite",
+        ... )
+        >>>
+        >>> table_exists(
+        ...     name="test_table",
+        ...     schema="default",
+        ...     data_format="parquet",
+        ...     spark_session=df.sparkSession,
+        ... )
+        ```
+        <div class="result" markdown>
+        ```{.sh .shell title="Terminal"}
+        True
+        ```
+        !!! success "Conclusion: Successfully written to table."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 3: Invalid Path"}
+        >>> write(
+        ...     data_frame=df,
+        ...     name="df.csv",
+        ...     method="path",
+        ...     path="./invalid_path",
+        ...     data_format="csv",
+        ...     mode="overwrite",
+        ...     write_options={"header": "true"},
+        ... )
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        Py4JJavaError: An error occurred while calling o45.save.
+        ```
+        !!! failure "Conclusion: Failed to write to invalid path."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 4: Invalid Table Structure"}
+        >>> write(
+        ...     data_frame=df,
+        ...     name="schema.test_table",
+        ...     method="table",
+        ...     schema="source",
+        ...     data_format="parquet",
+        ...     mode="overwrite",
+        ... )
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        Invalid table. Should be in the format `schema.table`: `source.schema.test_table`.
+        ```
+        !!! failure "Conclusion: Failed to write to table due to invalid table structure."
+        </div>
+
+    ??? tip "See Also"
+        - [`write_to_path`][toolbox_pyspark.io.write_to_path]
+        - [`write_to_table`][toolbox_pyspark.io.write_to_table]
+        - [`save`][toolbox_pyspark.io.save]
+    """
+
     if method == "table":
         write_to_table(
             data_frame=data_frame,
@@ -1082,6 +1786,201 @@ def transfer(
     to_table_options: Optional[str_dict] = None,
     to_partition_cols: Optional[str_collection] = None,
 ) -> None:
+    """
+    !!! note "Summary"
+        Transfer a table or file from one location to another.
+
+    ???+ abstract "Details"
+        This function serves as a unified interface for transferring data from one location to another. Depending on the `method` parameter, it will either transfer from a file path or a table.
+
+        - If `method` is `#!py "path"`, the function will use the `transfer_by_path` function to transfer the data from the specified `from_table_path` and `from_table_name` to the specified `to_table_path` and `to_table_name`.
+        - If `method` is `#!py "table"`, the function will use the `transfer_by_table` function to transfer the data from the specified `from_table_schema` and `from_table_name` to the specified `to_table_schema` and `to_table_name`.
+
+    Params:
+        spark_session (SparkSession):
+            The Spark session to use for the transfer.
+        from_table_name (str):
+            The name of the table or file to be transferred.
+        to_table_name (str):
+            The name of the table or file where it will be transferred.
+        method (Literal["table", "path"]):
+            The method to use for transferring the data. Either `#!py "table"` or `#!py "path"`.
+        from_table_path (Optional[str], optional):
+            The path from which the file will be transferred. Required if `method` is `#!py "path"`.<br>
+            Defaults to `#!py None`.
+        from_table_schema (Optional[str], optional):
+            The schema of the table to be transferred. Required if `method` is `#!py "table"`.<br>
+            Defaults to `#!py None`.
+        from_table_format (Optional[SPARK_FORMATS], optional):
+            The format of the data at the source location.<br>
+            Defaults to `#!py "parquet"`.
+        from_table_options (Dict[str, str], optional):
+            Any additional options to parse to the Spark reader.<br>
+            For more info, check the `pyspark` docs: [`pyspark.sql.DataFrameReader.options`](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrameReader.options.html).<br>
+            Defaults to `#!py dict()`.
+        to_table_path (Optional[str], optional):
+            The path location for where to save the table. Required if `method` is `#!py "path"`.<br>
+            Defaults to `#!py None`.
+        to_table_schema (Optional[str], optional):
+            The schema of the table where it will be saved. Required if `method` is `#!py "table"`.<br>
+            Defaults to `#!py None`.
+        to_table_format (Optional[SPARK_FORMATS], optional):
+            The format of the saved table.<br>
+            Defaults to `#!py "parquet"`.
+        to_table_mode (Optional[WRITE_MODES], optional):
+            The behaviour for when the data already exists.<br>
+            For more info, check the `pyspark` docs: [`pyspark.sql.DataFrameWriter.mode`](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrameWriter.mode.html).<br>
+            Defaults to `#!py None`.
+        to_table_options (Dict[str, str], optional):
+            Any additional settings to parse to the writer class.<br>
+            For more info, check the `pyspark` docs: [`pyspark.sql.DataFrameWriter.options`](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrameWriter.options.html).<br>
+            Defaults to `#!py dict()`.
+        to_partition_cols (Optional[Union[str_collection, str]], optional):
+            The column(s) that the table should partition by.<br>
+            Defaults to `#!py None`.
+
+    Raises:
+        TypeError:
+            If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
+        ValidationError:
+            If `from_table_name` or `to_table_name` contains `/`, or is structured with three elements like: `source.schema.table`.
+
+    Returns:
+        (type(None)):
+            Nothing is returned.
+
+    ???+ tip "Note"
+        You know that this function is successful if the table or file exists at the specified location, and there are no errors thrown.
+
+    ???+ example "Examples"
+
+        ```{.py .python linenums="1" title="Set up"}
+        >>> # Imports
+        >>> import pandas as pd
+        >>> from pyspark.sql import SparkSession
+        >>> from toolbox_pyspark.io import transfer
+        >>> from toolbox_pyspark.checks import table_exists
+        >>>
+        >>> # Instantiate Spark
+        >>> spark = SparkSession.builder.getOrCreate()
+        >>>
+        >>> # Create data
+        >>> df = pd.DataFrame(
+        ...     {
+        ...         "a": [1, 2, 3, 4],
+        ...         "b": ["a", "b", "c", "d"],
+        ...         "c": [1, 1, 1, 1],
+        ...         "d": ["2", "2", "2", "2"],
+        ...     }
+        ... )
+        >>> df.to_csv("./test/table.csv")
+        >>> df.to_parquet("./test/table.parquet")
+        >>> spark.read.parquet("./test/table.parquet").createOrReplaceTempView("test_table")
+        ```
+
+        ```{.py .python linenums="1" title="Example 1: Transfer from Path"}
+        >>> transfer(
+        ...     spark_session=spark,
+        ...     method="path",
+        ...     from_table_name="table.csv",
+        ...     from_table_path="./test",
+        ...     from_table_format="csv",
+        ...     from_table_options={"header": "true"},
+        ...     to_table_name="new_table.csv",
+        ...     to_table_path="./other",
+        ...     to_table_format="csv",
+        ...     to_table_mode="overwrite",
+        ...     to_table_options={"header": "true"},
+        ... )
+        >>>
+        >>> table_exists(
+        ...     name="new_table.csv",
+        ...     path="./other",
+        ...     data_format="csv",
+        ...     spark_session=spark,
+        ... )
+        ```
+        <div class="result" markdown>
+        ```{.sh .shell title="Terminal"}
+        True
+        ```
+        !!! success "Conclusion: Successfully transferred from path."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 2: Transfer from Table"}
+        >>> transfer(
+        ...     spark_session=spark,
+        ...     method="table",
+        ...     from_table_name="test_table",
+        ...     from_table_schema="default",
+        ...     from_table_format="parquet",
+        ...     to_table_name="new_table",
+        ...     to_table_schema="default",
+        ...     to_table_format="parquet",
+        ...     to_table_mode="overwrite",
+        ... )
+        >>>
+        >>> table_exists(
+        ...     name="new_table",
+        ...     schema="default",
+        ...     data_format="parquet",
+        ...     spark_session=spark,
+        ... )
+        ```
+        <div class="result" markdown>
+        ```{.sh .shell title="Terminal"}
+        True
+        ```
+        !!! success "Conclusion: Successfully transferred from table."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 3: Invalid Path"}
+        >>> transfer(
+        ...     spark_session=spark,
+        ...     method="path",
+        ...     from_table_name="table.csv",
+        ...     from_table_path="./invalid_path",
+        ...     from_table_format="csv",
+        ...     from_table_options={"header": "true"},
+        ...     to_table_name="new_table.csv",
+        ...     to_table_path="./other",
+        ...     to_table_format="csv",
+        ...     to_table_mode="overwrite",
+        ...     to_table_options={"header": "true"},
+        ... )
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        Py4JJavaError: An error occurred while calling o45.load.
+        ```
+        !!! failure "Conclusion: Failed to transfer from invalid path."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 4: Invalid Table Structure"}
+        >>> transfer(
+        ...     spark_session=spark,
+        ...     method="table",
+        ...     from_table_name="schema.test_table",
+        ...     from_table_schema="source",
+        ...     from_table_format="parquet",
+        ...     to_table_name="new_table",
+        ...     to_table_schema="default",
+        ...     to_table_format="parquet",
+        ...     to_table_mode="overwrite",
+        ... )
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        Invalid table. Should be in the format `schema.table`: `source.schema.test_table`.
+        ```
+        !!! failure "Conclusion: Failed to transfer from invalid table structure."
+        </div>
+
+    ??? tip "See Also"
+        - [`transfer_by_path`][toolbox_pyspark.io.transfer_by_path]
+        - [`transfer_by_table`][toolbox_pyspark.io.transfer_by_table]
+    """
+
     if method == "table":
         transfer_by_table(
             spark_session=spark_session,
