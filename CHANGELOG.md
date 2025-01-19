@@ -4,6 +4,35 @@
 
 ## null
 
+🏷️ Release Tag: `v1.1.0`<br>📅 Release Date: `2025-01-19`
+
+* Enhance initialisation scripts (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/9dff13b8313b0c304184e9893ba49be229ce790b)
+* Refresh the structure of the `pyproject.toml` file (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/a4ff84c009b3353f9c023f5e6f04ecfc941facdf)
+* Relabel some key elements in the `io` package 1. `transfer_table()` -> `transfer_table_by_path()` 2. Change parameter in the `write_to_path()` function: `table` -> `data_frame` (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/a64d37f45c76613ede7f83f4fc88f30300595f66)
+* Fix the `data_format` parameter for the functions in the `io` module so they can use the pre-defined `SPARK_FORMATS` Literal values (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/70c5e3916dfe7a44a57a766ccf6eae9920529ed8)
+* Add better headers and comments throughout the `io` module (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/8abee24bb36422ec8262cd7663d8a461e8a5d48a)
+* Fix up the default options in both the `read_from_path()` and `write_to_path()` functions (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/0f7f52c036c70df2504f8dd071d6bd5763babd9b)
+* Add three new table-spcific functions to the `io` module - `read_from_table()` - `write_to_table()` - `transfer_table_by_table()` (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/d9158ffd7a5b2ca350a08b1566798f77a886740e)
+* Add three new functions to the `io` module, which are generic switches between the `*_by_path()` and `_by_table()` functions - `read()` - `write()` - `transfer()` (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/899aede34fbcf98d009f71b3373a9e35ff36cd84)
+* Add additional aliases to the functions in the `io` module, to make them more transferrable and more generic - `load_from_path()` - `save_to_path()` - `load_from_table()` - `save_to_table()` - `load()` - `save()` (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/7b062997e3331fad0c7870c0fabe24ce60a4643b)
+* Fix some typos (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/50aa2bb8d267ce9cae36d14d2e21b1dad2bc6941)
+* Extend the `checks` module to add the `assert_table_exists()` function (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/407520e3cbe92decdc2e977f756a1514eff410dc)
+* Add `assert_table_exists()` to the unit tests in the `test_io` module (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/089fd71c5939f388324ad005cdb404794fdfaf23)
+* Add unit tests for the `*_by_table()` functions from the `io` module (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/d457741ff35011c358c3d482a587913dbe398565)
+* Add constant values for valid write modes (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/5b9e9b5dd22a7aa88407aa89d7a3779853639612)
+* Relabel parameters in the `transfer()` function (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/5e7577566de6c44907eac83abbf5f48d427abfb6)
+* Extend the unit tests for the `io` module to now have 100% code coverage (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/07a590455a2cb215009559f39fc7ddee300d9748)
+* Fix Unit Test error (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/549937e8827fa29fbe65b3937c44d224b5a46dfa)
+* Fix some unit tests (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/a414842b31723d2824bfbfb33368351f03aa7396)
+* Fix docstrings for the spark `*WRITE_MODES` constants in the `io` module (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/3a1c429e32c915aa3c07f8ba4f3ce89defcd0a41)
+* Add additional examples to some of the functions in the `io` module 1. `read_from_path()` 2. `write_to_path()` 3. `transfer_by_path()` (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/1f275bdd88bc718112f726e3fd0431a4a85fa7c0)
+* Add docstrings to the new functions in the `io` module - `read_from_table()` - `write_to_table()` - `transfer_by_table()` - `read()` - `write()` - `transfer()` (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/3e5805ee392e978f3ba8dd7d7aad5bbf0157fec3)
+* Enhance the error messages in the `_validate_table_name()` function (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/be1c65be8a66e8e6c0e712b189bc2ce9cfd71e29)
+* Enhance the initialisation commands (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/dc58041037f4229d5933a8fac51bba32b5e671eb)
+
+
+## null
+
 🏷️ Release Tag: `v1.0.0`<br>📅 Release Date: `2024-12-29`
 
 * Add PySpark version check and custom exception if version is insufficient (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/fbbee99c79b0264affc24e34d674fd4a3109efaa)
