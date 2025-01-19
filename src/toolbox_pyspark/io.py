@@ -63,6 +63,8 @@ from toolbox_pyspark.utils.exceptions import ValidationError
 __all__: str_list = [
     "SPARK_FORMATS",
     "VALID_SPARK_FORMATS",
+    "WRITE_MODES",
+    "VALID_WRITE_MODES",
     "read_from_path",
     "write_to_path",
     "transfer_by_path",
@@ -115,6 +117,7 @@ SPARK_FORMATS = Literal[
 The valid formats that can be used to read/write data in Spark.
 
 PySpark's built-in data source formats:
+
 - `parquet`
 - `orc`
 - `json`
@@ -123,6 +126,7 @@ PySpark's built-in data source formats:
 - `avro`
 
 Database formats (with proper JDBC drivers):
+
 - `jdbc`
 - `oracle`
 - `mysql`
@@ -131,6 +135,7 @@ Database formats (with proper JDBC drivers):
 - `db2`
 
 Other formats with additional dependencies:
+
 - `delta` (requires: `io.delta:delta-core` dependency and `delata-spark` package)
 - `xml` (requires: `com.databricks:spark-xml` dependency and `spark-xml` package)
 - `excel` (requires: `com.crealytics:spark-excel` dependency and `spark-excel` package)
@@ -139,11 +144,13 @@ Other formats with additional dependencies:
 - `cassandra` (requires: `com.datastax.spark:spark-cassandra-connector` dependency and `spark-cassandra-connector` package)
 - `elasticsearch` (requires: `org.elasticsearch:elasticsearch-hadoop` dependency and `elasticsearch-hadoop` package)
 """
+
 VALID_SPARK_FORMATS: str_tuple = get_args(SPARK_FORMATS)
 """
 The valid formats that can be used to read/write data in Spark.
 
 PySpark's built-in data source formats:
+
 - `parquet`
 - `orc`
 - `json`
@@ -152,6 +159,7 @@ PySpark's built-in data source formats:
 - `avro`
 
 Database formats (with proper JDBC drivers):
+
 - `jdbc`
 - `oracle`
 - `mysql`
@@ -160,6 +168,7 @@ Database formats (with proper JDBC drivers):
 - `db2`
 
 Other formats with additional dependencies:
+
 - `delta` (requires: `io.delta:delta-core` dependency and `delata-spark` package)
 - `xml` (requires: `com.databricks:spark-xml` dependency and `spark-xml` package)
 - `excel` (requires: `com.crealytics:spark-excel` dependency and `spark-excel` package)
@@ -173,16 +182,19 @@ Other formats with additional dependencies:
 ### Write modes ----
 WRITE_MODES = Literal["append", "overwrite", "ignore", "error", "errorifexists"]
 """
-The valid modes you can use for writing data frames
+The valid modes you can use for writing data frames:
+
 - `append`
 - `overwrite`
 - `ignore`
 - `error`
 - `errorifexists`
 """
+
 VALID_WRITE_MODES: str_tuple = get_args(WRITE_MODES)
 """
-The valid modes you can use for writing data frames
+The valid modes you can use for writing data frames:
+
 - `append`
 - `overwrite`
 - `ignore`
