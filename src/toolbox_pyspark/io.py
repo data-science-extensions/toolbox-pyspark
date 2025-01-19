@@ -122,13 +122,13 @@ VALID_SPARK_FORMATS.__doc__ = SPARK_FORMATS.__doc__
 
 # ---------------------------------------------------------------------------- #
 #                                                                              #
-#     Functions                                                             ####
+#     Path functions                                                        ####
 #                                                                              #
 # ---------------------------------------------------------------------------- #
 
 
 # ---------------------------------------------------------------------------- #
-#  Functions                                                                ####
+#  Read                                                                     ####
 # ---------------------------------------------------------------------------- #
 
 
@@ -257,11 +257,23 @@ def read_from_path(
         !!! success "Conclusion: Successfully read Parquet."
         </div>
     """
+
+    # Set default options ----
     data_format: str = data_format or "parquet"
+
+    # Initialise reader (including data format) ----
     reader: DataFrameReader = spark_session.read.format(data_format)
+
+    # Add options (if exists) ----
     if read_options:
         reader.options(**read_options)
-    return reader.load(f"{path}{'/' if not path.endswith('/') else ''}{name}")
+
+    # Load DataFrame ----
+
+
+## --------------------------------------------------------------------------- #
+##  Write                                                                   ####
+## --------------------------------------------------------------------------- #
 
 
 @typechecked
@@ -404,15 +416,29 @@ def write_to_path(
         !!! success "Conclusion: Successfully written to Parquet."
         </div>
     """
+
+    # Set default options ----
     write_options: str_dict = write_options or dict()
     data_format: str = data_format or "parquet"
+
+    # Initialise writer (including data format) ----
     writer: DataFrameWriter = data_frame.write.mode(mode).format(data_format)
+
+    # Add options (if exists) ----
     if write_options:
         writer.options(**write_options)
+
+    # Add partition (if exists) ----
     if partition_cols is not None:
         partition_cols = [partition_cols] if is_type(partition_cols, str) else partition_cols
         writer = writer.partitionBy(list(partition_cols))
-    writer.save(f"{path}{'/' if not path.endswith('/') else ''}{name}")
+
+    # Write table ----
+
+
+## --------------------------------------------------------------------------- #
+##  Transfer                                                                ####
+## --------------------------------------------------------------------------- #
 
 
 @typechecked
@@ -595,8 +621,8 @@ def transfer_table_by_path(
         !!! success "Conclusion: Successfully transferred CSV to Parquet."
         </div>
     """
-    from_table_options: str_dict = from_table_options or dict()
-    to_table_options: str_dict = to_table_options or dict()
+
+    # Read from source ----
     from_table: psDataFrame = read_from_path(
         name=from_table_name,
         path=from_table_path,
@@ -604,6 +630,8 @@ def transfer_table_by_path(
         data_format=from_table_format,
         read_options=from_table_options,
     )
+
+    # Write to target ----
     write_to_path(
         data_frame=from_table,
         name=to_table_name,
