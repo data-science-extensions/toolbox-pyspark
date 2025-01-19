@@ -259,7 +259,9 @@ def read_from_path(
     """
 
     # Set default options ----
+    read_options: str_dict = read_options or dict()
     data_format: str = data_format or "parquet"
+    load_path: str = f"{path}{'/' if not path.endswith('/') else ''}{name}"
 
     # Initialise reader (including data format) ----
     reader: DataFrameReader = spark_session.read.format(data_format)
@@ -269,6 +271,7 @@ def read_from_path(
         reader.options(**read_options)
 
     # Load DataFrame ----
+    return reader.load(load_path)
 
 
 ## --------------------------------------------------------------------------- #
@@ -420,6 +423,7 @@ def write_to_path(
     # Set default options ----
     write_options: str_dict = write_options or dict()
     data_format: str = data_format or "parquet"
+    write_path: str = f"{path}{'/' if not path.endswith('/') else ''}{name}"
 
     # Initialise writer (including data format) ----
     writer: DataFrameWriter = data_frame.write.mode(mode).format(data_format)
@@ -434,6 +438,7 @@ def write_to_path(
         writer = writer.partitionBy(list(partition_cols))
 
     # Write table ----
+    writer.save(write_path)
 
 
 ## --------------------------------------------------------------------------- #
