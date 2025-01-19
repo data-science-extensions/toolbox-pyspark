@@ -861,10 +861,10 @@ def transfer_by_path(
 
 def _validate_table_name(table: str) -> None:
     if "/" in table:
-        raise ValidationError(f"Invalid table. Cannot contain `/`: `{table}`")
+        raise ValidationError(f"Invalid table. Cannot contain `/`: `{table}`.")
     if len(table.split(".")) != 2:
         raise ValidationError(
-            f"Invalid table. Should be in the format `schema.table`: {table}"
+            f"Invalid table. Should be in the format `schema.table`: `{table}`."
         )
 
 
