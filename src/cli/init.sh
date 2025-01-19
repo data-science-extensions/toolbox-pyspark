@@ -15,3 +15,4 @@ poetry install --no-interaction --with dev,docs,test
 poetry shell
 pre-commit install
 pre-commit autoupdate
+pre-commit validate-config
