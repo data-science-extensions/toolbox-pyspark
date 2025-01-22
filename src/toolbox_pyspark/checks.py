@@ -89,6 +89,8 @@ __all__: str_list = [
     "warn_column_invalid_type",
     "warn_columns_invalid_type",
     "table_exists",
+    "assert_table_exists",
+    "column_contains_value",
 ]
 
 
