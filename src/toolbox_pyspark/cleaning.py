@@ -315,7 +315,7 @@ def keep_first_record_by_columns(
         1. Filter so that `#!sql RowNum=1`.
         1. Drop the `#!py RowNum` column.
 
-    ???+ tip "See Also"
+    ??? tip "See Also"
         - [`toolbox_pyspark.checks.assert_columns_exists()`][toolbox_pyspark.checks.assert_columns_exists]
     """
     columns = [columns] if is_type(columns, str) else columns
@@ -583,7 +583,7 @@ def convert_dataframe(
         !!! failure "Conclusion: Invalid return type."
         </div>
 
-    ???+ tip "See Also"
+    ??? tip "See Also"
         - [`toolbox_pyspark.constants`][toolbox_pyspark.constants]
     """
     if return_type in VALID_PYSPARK_DATAFRAME_NAMES:
@@ -757,7 +757,7 @@ def get_column_values(
         !!! failure "Conclusion: Invalid return type."
         </div>
 
-    ???+ tip "See Also"
+    ??? tip "See Also"
         - [`toolbox_pyspark.cleaning.convert_dataframe()`][toolbox_pyspark.cleaning.convert_dataframe]
         - [`toolbox_pyspark.constants`][toolbox_pyspark.constants]
     """
@@ -898,7 +898,7 @@ def update_nullability(
     ??? success "Credit"
         All credit goes to: https://stackoverflow.com/questions/46072411/can-i-change-the-nullability-of-a-column-in-my-spark-dataframe#answer-51821437.
 
-    ???+ tip "See Also"
+    ??? tip "See Also"
         - [`toolbox_pyspark.checks.assert_columns_exists()`][toolbox_pyspark.checks.assert_columns_exists]
     """
     columns = get_columns(dataframe, columns)
