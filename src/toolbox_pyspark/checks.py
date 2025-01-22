@@ -664,6 +664,54 @@ def is_vaid_spark_type(datatype: str) -> bool:
 
 @typechecked
 def assert_valid_spark_type(datatype: str) -> None:
+    """
+    !!! note "Summary"
+        Assert whether a given `#!py datatype` is a correct and valid `#!py pyspark` data type.
+
+    Params:
+        datatype (str):
+            The name of the data type to check.
+
+    Raises:
+        TypeError:
+            If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
+        InvalidPySparkDataTypeError:
+            If the given `#!py datatype` is not a valid `#!py pyspark` data type.
+
+    Returns:
+        (type(None)):
+            Nothing is returned. Either an `#!py InvalidPySparkDataTypeError` exception is raised, or nothing.
+
+    ???+ example "Examples"
+
+        ```{.py .python linenums="1" title="Set up"}
+        >>> from toolbox_pyspark.checks import assert_valid_spark_type
+        ```
+
+        ```{.py .python linenums="1" title="Example 1: Valid type"}
+        >>> assert_valid_spark_type("string")
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        None
+        ```
+        !!! success "Conclusion: Valid type."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 2: Invalid type"}
+        >>> assert_valid_spark_type("invalid_type")
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        InvalidPySparkDataTypeError: DataType 'invalid_type' is not valid.
+        Must be one of: ["binary", "bool", "boolean", "byte", "char", "date", "decimal", "double", "float", "int", "integer", "long", "short", "str", "string", "timestamp", "timestamp_ntz", "varchar", "void"]
+        ```
+        !!! failure "Conclusion: Invalid type."
+        </div>
+
+    ??? tip "See Also"
+        - [`is_vaid_spark_type`][toolbox_pyspark.checks.is_vaid_spark_type]
+    """
     if not is_vaid_spark_type(datatype):
         raise InvalidPySparkDataTypeError(
             f"DataType '{datatype}' is not valid.\n"
@@ -1084,6 +1132,74 @@ def warn_column_invalid_type(
     datatype: str,
     match_case: bool = False,
 ) -> None:
+    """
+    !!! note "Summary"
+        Check whether a given `#!py column` is of a given `#!py datatype` in `#!py dataframe` and raise a warning if not.
+
+    Params:
+        dataframe (psDataFrame):
+            The DataFrame to check.
+        column (str):
+            The column to check.
+        datatype (str):
+            The data type to check.
+        match_case (bool, optional):
+            Whether or not to match the string case for the columns.<br>
+            Defaults to `#!py False`.
+
+    Raises:
+        TypeError:
+            If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
+
+    Returns:
+        (type(None)):
+            Nothing is returned. Either an `#!py InvalidPySparkDataTypeWarning` exception is raised, or nothing.
+
+    ???+ example "Examples"
+
+        ```{.py .python linenums="1" title="Set up"}
+        >>> import pandas as pd
+        >>> from pyspark.sql import SparkSession
+        >>> from toolbox_pyspark.checks import warn_column_invalid_type
+        >>> spark = SparkSession.builder.getOrCreate()
+        >>> df = spark.createDataFrame(
+        ...     pd.DataFrame(
+        ...         {
+        ...             "a": [1, 2, 3, 4],
+        ...             "b": ["a", "b", "c", "d"],
+        ...         }
+        ...     )
+        ... )
+        ```
+
+        ```{.py .python linenums="1" title="Example 1: No warning"}
+        >>> warn_column_invalid_type(df, "a", "integer")
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        None
+        ```
+        !!! success "Conclusion: Column is of type."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 2: Warning raised"}
+        >>> warn_column_invalid_type(df, "b", "integer")
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        InvalidPySparkDataTypeWarning: Column 'b' is type 'string', which is not the required type: 'integer'.
+        ```
+        !!! failure "Conclusion: Column is not of type."
+        </div>
+
+    ??? tip "See Also"
+        - [`column_is_type`][toolbox_pyspark.checks.column_is_type]
+        - [`columns_are_type`][toolbox_pyspark.checks.columns_are_type]
+        - [`assert_column_is_type`][toolbox_pyspark.checks.assert_column_is_type]
+        - [`assert_columns_are_type`][toolbox_pyspark.checks.assert_columns_are_type]
+        - [`warn_column_invalid_type`][toolbox_pyspark.checks.warn_column_invalid_type]
+        - [`warn_columns_invalid_type`][toolbox_pyspark.checks.warn_columns_invalid
+    """
     result, invalid_types = _columns_are_type(dataframe, column, datatype, match_case)
     if not result:
         warn(
@@ -1100,6 +1216,75 @@ def warn_columns_invalid_type(
     datatype: str,
     match_case: bool = False,
 ) -> None:
+    """
+    !!! note "Summary"
+        Check whether the given `#!py columns` are of a given `#!py datatype` in `#!py dataframe` and raise a warning if not.
+
+    Params:
+        dataframe (psDataFrame):
+            The DataFrame to check.
+        columns (Union[str, str_collection]):
+            The columns to check.
+        datatype (str):
+            The data type to check.
+        match_case (bool, optional):
+            Whether or not to match the string case for the columns.<br>
+            Defaults to `#!py False`.
+
+    Raises:
+        TypeError:
+            If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
+
+    Returns:
+        (type(None)):
+            Nothing is returned. Either an `#!py InvalidPySparkDataTypeWarning` exception is raised, or nothing.
+
+    ???+ example "Examples"
+
+        ```{.py .python linenums="1" title="Set up"}
+        >>> import pandas as pd
+        >>> from pyspark.sql import SparkSession
+        >>> from toolbox_pyspark.checks import warn_columns_invalid_type
+        >>> spark = SparkSession.builder.getOrCreate()
+        >>> df = spark.createDataFrame(
+        ...     pd.DataFrame(
+        ...         {
+        ...             "a": [1, 2, 3, 4],
+        ...             "b": ["a", "b", "c", "d"],
+        ...             "c": [1.1, 2.2, 3.3, 4.4],
+        ...         }
+        ...     )
+        ... )
+        ```
+
+        ```{.py .python linenums="1" title="Example 1: No warning"}
+        >>> warn_columns_invalid_type(df, ["a", "c"], "double")
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        None
+        ```
+        !!! success "Conclusion: Columns are of type."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 2: Warning raised"}
+        >>> warn_columns_invalid_type(df, ["a", "b"], "double")
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        InvalidPySparkDataTypeWarning: Columns ['a', 'b'] are types ['int', 'string'], which are not the required type: 'double'.
+        ```
+        !!! failure "Conclusion: Columns are not of type."
+        </div>
+
+    ??? tip "See Also"
+        - [`column_is_type`][toolbox_pyspark.checks.column_is_type]
+        - [`columns_are_type`][toolbox_pyspark.checks.columns_are_type]
+        - [`assert_column_is_type`][toolbox_pyspark.checks.assert_column_is_type]
+        - [`assert_columns_are_type`][toolbox_pyspark.checks.assert_columns_are_type]
+        - [`warn_column_invalid_type`][toolbox_pyspark.checks.warn_column_invalid_type]
+        - [`warn_columns_invalid_type`][toolbox_pyspark.checks.warn_columns_invalid
+    """
     result, invalid_types = _columns_are_type(dataframe, columns, datatype, match_case)
     if not result:
         warn(
