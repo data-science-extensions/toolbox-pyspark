@@ -2,6 +2,10 @@ class ColumnDoesNotExistError(Exception):
     pass
 
 
+class TableDoesNotExistError(Exception):
+    pass
+
+
 class InvalidPySparkDataTypeError(Exception):
     pass
 

@@ -58,6 +58,7 @@ from toolbox_pyspark.io import SPARK_FORMATS, read_from_path
 from toolbox_pyspark.utils.exceptions import (
     ColumnDoesNotExistError,
     InvalidPySparkDataTypeError,
+    TableDoesNotExistError,
 )
 from toolbox_pyspark.utils.warnings import (
     ColumnDoesNotExistWarning,
@@ -1565,6 +1566,85 @@ def assert_table_exists(
     data_format: SPARK_FORMATS,
     spark_session: SparkSession,
 ) -> None:
-    assert table_exists(
+    """
+    !!! note "Summary"
+        Assert whether a table exists at a given `path` using `data_format`.
+
+    Params:
+        name (str):
+            The name of the table to check exists.
+        path (str):
+            The directory where the table should be existing.
+        data_format (str):
+            The format of the table to try checking.
+        spark_session (SparkSession):
+            The `#!py spark` session to use for the importing.
+
+    Raises:
+        TypeError:
+            If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
+        TableDoesNotExistError:
+            If the table does not exist at the specified location.
+
+    Returns:
+        (type(None)):
+            Nothing is returned. Either an `#!py TableDoesNotExistError` exception is raised, or nothing.
+
+    ???+ example "Examples"
+
+        ```{.py .python linenums="1" title="Set up"}
+        >>> # Imports
+        >>> import pandas as pd
+        >>> from pyspark.sql import SparkSession
+        >>> from toolbox_pyspark.io import write_to_path
+        >>> from toolbox_pyspark.checks import assert_table_exists
+        >>>
+        >>> # Constants
+        >>> write_name = "test_df"
+        >>> write_path = f"./test"
+        >>> write_format = "parquet"
+        >>>
+        >>> # Instantiate Spark
+        >>> spark = SparkSession.builder.getOrCreate()
+        >>>
+        >>> # Create data
+        >>> df = spark.createDataFrame(
+        ...     pd.DataFrame(
+        ...         {
+        ...             "a": [1, 2, 3, 4],
+        ...             "b": ["a", "b", "c", "d"],
+        ...         }
+        ...     )
+        ... )
+        >>>
+        >>> # Write data
+        >>> write_to_path(df, f"{write_name}.{write_format}", write_path)
+        ```
+
+        ```{.py .python linenums="1" title="Example 1: Table exists"}
+        >>> assert_table_exists("test_df.parquet", "./test", "parquet", spark)
+        ```
+        <div class="result" markdown>
+        ```{.sh .shell title="Terminal"}
+        None
+        ```
+        !!! success "Conclusion: Table exists."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 2: Table does not exist"}
+        >>> assert_table_exists("bad_table_name.parquet", "./test", "parquet", spark)
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        TableDoesNotExistError: Table 'bad_table_name.parquet' does not exist at path './test'.
+        ```
+        !!! failure "Conclusion: Table does not exist."
+        </div>
+
+    ??? tip "See Also"
+        - [`table_exists`][toolbox_pyspark.checks.table_exists]
+    """
+    if not table_exists(
         name=name, path=path, data_format=data_format, spark_session=spark_session
-    )
+    ):
+        raise TableDoesNotExistError(f"Table '{name}' does not exist at path '{path}'.")
