@@ -42,7 +42,12 @@ from typing import Union
 from warnings import warn
 
 # ## Python Third Party Imports ----
-from pyspark.sql import DataFrame as psDataFrame, SparkSession, types as T
+from pyspark.sql import (
+    DataFrame as psDataFrame,
+    SparkSession,
+    functions as F,
+    types as T,
+)
 from toolbox_python.checkers import is_type
 from toolbox_python.collection_types import str_collection, str_list
 from typeguard import typechecked
@@ -1102,6 +1107,84 @@ def warn_columns_invalid_type(
             f"which are not the required type: '{datatype}'.",
             InvalidPySparkDataTypeWarning,
         )
+
+
+@typechecked
+def column_contains_value(
+    dataframe: psDataFrame,
+    column: str,
+    value: str,
+    match_case: bool = False,
+) -> bool:
+    """
+    !!! note "Summary"
+        Check whether a given `#!py column` contains a specific `#!py value` in `#!py dataframe`.
+
+    Params:
+        dataframe (psDataFrame):
+            The DataFrame to check.
+        column (str):
+            The column to check.
+        value (str):
+            The value to check for.
+        match_case (bool, optional):
+            Whether or not to match the string case for the value.<br>
+            Defaults to `#!py False`.
+
+    Raises:
+        TypeError:
+            If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
+        ColumnDoesNotExistError:
+            If the `#!py column` does not exist within `#!py dataframe.columns`.
+
+    Returns:
+        (bool):
+            `#!py True` if the column contains the value, `#!py False` otherwise.
+
+    ???+ example "Examples"
+
+        ```{.py .python linenums="1" title="Set up"}
+        >>> import pandas as pd
+        >>> from pyspark.sql import SparkSession
+        >>> from toolbox_pyspark.checks import column_contains_value
+        >>> spark = SparkSession.builder.getOrCreate()
+        >>> df = spark.createDataFrame(
+        ...     pd.DataFrame(
+        ...         {
+        ...             "a": [1, 2, 3, 4],
+        ...             "b": ["a", "b", "c", "d"],
+        ...         }
+        ...     )
+        ... )
+        ```
+
+        ```{.py .python linenums="1" title="Example 1: Value exists"}
+        >>> column_contains_value(df, "b", "a")
+        ```
+        <div class="result" markdown>
+        ```{.sh .shell title="Terminal"}
+        True
+        ```
+        !!! success "Conclusion: Value exists in column."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 2: Value does not exist"}
+        >>> column_contains_value(df, "b", "z")
+        ```
+        <div class="result" markdown>
+        ```{.sh .shell title="Terminal"}
+        False
+        ```
+        !!! failure "Conclusion: Value does not exist in column."
+        </div>
+    """
+    assert_column_exists(dataframe, column, match_case)
+
+    if not match_case:
+        value = value.lower()
+        dataframe = dataframe.withColumn(column, F.lower(F.col(column)))
+
+    return dataframe.filter(f"{column} = {value}").count() > 0
 
 
 # ---------------------------------------------------------------------------- #
