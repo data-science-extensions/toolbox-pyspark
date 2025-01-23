@@ -246,7 +246,7 @@ class TestColumnContainsValue(PySparkSetup):
             ("value_missing", False, "b", "z"),
             ("value_exists_ignorecase", True, "b", "A", False),
             ("value_exists_matchcase", False, "b", "A", True),
-            ("column_missing", "raises", "z", "a"),
+            ("column_missing", "raises", "z", "a", False),
         ),
         name_func=name_func_predefined_name,
     )

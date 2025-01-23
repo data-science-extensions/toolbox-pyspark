@@ -1458,7 +1458,7 @@ def column_contains_value(
         value = value.lower()
         dataframe = dataframe.withColumn(column, F.lower(F.col(column)))
 
-    return dataframe.filter(f"{column} = {value}").count() > 0
+    return dataframe.filter(f"{column} = '{value}'").count() > 0
 
 
 # ---------------------------------------------------------------------------- #
