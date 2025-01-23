@@ -46,6 +46,7 @@ from toolbox_pyspark.io import write_to_path
 from toolbox_pyspark.utils.exceptions import (
     ColumnDoesNotExistError,
     InvalidPySparkDataTypeError,
+    TableDoesNotExistError,
 )
 from toolbox_pyspark.utils.warnings import (
     ColumnDoesNotExistWarning,
@@ -601,3 +602,12 @@ class TestTableExists(PySparkSetup):
         )
         expected = False
         assert result == expected
+
+    def test_table_exists_3(self) -> None:
+        with pytest.raises(TableDoesNotExistError):
+            table_exists(
+                name=f"{self.table_name}_failure",
+                path=self.write_path,
+                data_format=self.data_format,
+                spark_session=self.spark,
+            )
