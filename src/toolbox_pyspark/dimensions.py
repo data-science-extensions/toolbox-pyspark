@@ -37,12 +37,14 @@
 
 
 # ## Python StdLib Imports ----
+from copy import deepcopy
 from typing import Dict, Optional, Union
 
 # ## Python Third Party Imports ----
 import numpy as np
 from pandas import DataFrame as pdDataFrame
-from pyspark.sql import DataFrame as psDataFrame
+from pyspark.sql import DataFrame as psDataFrame, functions as F
+from toolbox_python.checkers import is_type
 from toolbox_python.collection_types import str_list
 from typeguard import typechecked
 
@@ -52,7 +54,12 @@ from typeguard import typechecked
 # ---------------------------------------------------------------------------- #
 
 
-__all__: str_list = ["get_dims", "get_dims_of_tables"]
+__all__: str_list = [
+    "get_dims",
+    "get_dims_of_tables",
+    "make_dimension_table",
+    "replace_columns_with_dimension_id",
+]
 
 
 # ---------------------------------------------------------------------------- #
@@ -311,3 +318,52 @@ def get_dims_of_tables(
         sizes["rows"].append(rows)
         sizes["cols"].append(cols)
     return pdDataFrame(sizes)
+
+
+def make_dimension_table(
+    dataframe: psDataFrame,
+    columns: Union[str, list[str]],
+    index_prefix: str = "id",
+) -> psDataFrame:
+    columns = [columns] if is_type(columns, str) else columns
+    index_name: str = f"{index_prefix}_{columns[0]}" if len(columns) == 0 else index_prefix
+    return (
+        dataframe.select(*columns)
+        .distinct()
+        .withColumn(index_name, F.expr(f"row_number() over (order by {', '.join(columns)})"))
+        .select(index_name, *columns)
+    )
+
+
+def replace_columns_with_dimension_id(
+    fct_dataframe: psDataFrame,
+    dim_dataframe: psDataFrame,
+    cols_to_replace: Union[str, list[str]],
+    dim_id_col: Optional[str] = None,
+) -> psDataFrame:
+    cols_to_replace = [cols_to_replace] if is_type(cols_to_replace, str) else cols_to_replace
+    fct_cols: list[str] = fct_dataframe.columns
+    dim_cols: list[str] = dim_dataframe.columns
+    assert all(col in fct_cols for col in cols_to_replace)
+    assert all(col in dim_cols for col in cols_to_replace)
+    assert dim_id_col in dim_cols
+    index_of_first_col: int = fct_cols.index(cols_to_replace[0])
+    fct_new_cols: list[str] = deepcopy(fct_cols)
+    fct_new_cols = list(
+        (
+            *fct_new_cols[:index_of_first_col],
+            dim_id_col,
+            *fct_new_cols[index_of_first_col + 1 :],
+        )
+    )
+    fct_removed_cols: list[str] = [col for col in fct_new_cols if col not in cols_to_replace]
+    return (
+        fct_dataframe.alias("a")
+        .join(
+            other=dim_dataframe.alias("b"),
+            on=[F.col(f"a.{col}") == F.col(f"b.{col}") for col in cols_to_replace],
+            how="left",
+        )
+        .select("a.*", f"b.{dim_id_col}")
+        .select(fct_removed_cols)
+    )
