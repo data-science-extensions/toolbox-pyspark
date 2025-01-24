@@ -28,6 +28,7 @@ from toolbox_pyspark.checks import (
     assert_column_is_type,
     assert_columns_are_type,
     assert_columns_exists,
+    assert_table_exists,
     assert_valid_spark_type,
     column_contains_value,
     column_exists,
@@ -605,7 +606,7 @@ class TestTableExists(PySparkSetup):
 
     def test_table_exists_3(self) -> None:
         with pytest.raises(TableDoesNotExistError):
-            table_exists(
+            assert_table_exists(
                 name=f"{self.table_name}_failure",
                 path=self.write_path,
                 data_format=self.data_format,
