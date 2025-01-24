@@ -27,6 +27,19 @@ from toolbox_pyspark.io import write_to_path
 from toolbox_pyspark.schema import check_schemas_match, view_schema_differences
 
 
+## --------------------------------------------------------------------------- #
+##  Initialisation                                                          ####
+## --------------------------------------------------------------------------- #
+
+
+def setUpModule() -> None:
+    PySparkSetup.set_up()
+
+
+def tearDownModule() -> None:
+    PySparkSetup.tear_down()
+
+
 # ---------------------------------------------------------------------------- #
 #                                                                              #
 #     Test Suite                                                            ####

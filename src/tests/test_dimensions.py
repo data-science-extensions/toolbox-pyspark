@@ -22,6 +22,19 @@ from toolbox_pyspark.dimensions import (
 )
 
 
+## --------------------------------------------------------------------------- #
+##  Initialisation                                                          ####
+## --------------------------------------------------------------------------- #
+
+
+def setUpModule() -> None:
+    PySparkSetup.set_up()
+
+
+def tearDownModule() -> None:
+    PySparkSetup.tear_down()
+
+
 # ---------------------------------------------------------------------------- #
 #                                                                              #
 #     Test Suite                                                            ####
@@ -35,6 +48,7 @@ from toolbox_pyspark.dimensions import (
 
 
 class TestGetDims(PySparkSetup):
+
     def setUp(self) -> None:
         pass
 

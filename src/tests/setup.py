@@ -18,8 +18,7 @@ import os
 import sys
 from pathlib import Path
 from string import ascii_letters
-from typing import Callable, Union
-from unittest import TestCase
+from typing import Callable
 
 # ## Python Third Party Imports ----
 import pandas as pd
@@ -82,20 +81,16 @@ def name_func_predefined_name(
 # ---------------------------------------------------------------------------- #
 
 
-# ---------------------------------------------------------------------------- #
-#  PySparkSetup                                                             ####
-# ---------------------------------------------------------------------------- #
+class PySparkSetup:
 
-
-class PySparkSetup(TestCase):
     num_rows: int = 4
 
     @classmethod
-    def setUpClass(cls) -> None:
+    def set_up(cls) -> None:
         cls.setup_environ().setup_spark()
 
     @classmethod
-    def tearDownClass(cls) -> None:
+    def tear_down(cls) -> None:
         cls.spark.stop()
 
     @classmethod

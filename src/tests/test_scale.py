@@ -24,6 +24,19 @@ from tests.setup import PySparkSetup
 from toolbox_pyspark.scale import DEFAULT_DECIMAL_ACCURACY, round_column, round_columns
 
 
+## --------------------------------------------------------------------------- #
+##  Initialisation                                                          ####
+## --------------------------------------------------------------------------- #
+
+
+def setUpModule() -> None:
+    PySparkSetup.set_up()
+
+
+def tearDownModule() -> None:
+    PySparkSetup.tear_down()
+
+
 # ---------------------------------------------------------------------------- #
 #                                                                              #
 #     Test Suite                                                            ####

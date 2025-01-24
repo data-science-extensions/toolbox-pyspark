@@ -29,6 +29,19 @@ from toolbox_pyspark.datetime import (
 from toolbox_pyspark.utils.exceptions import ColumnDoesNotExistError
 
 
+## --------------------------------------------------------------------------- #
+##  Initialisation                                                          ####
+## --------------------------------------------------------------------------- #
+
+
+def setUpModule() -> None:
+    PySparkSetup.set_up()
+
+
+def tearDownModule() -> None:
+    PySparkSetup.tear_down()
+
+
 # ---------------------------------------------------------------------------- #
 #                                                                              #
 #     Test Suite                                                            ####

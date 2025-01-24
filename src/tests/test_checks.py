@@ -55,6 +55,19 @@ from toolbox_pyspark.utils.warnings import (
 )
 
 
+## --------------------------------------------------------------------------- #
+##  Initialisation                                                          ####
+## --------------------------------------------------------------------------- #
+
+
+def setUpModule() -> None:
+    PySparkSetup.set_up()
+
+
+def tearDownModule() -> None:
+    PySparkSetup.tear_down()
+
+
 # ---------------------------------------------------------------------------- #
 #                                                                              #
 #     Test Suite                                                            ####

@@ -25,6 +25,19 @@ from tests.setup import PySparkSetup, name_func_nested_list
 from toolbox_pyspark.keys import add_key_from_columns, add_keys_from_columns
 
 
+## --------------------------------------------------------------------------- #
+##  Initialisation                                                          ####
+## --------------------------------------------------------------------------- #
+
+
+def setUpModule() -> None:
+    PySparkSetup.set_up()
+
+
+def tearDownModule() -> None:
+    PySparkSetup.tear_down()
+
+
 # ---------------------------------------------------------------------------- #
 #                                                                              #
 #     Test Suite                                                            ####

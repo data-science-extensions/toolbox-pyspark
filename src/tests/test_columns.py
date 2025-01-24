@@ -33,6 +33,19 @@ from toolbox_pyspark.utils.exceptions import ColumnDoesNotExistError
 from toolbox_pyspark.utils.warnings import ColumnDoesNotExistWarning
 
 
+## --------------------------------------------------------------------------- #
+##  Initialisation                                                          ####
+## --------------------------------------------------------------------------- #
+
+
+def setUpModule() -> None:
+    PySparkSetup.set_up()
+
+
+def tearDownModule() -> None:
+    PySparkSetup.tear_down()
+
+
 # ---------------------------------------------------------------------------- #
 #                                                                              #
 #     Test Suite                                                            ####
