@@ -14,6 +14,7 @@
 import shutil
 from pathlib import Path
 from pprint import pformat
+from unittest import TestCase
 
 # ## Python Third Party Imports ----
 import pytest
@@ -52,7 +53,7 @@ def tearDownModule() -> None:
 # ---------------------------------------------------------------------------- #
 
 
-class TestCheckSchemas(PySparkSetup):
+class TestCheckSchemas(PySparkSetup, TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
@@ -268,7 +269,7 @@ class TestCheckSchemas(PySparkSetup):
         assert result is False
 
 
-class TestViewSchemas(PySparkSetup):
+class TestViewSchemas(PySparkSetup, TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:

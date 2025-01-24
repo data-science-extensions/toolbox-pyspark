@@ -13,6 +13,7 @@
 # ## Python StdLib Imports ----
 from itertools import product
 from typing import Literal
+from unittest import TestCase
 
 # ## Python Third Party Imports ----
 from chispa.dataframe_comparer import assert_df_equality
@@ -50,7 +51,7 @@ def tearDownModule() -> None:
 # ---------------------------------------------------------------------------- #
 
 
-class TestAddKeysFromListsOfColumns(PySparkSetup):
+class TestAddKeysFromListsOfColumns(PySparkSetup, TestCase):
     def setUp(self) -> None:
         pass
 

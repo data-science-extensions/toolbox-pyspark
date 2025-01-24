@@ -12,6 +12,7 @@
 
 # ## Python StdLib Imports ----
 from itertools import product
+from unittest import TestCase
 
 # ## Python Third Party Imports ----
 import pytest
@@ -49,7 +50,7 @@ def tearDownModule() -> None:
 # ---------------------------------------------------------------------------- #
 
 
-class TestRoundColumnToDecimalScale(PySparkSetup):
+class TestRoundColumnToDecimalScale(PySparkSetup, TestCase):
     def setUp(self) -> None:
         pass
 
@@ -105,7 +106,7 @@ class TestRoundColumnToDecimalScale(PySparkSetup):
         assert str(e.value) == expected_message
 
 
-class TestRoundColumnsToDecimalScale(PySparkSetup):
+class TestRoundColumnsToDecimalScale(PySparkSetup, TestCase):
     def setUp(self) -> None:
         pass
 

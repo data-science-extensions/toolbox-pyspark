@@ -10,6 +10,9 @@
 # ---------------------------------------------------------------------------- #
 
 
+# ## Python StdLib Imports ----
+from unittest import TestCase
+
 # ## Python Third Party Imports ----
 import pytest
 from chispa.dataframe_comparer import assert_df_equality
@@ -54,7 +57,7 @@ def tearDownModule() -> None:
 # ---------------------------------------------------------------------------- #
 
 
-class TestDateTimeColumnNames(PySparkSetup):
+class TestDateTimeColumnNames(PySparkSetup, TestCase):
     def setUp(self) -> None:
         pass
 
@@ -121,7 +124,7 @@ class TestDateTimeColumnNames(PySparkSetup):
 # ---------------------------------------------------------------------------- #
 
 
-class TestLocalDateTimeColumns(PySparkSetup):
+class TestLocalDateTimeColumns(PySparkSetup, TestCase):
     def setUp(self) -> None:
         pass
 
@@ -328,7 +331,7 @@ class TestLocalDateTimeColumns(PySparkSetup):
 # ---------------------------------------------------------------------------- #
 
 
-class TestSplitDateTimeColumns(PySparkSetup):
+class TestSplitDateTimeColumns(PySparkSetup, TestCase):
 
     def setUp(self) -> None:
         pass

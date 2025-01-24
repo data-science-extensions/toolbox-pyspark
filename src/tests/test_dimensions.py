@@ -10,6 +10,9 @@
 # ---------------------------------------------------------------------------- #
 
 
+# ## Python StdLib Imports ----
+from unittest import TestCase
+
 # ## Python Third Party Imports ----
 import numpy as np
 from chispa import assert_df_equality
@@ -52,7 +55,7 @@ def tearDownModule() -> None:
 # ---------------------------------------------------------------------------- #
 
 
-class TestGetDims(PySparkSetup):
+class TestGetDims(PySparkSetup, TestCase):
 
     def setUp(self) -> None:
         pass
@@ -83,7 +86,7 @@ class TestGetDims(PySparkSetup):
         assert result == expected
 
 
-class TestGetSizesOfListOfTables(PySparkSetup):
+class TestGetSizesOfListOfTables(PySparkSetup, TestCase):
 
     def test_get_dims_of_tables_1(self) -> None:
 
@@ -145,7 +148,7 @@ class TestGetSizesOfListOfTables(PySparkSetup):
         assert str(result2) == str(expected2)
 
 
-class TestMakeDimensions(PySparkSetup):
+class TestMakeDimensions(PySparkSetup, TestCase):
 
     def setUp(self) -> None:
         pass

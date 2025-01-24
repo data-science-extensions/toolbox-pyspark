@@ -12,6 +12,7 @@
 
 # ## Python StdLib Imports ----
 from itertools import product
+from unittest import TestCase
 
 # ## Python Third Party Imports ----
 import numpy as np
@@ -70,7 +71,7 @@ def tearDownModule() -> None:
 # ---------------------------------------------------------------------------- #
 
 
-class TestCreateEmptyDataFrame(PySparkSetup):
+class TestCreateEmptyDataFrame(PySparkSetup, TestCase):
 
     def setUp(self) -> None:
         pass
@@ -93,7 +94,7 @@ class TestCreateEmptyDataFrame(PySparkSetup):
 # ---------------------------------------------------------------------------- #
 
 
-class TestKeepFirstRecordByColumns(PySparkSetup):
+class TestKeepFirstRecordByColumns(PySparkSetup, TestCase):
 
     def setUp(self) -> None:
         pass
@@ -139,7 +140,7 @@ class TestKeepFirstRecordByColumns(PySparkSetup):
 # ---------------------------------------------------------------------------- #
 
 
-class TestDataFrameToType(PySparkSetup):
+class TestDataFrameToType(PySparkSetup, TestCase):
 
     def setUp(self) -> None:
         pass
@@ -191,7 +192,7 @@ class TestDataFrameToType(PySparkSetup):
 # ---------------------------------------------------------------------------- #
 
 
-class TestGetColumnValues(PySparkSetup):
+class TestGetColumnValues(PySparkSetup, TestCase):
 
     def setUp(self) -> None:
         pass
@@ -222,7 +223,7 @@ class TestGetColumnValues(PySparkSetup):
 # ---------------------------------------------------------------------------- #
 
 
-class TestUpdateNullability(PySparkSetup):
+class TestUpdateNullability(PySparkSetup, TestCase):
 
     def setUp(self) -> None:
         self.table = self.ps_df_extended
@@ -253,7 +254,7 @@ class TestUpdateNullability(PySparkSetup):
 # ---------------------------------------------------------------------------- #
 
 
-class TestTrimSpacesFromListOfColumns(PySparkSetup):
+class TestTrimSpacesFromListOfColumns(PySparkSetup, TestCase):
 
     def setUp(self) -> None:
         pass
@@ -341,7 +342,7 @@ class TestTrimSpacesFromListOfColumns(PySparkSetup):
         assert_df_equality(result, expected)
 
 
-class TestApplyFunctionToColumn(PySparkSetup):
+class TestApplyFunctionToColumn(PySparkSetup, TestCase):
 
     def setUp(self) -> None:
         pass
@@ -417,7 +418,7 @@ class TestApplyFunctionToColumn(PySparkSetup):
         assert_df_equality(result, expected)
 
 
-class TestApplyFunctionToListOfColumns(PySparkSetup):
+class TestApplyFunctionToListOfColumns(PySparkSetup, TestCase):
 
     def setUp(self) -> None:
         pass
@@ -539,7 +540,7 @@ class TestApplyFunctionToListOfColumns(PySparkSetup):
         assert_df_equality(result, expected)
 
 
-class TestCleanOneTableFromAnotherTable(PySparkSetup):
+class TestCleanOneTableFromAnotherTable(PySparkSetup, TestCase):
 
     def setUp(self) -> None:
         self.left_table = self.ps_df_duplication

@@ -10,6 +10,9 @@
 # ---------------------------------------------------------------------------- #
 
 
+# ## Python StdLib Imports ----
+from unittest import TestCase
+
 # ## Python Third Party Imports ----
 import pytest
 from chispa.dataframe_comparer import assert_df_equality
@@ -53,7 +56,7 @@ def tearDownModule() -> None:
 # ---------------------------------------------------------------------------- #
 
 
-class TestDataframeColumnTypes(PySparkSetup):
+class TestDataframeColumnTypes(PySparkSetup, TestCase):
     def setUp(self) -> None:
         pass
 
@@ -80,7 +83,7 @@ class TestDataframeColumnTypes(PySparkSetup):
 # ---------------------------------------------------------------------------- #
 
 
-class TestCastColumnsToType(PySparkSetup):
+class TestCastColumnsToType(PySparkSetup, TestCase):
     def setUp(self) -> None:
         pass
 
@@ -245,7 +248,7 @@ class TestCastColumnsToType(PySparkSetup):
 # ---------------------------------------------------------------------------- #
 
 
-class TestMapCastColumnsToType(PySparkSetup):
+class TestMapCastColumnsToType(PySparkSetup, TestCase):
     def setUp(self) -> None:
         pass
 

@@ -10,6 +10,9 @@
 # ---------------------------------------------------------------------------- #
 
 
+# ## Python StdLib Imports ----
+from unittest import TestCase
+
 # ## Python Third Party Imports ----
 from chispa.dataframe_comparer import assert_df_equality
 
@@ -39,7 +42,7 @@ def tearDownModule() -> None:
 # ---------------------------------------------------------------------------- #
 
 
-class TestDuplicateUnionSingleDataFrameByList(PySparkSetup):
+class TestDuplicateUnionSingleDataFrameByList(PySparkSetup, TestCase):
     def setUp(self) -> None:
         pass
 
@@ -103,7 +106,7 @@ class TestDuplicateUnionSingleDataFrameByList(PySparkSetup):
         assert dims == {"rows": 4 * 3, "cols": 6}
 
 
-class TestUnionAll(PySparkSetup):
+class TestUnionAll(PySparkSetup, TestCase):
     def setUp(self) -> None:
         pass
 
