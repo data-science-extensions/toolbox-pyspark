@@ -103,11 +103,10 @@ There are 12 modules used in this package, which covers 41 functions
 |                                              | [`apply_function_to_columns()`][toolbox_pyspark.cleaning.apply_function_to_columns] |
 |                                              | [`drop_matching_rows()`][toolbox_pyspark.cleaning.drop_matching_rows] |
 |                                              | |
-| [`duplication`][toolbox_pyspark.duplication] | [`duplicate_dataframe()`][toolbox_pyspark.duplication.duplicate_dataframe] |
-|                                              | [`union_dataframes()`][toolbox_pyspark.duplication.union_dataframes] |
+| [`duplication`][toolbox_pyspark.duplication] | [`duplicate_union_dataframe()`][toolbox_pyspark.duplication.duplicate_union_dataframe] |
+|                                              | [`union_all()`][toolbox_pyspark.duplication.union_all] |
 |                                              | |
-| [`schema`][toolbox_pyspark.schema]           | [`check_schema()`][toolbox_pyspark.schema.check_schema] |
-|                                              | [`validate_schema()`][toolbox_pyspark.schema.validate_schema] |
+| [`schema`][toolbox_pyspark.schema]           | [`check_schemas_match()`][toolbox_pyspark.schema.check_schemas_match] |
 |                                              | [`view_schema_differences()`][toolbox_pyspark.schema.view_schema_differences] |
 |                                              | |
 | [`delta`][toolbox_pyspark.delta]             | [`load_table()`][toolbox_pyspark.delta.load_table] |
