@@ -33,17 +33,43 @@ There are 12 modules used in this package, which covers 41 functions
 |                                              | |
 | [`io`][toolbox_pyspark.io]                   | [`read_from_path()`][toolbox_pyspark.io.read_from_path] |
 |                                              | [`write_to_path()`][toolbox_pyspark.io.write_to_path] |
-|                                              | [`transfer_table()`][toolbox_pyspark.io.transfer_table] |
+|                                              | [`transfer_by_path()`][toolbox_pyspark.io.transfer_by_path] |
+|                                              | [`read_from_table()`][toolbox_pyspark.io.read_from_table] |
+|                                              | [`write_to_table()`][toolbox_pyspark.io.write_to_table] |
+|                                              | [`transfer_by_table()`][toolbox_pyspark.io.transfer_by_table] |
+|                                              | [`read()`][toolbox_pyspark.io.read] |
+|                                              | [`write()`][toolbox_pyspark.io.write] |
+|                                              | [`transfer()`][toolbox_pyspark.io.transfer] |
+|                                              | [`load_from_path()`][toolbox_pyspark.io.load_from_path] |
+|                                              | [`save_to_path()`][toolbox_pyspark.io.save_to_path] |
+|                                              | [`load_from_table()`][toolbox_pyspark.io.load_from_table] |
+|                                              | [`save_to_table()`][toolbox_pyspark.io.save_to_table] |
+|                                              | [`load()`][toolbox_pyspark.io.load] |
+|                                              | [`save()`][toolbox_pyspark.io.save] |
 |                                              | |
 | [`checks`][toolbox_pyspark.checks]           | [`column_exists()`][toolbox_pyspark.checks.column_exists] |
 |                                              | [`columns_exists()`][toolbox_pyspark.checks.columns_exists] |
+|                                              | [`assert_column_exists()`][toolbox_pyspark.checks.assert_column_exists] |
+|                                              | [`assert_columns_exists()`][toolbox_pyspark.checks.assert_columns_exists] |
+|                                              | [`warn_column_missing()`][toolbox_pyspark.checks.warn_column_missing] |
+|                                              | [`warn_columns_missing()`][toolbox_pyspark.checks.warn_columns_missing] |
 |                                              | [`is_vaid_spark_type()`][toolbox_pyspark.checks.is_vaid_spark_type] |
+|                                              | [`assert_valid_spark_type()`][toolbox_pyspark.checks.assert_valid_spark_type] |
+|                                              | [`column_is_type()`][toolbox_pyspark.checks.column_is_type] |
+|                                              | [`columns_are_type()`][toolbox_pyspark.checks.columns_are_type] |
+|                                              | [`assert_column_is_type()`][toolbox_pyspark.checks.assert_column_is_type] |
+|                                              | [`assert_columns_are_type()`][toolbox_pyspark.checks.assert_columns_are_type] |
+|                                              | [`warn_column_invalid_type()`][toolbox_pyspark.checks.warn_column_invalid_type] |
+|                                              | [`warn_columns_invalid_type()`][toolbox_pyspark.checks.warn_columns_invalid_type] |
+|                                              | [`column_contains_value()`][toolbox_pyspark.checks.column_contains_value] |
 |                                              | [`table_exists()`][toolbox_pyspark.checks.table_exists] |
+|                                              | [`assert_table_exists()`][toolbox_pyspark.checks.assert_table_exists] |
 |                                              | |
 | [`types`][toolbox_pyspark.types]             | [`get_column_types()`][toolbox_pyspark.types.get_column_types] |
 |                                              | [`cast_column_to_type()`][toolbox_pyspark.types.cast_column_to_type] |
 |                                              | [`cast_columns_to_type()`][toolbox_pyspark.types.cast_columns_to_type] |
 |                                              | [`map_cast_columns_to_type()`][toolbox_pyspark.types.map_cast_columns_to_type] |
+|                                              | |
 | [`keys`][toolbox_pyspark.keys]               | [`add_keys_from_columns()`][toolbox_pyspark.keys.add_keys_from_columns] |
 |                                              | [`add_key_from_columns()`][toolbox_pyspark.keys.add_key_from_columns] |
 |                                              | |

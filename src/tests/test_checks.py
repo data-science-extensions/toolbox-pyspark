@@ -28,7 +28,9 @@ from toolbox_pyspark.checks import (
     assert_column_is_type,
     assert_columns_are_type,
     assert_columns_exists,
+    assert_table_exists,
     assert_valid_spark_type,
+    column_contains_value,
     column_exists,
     column_is_type,
     columns_are_type,
@@ -45,6 +47,7 @@ from toolbox_pyspark.io import write_to_path
 from toolbox_pyspark.utils.exceptions import (
     ColumnDoesNotExistError,
     InvalidPySparkDataTypeError,
+    TableDoesNotExistError,
 )
 from toolbox_pyspark.utils.warnings import (
     ColumnDoesNotExistWarning,
@@ -227,6 +230,47 @@ class TestColumnExistence(PySparkSetup):
             assert warn_columns_missing(self.ps_df_extended, cols, match_case) is None
         else:
             assert warn_columns_missing(self.ps_df_extended, cols) is None
+
+
+# ---------------------------------------------------------------------------- #
+#  Column Contains Value                                                    ####
+# ---------------------------------------------------------------------------- #
+
+
+class TestColumnContainsValue(PySparkSetup):
+
+    def setUp(self) -> None:
+        pass
+
+    @parameterized.expand(
+        input=(
+            ("value_exists", True, "b", "a"),
+            ("value_missing", False, "b", "z"),
+            ("value_exists_ignorecase", True, "b", "A", False),
+            ("value_exists_matchcase", False, "b", "A", True),
+            ("column_missing", "raises", "z", "a", False),
+        ),
+        name_func=name_func_predefined_name,
+    )
+    def test_column_contains_value(
+        self,
+        test_name: str,
+        expected: Union[bool, Literal["raises"]],
+        column: str,
+        value: str,
+        match_case: Optional[bool] = None,
+    ) -> None:
+        if expected == "raises":
+            with pytest.raises(ColumnDoesNotExistError):
+                column_contains_value(self.ps_df_extended, column, value, match_case)
+        elif match_case is not None:
+            result: bool = column_contains_value(
+                self.ps_df_extended, column, value, match_case
+            )
+            assert result == expected
+        else:
+            result: bool = column_contains_value(self.ps_df_extended, column, value)
+            assert result == expected
 
 
 # ---------------------------------------------------------------------------- #
@@ -559,3 +603,12 @@ class TestTableExists(PySparkSetup):
         )
         expected = False
         assert result == expected
+
+    def test_table_exists_3(self) -> None:
+        with pytest.raises(TableDoesNotExistError):
+            assert_table_exists(
+                name=f"{self.table_name}_failure",
+                path=self.write_path,
+                data_format=self.data_format,
+                spark_session=self.spark,
+            )

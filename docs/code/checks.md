@@ -23,6 +23,16 @@
             - warn_columns_missing
 
 
+## Column Values
+
+::: toolbox_pyspark.checks
+    options:
+        show_root_heading: false
+        heading_level: 3
+        members:
+            - column_contains_value
+
+
 ## Type Checks
 
 ::: toolbox_pyspark.checks
@@ -58,3 +68,4 @@
         heading_level: 3
         members:
             - table_exists
+            - assert_table_exists
