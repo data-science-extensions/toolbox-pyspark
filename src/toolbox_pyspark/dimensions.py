@@ -45,8 +45,11 @@ import numpy as np
 from pandas import DataFrame as pdDataFrame
 from pyspark.sql import DataFrame as psDataFrame, functions as F
 from toolbox_python.checkers import is_type
-from toolbox_python.collection_types import str_list
+from toolbox_python.collection_types import str_collection, str_list
 from typeguard import typechecked
+
+# ## Local First Party Imports ----
+from toolbox_pyspark.checks import assert_column_exists, assert_columns_exists
 
 
 # ---------------------------------------------------------------------------- #
@@ -193,7 +196,7 @@ def get_dims_of_tables(
         This function will check against the `#!py global()` scope. So you need to be careful if you're dealing with massive amounts of data in memory.
 
     Params:
-        tables (List[str]):
+        tables (str_list):
             The list of the tables that will be checked.
         scope (dict, optional):
             This is the scope against which the tables will be checked.<br>
@@ -320,9 +323,10 @@ def get_dims_of_tables(
     return pdDataFrame(sizes)
 
 
+@typechecked
 def make_dimension_table(
     dataframe: psDataFrame,
-    columns: Union[str, list[str]],
+    columns: Union[str, str_collection],
     index_prefix: str = "id",
 ) -> psDataFrame:
     """
@@ -459,19 +463,24 @@ def make_dimension_table(
         - [`replace_columns_with_dimension_id`][toolbox_pyspark.dimensions.replace_columns_with_dimension_id]
     """
     columns = [columns] if is_type(columns, str) else columns
-    index_name: str = f"{index_prefix}_{columns[0]}" if len(columns) == 0 else index_prefix
+    assert_columns_exists(dataframe, columns)
+    index_name: str = f"{index_prefix}_{columns[0]}" if len(columns) == 1 else index_prefix
     return (
         dataframe.select(*columns)
         .distinct()
-        .withColumn(index_name, F.expr(f"row_number() over (order by {', '.join(columns)})"))
+        .withColumn(
+            index_name,
+            F.expr(f"row_number() over (order by {', '.join(columns)})").cast("int"),
+        )
         .select(index_name, *columns)
     )
 
 
+@typechecked
 def replace_columns_with_dimension_id(
     fct_dataframe: psDataFrame,
     dim_dataframe: psDataFrame,
-    cols_to_replace: Union[str, list[str]],
+    cols_to_replace: Union[str, str_collection],
     dim_id_col: Optional[str] = None,
 ) -> psDataFrame:
     """
@@ -646,16 +655,31 @@ def replace_columns_with_dimension_id(
     ??? tip "See Also"
         - [`make_dimension_table`][toolbox_pyspark.dimensions.make_dimension_table]
     """
-    index_of_first_col: int = fct_cols.index(cols_to_replace[0])
-    fct_new_cols: list[str] = deepcopy(fct_cols)
-    fct_new_cols = list(
-        (
-            *fct_new_cols[:index_of_first_col],
-            dim_id_col,
-            *fct_new_cols[index_of_first_col + 1 :],
-        )
+
+    # Generate variables ----
+    cols_to_replace: str_list = (
+        [cols_to_replace] if is_type(cols_to_replace, str) else list(cols_to_replace)
     )
-    fct_removed_cols: list[str] = [col for col in fct_new_cols if col not in cols_to_replace]
+    fct_cols: str_list = fct_dataframe.columns
+    dim_cols: str_list = dim_dataframe.columns
+    dim_id_col = dim_id_col or dim_cols[0]
+
+    # Check variables ----
+    assert_columns_exists(fct_dataframe, cols_to_replace)
+    assert_columns_exists(dim_dataframe, cols_to_replace)
+    assert_column_exists(dim_dataframe, dim_id_col)
+
+    # Perform the replacement ----
+    index_of_first_col: int = fct_cols.index(cols_to_replace[0])
+    fct_new_cols: str_list = deepcopy(fct_cols)
+    fct_new_cols = [
+        *fct_new_cols[:index_of_first_col],
+        dim_id_col,
+        *fct_new_cols[index_of_first_col + 1 :],
+    ]
+    fct_removed_cols: str_list = [col for col in fct_new_cols if col not in cols_to_replace]
+
+    # Return ----
     return (
         fct_dataframe.alias("a")
         .join(
@@ -664,5 +688,5 @@ def replace_columns_with_dimension_id(
             how="left",
         )
         .select("a.*", f"b.{dim_id_col}")
-        .select(fct_removed_cols)
+        .select(*fct_removed_cols)
     )
