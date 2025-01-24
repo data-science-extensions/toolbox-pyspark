@@ -325,6 +325,139 @@ def make_dimension_table(
     columns: Union[str, list[str]],
     index_prefix: str = "id",
 ) -> psDataFrame:
+    """
+    !!! note "Summary"
+        Create a dimension table from the specified columns of a given `pyspark` dataframe.
+
+    ???+ abstract "Details"
+        This function will create a dimension table from the specified columns of a given `pyspark` dataframe. The dimension table will contain the unique values of the specified columns, along with an index column that will be used to replace the original columns in the original dataframe.
+
+        index column will be named according to the `index_prefix` parameter. If only one column is specified, then the index column will be named according to the `index_prefix` parameter followed by the name of the column. If multiple columns are specified, then the index column will be named according to the `index_prefix` parameter only. The index column will be created by using the `#!py row_number()` window function over the specified columns.
+
+        The dimension table will be created by selecting the specified columns from the original dataframe, then applying the `#!py distinct()` function to get the unique values, and finally applying the `#!py row_number()` window function to create the index column.
+
+    Params:
+        dataframe (psDataFrame):
+            The DataFrame to create the dimension table from.
+        columns (Union[str, str_collection]):
+            The column(s) to include in the dimension table.
+        index_prefix (str, optional):
+            The prefix to use for the index column.<br>
+            Defaults to `#!py "id"`.
+
+    Raises:
+        TypeError:
+            If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
+        ColumnDoesNotExistError:
+            If any of the columns specified do not exist in the dataframe.
+
+    Returns:
+        (psDataFrame):
+            The dimension table.
+
+    ???+ example "Examples"
+
+        ```{.py .python linenums="1" title="Set up"}
+        >>> # Imports
+        >>> import pandas as pd
+        >>> from pyspark.sql import SparkSession
+        >>> from toolbox_pyspark.dimensions import make_dimension_table
+        >>>
+        >>> # Instantiate Spark
+        >>> spark = SparkSession.builder.getOrCreate()
+        >>>
+        >>> # Create data
+        >>> df = spark.createDataFrame(
+        ...     pd.DataFrame(
+        ...         {
+        ...             "a": [1, 2, 3, 4],
+        ...             "b": ["a", "b", "c", "d"],
+        ...             "c": [1, 1, 2, 2],
+        ...             "d": ["a", "b", "b", "b"],
+        ...             "e": ["x", "x", "y", "z"],
+        ...         }
+        ...     )
+        ... )
+        >>>
+        >>> # Check
+        >>> df.show()
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        +---+---+---+---+---+
+        | a | b | c | d | e |
+        +---+---+---+---+---+
+        | 1 | a | 1 | a | x |
+        | 2 | b | 1 | b | x |
+        | 3 | c | 2 | b | y |
+        | 4 | d | 2 | b | z |
+        +---+---+---+---+---+
+        ```
+        </div>
+
+        ```{.py .python linenums="1" title="Example 1: Create dimension table with single column"}
+        >>> dim_table = make_dimension_table(df, "d")
+        >>> dim_table.show()
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        +------+---+
+        | id_d | d |
+        +------+---+
+        |    1 | a |
+        |    2 | b |
+        +------+---+
+        ```
+        !!! success "Conclusion: Successfully created dimension table with single column."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 2: Create dimension table with multiple columns"}
+        >>> dim_table = make_dimension_table(df, ["c", "d"])
+        >>> dim_table.show()
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        +----+---+---+
+        | id | c | d |
+        +----+---+---+
+        |  1 | 1 | a |
+        |  2 | 1 | b |
+        |  3 | 2 | b |
+        +----+---+---+
+        ```
+        !!! success "Conclusion: Successfully created dimension table with multiple columns."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 3: Use different prefix"}
+        >>> dim_table = make_dimension_table(df, "e", "index")
+        >>> dim_table.show()
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        +---------+---+
+        | index_e | e |
+        +---------+---+
+        |       1 | x |
+        |       2 | y |
+        |       3 | z |
+        +---------+---+
+        ```
+        !!! success "Conclusion: Successfully created dimension table with different prefix."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 4: Invalid column"}
+        >>> dim_table = make_dimension_table(df, "123")
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        ColumnDoesNotExistError: Column '123' does not exist in the DataFrame.
+        ```
+        !!! failure "Conclusion: Failed to create dimension table due to invalid column name."
+        </div>
+
+    ??? tip "See Also"
+        - [`replace_columns_with_dimension_id`][toolbox_pyspark.dimensions.replace_columns_with_dimension_id]
+    """
     columns = [columns] if is_type(columns, str) else columns
     index_name: str = f"{index_prefix}_{columns[0]}" if len(columns) == 0 else index_prefix
     return (
@@ -341,12 +474,178 @@ def replace_columns_with_dimension_id(
     cols_to_replace: Union[str, list[str]],
     dim_id_col: Optional[str] = None,
 ) -> psDataFrame:
-    cols_to_replace = [cols_to_replace] if is_type(cols_to_replace, str) else cols_to_replace
-    fct_cols: list[str] = fct_dataframe.columns
-    dim_cols: list[str] = dim_dataframe.columns
-    assert all(col in fct_cols for col in cols_to_replace)
-    assert all(col in dim_cols for col in cols_to_replace)
-    assert dim_id_col in dim_cols
+    """
+    !!! note "Summary"
+        Replace the specified columns in a given `pyspark` dataframe with the corresponding dimension table IDs.
+
+    ???+ abstract "Details"
+        This function will replace the specified columns in a given `pyspark` dataframe with the corresponding dimension table IDs. The dimension table IDs will be obtained by joining the dimension table with the original dataframe on the specified columns. The original columns will then be dropped from the original dataframe.
+
+        The dimension table IDs will be added to the original dataframe to replace the columns specified in `cols_to_replace`. The dimension table IDs will be obtained by joining the dimension table with the original dataframe on the specified columns.
+
+        The join will be performed using a left join, so that any rows in the original dataframe that do not have a corresponding row in the dimension table will have a `#!sql null` value for the dimension table ID. The original columns will be dropped from the original dataframe after the join.         The resulting dataframe will have the same number of rows as the original dataframe, but with the specified columns replaced by the dimension table IDs.
+
+    Params:
+        fct_dataframe (psDataFrame):
+            The DataFrame to replace the columns in.
+        dim_dataframe (psDataFrame):
+            The dimension table containing the IDs.
+        cols_to_replace (Union[str, str_collection]):
+            The column(s) to replace with the dimension table IDs.
+        dim_id_col (str, optional):
+            The name of the column in the dimension table containing the IDs.<br>
+            If `#!py None`, then will use the first column of the dimension table.<br>
+            Defaults to `#!py None`.
+
+    Raises:
+        TypeError:
+            If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
+        ColumnDoesNotExistError:
+            If any of the columns specified do not exist in the dataframes.
+
+    Returns:
+        (psDataFrame):
+            The DataFrame with the columns replaced by the dimension table IDs.
+
+    ???+ example "Examples"
+
+        ```{.py .python linenums="1" title="Set up"}
+        >>> # Imports
+        >>> import pandas as pd
+        >>> from pyspark.sql import SparkSession
+        >>>
+        >>> # Instantiate Spark
+        >>> from toolbox_pyspark.dimensions import make_dimension_table, replace_columns_with_dimension_id
+        >>> spark = SparkSession.builder.getOrCreate()
+        >>>
+        >>> # Create data
+        >>> df = spark.createDataFrame(
+        ...     pd.DataFrame(
+        ...         {
+        ...             "a": [1, 2, 3, 4],
+        ...             "b": ["a", "b", "c", "d"],
+        ...             "c": [1, 1, 2, 2],
+        ...             "d": ["a", "b", "b", "b"],
+        ...             "e": ["x", "x", "y", "z"],
+        ...         }
+        ...     )
+        ... )
+        >>> dim_table1 = make_dimension_table(df, "d")
+        >>> dim_table2 = make_dimension_table(df, "e")
+        >>> dim_table3 = make_dimension_table(df, ("c", "d"))
+        >>>
+        >>> # Check
+        >>> df.show()
+        >>> dim_table1.show()
+        >>> dim_table2.show()
+        >>> dim_table3.show()
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        +---+---+---+---+---+
+        | a | b | c | d | e |
+        +---+---+---+---+---+
+        | 1 | a | 1 | a | x |
+        | 2 | b | 1 | b | x |
+        | 3 | c | 2 | b | y |
+        | 4 | d | 2 | b | z |
+        +---+---+---+---+---+
+        ```
+        ```{.txt .text title="Terminal"}
+        +------+---+
+        | id_d | d |
+        +------+---+
+        |    1 | a |
+        |    2 | b |
+        +------+---+
+        ```
+        ```{.txt .text title="Terminal"}
+        +------+---+
+        | id_e | e |
+        +------+---+
+        |    1 | x |
+        |    2 | y |
+        |    3 | z |
+        +------+---+
+        ```
+        ```{.txt .text title="Terminal"}
+        +----+---+---+
+        | id | c | d |
+        +----+---+---+
+        |  1 | 1 | a |
+        |  2 | 1 | b |
+        |  3 | 2 | b |
+        +----+---+---+
+        ```
+        </div>
+
+        ```{.py .python linenums="1" title="Example 1: Replace single column with dimension ID"}
+        >>> df_replaced = replace_columns_with_dimension_id(df, dim_table1, "d")
+        >>> df_replaced.show()
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        +---+---+---+------+---+
+        | a | b | c | id_d | e |
+        +---+---+---+------+---+
+        | 1 | a | 1 |    1 | x |
+        | 2 | b | 1 |    2 | x |
+        | 3 | c | 2 |    2 | y |
+        | 4 | d | 2 |    2 | z |
+        +---+---+---+------+---+
+        ```
+        !!! success "Conclusion: Successfully replaced single column with dimension ID."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 2: Replace single column with dimension ID"}
+        >>> df_replaced = replace_columns_with_dimension_id(df, dim_table2, "e")
+        >>> df_replaced.show()
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        +---+---+---+---+------+
+        | a | b | c | d | id_e |
+        +---+---+---+---+------+
+        | 1 | a | 1 | a |    1 |
+        | 2 | b | 1 | b |    1 |
+        | 3 | c | 2 | b |    2 |
+        | 4 | d | 2 | b |    3 |
+        +---+---+---+---+------+
+        ```
+        !!! success "Conclusion: Successfully replaced single column with dimension ID."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 3: Replace multiple columns with dimension IDs"}
+        >>> df_replaced_multi = replace_columns_with_dimension_id(df, dim_table3, ["c", "d"])
+        >>> df_replaced_multi.show()
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        +---+---+----+---+
+        | a | b | id | e |
+        +---+---+----+---+
+        | 1 | a |  1 | x |
+        | 2 | b |  2 | x |
+        | 3 | c |  3 | y |
+        | 4 | d |  3 | z |
+        +---+---+----+---+
+        ```
+        !!! success "Conclusion: Successfully replaced multiple columns with dimension IDs."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 4: Invalid column type"}
+        >>> df_replaced = replace_columns_with_dimension_id(df, dim_table, "123")
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        ColumnDoesNotExistError: Column '123' does not exist in the DataFrame.
+        ```
+        !!! failure "Conclusion: Failed to replace columns due to invalid column type."
+        </div>
+
+    ??? tip "See Also"
+        - [`make_dimension_table`][toolbox_pyspark.dimensions.make_dimension_table]
+    """
     index_of_first_col: int = fct_cols.index(cols_to_replace[0])
     fct_new_cols: list[str] = deepcopy(fct_cols)
     fct_new_cols = list(
