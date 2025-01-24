@@ -183,15 +183,17 @@ class PySparkSetup:
         +---+---+---------------------+---------------------+
         ```
         """
-        return self.spark.createDataFrame(
-            pd.DataFrame(
-                {
-                    "a": [1, 2, 3, 4],
-                    "b": ["a", "b", "c", "d"],
-                    "c_date": pd.date_range(start="2022-01-01", periods=4, freq="h"),
-                    "d_date": pd.date_range(start="2022-02-01", periods=4, freq="h"),
-                }
-            )
+        return self.ps_df.withColumns(
+            {
+                "c_date": self.add_column_from_list(
+                    "a",
+                    F.lit(pd.date_range(start="2022-01-01", periods=self.num_rows, freq="h")),
+                ),
+                "d_date": self.add_column_from_list(
+                    "a",
+                    F.lit(pd.date_range(start="2022-02-01", periods=self.num_rows, freq="h")),
+                ),
+            }
         )
 
     @property
@@ -256,18 +258,23 @@ class PySparkSetup:
         +---+---+---------------------+---------------------+---------------------+-----------------+-------------------+
         ```
         """
-        return self.spark.createDataFrame(
-            pd.DataFrame(
-                {
-                    "a": [1, 2, 3, 4],
-                    "b": ["a", "b", "c", "d"],
-                    "c": pd.date_range(start="2022-01-01", periods=4, freq="D"),
-                    "d": pd.date_range(start="2022-02-01", periods=4, freq="D"),
-                    "e": pd.date_range(start="2022-03-01", periods=4, freq="D"),
-                    "target": ["Asia/Singapore"] * 4,
-                    "TIMEZONE_LOCATION": ["Australia/Perth"] * 4,
-                }
-            )
+        return self.ps_df.withColumns(
+            {
+                "c": self.add_column_from_list(
+                    "a",
+                    F.lit(pd.date_range(start="2022-01-01", periods=self.num_rows, freq="D")),
+                ),
+                "d": self.add_column_from_list(
+                    "a",
+                    F.lit(pd.date_range(start="2022-02-01", periods=self.num_rows, freq="D")),
+                ),
+                "e": self.add_column_from_list(
+                    "a",
+                    F.lit(pd.date_range(start="2022-03-01", periods=self.num_rows, freq="D")),
+                ),
+                "target": F.lit("Asia/Singapore"),
+                "TIMEZONE_LOCATION": F.lit("Australia/Perth"),
+            }
         )
 
     @property
@@ -285,12 +292,12 @@ class PySparkSetup:
         ```
         """
         return self.ps_df_timezone.withColumnsRenamed(
-            {"d": "d_datetime", "e": "e_datetime"}
+            {"d": "d_datetime", "e": "e_datetime"},
         ).withColumns(
             {
                 "d_datetime": F.to_timestamp("d_datetime"),
                 "e_datetime": F.to_timestamp("e_datetime"),
-            }
+            },
         )
 
     @property
@@ -307,17 +314,22 @@ class PySparkSetup:
         +---+---+---------------------+---------------------+---------------------+-------------------+
         ```
         """
-        return self.spark.createDataFrame(
-            pd.DataFrame(
-                {
-                    "a": [1, 2, 3, 4],
-                    "b": ["a", "b", "c", "d"],
-                    "c_datetime": pd.date_range(start="2022-01-01", periods=4, freq="h"),
-                    "d_datetime": pd.date_range(start="2022-02-01", periods=4, freq="h"),
-                    "e_datetime": pd.date_range(start="2022-03-01", periods=4, freq="h"),
-                    "TIMEZONE_LOCATION": ["Australia/Perth"] * 4,
-                }
-            )
+        return self.ps_df.withColumns(
+            {
+                "c_datetime": self.add_column_from_list(
+                    "a",
+                    F.lit(pd.date_range(start="2022-01-01", periods=self.num_rows, freq="h")),
+                ),
+                "d_datetime": self.add_column_from_list(
+                    "a",
+                    F.lit(pd.date_range(start="2022-02-01", periods=self.num_rows, freq="h")),
+                ),
+                "e_datetime": self.add_column_from_list(
+                    "a",
+                    F.lit(pd.date_range(start="2022-03-01", periods=self.num_rows, freq="h")),
+                ),
+                "TIMEZONE_LOCATION": F.lit("Australia/Perth"),
+            }
         )
 
     @property
@@ -334,16 +346,12 @@ class PySparkSetup:
         +---+---+---+---+---+
         ```
         """
-        return self.spark.createDataFrame(
-            pd.DataFrame(
-                {
-                    "a": [1, 2, 3, 4],
-                    "b": ["a", "b", "c", "d"],
-                    "c": [1, 1, 1, 1],
-                    "d": ["2", "2", "2", "2"],
-                    "n": ["a", "b", "c", "d"],
-                }
-            )
+        return self.ps_df.withColumns(
+            {
+                "c": F.lit(1),
+                "d": F.lit("2"),
+                "n": F.col("b"),
+            }
         )
 
     @property
@@ -360,16 +368,13 @@ class PySparkSetup:
         +---+---+---+---+---+
         ```
         """
-        return self.spark.createDataFrame(
-            pd.DataFrame(
-                {
-                    "a": [1, 2, 3, 4],
-                    "b": ["a", "b", "c", "d"],
-                    "c": [1, 1, 2, 2],
-                    "d": [1, 2, 2, 2],
-                    "e": [1, 1, 2, 3],
-                }
-            )
+
+        return self.ps_df.withColumns(
+            {
+                "c": self.add_column_from_list("a", F.lit([1, 1, 2, 2])),
+                "d": self.add_column_from_list("a", F.lit([1, 2, 2, 2])),
+                "e": self.add_column_from_list("a", F.lit([1, 1, 2, 3])),
+            }
         )
 
     @property
@@ -408,16 +413,14 @@ class PySparkSetup:
         +---+---+------+------+---------+
         ```
         """
-        return self.spark.createDataFrame(
-            pd.DataFrame(
-                {
-                    "a": [1, 2, 3, 4],
-                    "b": ["a", "b", "c", "d"],
-                    "c": ["1   ", "1   ", "1   ", "1   "],
-                    "d": ["   2", "   2", "   2", "   2"],
-                    "e": ["   3   ", "   3   ", "   3   ", "   3   "],
-                }
-            )
+        return self.ps_df.withColumns(
+            {
+                "c": self.add_column_from_list("a", F.lit(["1   ", "1   ", "1   ", "1   "])),
+                "d": self.add_column_from_list("a", F.lit(["   2", "   2", "   2", "   2"])),
+                "e": self.add_column_from_list(
+                    "a", F.lit(["   3   ", "   3   ", "   3   ", "   3   "])
+                ),
+            }
         )
 
     @property
