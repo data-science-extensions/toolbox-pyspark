@@ -107,6 +107,11 @@ class PySparkSetup:
         )
         return cls
 
+    @staticmethod
+    @F.udf
+    def add_column_from_list(row, lst) -> str:
+        return lst[row]
+
     @property
     def deprecation_message_regex(self) -> str:
         return "The .+ was deprecated since .+ in favor of .+"
@@ -365,6 +370,28 @@ class PySparkSetup:
                     "e": [1, 1, 2, 3],
                 }
             )
+        )
+
+    @property
+    def ps_df_dimensions(self) -> psDataFrame:
+        """
+        ```txt
+        +---+---+---+---+---+
+        | a | b | c | d | e |
+        +---+---+---+---+---+
+        | 1 | a | 1 | a | x |
+        | 2 | b | 1 | b | x |
+        | 3 | c | 2 | b | y |
+        | 4 | d | 2 | b | z |
+        +---+---+---+---+---+
+        ```
+        """
+        return self.ps_df.withColumns(
+            {
+                "c": self.add_column_from_list("a", F.lit(["1", "1", "2", "2"])),
+                "d": self.add_column_from_list("a", F.lit(["a", "b", "b", "b"])),
+                "e": self.add_column_from_list("a", F.lit(["x", "x", "y", "z"])),
+            }
         )
 
     @property
