@@ -179,7 +179,7 @@ build-changelog:
 	./src/cli/changelog.sh > ./CHANGELOG.md
 commit-changelog:
 	git add ./CHANGELOG.md
-	git commit --message="Update changelog [skip ci]"
+	git commit --message="Update changelog [skip ci]" --no-verify
 	git push --force --no-verify
 	git status
 

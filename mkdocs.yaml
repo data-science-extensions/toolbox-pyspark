@@ -48,6 +48,7 @@ nav:
   - Usage:
       - Overview: usage/overview.md
       - Application: usage/application.md
+      - Changelog: usage/changelog.md
   - Modules:
       - code/index.md
       - Constants: code/constants.md
