@@ -44,8 +44,8 @@ from typing import Any, Optional, Union
 from numpy import ndarray as npArray
 from pandas import DataFrame as pdDataFrame
 from pyspark.sql import DataFrame as psDataFrame, types as T
-from toolbox_python.collection_types import str_list, str_collection
 from toolbox_python.checkers import is_type
+from toolbox_python.collection_types import str_collection, str_list
 from typeguard import typechecked
 
 # ## Local First Party Imports ----
@@ -55,6 +55,10 @@ from toolbox_pyspark.constants import (
     LITERAL_NUMPY_ARRAY_NAMES,
     LITERAL_PANDAS_DATAFRAME_NAMES,
     LITERAL_PYSPARK_DATAFRAME_NAMES,
+    VALID_LIST_OBJECT_NAMES,
+    VALID_NUMPY_ARRAY_NAMES,
+    VALID_PANDAS_DATAFRAME_NAMES,
+    VALID_PYSPARK_DATAFRAME_NAMES,
 )
 
 
@@ -88,7 +92,6 @@ def extract_column_values(
         LITERAL_PANDAS_DATAFRAME_NAMES,
         LITERAL_NUMPY_ARRAY_NAMES,
         LITERAL_LIST_OBJECT_NAMES,
-        str,
     ] = "pd",
 ) -> Optional[Union[psDataFrame, pdDataFrame, npArray, list]]:
     """
@@ -197,20 +200,21 @@ def extract_column_values(
     ??? tip "See Also"
         - [`get_distinct_values`][toolbox_pyspark.info.get_distinct_values]
     """
+
     assert_column_exists(dataframe, column)
-    if return_type not in ["ps", "pd", "np", "list"]:
-        raise ValueError(f"Invalid return type: {return_type}")
+
+    dataframe = dataframe.select(column)
 
     if distinct:
-        dataframe = dataframe.select(column).distinct()
+        dataframe = dataframe.distinct()
 
-    if return_type == "ps":
+    if return_type in VALID_PYSPARK_DATAFRAME_NAMES:
         return dataframe
-    elif return_type == "pd":
+    elif return_type in VALID_PANDAS_DATAFRAME_NAMES:
         return dataframe.toPandas()
-    elif return_type == "np":
+    elif return_type in VALID_NUMPY_ARRAY_NAMES:
         return dataframe.select(column).toPandas().to_numpy()
-    elif return_type == "list":
+    elif return_type in VALID_LIST_OBJECT_NAMES:
         return dataframe.select(column).toPandas()[column].tolist()
 
 
@@ -281,4 +285,6 @@ def get_distinct_values(
     """
     columns = [columns] if is_type(columns, str) else columns
     rows: list[T.Row] = dataframe.select(*columns).distinct().collect()
-    return tuple(row[columns] for row in rows)
+    if len(columns) == 1:
+        return tuple(row[columns[0]] for row in rows)
+    return tuple(tuple(row[col] for col in columns) for row in rows)

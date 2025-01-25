@@ -80,7 +80,6 @@ __all__: str_list = [
     "create_empty_dataframe",
     "keep_first_record_by_columns",
     "convert_dataframe",
-    "get_column_values",
     "update_nullability",
     "trim_spaces_from_column",
     "trim_spaces_from_columns",

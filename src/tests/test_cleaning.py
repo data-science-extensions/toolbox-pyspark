@@ -31,7 +31,6 @@ from toolbox_pyspark.cleaning import (
     convert_dataframe,
     create_empty_dataframe,
     drop_matching_rows,
-    get_column_values,
     keep_first_record_by_columns,
     trim_spaces_from_column,
     trim_spaces_from_columns,
@@ -185,37 +184,6 @@ class TestDataFrameToType(PySparkSetup, TestCase):
     def test_convert_dataframe_5(self) -> None:
         with pytest.raises(ValueError):
             convert_dataframe(self.ps_df, "testing")
-
-
-# ---------------------------------------------------------------------------- #
-#  TestGetColumnValues                                                      ####
-# ---------------------------------------------------------------------------- #
-
-
-class TestGetColumnValues(PySparkSetup, TestCase):
-
-    def setUp(self) -> None:
-        pass
-
-    def test_get_column_values_1(self) -> None:
-        result = get_column_values(self.ps_df_extended, "c")
-        expected = (
-            self.ps_df_extended.select("c").filter("c is not null and c <> ''").distinct()
-        )
-        expected = convert_dataframe(expected, "pd")
-        pd.testing.assert_frame_equal(result, expected)
-
-    def test_get_column_values_2(self) -> None:
-        result = get_column_values(self.ps_df_extended, "c", False)
-        expected = self.ps_df_extended.select("c").filter("c is not null and c <> ''")
-        expected = convert_dataframe(expected, "pd")
-        pd.testing.assert_frame_equal(result, expected)
-
-    def test_get_column_values_3(self) -> None:
-        result = get_column_values(self.ps_df_extended, "c", False, "flat_list")
-        expected = self.ps_df_extended.select("c").filter("c is not null and c <> ''")
-        expected = convert_dataframe(expected, "flat_list")
-        assert result == expected
 
 
 # ---------------------------------------------------------------------------- #

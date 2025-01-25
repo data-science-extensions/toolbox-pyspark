@@ -46,7 +46,7 @@ from toolbox_python.collection_types import str_list
 from typeguard import typechecked
 
 # ## Local First Party Imports ----
-from toolbox_pyspark.cleaning import get_column_values
+from toolbox_pyspark.info import extract_column_values
 
 
 # ---------------------------------------------------------------------------- #
@@ -234,7 +234,7 @@ def duplicate_union_dataframe(
         by_list: str_list,
         new_column_name: str,
     ) -> psDataFrame:
-        values_in_col: list = get_column_values(
+        values_in_col: list = extract_column_values(
             dataframe=dataframe,
             column=new_column_name,
             distinct=True,
