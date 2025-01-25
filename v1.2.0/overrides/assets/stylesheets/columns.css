@@ -1,0 +1,31 @@
+/* Two-column layout */
+.md-typeset .mdx-columns ol,
+.md-typeset .mdx-columns ul,
+.md-typeset .mdx-two-columns ol,
+.md-typeset .mdx-two-columns ul {
+    columns: 2;
+    break-inside: avoid;
+}
+
+/* Three-column layout */
+.md-typeset .mdx-three-columns ol,
+.md-typeset .mdx-three-columns ul {
+    columns: 3;
+    break-inside: avoid;
+}
+
+/* Four-column layout */
+.md-typeset .mdx-four-columns ol,
+.md-typeset .mdx-four-columns ul {
+    columns: 4;
+    break-inside: avoid;
+}
+
+/* [mobile portrait -]: Reset columns on mobile */
+@media only screen and (max-width: 600px) {
+
+    .md-typeset .mdx-columns ol,
+    .md-typeset .mdx-columns ul {
+        columns: initial;
+    }
+}
