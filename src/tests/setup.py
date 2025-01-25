@@ -16,6 +16,7 @@ from __future__ import annotations
 # ## Python StdLib Imports ----
 import os
 import sys
+from functools import cached_property
 from pathlib import Path
 from string import ascii_letters
 from typing import Callable
@@ -30,6 +31,9 @@ from pyspark.sql import (
     types as T,
 )
 from toolbox_python.collection_types import any_list_tuple, str_list
+
+# ## Local First Party Imports ----
+from toolbox_pyspark.types import cast_columns_to_type
 
 
 ## --------------------------------------------------------------------------- #
@@ -110,76 +114,76 @@ class PySparkSetup:
     @staticmethod
     @F.udf
     def add_column_from_list(row, lst) -> str:
-        return lst[row]
+        return lst[row - 1]
 
-    @property
+    @cached_property
     def deprecation_message_regex(self) -> str:
         return "The .+ was deprecated since .+ in favor of .+"
 
-    @property
+    @cached_property
     def pd_df(self) -> pdDataFrame:
         """
         ```txt
         +---+---+
         | a | b |
         +---+---+
-        | 0 | a |
-        | 1 | b |
-        | 2 | c |
-        | 3 | d |
+        | 1 | a |
+        | 2 | b |
+        | 3 | c |
+        | 4 | d |
         +---+---+
         ```
         """
         return pdDataFrame(
             {
-                "a": range(self.num_rows),
+                "a": range(1, self.num_rows + 1),
                 "b": list(ascii_letters[: self.num_rows]),
             }
         )
 
-    @property
+    @cached_property
     def ps_df(self) -> psDataFrame:
         """
         ```txt
         +---+---+
         | a | b |
         +---+---+
-        | 0 | a |
-        | 1 | b |
-        | 2 | c |
-        | 3 | d |
+        | 1 | a |
+        | 2 | b |
+        | 3 | c |
+        | 4 | d |
         +---+---+
         ```
         """
         return self.spark.createDataFrame(self.pd_df)
 
-    @property
+    @cached_property
     def ps_df_extended(self) -> psDataFrame:
         """
         ```txt
         +---+---+---+---+
         | a | b | c | d |
         +---+---+---+---+
-        | 0 | a | c | d |
-        | 1 | b | c | d |
-        | 2 | c | c | d |
-        | 3 | d | c | d |
+        | 1 | a | c | d |
+        | 2 | b | c | d |
+        | 3 | c | c | d |
+        | 4 | d | c | d |
         +---+---+---+---+
         ```
         """
         return self.ps_df.withColumn("c", F.lit("c")).withColumn("d", F.lit("d"))
 
-    @property
+    @cached_property
     def ps_df_timestamp(self) -> psDataFrame:
         """
         ```txt
         +---+---+---------------------+---------------------+
         | a | b |              c_date |              d_date |
         +---+---+---------------------+---------------------+
-        | 0 | a | 2022-01-01 00:00:00 | 2022-02-01 00:00:00 |
-        | 1 | b | 2022-01-01 01:00:00 | 2022-02-01 01:00:00 |
-        | 2 | c | 2022-01-01 02:00:00 | 2022-02-01 02:00:00 |
-        | 3 | d | 2022-01-01 03:00:00 | 2022-02-01 03:00:00 |
+        | 1 | a | 2022-01-01 00:00:00 | 2022-02-01 00:00:00 |
+        | 2 | b | 2022-01-01 01:00:00 | 2022-02-01 01:00:00 |
+        | 3 | c | 2022-01-01 02:00:00 | 2022-02-01 02:00:00 |
+        | 4 | d | 2022-01-01 03:00:00 | 2022-02-01 03:00:00 |
         +---+---+---------------------+---------------------+
         ```
         """
@@ -187,26 +191,34 @@ class PySparkSetup:
             {
                 "c_date": self.add_column_from_list(
                     "a",
-                    F.lit(pd.date_range(start="2022-01-01", periods=self.num_rows, freq="h")),
+                    F.lit(
+                        list(
+                            pd.date_range(start="2022-01-01", periods=self.num_rows, freq="h")
+                        )
+                    ),
                 ),
                 "d_date": self.add_column_from_list(
                     "a",
-                    F.lit(pd.date_range(start="2022-02-01", periods=self.num_rows, freq="h")),
+                    F.lit(
+                        list(
+                            pd.date_range(start="2022-02-01", periods=self.num_rows, freq="h")
+                        )
+                    ),
                 ),
             }
-        )
+        ).transform(cast_columns_to_type, ["c_date", "d_date"], "datetime")
 
-    @property
+    @cached_property
     def ps_df_types(self) -> psDataFrame:
         """
         ```txt
         +---+---+---+---+-----+-----+------------+---------------------+
         | a | b | c | d |   e |   f |          g |                   h |
         +---+---+---+---+-----+-----+------------+---------------------+
-        | 0 | a | 1 | 2 | 1.1 | 1.2 | 2022-01-01 | 2022-02-01 01:00:00 |
-        | 1 | b | 1 | 2 | 1.1 | 1.2 | 2022-01-01 | 2022-02-01 01:00:00 |
-        | 2 | c | 1 | 2 | 1.1 | 1.2 | 2022-01-01 | 2022-02-01 01:00:00 |
-        | 3 | d | 1 | 2 | 1.1 | 1.2 | 2022-01-01 | 2022-02-01 01:00:00 |
+        | 1 | a | 1 | 2 | 1.1 | 1.2 | 2022-01-01 | 2022-02-01 01:00:00 |
+        | 2 | b | 1 | 2 | 1.1 | 1.2 | 2022-01-01 | 2022-02-01 01:00:00 |
+        | 3 | c | 1 | 2 | 1.1 | 1.2 | 2022-01-01 | 2022-02-01 01:00:00 |
+        | 4 | d | 1 | 2 | 1.1 | 1.2 | 2022-01-01 | 2022-02-01 01:00:00 |
         +---+---+---+---+-----+-----+------------+---------------------+
         ```
         """
@@ -221,21 +233,21 @@ class PySparkSetup:
             }
         )
 
-    @property
+    @cached_property
     def pd_type_check(self) -> pdDataFrame:
         """
         ```txt
         +---+----------+-----------+
         |   | col_name |  col_type |
         +---+----------+-----------+
-        | 0 |        a |    bigint |
-        | 1 |        b |    string |
-        | 2 |        c |       int |
-        | 3 |        d |    string |
-        | 4 |        e |     float |
-        | 5 |        f |    double |
-        | 6 |        g |      date |
-        | 7 |        h | timestamp |
+        | 1 |        a |    bigint |
+        | 2 |        b |    string |
+        | 3 |        c |       int |
+        | 4 |        d |    string |
+        | 5 |        e |     float |
+        | 6 |        f |    double |
+        | 7 |        g |      date |
+        | 8 |        h | timestamp |
         +---+----------+-----------+
         ```
         """
@@ -244,7 +256,7 @@ class PySparkSetup:
             columns=["col_name", "col_type"],
         )
 
-    @property
+    @cached_property
     def ps_df_timezone(self) -> psDataFrame:
         """
         ```txt
@@ -262,22 +274,34 @@ class PySparkSetup:
             {
                 "c": self.add_column_from_list(
                     "a",
-                    F.lit(pd.date_range(start="2022-01-01", periods=self.num_rows, freq="D")),
+                    F.lit(
+                        list(
+                            pd.date_range(start="2022-01-01", periods=self.num_rows, freq="D")
+                        )
+                    ),
                 ),
                 "d": self.add_column_from_list(
                     "a",
-                    F.lit(pd.date_range(start="2022-02-01", periods=self.num_rows, freq="D")),
+                    F.lit(
+                        list(
+                            pd.date_range(start="2022-02-01", periods=self.num_rows, freq="D")
+                        )
+                    ),
                 ),
                 "e": self.add_column_from_list(
                     "a",
-                    F.lit(pd.date_range(start="2022-03-01", periods=self.num_rows, freq="D")),
+                    F.lit(
+                        list(
+                            pd.date_range(start="2022-03-01", periods=self.num_rows, freq="D")
+                        )
+                    ),
                 ),
                 "target": F.lit("Asia/Singapore"),
                 "TIMEZONE_LOCATION": F.lit("Australia/Perth"),
             }
-        )
+        ).transform(cast_columns_to_type, ["c", "d", "e"], "datetime")
 
-    @property
+    @cached_property
     def ps_df_timezone_extended(self) -> psDataFrame:
         """
         ```txt
@@ -300,7 +324,7 @@ class PySparkSetup:
             },
         )
 
-    @property
+    @cached_property
     def ps_df_datetime(self) -> psDataFrame:
         """
         ```txt
@@ -318,21 +342,35 @@ class PySparkSetup:
             {
                 "c_datetime": self.add_column_from_list(
                     "a",
-                    F.lit(pd.date_range(start="2022-01-01", periods=self.num_rows, freq="h")),
+                    F.lit(
+                        list(
+                            pd.date_range(start="2022-01-01", periods=self.num_rows, freq="h")
+                        ),
+                    ),
                 ),
                 "d_datetime": self.add_column_from_list(
                     "a",
-                    F.lit(pd.date_range(start="2022-02-01", periods=self.num_rows, freq="h")),
+                    F.lit(
+                        list(
+                            pd.date_range(start="2022-02-01", periods=self.num_rows, freq="h")
+                        ),
+                    ),
                 ),
                 "e_datetime": self.add_column_from_list(
                     "a",
-                    F.lit(pd.date_range(start="2022-03-01", periods=self.num_rows, freq="h")),
+                    F.lit(
+                        list(
+                            pd.date_range(start="2022-03-01", periods=self.num_rows, freq="h")
+                        ),
+                    ),
                 ),
                 "TIMEZONE_LOCATION": F.lit("Australia/Perth"),
             }
+        ).transform(
+            cast_columns_to_type, ["c_datetime", "d_datetime", "e_datetime"], "datetime"
         )
 
-    @property
+    @cached_property
     def ps_df_duplication(self) -> psDataFrame:
         """
         ```txt
@@ -354,7 +392,7 @@ class PySparkSetup:
             }
         )
 
-    @property
+    @cached_property
     def ps_df_duplicates(self) -> psDataFrame:
         """
         ```txt
@@ -377,7 +415,7 @@ class PySparkSetup:
             }
         )
 
-    @property
+    @cached_property
     def ps_df_dimensions(self) -> psDataFrame:
         """
         ```txt
@@ -399,7 +437,7 @@ class PySparkSetup:
             }
         )
 
-    @property
+    @cached_property
     def ps_df_trimming(self) -> psDataFrame:
         """
         ```txt
@@ -423,17 +461,17 @@ class PySparkSetup:
             }
         )
 
-    @property
+    @cached_property
     def ps_df_keys(self) -> psDataFrame:
         """
         ```txt
         +---+---+---+---+---+---+
         | a | b | c | d | e | f |
         +---+---+---+---+---+---+
-        | 0 | a | 1 | 2 | 3 | 4 |
-        | 1 | b | 1 | 2 | 3 | 4 |
-        | 2 | c | 1 | 2 | 3 | 4 |
-        | 3 | d | 1 | 2 | 3 | 4 |
+        | 1 | a | 1 | 2 | 3 | 4 |
+        | 2 | b | 1 | 2 | 3 | 4 |
+        | 3 | c | 1 | 2 | 3 | 4 |
+        | 4 | d | 1 | 2 | 3 | 4 |
         +---+---+---+---+---+---+
         ```
         """
@@ -444,17 +482,17 @@ class PySparkSetup:
             .withColumn("f", F.lit("4"))
         )
 
-    @property
+    @cached_property
     def ps_df_with_keys(self) -> psDataFrame:
         """
         ```txt
         +---+---+-------+---+---+-------+-------+
         | a | b | key_a | c | d | key_c | key_e |
         +---+---+-------+---+---+-------+-------+
-        | 0 | a |     0 | 1 | 2 |     1 |     3 |
-        | 1 | b |     1 | 1 | 2 |     1 |     3 |
-        | 2 | c |     2 | 1 | 2 |     1 |     3 |
-        | 3 | d |     3 | 1 | 2 |     1 |     3 |
+        | 1 | a |     0 | 1 | 2 |     1 |     3 |
+        | 2 | b |     1 | 1 | 2 |     1 |     3 |
+        | 3 | c |     2 | 1 | 2 |     1 |     3 |
+        | 4 | d |     3 | 1 | 2 |     1 |     3 |
         +---+---+-------+---+---+-------+-------+
         ```
         """
@@ -466,33 +504,33 @@ class PySparkSetup:
             .withColumn("key_e", F.lit("3"))
         )
 
-    @property
+    @cached_property
     def ps_df_schema_left(self) -> psDataFrame:
         """
         ```txt
         +---+---+---+---+---+---+
         | a | b | c | d | e | f |
         +---+---+---+---+---+---+
-        | 0 | a | 1 | 2 | 3 | 4 |
-        | 1 | b | 1 | 2 | 3 | 4 |
-        | 2 | c | 1 | 2 | 3 | 4 |
-        | 3 | d | 1 | 2 | 3 | 4 |
+        | 1 | a | 1 | 2 | 3 | 4 |
+        | 2 | b | 1 | 2 | 3 | 4 |
+        | 3 | c | 1 | 2 | 3 | 4 |
+        | 4 | d | 1 | 2 | 3 | 4 |
         +---+---+---+---+---+---+
         ```
         """
         return self.ps_df_keys
 
-    @property
+    @cached_property
     def ps_df_schema_right(self) -> psDataFrame:
         """
         ```txt
         +---+---+---+------+---+---+
         | a | b | c |    d | f | g |
         +---+---+---+------+---+---+
-        | 0 | a | 1 | null | 4 | a |
-        | 1 | b | 1 | null | 4 | a |
-        | 2 | c | 1 | null | 4 | a |
-        | 3 | d | 1 | null | 4 | a |
+        | 1 | a | 1 | null | 4 | a |
+        | 2 | b | 1 | null | 4 | a |
+        | 3 | c | 1 | null | 4 | a |
+        | 4 | d | 1 | null | 4 | a |
         +---+---+---+------+---+---+
         ```
         """
@@ -503,33 +541,33 @@ class PySparkSetup:
             .drop("e")
         )
 
-    @property
+    @cached_property
     def ps_df_decimals(self) -> psDataFrame:
         """
         ```txt
         +----+------------------------+------------------------+
         | a  | b                      | c                      |
         +----+------------------------+------------------------+
-        | 0  | 1.10000000000000000000 | 1.60000000000000000000 |
-        | 1  | 1.01000000000000000000 | 1.06000000000000000000 |
-        | 2  | 1.00100000000000000000 | 1.00600000000000000000 |
-        | 3  | 1.00010000000000000000 | 1.00060000000000000000 |
-        | 4  | 1.00001000000000000000 | 1.00006000000000000000 |
-        | 5  | 1.00000100000000000000 | 1.00000600000000000000 |
-        | 6  | 1.00000010000000000000 | 1.00000060000000000000 |
-        | 7  | 1.00000001000000000000 | 1.00000006000000000000 |
-        | 8  | 1.00000000100000000000 | 1.00000000600000000000 |
-        | 9  | 1.00000000010000000000 | 1.00000000060000000000 |
-        | 10 | 1.00000000001000000000 | 1.00000000006000000000 |
-        | 11 | 1.00000000000100000000 | 1.00000000000600000000 |
-        | 12 | 1.00000000000010000000 | 1.00000000000060000000 |
-        | 13 | 1.00000000000001000000 | 1.00000000000006000000 |
-        | 14 | 1.00000000000000100000 | 1.00000000000000600000 |
-        | 15 | 1.00000000000000010000 | 1.00000000000000060000 |
-        | 16 | 1.00000000000000001000 | 1.00000000000000006000 |
-        | 17 | 1.00000000000000000100 | 1.00000000000000000600 |
-        | 18 | 1.00000000000000000010 | 1.00000000000000000060 |
-        | 19 | 1.00000000000000000001 | 1.00000000000000000006 |
+        | 1  | 1.10000000000000000000 | 1.60000000000000000000 |
+        | 2  | 1.01000000000000000000 | 1.06000000000000000000 |
+        | 3  | 1.00100000000000000000 | 1.00600000000000000000 |
+        | 4  | 1.00010000000000000000 | 1.00060000000000000000 |
+        | 5  | 1.00001000000000000000 | 1.00006000000000000000 |
+        | 6  | 1.00000100000000000000 | 1.00000600000000000000 |
+        | 7  | 1.00000010000000000000 | 1.00000060000000000000 |
+        | 8  | 1.00000001000000000000 | 1.00000006000000000000 |
+        | 9  | 1.00000000100000000000 | 1.00000000600000000000 |
+        | 10 | 1.00000000010000000000 | 1.00000000060000000000 |
+        | 11 | 1.00000000001000000000 | 1.00000000006000000000 |
+        | 12 | 1.00000000000100000000 | 1.00000000000600000000 |
+        | 13 | 1.00000000000010000000 | 1.00000000000060000000 |
+        | 14 | 1.00000000000001000000 | 1.00000000000006000000 |
+        | 15 | 1.00000000000000100000 | 1.00000000000000600000 |
+        | 16 | 1.00000000000000010000 | 1.00000000000000060000 |
+        | 17 | 1.00000000000000001000 | 1.00000000000000006000 |
+        | 18 | 1.00000000000000000100 | 1.00000000000000000600 |
+        | 19 | 1.00000000000000000010 | 1.00000000000000000060 |
+        | 20 | 1.00000000000000000001 | 1.00000000000000000006 |
         +----+------------------------+------------------------+
         ```
         """
@@ -537,9 +575,9 @@ class PySparkSetup:
         return self.spark.createDataFrame(
             pd.DataFrame(
                 {
-                    "a": range(rows),
-                    "b": [f"1.{'0'*val}1" for val in range(rows)],
-                    "c": [f"1.{'0'*val}6" for val in range(rows)],
+                    "a": range(1, rows + 1),
+                    "b": [f"1.{'0'*val}1" for val in range(1, rows + 1)],
+                    "c": [f"1.{'0'*val}6" for val in range(1, rows + 1)],
                 }
             )
         ).withColumns(

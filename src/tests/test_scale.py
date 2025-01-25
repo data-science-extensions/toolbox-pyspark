@@ -77,7 +77,7 @@ class TestRoundColumnToDecimalScale(PySparkSetup, TestCase):
         assert_df_equality(result, expected)
 
     @parameterized.expand(
-        input=list(product(["scale"], range(20))),
+        input=list(product(["scale"], range(1, 21))),
         name_func=lambda func, idx, params: f"{func.__name__}_{idx}_{'_'.join([str(prm) for prm in params[0]])}",
     )
     def test_round_column_3(self, name, scale) -> None:
@@ -174,7 +174,7 @@ class TestRoundColumnsToDecimalScale(PySparkSetup, TestCase):
         assert_df_equality(result, expected)
 
     @parameterized.expand(
-        input=list(product(["scale"], range(20))),
+        input=list(product(["scale"], range(1, 21))),
         name_func=lambda func, idx, params: f"{func.__name__}_{idx}_{'_'.join([str(prm) for prm in params[0]])}",
     )
     def test_round_columns_7(self, name, scale) -> None:
