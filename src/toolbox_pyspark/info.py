@@ -106,7 +106,7 @@ def extract_column_values(
         distinct (bool, optional):
             Whether to retrieve only distinct values.<br>
             Defaults to `#!py True`.
-        return_type (Union[str, LITERAL_PYSPARK_DATAFRAME_NAMES, LITERAL_PANDAS_DATAFRAME_NAMES, LITERAL_NUMPY_ARRAY_NAMES, LITERAL_LIST_OBJECT_NAMES], optional):
+        return_type (Union[LITERAL_PYSPARK_DATAFRAME_NAMES, LITERAL_PANDAS_DATAFRAME_NAMES, LITERAL_NUMPY_ARRAY_NAMES, LITERAL_LIST_OBJECT_NAMES], optional):
             The type of object to return.<br>
             Defaults to `#!py "pd"`.
 
@@ -140,7 +140,8 @@ def extract_column_values(
         ...             "a": [1, 2, 3, 4],
         ...             "b": ["a", "b", "c", "d"],
         ...             "c": [1, 1, 1, 1],
-        ...             "d": ["2", "2", "2", "2"],
+        ...             "d": ["2", "3", "3", "3"],
+        ...             "e": ["a", "a", "b", "b"],
         ...         }
         ...     )
         ... )
@@ -150,18 +151,36 @@ def extract_column_values(
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        +---+---+---+---+
-        | a | b | c | d |
-        +---+---+---+---+
-        | 1 | a | 1 | 2 |
-        | 2 | b | 1 | 2 |
-        | 3 | c | 1 | 2 |
-        | 4 | d | 1 | 2 |
-        +---+---+---+---+
+        +---+---+---+---+---+
+        | a | b | c | d | e |
+        +---+---+---+---+---+
+        | 1 | a | 1 | 2 | a |
+        | 2 | b | 1 | 3 | a |
+        | 3 | c | 1 | 3 | b |
+        | 4 | d | 1 | 3 | b |
+        +---+---+---+---+---+
         ```
         </div>
 
-        ```{.py .python linenums="1" title="Example 1: Retrieve distinct values as pandas DataFrame"}
+        ```{.py .python linenums="1" title="Example 1: Retrieve all values as pyspark DataFrame"}
+        >>> result = get_column_values(df, "e", distinct=False, return_type="ps")
+        >>> result.show()
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        +---+
+        | e |
+        +---+
+        | a |
+        | a |
+        | b |
+        | b |
+        +---+
+        ```
+        !!! success "Conclusion: Successfully retrieved all values as pyspark DataFrame."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 2: Retrieve distinct values as pandas DataFrame"}
         >>> result = get_column_values(df, "b", distinct=True, return_type="pd")
         >>> print(result)
         ```
@@ -176,7 +195,7 @@ def extract_column_values(
         !!! success "Conclusion: Successfully retrieved distinct values as pandas DataFrame."
         </div>
 
-        ```{.py .python linenums="1" title="Example 2: Retrieve all values as list"}
+        ```{.py .python linenums="1" title="Example 3: Retrieve all values as list"}
         >>> result = get_column_values(df, "c", distinct=False, return_type="list")
         >>> print(result)
         ```
@@ -187,7 +206,28 @@ def extract_column_values(
         !!! success "Conclusion: Successfully retrieved all values as list."
         </div>
 
-        ```{.py .python linenums="1" title="Example 3: Invalid return type"}
+        ```{.py .python linenums="1" title="Example 4: Retrieve distinct values as numpy array"}
+        >>> result = get_column_values(df, "d", distinct=True, return_type="np")
+        >>> print(result)
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        ['2' '3']
+        ```
+        !!! success "Conclusion: Successfully retrieved distinct values as numpy array."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 5: Invalid column"}
+        >>> result = get_column_values(df, "invalid", distinct=True, return_type="pd")
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        ColumnDoesNotExistError: Column 'invalid' does not exist. Did you mean one of the following? [a, b, c, d, e]
+        ```
+        !!! failure "Conclusion: Failed to retrieve values due to invalid column."
+        </div>
+
+        ```{.py .python linenums="1" title="Example 6: Invalid return type"}
         >>> result = get_column_values(df, "b", distinct=True, return_type="invalid")
         ```
         <div class="result" markdown>
@@ -229,8 +269,8 @@ def get_distinct_values(
     Params:
         dataframe (psDataFrame):
             The DataFrame to retrieve the distinct column values from.
-        column (str):
-            The column to retrieve the distinct values from.
+        columns (str):
+            The column(s) to retrieve the distinct values from.
 
     Raises:
         TypeError:
@@ -281,7 +321,7 @@ def get_distinct_values(
         </div>
 
     ??? tip "See Also"
-        - [`get_column_values`][toolbox_pyspark.info.get_column_values]
+        - [`get_column_values`][toolbox_pyspark.info.extract_column_values]
     """
     columns = [columns] if is_type(columns, str) else columns
     rows: list[T.Row] = dataframe.select(*columns).distinct().collect()

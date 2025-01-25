@@ -139,7 +139,7 @@ def format_numbers(dataframe: psDataFrame) -> psDataFrame:
         | 4 | d | 4.0 | 4.4 | 1,000,000 | 4,444,444.44 |
         +---+---+-----+-----+-----------+--------------+
         ```
-        !!! success "Conclusion: Successfully formatted dataframe.
+        !!! success "Conclusion: Successfully formatted dataframe."
         </div>
 
         ```{.py .python linenums="1" title="Example 2: Format Numbers by method"}
@@ -156,7 +156,7 @@ def format_numbers(dataframe: psDataFrame) -> psDataFrame:
         | 4 | d | 4.0 | 4.4 | 1,000,000 | 4,444,444.44 |
         +---+---+-----+-----+-----------+--------------+
         ```
-        !!! success "Conclusion: Successfully formatted dataframe.
+        !!! success "Conclusion: Successfully formatted dataframe."
         </div>
     """
     for col, typ in dataframe.dtypes:
@@ -220,6 +220,18 @@ def display_intermediary_table(
         >>> # Check
         >>> df.show()
         ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        +---+---+-----+-----+
+        | a | b |   c |   d |
+        +---+---+-----+-----+
+        | 1 | a | 1.0 | 1.1 |
+        | 2 | b | 2.0 | 2.2 |
+        | 3 | c | 3.0 | 3.3 |
+        | 4 | d | 4.0 | 4.4 |
+        +---+---+-----+-----+
+        ```
+        </div>
 
         ```{.py .python linenums="1" title="Example 1: Display intermediary table with no subsequent formatting"}
         >>> (
@@ -247,7 +259,7 @@ def display_intermediary_table(
         | 4 | d | 4.0 | 4.4 |
         +---+---+-----+-----+
         ```
-        !!! success "Conclusion: Successfully displayed intermediary table with no subsequent formatting.
+        !!! success "Conclusion: Successfully displayed intermediary table with no subsequent formatting."
         </div>
 
         ```{.py .python linenums="1" title="Example 2: Display intermediary table with subsequent formatting"}
@@ -279,7 +291,7 @@ def display_intermediary_table(
         | 4 | d | 8.0 | 4.4 |
         +---+---+-----+-----+
         ```
-        !!! success "Conclusion: Successfully displayed intermediary table with subsequent formatting.
+        !!! success "Conclusion: Successfully displayed intermediary table with subsequent formatting."
         </div>
     """
     if reformat_numbers:
@@ -373,7 +385,7 @@ def display_intermediary_schema(dataframe: psDataFrame) -> psDataFrame:
         | 4 | d | 4.0 | 4.4 |
         +---+---+-----+-----+
         ```
-        !!! success "Conclusion: Successfully displayed intermediary schema.
+        !!! success "Conclusion: Successfully displayed intermediary schema."
         </div>
 
         ```{.py .python linenums="1" title="Example 2: Display intermediary schema with subsequent formatting"}
@@ -397,6 +409,8 @@ def display_intermediary_schema(dataframe: psDataFrame) -> psDataFrame:
         | 4 | d | 4.0 | 4.4 | 8 |
         +---+---+-----+-----+---+
         ```
+        !!! success "Conclusion: Successfully displayed intermediary schema."
+        </div>
     """
     dataframe.printSchema()
     return dataframe
