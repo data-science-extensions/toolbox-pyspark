@@ -10,6 +10,9 @@
 # ---------------------------------------------------------------------------- #
 
 
+# ## Python StdLib Imports ----
+from unittest import TestCase
+
 # ## Python Third Party Imports ----
 from chispa.dataframe_comparer import assert_df_equality
 
@@ -19,6 +22,19 @@ from toolbox_pyspark.dimensions import get_dims
 from toolbox_pyspark.duplication import duplicate_union_dataframe, union_all
 
 
+## --------------------------------------------------------------------------- #
+##  Initialisation                                                          ####
+## --------------------------------------------------------------------------- #
+
+
+def setUpModule() -> None:
+    PySparkSetup.set_up()
+
+
+def tearDownModule() -> None:
+    PySparkSetup.tear_down()
+
+
 # ---------------------------------------------------------------------------- #
 #                                                                              #
 #     Test Suite                                                            ####
@@ -26,7 +42,7 @@ from toolbox_pyspark.duplication import duplicate_union_dataframe, union_all
 # ---------------------------------------------------------------------------- #
 
 
-class TestDuplicateUnionSingleDataFrameByList(PySparkSetup):
+class TestDuplicateUnionSingleDataFrameByList(PySparkSetup, TestCase):
     def setUp(self) -> None:
         pass
 
@@ -90,7 +106,7 @@ class TestDuplicateUnionSingleDataFrameByList(PySparkSetup):
         assert dims == {"rows": 4 * 3, "cols": 6}
 
 
-class TestUnionAll(PySparkSetup):
+class TestUnionAll(PySparkSetup, TestCase):
     def setUp(self) -> None:
         pass
 

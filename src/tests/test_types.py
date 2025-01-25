@@ -10,6 +10,9 @@
 # ---------------------------------------------------------------------------- #
 
 
+# ## Python StdLib Imports ----
+from unittest import TestCase
+
 # ## Python Third Party Imports ----
 import pytest
 from chispa.dataframe_comparer import assert_df_equality
@@ -28,6 +31,19 @@ from toolbox_pyspark.types import (
 from toolbox_pyspark.utils.exceptions import InvalidDataFrameNameError
 
 
+## --------------------------------------------------------------------------- #
+##  Initialisation                                                          ####
+## --------------------------------------------------------------------------- #
+
+
+def setUpModule() -> None:
+    PySparkSetup.set_up()
+
+
+def tearDownModule() -> None:
+    PySparkSetup.tear_down()
+
+
 # ---------------------------------------------------------------------------- #
 #                                                                              #
 #     Test Suite                                                            ####
@@ -40,7 +56,7 @@ from toolbox_pyspark.utils.exceptions import InvalidDataFrameNameError
 # ---------------------------------------------------------------------------- #
 
 
-class TestDataframeColumnTypes(PySparkSetup):
+class TestDataframeColumnTypes(PySparkSetup, TestCase):
     def setUp(self) -> None:
         pass
 
@@ -67,7 +83,7 @@ class TestDataframeColumnTypes(PySparkSetup):
 # ---------------------------------------------------------------------------- #
 
 
-class TestCastColumnsToType(PySparkSetup):
+class TestCastColumnsToType(PySparkSetup, TestCase):
     def setUp(self) -> None:
         pass
 
@@ -232,7 +248,7 @@ class TestCastColumnsToType(PySparkSetup):
 # ---------------------------------------------------------------------------- #
 
 
-class TestMapCastColumnsToType(PySparkSetup):
+class TestMapCastColumnsToType(PySparkSetup, TestCase):
     def setUp(self) -> None:
         pass
 

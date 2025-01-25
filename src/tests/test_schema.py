@@ -14,6 +14,7 @@
 import shutil
 from pathlib import Path
 from pprint import pformat
+from unittest import TestCase
 
 # ## Python Third Party Imports ----
 import pytest
@@ -25,6 +26,19 @@ from tests.setup import PySparkSetup
 from toolbox_pyspark.cleaning import update_nullability
 from toolbox_pyspark.io import write_to_path
 from toolbox_pyspark.schema import check_schemas_match, view_schema_differences
+
+
+## --------------------------------------------------------------------------- #
+##  Initialisation                                                          ####
+## --------------------------------------------------------------------------- #
+
+
+def setUpModule() -> None:
+    PySparkSetup.set_up()
+
+
+def tearDownModule() -> None:
+    PySparkSetup.tear_down()
 
 
 # ---------------------------------------------------------------------------- #
@@ -39,7 +53,7 @@ from toolbox_pyspark.schema import check_schemas_match, view_schema_differences
 # ---------------------------------------------------------------------------- #
 
 
-class TestCheckSchemas(PySparkSetup):
+class TestCheckSchemas(PySparkSetup, TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
@@ -255,7 +269,7 @@ class TestCheckSchemas(PySparkSetup):
         assert result is False
 
 
-class TestViewSchemas(PySparkSetup):
+class TestViewSchemas(PySparkSetup, TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:

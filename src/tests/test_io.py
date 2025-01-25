@@ -14,6 +14,7 @@
 import os
 import shutil
 from pathlib import Path
+from unittest import TestCase
 
 # ## Python Third Party Imports ----
 import pytest
@@ -38,6 +39,19 @@ from toolbox_pyspark.io import (
 from toolbox_pyspark.utils.exceptions import ValidationError
 
 
+## --------------------------------------------------------------------------- #
+##  Initialisation                                                          ####
+## --------------------------------------------------------------------------- #
+
+
+def setUpModule() -> None:
+    PySparkSetup.set_up()
+
+
+def tearDownModule() -> None:
+    PySparkSetup.tear_down()
+
+
 # ---------------------------------------------------------------------------- #
 #                                                                              #
 #     Test Suite                                                            ####
@@ -50,7 +64,7 @@ from toolbox_pyspark.utils.exceptions import ValidationError
 # ---------------------------------------------------------------------------- #
 
 
-class TestReadingAndWriting_ByPath(PySparkSetup):
+class TestReadingAndWriting_ByPath(PySparkSetup, TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
@@ -323,7 +337,7 @@ class TestReadingAndWriting_ByPath(PySparkSetup):
         assert_df_equality(result, expected, ignore_nullable=True)
 
 
-class TestReadingAndWriting_ByTable(PySparkSetup):
+class TestReadingAndWriting_ByTable(PySparkSetup, TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:

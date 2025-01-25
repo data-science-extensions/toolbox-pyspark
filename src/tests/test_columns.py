@@ -12,6 +12,7 @@
 
 # ## Python StdLib Imports ----
 from itertools import product
+from unittest import TestCase
 
 # ## Python Third Party Imports ----
 import pytest
@@ -33,6 +34,19 @@ from toolbox_pyspark.utils.exceptions import ColumnDoesNotExistError
 from toolbox_pyspark.utils.warnings import ColumnDoesNotExistWarning
 
 
+## --------------------------------------------------------------------------- #
+##  Initialisation                                                          ####
+## --------------------------------------------------------------------------- #
+
+
+def setUpModule() -> None:
+    PySparkSetup.set_up()
+
+
+def tearDownModule() -> None:
+    PySparkSetup.tear_down()
+
+
 # ---------------------------------------------------------------------------- #
 #                                                                              #
 #     Test Suite                                                            ####
@@ -45,7 +59,7 @@ from toolbox_pyspark.utils.warnings import ColumnDoesNotExistWarning
 # ---------------------------------------------------------------------------- #
 
 
-class TestGetColumns(PySparkSetup):
+class TestGetColumns(PySparkSetup, TestCase):
     def setUp(self) -> None:
         pass
 
@@ -135,7 +149,7 @@ class TestGetColumns(PySparkSetup):
 # ---------------------------------------------------------------------------- #
 
 
-class TestGetColumnsByLikeness(PySparkSetup):
+class TestGetColumnsByLikeness(PySparkSetup, TestCase):
     def setUp(self) -> None:
         pass
 
@@ -335,7 +349,7 @@ class TestGetColumnsByLikeness(PySparkSetup):
 # ---------------------------------------------------------------------------- #
 
 
-class TestRenameColumns(PySparkSetup):
+class TestRenameColumns(PySparkSetup, TestCase):
     def setUp(self) -> None:
         pass
 
@@ -429,16 +443,16 @@ class TestRenameColumns(PySparkSetup):
 # ---------------------------------------------------------------------------- #
 
 
-class TestReorderColumns(PySparkSetup):
+class TestReorderColumns(PySparkSetup, TestCase):
     def setUp(self) -> None:
         pass
 
     def test_reorder_columns_1(self) -> None:
         result = self.ps_df_with_keys.toPandas().to_dict(orient="list")
         expected = {
-            "a": list(range(4)),
+            "a": list(range(1, 5)),
             "b": ["a", "b", "c", "d"],
-            "key_a": list(range(4)),
+            "key_a": list(range(1, 5)),
             "c": ["1"] * 4,
             "d": ["2"] * 4,
             "key_c": ["1"] * 4,
@@ -512,7 +526,7 @@ class TestReorderColumns(PySparkSetup):
 # ---------------------------------------------------------------------------- #
 
 
-class TestDeleteColumns(PySparkSetup):
+class TestDeleteColumns(PySparkSetup, TestCase):
     def setUp(self) -> None:
         self.df = self.ps_df_extended
 

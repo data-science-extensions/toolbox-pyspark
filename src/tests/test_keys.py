@@ -13,6 +13,7 @@
 # ## Python StdLib Imports ----
 from itertools import product
 from typing import Literal
+from unittest import TestCase
 
 # ## Python Third Party Imports ----
 from chispa.dataframe_comparer import assert_df_equality
@@ -23,6 +24,19 @@ from toolbox_python.collection_types import str_list
 # ## Local First Party Imports ----
 from tests.setup import PySparkSetup, name_func_nested_list
 from toolbox_pyspark.keys import add_key_from_columns, add_keys_from_columns
+
+
+## --------------------------------------------------------------------------- #
+##  Initialisation                                                          ####
+## --------------------------------------------------------------------------- #
+
+
+def setUpModule() -> None:
+    PySparkSetup.set_up()
+
+
+def tearDownModule() -> None:
+    PySparkSetup.tear_down()
 
 
 # ---------------------------------------------------------------------------- #
@@ -37,7 +51,7 @@ from toolbox_pyspark.keys import add_key_from_columns, add_keys_from_columns
 # ---------------------------------------------------------------------------- #
 
 
-class TestAddKeysFromListsOfColumns(PySparkSetup):
+class TestAddKeysFromListsOfColumns(PySparkSetup, TestCase):
     def setUp(self) -> None:
         pass
 

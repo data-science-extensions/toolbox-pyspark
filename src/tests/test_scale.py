@@ -12,6 +12,7 @@
 
 # ## Python StdLib Imports ----
 from itertools import product
+from unittest import TestCase
 
 # ## Python Third Party Imports ----
 import pytest
@@ -22,6 +23,19 @@ from pyspark.sql import DataFrame as psDataFrame, functions as F
 # ## Local First Party Imports ----
 from tests.setup import PySparkSetup
 from toolbox_pyspark.scale import DEFAULT_DECIMAL_ACCURACY, round_column, round_columns
+
+
+## --------------------------------------------------------------------------- #
+##  Initialisation                                                          ####
+## --------------------------------------------------------------------------- #
+
+
+def setUpModule() -> None:
+    PySparkSetup.set_up()
+
+
+def tearDownModule() -> None:
+    PySparkSetup.tear_down()
 
 
 # ---------------------------------------------------------------------------- #
@@ -36,7 +50,7 @@ from toolbox_pyspark.scale import DEFAULT_DECIMAL_ACCURACY, round_column, round_
 # ---------------------------------------------------------------------------- #
 
 
-class TestRoundColumnToDecimalScale(PySparkSetup):
+class TestRoundColumnToDecimalScale(PySparkSetup, TestCase):
     def setUp(self) -> None:
         pass
 
@@ -63,7 +77,7 @@ class TestRoundColumnToDecimalScale(PySparkSetup):
         assert_df_equality(result, expected)
 
     @parameterized.expand(
-        input=list(product(["scale"], range(20))),
+        input=list(product(["scale"], range(1, 21))),
         name_func=lambda func, idx, params: f"{func.__name__}_{idx}_{'_'.join([str(prm) for prm in params[0]])}",
     )
     def test_round_column_3(self, name, scale) -> None:
@@ -92,7 +106,7 @@ class TestRoundColumnToDecimalScale(PySparkSetup):
         assert str(e.value) == expected_message
 
 
-class TestRoundColumnsToDecimalScale(PySparkSetup):
+class TestRoundColumnsToDecimalScale(PySparkSetup, TestCase):
     def setUp(self) -> None:
         pass
 
@@ -160,7 +174,7 @@ class TestRoundColumnsToDecimalScale(PySparkSetup):
         assert_df_equality(result, expected)
 
     @parameterized.expand(
-        input=list(product(["scale"], range(20))),
+        input=list(product(["scale"], range(1, 21))),
         name_func=lambda func, idx, params: f"{func.__name__}_{idx}_{'_'.join([str(prm) for prm in params[0]])}",
     )
     def test_round_columns_7(self, name, scale) -> None:

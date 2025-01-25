@@ -14,6 +14,7 @@
 import shutil
 from pathlib import Path
 from typing import Literal, Optional, Union
+from unittest import TestCase
 
 # ## Python Third Party Imports ----
 import pytest
@@ -55,6 +56,19 @@ from toolbox_pyspark.utils.warnings import (
 )
 
 
+## --------------------------------------------------------------------------- #
+##  Initialisation                                                          ####
+## --------------------------------------------------------------------------- #
+
+
+def setUpModule() -> None:
+    PySparkSetup.set_up()
+
+
+def tearDownModule() -> None:
+    PySparkSetup.tear_down()
+
+
 # ---------------------------------------------------------------------------- #
 #                                                                              #
 #     Test Suite                                                            ####
@@ -67,7 +81,7 @@ from toolbox_pyspark.utils.warnings import (
 # ---------------------------------------------------------------------------- #
 
 
-class TestColumnExistence(PySparkSetup):
+class TestColumnExistence(PySparkSetup, TestCase):
 
     def setUp(self) -> None:
         pass
@@ -237,7 +251,7 @@ class TestColumnExistence(PySparkSetup):
 # ---------------------------------------------------------------------------- #
 
 
-class TestColumnContainsValue(PySparkSetup):
+class TestColumnContainsValue(PySparkSetup, TestCase):
 
     def setUp(self) -> None:
         pass
@@ -278,7 +292,7 @@ class TestColumnContainsValue(PySparkSetup):
 # ---------------------------------------------------------------------------- #
 
 
-class TestValidPySparkDataType(PySparkSetup):
+class TestValidPySparkDataType(PySparkSetup, TestCase):
 
     def setUp(self) -> None:
         pass
@@ -311,7 +325,7 @@ class TestValidPySparkDataType(PySparkSetup):
 # ---------------------------------------------------------------------------- #
 
 
-class TestColumnTypes(PySparkSetup):
+class TestColumnTypes(PySparkSetup, TestCase):
 
     def setUp(self) -> None:
         pass
@@ -563,7 +577,8 @@ class TestColumnTypes(PySparkSetup):
 # ---------------------------------------------------------------------------- #
 
 
-class TestTableExists(PySparkSetup):
+class TestTableExists(PySparkSetup, TestCase):
+
     def setUp(self) -> None:
         self.write_dir_name = "io"
         self.write_path: str = f"./src/tests/{self.write_dir_name}"

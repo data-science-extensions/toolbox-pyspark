@@ -45,6 +45,7 @@ from typing import Literal, NamedTuple, Optional, Union
 # ## Python Third Party Imports ----
 from pyspark.sql import DataFrame as psDataFrame, SparkSession
 from pyspark.sql.types import StructField
+from toolbox_python.checkers import is_type
 from toolbox_python.collection_types import str_list, str_set
 from typeguard import typechecked
 
@@ -926,7 +927,7 @@ def _view_schema_differences_by_table_and_table(
             return_object="results",
         )
     )
-    if isinstance(schema_differences, list) and len(schema_differences) > 0:
+    if is_type(schema_differences, list) and len(schema_differences) > 0:
         if view_type == "print":
             print(schema_differences)
         elif view_type == "pprint":
