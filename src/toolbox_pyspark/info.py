@@ -192,40 +192,73 @@ def extract_column_values(
         return dataframe.select(column).toPandas().to_numpy()
     elif return_type == "list":
         return dataframe.select(column).toPandas()[column].tolist()
+
+
+@typechecked
+def get_distinct_values(
+    dataframe: psDataFrame, columns: Union[str, str_collection]
+) -> tuple[Any, ...]:
+    """
+    !!! note "Summary"
+        Retrieve the distinct values from a specified column in a `pyspark` dataframe.
+
+    Params:
+        dataframe (psDataFrame):
+            The DataFrame to retrieve the distinct column values from.
+        column (str):
+            The column to retrieve the distinct values from.
+
+    Raises:
+        TypeError:
+            If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
+
+    Returns:
+        (str_tuple):
+            The distinct values from the specified column.
+
+    ???+ example "Examples"
+
+        ```{.py .python linenums="1" title="Set up"}
+        >>> import pandas as pd
+        >>> from pyspark.sql import SparkSession
+        >>> from toolbox_pyspark.info import get_distinct_values
+        >>> spark = SparkSession.builder.getOrCreate()
+        >>> df = spark.createDataFrame(
+        ...     pd.DataFrame(
+        ...         {
+        ...             "a": [1, 2, 3, 4],
+        ...             "b": ["a", "b", "c", "d"],
+        ...             "c": [1, 1, 1, 1],
+        ...             "d": ["2", "2", "2", "2"],
+        ...         }
+        ...     )
+        ... )
+        ```
+
+        ```{.py .python linenums="1" title="Example 1: Retrieve distinct values"}
+        >>> result = get_distinct_values(df, "b")
+        >>> print(result)
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        <class 'list'>
+        ('a', 'b', 'c', 'd')
         ```
-        ```{.txt .text title="Terminal"}
-        ["c", "c", "c", "c"]
-        ```
-        !!! success "Conclusion: Successfully extracted values from the `c` column, and converted to flat List."
+        !!! success "Conclusion: Successfully retrieved distinct values."
         </div>
 
-        ```{.py .python linenums="1" title="Example 4: Invalid return type"}
-        >>> get_column_values(df, "c", return_type="invalid")
+        ```{.py .python linenums="1" title="Example 2: Invalid column"}
+        >>> result = get_distinct_values(df, "invalid")
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        ValueError: Unknown return type: 'invalid'.
-        Must be one of: ['pd', 'ps', 'np', 'list'].
-        For more info, check the `constants` module.
+        AnalysisException: Column 'invalid' does not exist. Did you mean one of the following? [a, b, c, d]
         ```
-        !!! failure "Conclusion: Invalid return type."
+        !!! failure "Conclusion: Failed to retrieve values due to invalid column."
         </div>
 
     ??? tip "See Also"
-        - [`toolbox_pyspark.cleaning.convert_dataframe()`][toolbox_pyspark.cleaning.convert_dataframe]
-        - [`toolbox_pyspark.constants`][toolbox_pyspark.constants]
+        - [`get_column_values`][toolbox_pyspark.info.get_column_values]
     """
-    df: psDataFrame = dataframe.select(column).filter(
-        f"{column} is not null and {column} <> ''"
-    )
-    df = df.distinct() if distinct else df
-    return convert_dataframe(dataframe=df, return_type=return_type)
-
-
-def get_distinct_values(dataframe: psDataFrame, column: str) -> str_tuple:
-    rows: list[T.Row] = dataframe.select(column).distinct().collect()
-    return tuple(row[column] for row in rows)
+    columns = [columns] if is_type(columns, str) else columns
+    rows: list[T.Row] = dataframe.select(*columns).distinct().collect()
+    return tuple(row[columns] for row in rows)
