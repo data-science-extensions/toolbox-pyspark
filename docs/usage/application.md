@@ -1,6 +1,6 @@
 # Application
 
-The application of this package is quite versatile and flexible. You can adapt it to suit any of your needs.
+The application of functions in this package is quite versatile and flexible. You can adapt it to suit any of your needs.
 
 ## Example Pipelines
 
@@ -115,17 +115,23 @@ This process can then be continued to be implemented over larger tables, and lon
 <div class="grid cards" markdown>
 
 
-- **:material-numeric-1-circle-outline: Why design a functional-oriented package, and not use object-oriented methodology?**
+- **:material-numeric-1-circle-outline: Why design a functional-oriented package, and not use object-oriented methodology? :material-function-variant:**
 
     ---
 
     Because of how the PySpark API is set up. More specifically, in the use of the [`.transform()`][.transform] method. This requires a single callable object, which returns a PySpark dataframe from it. The [`.transform()`][.transform] method is quite powerful and versatile for our purposes.
 
-- **:material-numeric-2-circle-outline: What version of PySpark is required to use the full features of this package?**
+- **:material-numeric-2-circle-outline: What version of PySpark is required to use the full features of this package? :1234:**
 
     ---
 
     PySpark version `3.3.0` or higher is required. This is because the [`.transform()`][.transform] method had the `*args` and `**kwargs` parameters added in version `3.3.0`. If you try to use a version earlier than this, then a [`PySparkVersionError`][toolbox_pyspark.utils.exceptions.PySparkVersionError] will be raised during initialisation of this package.
+
+- **:material-numeric-3-circle-outline: Why shouldn't I just use the default PySpark functions out-of-the-box? :package:**
+
+    ---
+
+    PySpark functions are designed to be generic, single-use functions. Which is fine, and it works well. This [`toolbox-pyspark`][toolbox-pyspark] package is designed to leverage the PySpark base functionality, and add more conveniences and extensions to it. It also reduces hundreds of lines of pure PySpark code in to just a few convenient lines, if you make full use of the [`.transform()`][.transform] method.
 
 </div>
 
@@ -134,3 +140,4 @@ This process can then be continued to be implemented over larger tables, and lon
 [.createDataFrame]: https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.SparkSession.createDataFrame.html
 [.withColumn]: https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrame.withColumn.html
 [.transform]: https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrame.transform.html
+[toolbox-pyspark]: https://data-science-extensions.com/toolbox-pyspark/
