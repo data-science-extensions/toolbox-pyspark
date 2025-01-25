@@ -19,7 +19,7 @@ import sys
 from functools import cached_property
 from pathlib import Path
 from string import ascii_letters
-from typing import Callable
+from typing import Callable, Union
 
 # ## Python Third Party Imports ----
 import pandas as pd
@@ -539,6 +539,33 @@ class PySparkSetup:
             .withColumn("g", F.lit("a"))
             .withColumn("d", F.lit("null"))
             .drop("e")
+        )
+
+    @cached_property
+    def ps_df_formatting(self) -> psDataFrame:
+        """
+        ```txt
+        +---+---+-----+-----+---------+------------+
+        | a | b |   c |   d |       e |          f |
+        +---+---+-----+-----+---------+------------+
+        | 1 | a | 1.0 | 1.1 |    1000 |    1111.11 |
+        | 2 | b | 2.0 | 2.2 |   10000 |   22222.22 |
+        | 3 | c | 3.0 | 3.3 |  100000 |  333333.33 |
+        | 4 | d | 4.0 | 4.4 | 1000000 | 4444444.44 |
+        +---+---+-----+-----+---------+------------+
+        ```
+        """
+        return self.ps_df.withColumns(
+            {
+                "c": self.add_column_from_list("a", F.lit([1.0, 2.0, 3.0, 4.0])).cast("float"),
+                "d": self.add_column_from_list("a", F.lit([1.1, 2.2, 3.3, 4.4])).cast("float"),
+                "e": self.add_column_from_list(
+                    "a", F.lit([1000, 10000, 100000, 1000000])
+                ).cast("int"),
+                "f": self.add_column_from_list(
+                    "a", F.lit([1111.11, 22222.22, 333333.33, 4444444.44])
+                ).cast("float"),
+            }
         )
 
     @cached_property
