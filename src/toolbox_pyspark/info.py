@@ -43,7 +43,7 @@ from toolbox_pyspark.constants import (
 ## --------------------------------------------------------------------------- #
 
 
-__all__: str_list = ["get_distinct_values"]
+__all__: str_list = ["get_distinct_values", "extract_column_values"]
 
 
 # ---------------------------------------------------------------------------- #
@@ -59,7 +59,7 @@ __all__: str_list = ["get_distinct_values"]
 
 
 @typechecked
-def get_column_values(
+def extract_column_values(
     dataframe: psDataFrame,
     column: str,
     distinct: bool = True,
