@@ -73,41 +73,31 @@ def get_column_values(
 ) -> Optional[Union[psDataFrame, pdDataFrame, npArray, list]]:
     """
     !!! note "Summary"
-        Extract and return unique values from a specified column of a PySpark DataFrame.
-
-    ???+ abstract "Details"
-        This function retrieves the unique values from a specified column of a PySpark DataFrame.
+        Retrieve the values from a specified column in a `pyspark` dataframe.
 
     Params:
         dataframe (psDataFrame):
-            The input PySpark DataFrame.
+            The DataFrame to retrieve the column values from.
         column (str):
-            The name of the column from which to extract unique values.
+            The column to retrieve the values from.
         distinct (bool, optional):
-            If `#!py True`, return distinct (unique) values.<br>
+            Whether to retrieve only distinct values.<br>
             Defaults to `#!py True`.
-        return_type (Union[LITERAL_LIST_OBJECT_NAMES, LITERAL_PANDAS_DATAFRAME_NAMES, LITERAL_PYSPARK_DATAFRAME_NAMES, LITERAL_NUMPY_ARRAY_NAMES, str], optional):
-            The desired return type.<br>
-            Options:
-
-            - `#!py "ps"`: Return the result as a PySpark DataFrame.
-            - `#!py "pd"`: Return the result as a Pandas DataFrame.
-            - `#!py "np"`: Return the result as a NumPy array.
-            - `#!py "list"`: Return the result as a Python list.
-
+        return_type (Union[str, LITERAL_PYSPARK_DATAFRAME_NAMES, LITERAL_PANDAS_DATAFRAME_NAMES, LITERAL_NUMPY_ARRAY_NAMES, LITERAL_LIST_OBJECT_NAMES], optional):
+            The type of object to return.<br>
             Defaults to `#!py "pd"`.
 
     Raises:
         TypeError:
             If any of the inputs parsed to the parameters of this function are not the correct type. Uses the [`@typeguard.typechecked`](https://typeguard.readthedocs.io/en/stable/api.html#typeguard.typechecked) decorator.
         ValueError:
-            If any of the values parsed to `return_type` are not valid options.
+            If the `return_type` is not one of the valid options.
         ColumnDoesNotExistError:
             If the `#!py column` does not exist within `#!py dataframe.columns`.
 
     Returns:
         (Optional[Union[psDataFrame, pdDataFrame, npArray, list]]):
-            The values from the given column, in the desired type.
+            The values from the specified column in the specified return type.
 
     ???+ example "Examples"
 
@@ -115,7 +105,7 @@ def get_column_values(
         >>> # Imports
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
-        >>> from toolbox_pyspark.cleaning import get_column_values
+        >>> from toolbox_pyspark.info import get_column_values
         >>>
         >>> # Instantiate Spark
         >>> spark = SparkSession.builder.getOrCreate()
@@ -124,10 +114,10 @@ def get_column_values(
         >>> df = spark.createDataFrame(
         ...     pd.DataFrame(
         ...         {
-        ...             "a": [0, 1, 2, 3],
+        ...             "a": [1, 2, 3, 4],
         ...             "b": ["a", "b", "c", "d"],
-        ...             "c": ["c", "c", "c", "c"],
-        ...             "d": ["d", "d", "d", "d"],
+        ...             "c": [1, 1, 1, 1],
+        ...             "d": ["2", "2", "2", "2"],
         ...         }
         ...     )
         ... )
@@ -140,53 +130,68 @@ def get_column_values(
         +---+---+---+---+
         | a | b | c | d |
         +---+---+---+---+
-        | 0 | a | c | d |
-        | 1 | b | c | d |
-        | 2 | c | c | d |
-        | 3 | d | c | d |
+        | 1 | a | 1 | 2 |
+        | 2 | b | 1 | 2 |
+        | 3 | c | 1 | 2 |
+        | 4 | d | 1 | 2 |
         +---+---+---+---+
         ```
         </div>
 
-        ```{.py .python linenums="1" title="Example 1: Default params"}
-        >>> values = get_column_values(df, "c")
-        >>> print(type(values))
-        >>> print(values)
+        ```{.py .python linenums="1" title="Example 1: Retrieve distinct values as pandas DataFrame"}
+        >>> result = get_column_values(df, "b", distinct=True, return_type="pd")
+        >>> print(result)
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        <class 'pandas.core.frame.DataFrame'>
+           b
+        0  a
+        1  b
+        2  c
+        3  d
         ```
-        ```{.txt .text title="Terminal"}
-          c
-        0 c
-        ```
-        !!! success "Conclusion: Successfully extracted distinct values from the `c` column, and converted to Pandas."
+        !!! success "Conclusion: Successfully retrieved distinct values as pandas DataFrame."
         </div>
 
-        ```{.py .python linenums="1" title="Example 2: Not distinct"}
-        >>> values = get_column_values(df, "c", False)
-        >>> print(type(values))
-        >>> print(values)
+        ```{.py .python linenums="1" title="Example 2: Retrieve all values as list"}
+        >>> result = get_column_values(df, "c", distinct=False, return_type="list")
+        >>> print(result)
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
-        <class 'pandas.core.frame.DataFrame'>
+        ['1', '1', '1', '1']
         ```
-        ```{.txt .text title="Terminal"}
-          c
-        0 c
-        1 c
-        2 c
-        3 c
-        ```
-        !!! success "Conclusion: Successfully extracted values from the `c` column, and converted to Pandas."
+        !!! success "Conclusion: Successfully retrieved all values as list."
         </div>
 
-        ```{.py .python linenums="1" title="Example 3: Flat list"}
-        >>> values = get_column_values(df, "c", False, "flat_list")
-        >>> print(type(values))
-        >>> print(values)
+        ```{.py .python linenums="1" title="Example 3: Invalid return type"}
+        >>> result = get_column_values(df, "b", distinct=True, return_type="invalid")
+        ```
+        <div class="result" markdown>
+        ```{.txt .text title="Terminal"}
+        ValueError: Invalid return type: invalid
+        ```
+        !!! failure "Conclusion: Failed to retrieve values due to invalid return type."
+        </div>
+
+    ??? tip "See Also"
+        - [`get_distinct_values`][toolbox_pyspark.info.get_distinct_values]
+    """
+    assert_column_exists(dataframe, column)
+    if return_type not in ["ps", "pd", "np", "list"]:
+        raise ValueError(f"Invalid return type: {return_type}")
+
+    if distinct:
+        dataframe = dataframe.select(column).distinct()
+
+    if return_type == "ps":
+        return dataframe
+    elif return_type == "pd":
+        return dataframe.toPandas()
+    elif return_type == "np":
+        return dataframe.select(column).toPandas().to_numpy()
+    elif return_type == "list":
+        return dataframe.select(column).toPandas()[column].tolist()
         ```
         <div class="result" markdown>
         ```{.txt .text title="Terminal"}
