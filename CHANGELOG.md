@@ -4,6 +4,40 @@
 
 ## null
 
+🏷️ Release Tag: `v1.2.0`<br>📅 Release Date: `2025-01-25`
+
+* Add the `column_contains_value()` function to the `checks` module (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/c46038a19604a073ad4df1fc8bb0094a66111d06)
+* Add missing docstrings for functions in the `checks` module - `assert_valid_spark_type() - `warn_column_invalid_type()` - `warn_columns_invalid_type()` (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/2565cb8b815ed816b3fef643a2fa02602e1931bc)
+* For all docs in the `checks` module, ensure they they have the `See Also` section, which appropriately references other functions (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/6a517b95c1e401b2f069df753512eb6a0a0ffacf)
+* Fix typos in the `cleaning` module (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/e0f77f22f603208825f3fa40bfcb3e7e077bba01)
+* Fix up the `assert_table_exists()` function to ensure it throws the correct error, and that it is approprately documented (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/3718565bf9c4554e9c57177350c006ec5e21c0f5)
+* Add unit tests for the `column_contains_value()` function (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/bb42d990295a321caaf2acc4339cac22951c4988)
+* Fix missing docs references (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/5a5b80973070a88c8419344ee12e357636796011)
+* Fix logical flaw in the function `column_contains_value()` (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/86c2ebd04a6f1f67433150efb8857c455cfa1cb4)
+* Fix missing unit tests (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/f103f73b8a0e9faaac99db0d8ed86301cd2cdfd4)
+* Fix bug in the unit tests for the `checks` module (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/69e101c80e153028f1e606c4673674cb055d8ca9)
+* Fix ref errors in docs (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/6f76d4bc0e22e35fc5c1f4b1cf01cb618902451f)
+* Add new functions to the `dimensions` module - `make_dimension_table()` - `replace_columns_with_dimension_id()` (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/70ab37e9f789a3003d37b4a98d3a1a17a120d79e)
+* Add two new modules `formatting` and `info` Functions: - `format_numbers()` - `display_intermediary_table()` - `display_intermediary_schema()` - `display_intermediary_columns()` - `get_distinct_values()` (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/27d6639863f57f4a9e5f93020e612562f3e13943)
+* Speed up the execution of the Unit Tests by changing the `setUpClass()` and `tearDownClass()` structure to `setUpModule()` and `tearDownModule()` (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/c22fd15f56f3e8eb499f80560225514ac60ffb5d)
+* Add docstrings to the `make_dimension_table()` and `replace_columns_with_dimension_id()` functions (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/b736676e9f3b2bbc6aea736b47f69aba66aca679)
+* Fix up a few logical bugs in the `dimensions` module (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/c9f5b184460382c6d1cb9710da47db6037a071fd)
+* Add new unit tests to now have 100% coverage of the `dimensions` module (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/bacc0061fbc8e4eae08ca9a790f3259760717315)
+* Fix the structure of the tables used in the Unit Tests (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/dbb9a3faee15f75c67834ddd20e12d71d45e12f8)
+* Fix missing `TestCase` imports in all Unit Tests (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/1364b9c82fc62d9084688e1590f1c5e4189caada)
+* Enhance the Unit Tests setup and functionality 1. Change all `@property` to `@cached_property` 2. Fix all column ID's to start at index `1`, not `0` 3. For any DataFrames including columns of type `datetime`, ensure they are cast to the proper type 4. All unit test classes are sub-classed from both the `PySparkSetup` and `TestCase` classes (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/72bb4710856e4f151da3d540017a43a5cb89d731)
+* Move the `get_column_values()` function from the `cleaning` module to the `info` module (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/aecaee871105e96f12ac7791242fda0b97dd8e4e)
+* Fix docstring for the `get_column_values()` function (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/81894cde99bb683ef931a6581b8521eea3548922)
+* Rename `get_column_values()` to `extract_column_values()` (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/9042d005a9ce35d9dd9a0098e832cc70f797fc57)
+* Add docstrings to the `get_distinct_values()` function (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/553e624408710e0ac5bb4ea3d735b5efd61c0fb5)
+* Finalise docs for the `info` module (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/a57c587a4118334982c88821009153911d6aa6ca)
+* Finish adding unit tests for the `info` module (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/8e2c5425352ff9300ad82f316c219bb1fbcf3ebc)
+* Add all docs for the `formatting` module (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/ee7c55fff9cd22b20739cbaa36839ef89fdc2cf3)
+* Add all unit tests for the `formatting` module (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/61c72a29d03f03c31febf8fb00ce40cfcbe8592d)
+
+
+## null
+
 🏷️ Release Tag: `v1.1.0`<br>📅 Release Date: `2025-01-19`
 
 * Enhance initialisation scripts (by [Chris Mahoney](mailto:44449504+chrimaho@users.noreply.github.com)) [View](https://github.com/data-science-extensions/toolbox-pyspark/-/commit/9dff13b8313b0c304184e9893ba49be229ce790b)
