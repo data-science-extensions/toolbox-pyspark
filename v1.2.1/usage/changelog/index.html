@@ -1,0 +1,1749 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Helper files/functions/classes for generic PySpark processes">
+      
+      
+        <meta name="author" content="[Chris Mahoney](mailto:chris@mahoneyconsultingservices.com)">
+      
+      
+      
+        <link rel="prev" href="../application/">
+      
+      
+        <link rel="next" href="../contributing/">
+      
+      
+      <link rel="icon" href="../../assets/images/spark.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.50">
+    
+    
+      
+        <title>Changelog - PySpark Toolbox</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.a40c8224.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/style.css">
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/admonitions.css">
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/code_chunks.css">
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/columns.css">
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/lists.css">
+    
+      <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.4.2/css/all.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#changelog" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+          <aside class="md-banner md-banner--warning">
+            <div class="md-banner__inner md-grid md-typeset">
+              
+  You're not viewing the latest version.
+  <a href="../../..">
+    <strong>Click here to go to latest.</strong>
+  </a>
+
+            </div>
+            <script>var el=document.querySelector("[data-md-component=outdated]"),outdated=__md_get("__outdated",sessionStorage);!0===outdated&&el&&(el.hidden=!1)</script>
+          </aside>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="PySpark Toolbox" class="md-header__button md-logo" aria-label="PySpark Toolbox" data-md-component="logo">
+      
+  <img src="../../assets/images/spark.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            PySpark Toolbox
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Changelog
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/data-science-extensions/toolbox-pyspark" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m21.94 13.11-1.05-3.22c0-.03-.01-.06-.02-.09l-2.11-6.48a.86.86 0 0 0-.8-.57c-.36 0-.68.25-.79.58l-2 6.17H8.84L6.83 3.33a.85.85 0 0 0-.79-.58c-.37 0-.69.25-.8.58L3.13 9.82v.01l-1.07 3.28c-.16.5.01 1.04.44 1.34l9.22 6.71c.17.12.39.12.56-.01l9.22-6.7c.43-.3.6-.84.44-1.34M8.15 10.45l2.57 7.91-6.17-7.91m8.73 7.92 2.47-7.59.1-.33h3.61l-5.59 7.16m4.1-13.67 1.81 5.56h-3.62m-1.3.95-1.79 5.51L12 19.24l-2.86-8.79M6.03 3.94 7.84 9.5H4.23m-1.18 4.19c-.09-.07-.13-.19-.09-.29l.79-2.43 5.82 7.45m11.38-4.73-6.51 4.73.02-.03 5.79-7.42.79 2.43c.04.1 0 .22-.09.29"/></svg>
+  </div>
+  <div class="md-source__repository">
+    toolbox-pyspark
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../overview/" class="md-tabs__link">
+          
+  
+    
+  
+  Usage
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../code/" class="md-tabs__link">
+          
+  
+    
+  
+  Modules
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="PySpark Toolbox" class="md-nav__button md-logo" aria-label="PySpark Toolbox" data-md-component="logo">
+      
+  <img src="../../assets/images/spark.svg" alt="logo">
+
+    </a>
+    PySpark Toolbox
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/data-science-extensions/toolbox-pyspark" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m21.94 13.11-1.05-3.22c0-.03-.01-.06-.02-.09l-2.11-6.48a.86.86 0 0 0-.8-.57c-.36 0-.68.25-.79.58l-2 6.17H8.84L6.83 3.33a.85.85 0 0 0-.79-.58c-.37 0-.69.25-.8.58L3.13 9.82v.01l-1.07 3.28c-.16.5.01 1.04.44 1.34l9.22 6.71c.17.12.39.12.56-.01l9.22-6.7c.43-.3.6-.84.44-1.34M8.15 10.45l2.57 7.91-6.17-7.91m8.73 7.92 2.47-7.59.1-.33h3.61l-5.59 7.16m4.1-13.67 1.81 5.56h-3.62m-1.3.95-1.79 5.51L12 19.24l-2.86-8.79M6.03 3.94 7.84 9.5H4.23m-1.18 4.19c-.09-.07-.13-.19-.09-.29l.79-2.43 5.82 7.45m11.38-4.73-6.51 4.73.02-.03 5.79-7.42.79 2.43c.04.1 0 .22-.09.29"/></svg>
+  </div>
+  <div class="md-source__repository">
+    toolbox-pyspark
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Usage
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Usage
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../application/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Application
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Changelog
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Changelog
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#null" class="md-nav__link">
+    <span class="md-ellipsis">
+      null
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#null_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      null
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#null_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      null
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#null_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      null
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#null_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      null
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#null_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      null
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#null_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      null
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#null_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      null
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#null_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      null
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#null_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      null
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#null_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      null
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#null_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      null
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#null_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      null
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#null_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      null
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#null_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      null
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#null_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      null
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#null_16" class="md-nav__link">
+    <span class="md-ellipsis">
+      null
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contributing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../code/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Modules
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Modules
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/constants/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Constants
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/io/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    IO
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/checks/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Checks
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/types/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Types
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/keys/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Keys
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/scale/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Scale
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/dimensions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dimensions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/columns/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Columns
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/datetime/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DateTime
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/info/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Info
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/formatting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Formatting
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/cleaning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Cleaning
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/duplication/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Duplication
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/schema/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Schema
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/delta/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Delta
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_17" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_17" id="__nav_3_17_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Utils
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_17_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_17">
+            <span class="md-nav__icon md-icon"></span>
+            Utils
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/utils/exceptions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Exceptions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/utils/warnings/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Warnings
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code/utils/whitespaces/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Whitespaces
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#null" class="md-nav__link">
+    <span class="md-ellipsis">
+      null
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#null_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      null
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#null_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      null
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#null_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      null
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#null_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      null
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#null_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      null
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#null_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      null
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#null_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      null
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#null_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      null
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#null_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      null
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#null_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      null
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#null_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      null
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#null_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      null
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#null_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      null
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#null_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      null
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#null_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      null
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#null_16" class="md-nav__link">
+    <span class="md-ellipsis">
+      null
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+    <a href="https://github.com/data-science-extensions/toolbox-pyspark/edit/main/docs/usage/changelog.md" title="Edit this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/data-science-extensions/toolbox-pyspark/raw/main/docs/usage/changelog.md" title="View source of this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
+    </a>
+  
+
+
+<!-- !This file is auto-generated. Do not edit this file manually! -->
+
+<!-- origin_url='https://github.com/data-science-extensions/toolbox-pyspark' -->
+<!-- repo='github.com/data-science-extensionstoolbox-pyspark' -->
+<!-- api_url='https://api.github.com/repos/github.com/data-science-extensionstoolbox-pyspark/releases/tags' -->
+
+<h1 id="changelog">Changelog<a class="headerlink" href="#changelog" title="Permanent link">🔗</a></h1>
+<h2 id="null">null<a class="headerlink" href="#null" title="Permanent link">🔗</a></h2>
+<p>🏷️ Release Tag: <code>v1.2.1</code><br>📅 Release Date: <code>2025-01-26</code></p>
+<ul>
+<li>Fix issue with <code>null</code> headers in the <code>CHANGELOG.md</code> file. --&gt; Root cause: it was because GitHub was rate-limiting <em>unauthenticated</em> API calls. --&gt; Resolution: Add authentication to the <code>curl</code> command (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/5805453f879b8c13efeaef8ef9ae2a94d23b469f">View</a></li>
+<li>Fix a few logical bugs in the docs for the <code>info</code> and the <code>formatting</code> modules (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/abe27850f705b03a3bf31cb02932cc4d73fe1476">View</a></li>
+<li>For all the info about how to contribute, pull it out of the <code>README.md</code> file and place it in to the <code>CONTRIBUTING.md</code> file. Also create a new <code>Contributing</code> page in the docs, add instructions for installation using <code>uv</code>, and add more questions to the FAQ. (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/e7f4badd3f8eca8e108082665a26e1731f2aa4a5">View</a></li>
+</ul>
+<h2 id="null_1">null<a class="headerlink" href="#null_1" title="Permanent link">🔗</a></h2>
+<p>🏷️ Release Tag: <code>v1.2.0</code><br>📅 Release Date: <code>2025-01-25</code></p>
+<ul>
+<li>Add the <code>column_contains_value()</code> function to the <code>checks</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/c46038a19604a073ad4df1fc8bb0094a66111d06">View</a></li>
+<li>Add missing docstrings for functions in the <code>checks</code> module - <code>assert_valid_spark_type() -</code>warn_column_invalid_type()<code>-</code>warn_columns_invalid_type()` (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/2565cb8b815ed816b3fef643a2fa02602e1931bc">View</a></li>
+<li>For all docs in the <code>checks</code> module, ensure they they have the <code>See Also</code> section, which appropriately references other functions (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/6a517b95c1e401b2f069df753512eb6a0a0ffacf">View</a></li>
+<li>Fix typos in the <code>cleaning</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/e0f77f22f603208825f3fa40bfcb3e7e077bba01">View</a></li>
+<li>Fix up the <code>assert_table_exists()</code> function to ensure it throws the correct error, and that it is approprately documented (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/3718565bf9c4554e9c57177350c006ec5e21c0f5">View</a></li>
+<li>Add unit tests for the <code>column_contains_value()</code> function (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/bb42d990295a321caaf2acc4339cac22951c4988">View</a></li>
+<li>Fix missing docs references (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/5a5b80973070a88c8419344ee12e357636796011">View</a></li>
+<li>Fix logical flaw in the function <code>column_contains_value()</code> (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/86c2ebd04a6f1f67433150efb8857c455cfa1cb4">View</a></li>
+<li>Fix missing unit tests (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/f103f73b8a0e9faaac99db0d8ed86301cd2cdfd4">View</a></li>
+<li>Fix bug in the unit tests for the <code>checks</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/69e101c80e153028f1e606c4673674cb055d8ca9">View</a></li>
+<li>Fix ref errors in docs (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/6f76d4bc0e22e35fc5c1f4b1cf01cb618902451f">View</a></li>
+<li>Add new functions to the <code>dimensions</code> module - <code>make_dimension_table()</code> - <code>replace_columns_with_dimension_id()</code> (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/70ab37e9f789a3003d37b4a98d3a1a17a120d79e">View</a></li>
+<li>Add two new modules <code>formatting</code> and <code>info</code> Functions: - <code>format_numbers()</code> - <code>display_intermediary_table()</code> - <code>display_intermediary_schema()</code> - <code>display_intermediary_columns()</code> - <code>get_distinct_values()</code> (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/27d6639863f57f4a9e5f93020e612562f3e13943">View</a></li>
+<li>Speed up the execution of the Unit Tests by changing the <code>setUpClass()</code> and <code>tearDownClass()</code> structure to <code>setUpModule()</code> and <code>tearDownModule()</code> (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/c22fd15f56f3e8eb499f80560225514ac60ffb5d">View</a></li>
+<li>Add docstrings to the <code>make_dimension_table()</code> and <code>replace_columns_with_dimension_id()</code> functions (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/b736676e9f3b2bbc6aea736b47f69aba66aca679">View</a></li>
+<li>Fix up a few logical bugs in the <code>dimensions</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/c9f5b184460382c6d1cb9710da47db6037a071fd">View</a></li>
+<li>Add new unit tests to now have 100% coverage of the <code>dimensions</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/bacc0061fbc8e4eae08ca9a790f3259760717315">View</a></li>
+<li>Fix the structure of the tables used in the Unit Tests (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/dbb9a3faee15f75c67834ddd20e12d71d45e12f8">View</a></li>
+<li>Fix missing <code>TestCase</code> imports in all Unit Tests (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/1364b9c82fc62d9084688e1590f1c5e4189caada">View</a></li>
+<li>Enhance the Unit Tests setup and functionality 1. Change all <code>@property</code> to <code>@cached_property</code> 2. Fix all column ID's to start at index <code>1</code>, not <code>0</code> 3. For any DataFrames including columns of type <code>datetime</code>, ensure they are cast to the proper type 4. All unit test classes are sub-classed from both the <code>PySparkSetup</code> and <code>TestCase</code> classes (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/72bb4710856e4f151da3d540017a43a5cb89d731">View</a></li>
+<li>Move the <code>get_column_values()</code> function from the <code>cleaning</code> module to the <code>info</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/aecaee871105e96f12ac7791242fda0b97dd8e4e">View</a></li>
+<li>Fix docstring for the <code>get_column_values()</code> function (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/81894cde99bb683ef931a6581b8521eea3548922">View</a></li>
+<li>Rename <code>get_column_values()</code> to <code>extract_column_values()</code> (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/9042d005a9ce35d9dd9a0098e832cc70f797fc57">View</a></li>
+<li>Add docstrings to the <code>get_distinct_values()</code> function (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/553e624408710e0ac5bb4ea3d735b5efd61c0fb5">View</a></li>
+<li>Finalise docs for the <code>info</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/a57c587a4118334982c88821009153911d6aa6ca">View</a></li>
+<li>Finish adding unit tests for the <code>info</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/8e2c5425352ff9300ad82f316c219bb1fbcf3ebc">View</a></li>
+<li>Add all docs for the <code>formatting</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/ee7c55fff9cd22b20739cbaa36839ef89fdc2cf3">View</a></li>
+<li>Add all unit tests for the <code>formatting</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/61c72a29d03f03c31febf8fb00ce40cfcbe8592d">View</a></li>
+</ul>
+<h2 id="null_2">null<a class="headerlink" href="#null_2" title="Permanent link">🔗</a></h2>
+<p>🏷️ Release Tag: <code>v1.1.0</code><br>📅 Release Date: <code>2025-01-19</code></p>
+<ul>
+<li>Enhance initialisation scripts (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/9dff13b8313b0c304184e9893ba49be229ce790b">View</a></li>
+<li>Refresh the structure of the <code>pyproject.toml</code> file (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/a4ff84c009b3353f9c023f5e6f04ecfc941facdf">View</a></li>
+<li>Relabel some key elements in the <code>io</code> package 1. <code>transfer_table()</code> -&gt; <code>transfer_table_by_path()</code> 2. Change parameter in the <code>write_to_path()</code> function: <code>table</code> -&gt; <code>data_frame</code> (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/a64d37f45c76613ede7f83f4fc88f30300595f66">View</a></li>
+<li>Fix the <code>data_format</code> parameter for the functions in the <code>io</code> module so they can use the pre-defined <code>SPARK_FORMATS</code> Literal values (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/70c5e3916dfe7a44a57a766ccf6eae9920529ed8">View</a></li>
+<li>Add better headers and comments throughout the <code>io</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/8abee24bb36422ec8262cd7663d8a461e8a5d48a">View</a></li>
+<li>Fix up the default options in both the <code>read_from_path()</code> and <code>write_to_path()</code> functions (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/0f7f52c036c70df2504f8dd071d6bd5763babd9b">View</a></li>
+<li>Add three new table-spcific functions to the <code>io</code> module - <code>read_from_table()</code> - <code>write_to_table()</code> - <code>transfer_table_by_table()</code> (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/d9158ffd7a5b2ca350a08b1566798f77a886740e">View</a></li>
+<li>Add three new functions to the <code>io</code> module, which are generic switches between the <code>*_by_path()</code> and <code>_by_table()</code> functions - <code>read()</code> - <code>write()</code> - <code>transfer()</code> (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/899aede34fbcf98d009f71b3373a9e35ff36cd84">View</a></li>
+<li>Add additional aliases to the functions in the <code>io</code> module, to make them more transferrable and more generic - <code>load_from_path()</code> - <code>save_to_path()</code> - <code>load_from_table()</code> - <code>save_to_table()</code> - <code>load()</code> - <code>save()</code> (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/7b062997e3331fad0c7870c0fabe24ce60a4643b">View</a></li>
+<li>Fix some typos (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/50aa2bb8d267ce9cae36d14d2e21b1dad2bc6941">View</a></li>
+<li>Extend the <code>checks</code> module to add the <code>assert_table_exists()</code> function (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/407520e3cbe92decdc2e977f756a1514eff410dc">View</a></li>
+<li>Add <code>assert_table_exists()</code> to the unit tests in the <code>test_io</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/089fd71c5939f388324ad005cdb404794fdfaf23">View</a></li>
+<li>Add unit tests for the <code>*_by_table()</code> functions from the <code>io</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/d457741ff35011c358c3d482a587913dbe398565">View</a></li>
+<li>Add constant values for valid write modes (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/5b9e9b5dd22a7aa88407aa89d7a3779853639612">View</a></li>
+<li>Relabel parameters in the <code>transfer()</code> function (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/5e7577566de6c44907eac83abbf5f48d427abfb6">View</a></li>
+<li>Extend the unit tests for the <code>io</code> module to now have 100% code coverage (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/07a590455a2cb215009559f39fc7ddee300d9748">View</a></li>
+<li>Fix Unit Test error (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/549937e8827fa29fbe65b3937c44d224b5a46dfa">View</a></li>
+<li>Fix some unit tests (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/a414842b31723d2824bfbfb33368351f03aa7396">View</a></li>
+<li>Fix docstrings for the spark <code>*WRITE_MODES</code> constants in the <code>io</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/3a1c429e32c915aa3c07f8ba4f3ce89defcd0a41">View</a></li>
+<li>Add additional examples to some of the functions in the <code>io</code> module 1. <code>read_from_path()</code> 2. <code>write_to_path()</code> 3. <code>transfer_by_path()</code> (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/1f275bdd88bc718112f726e3fd0431a4a85fa7c0">View</a></li>
+<li>Add docstrings to the new functions in the <code>io</code> module - <code>read_from_table()</code> - <code>write_to_table()</code> - <code>transfer_by_table()</code> - <code>read()</code> - <code>write()</code> - <code>transfer()</code> (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/3e5805ee392e978f3ba8dd7d7aad5bbf0157fec3">View</a></li>
+<li>Enhance the error messages in the <code>_validate_table_name()</code> function (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/be1c65be8a66e8e6c0e712b189bc2ce9cfd71e29">View</a></li>
+<li>Enhance the initialisation commands (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/dc58041037f4229d5933a8fac51bba32b5e671eb">View</a></li>
+</ul>
+<h2 id="null_3">null<a class="headerlink" href="#null_3" title="Permanent link">🔗</a></h2>
+<p>🏷️ Release Tag: <code>v1.0.0</code><br>📅 Release Date: <code>2024-12-29</code></p>
+<ul>
+<li>Add PySpark version check and custom exception if version is insufficient (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/fbbee99c79b0264affc24e34d674fd4a3109efaa">View</a></li>
+<li>Enhance the docs Pages removed: - Roadmap Pages added: - Application - Exceptions - Warnings - Whitespaces (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/d757c45736a21e52e78f31f7c18e09dac41f1df1">View</a></li>
+<li>Fix the order of the shields on the README (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/51865e0344a2e02a8669300e1930a5af32ad5fd7">View</a></li>
+<li>Fix classifiers to now confirm it is stable (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/1b25e5ba6254de8f2b511aade3d4af19dde1485c">View</a></li>
+<li>Add process to automatically generate the <code>CHANGELOG.md</code> file (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/85fc13a28f3503c1903ccbdf690b7cc8d8b84b8b">View</a></li>
+<li>Add code complexity checks (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/86557baeb3742c101c4ef8545057d904c03ecfa1">View</a></li>
+<li>Skip code coverage report for the <code>PySparkVersionError</code> exception (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/ea340ef4278c42a40d2e467fe14038e25a974eac">View</a></li>
+</ul>
+<h2 id="null_4">null<a class="headerlink" href="#null_4" title="Permanent link">🔗</a></h2>
+<p>🏷️ Release Tag: <code>v0.12.0</code><br>📅 Release Date: <code>2024-12-27</code></p>
+<ul>
+<li>Initial commit of <code>delta</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/fb36c65e67022f4af6c79bb503977c2be138fb82">View</a></li>
+<li>Fix typos (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/f6273ae795c4d2fd314c3f1f41e5b69313739df0">View</a></li>
+<li>Improve the docs for the <code>delta</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/f894d67185376554483fc49d4743f63191db75eb">View</a></li>
+<li>Add the docs for the <code>delta</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/96d8d30b7684ef34d56151763e860f00a59275a3">View</a></li>
+<li>Add missing docstrings to the <code>delta</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/d1a07ab8c359bd3c1cbf554d8b8e324ec80f0125">View</a></li>
+<li>Fix typo (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/4777aa8a707d2c2085c7fad93b4b1407362fbebc">View</a></li>
+<li>Omit code coverage for the <code>delta</code> package (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/0b4773e5d02e5e3d8e5826bdf0db7befe47674b0">View</a></li>
+</ul>
+<h2 id="null_5">null<a class="headerlink" href="#null_5" title="Permanent link">🔗</a></h2>
+<p>🏷️ Release Tag: <code>v0.11.0</code><br>📅 Release Date: <code>2024-12-26</code></p>
+<ul>
+<li>Initial commit of <code>schema</code> module and Unit Tests (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/0681903928f84db198d2e4293cb69732114b16c3">View</a></li>
+<li>Fix typo (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/dcb4de6d569bbb3244aea32a3e269ddfcd4d713b">View</a></li>
+<li>Add docs for <code>schema</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/dbf6b898cb757bdb643b1299ec26970f24efc273">View</a></li>
+<li>Change default line-length to be <code>95</code> characters (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/fd423560b99d8d90fb5dc9451a3c726684bbee57">View</a></li>
+<li>Enhance the docs for the <code>schema</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/6d98cc16e467f5823d39b9a22d444529f27019a3">View</a></li>
+<li>Make linting and checking better (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/07543e9877b4f7e142beb2de45ff6308e57a5d1a">View</a></li>
+<li>Fix typo (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/52c03c55314241de6a631df204af45f5a106157a">View</a></li>
+<li>Allow code annotations in the docs (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/8c722cdeab40ab3a68616df32e097c82312645e3">View</a></li>
+<li>Fix missing docs (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/1866acf8e456adc5f2115d7a7789f55953fccdd9">View</a></li>
+</ul>
+<h2 id="null_6">null<a class="headerlink" href="#null_6" title="Permanent link">🔗</a></h2>
+<p>🏷️ Release Tag: <code>v0.10.0</code><br>📅 Release Date: <code>2024-12-24</code></p>
+<ul>
+<li>Initial commit of <code>duplication</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/4506315d60c151e166731ab29fead9f22f683876">View</a></li>
+<li>Add docs for the <code>duplication</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/3ceb574bcf09c3f1d1821997221ae0d37b9f8e3c">View</a></li>
+<li>Fix typo (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/b86686f3ca7a2d942c0d7cc17a65769dd1aee5bc">View</a></li>
+</ul>
+<h2 id="null_7">null<a class="headerlink" href="#null_7" title="Permanent link">🔗</a></h2>
+<p>🏷️ Release Tag: <code>v0.9.0</code><br>📅 Release Date: <code>2024-12-24</code></p>
+<ul>
+<li>Add <code>cleaning</code> module and Unit Tests (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/34b2c8f7835d0b270eac2b8a9f0c7c797df5f40b">View</a></li>
+<li>Add docs for the <code>cleaning</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/cdab1f2d02f5fb94ecd07459758975c9ef01060d">View</a></li>
+<li>Fix typo (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/67ead236bf55a985290408c6c72da741a69b08a9">View</a></li>
+<li>Fix type errors (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/e2b17b5a7cb32b77ac728851ee62f4a31d173b49">View</a></li>
+<li>Add more styling to docs pages (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/aafc0d1e50d69846b7371bfdeed03253e3ac9809">View</a></li>
+<li>Add clearer <code>Literal</code> values to the <code>constants</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/245e24b57f8820b44a650627ee5b103977697d88">View</a></li>
+<li>Update the docstrings for the <code>Column Processes</code> section of the <code>cleaning</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/33ff6ae1bbb26ad3c1fc8eb8773a6f74335b11d2">View</a></li>
+<li>Fix typos (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/0061748898ba476d4d3c1463fb73abc041f2a220">View</a></li>
+<li>Fix unit test errors (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/f3fc4d972268e6ca63e1e0e0edae2d7e5c6d210b">View</a></li>
+<li>Add <code>VALID_PYAPARK_JOIN_TYPES</code> and <code>ALL_PYSPARK_JOIN_TYPES</code> to the <code>constants</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/c5baeb02c529942110ccd0c215ae68aaad16e81f">View</a></li>
+<li>Add the <code>constants</code> module to the docs (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/6d1adec94be8c61041a1111deacfd69097f47590">View</a></li>
+<li>Fix a few typos (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/69d18675b74175d791bc79921252a4bd19224906">View</a></li>
+<li>Enhance the docs for the <code>cleaning</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/205ff6e367731bbfb70cf6b95974da8e20da75b1">View</a></li>
+<li>Fix <code>pylint</code> errors (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/8c13ed4f06946725d2dcf17450aab5cbe0d1cd86">View</a></li>
+<li>Fix the parameters of the <code>drop_matching_rows()</code> function, and add additional column assertions (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/8fb60926a6ed321f2371808f0d76e6d9bc8dd98a">View</a></li>
+<li>Fix PyTest errors (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/e63ad5f5f80d1594d482b6fd28bd6e302304871e">View</a></li>
+<li>Fix docs not rendering correctly (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/4ec22d915e4f338e7a8a52d76cd7f9ebb3b88f19">View</a></li>
+</ul>
+<h2 id="null_8">null<a class="headerlink" href="#null_8" title="Permanent link">🔗</a></h2>
+<p>🏷️ Release Tag: <code>v0.8.0</code><br>📅 Release Date: <code>2024-12-22</code></p>
+<ul>
+<li>Add <code>datetime</code> module and Unit Tests (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/5f9cb8e4054980c9f85382a8fff09fa4306a02a7">View</a></li>
+<li>Add docs for the <code>datetime</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/f188c0f5f99c85df332565603376f12970a1a569">View</a></li>
+<li>Add new step to the <code>CI</code> workflow to ensure that code coverage is sufficient (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/745308211235c9c27f363b69a8b89dd224542794">View</a></li>
+<li>Fix bug (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/a117b0c6aaa980711d5faff34c62b1b99f39f0f2">View</a></li>
+<li>Fix missing docs (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/f8339de09eddc1d575bc157cda4a3449589cb837">View</a></li>
+<li>Add more info to the docs for the <code>datetime</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/a5e43820dc1c5d5ebfa5ab78ea773886276f2480">View</a></li>
+<li>Refactor type checks in <code>get_columns()</code> function to use <code>tuple</code> syntax for improved readability and performance (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/2a47774fb16c5f4db4aafc51439806ea89467554">View</a></li>
+<li>Refactor <code>rename_datetime_columns()</code> to improve readability and streamline column selection logic (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/9680eba96e02081d184ca830014bd8cd4f98f346">View</a></li>
+<li>Enhance documentation for <code>rename_datetime_columns()</code> and <code>add_local_datetime_columns()</code> with additional examples and success/failure conclusions (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/0dee52f5be8c3d9f2eaccd1f444bec0081968382">View</a></li>
+<li>Update frequency parameter in <code>pd.date_range()</code> functions from <code>'H'</code> to <code>'h'</code> for consistency and future-proofing (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/9585c94b0ac343a0c451435b2ab0d120c36476b4">View</a></li>
+<li>Enhance documentation for <code>add_local_datetime_column()</code> and <code>add_local_datetime_columns()</code> by adding examples for error handling and invalid inputs (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/0ec252422175a3617f436c1413455402f7be5ae5">View</a></li>
+<li>Refactor type checks across all modules to use <code>is_type()</code> function from the <code>toolbox_python</code> package for improved readability, consistency and reliability (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/27b24f9bb368c9c5160180390baf030f2971e0c3">View</a></li>
+<li>Refactor column handling to use <code>list()</code> function for type casting, to ensure consistency and robustness (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/d6c68cde7ea56420e0bc81219e460f4c5ae25080">View</a></li>
+<li>Fix return type of <code>is_vaid_spark_type()</code> to bool and add <code>assert_valid_spark_type()</code> function for type validation checks (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/36c51f0acc70d8c055bce97f42ceac5a62cd185c">View</a></li>
+<li>Replace <code>AttributeError()</code> with <code>ColumnDoesNotExistError()</code> in column validation functions for improved error handling and make readability clearer (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/bb79af3451359e18b744829206052857883fb25b">View</a></li>
+<li>Add custom exceptions for improved error handling in PySpark utilities: <code>ColumnDoesNotExistError()</code>, <code>InvalidPySparkDataTypeError()</code>, <code>InvalidDataFrameNameError()</code>, <code>ColumnDoesNotExistWarning()</code> (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/ab921b9200dbfadd627c7f906a094307a36f3758">View</a></li>
+<li>Refactor the <code>checks</code> module to add enhanced checking functionalities for columns being in the correct data type. New objects added: - <code>ColumnsAreTypeResult()</code> - <code>_columns_are_type()</code> - <code>column_is_type()</code> - <code>columns_are_type()</code> - <code>assert_column_is_type()</code> - <code>assert_columns_are_type()</code> (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/914509a3a6f65ff7361de1d4a50e15c928ea0b25">View</a></li>
+<li>Fix unnecessary PyLint checks (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/fe4b881cbff6b64694d41669db9f581d34423cef">View</a></li>
+<li>Fix PyTest errors (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/00f596e33ea543f2ab80e7fda05e59c6c3932ff5">View</a></li>
+<li>Fix PyTest errors (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/f1a19a91cc44496d01cd4c00be5e1a0fd201fc71">View</a></li>
+<li>Finish unit testing the <code>checks</code> module. Now 100% coverage and all tests are passing (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/e75e4966444eaf3478bd6028baad49ca346651cf">View</a></li>
+<li>Add header (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/d3a502ea77e58c2def8cbfc30334f6d4554024c8">View</a></li>
+<li>Finish adding docs to the <code>datetime</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/0a1ba8b0535b3908d35946c8a3dcd64f1c8985b8">View</a></li>
+<li>Split out the docs for the <code>checks</code> module in to separate sections (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/9766e12dba50985162a842652b15e00387af0a6c">View</a></li>
+<li>Fix typo (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/ff5a1be223d747a855a11ed4cde9385de2cb13e4">View</a></li>
+<li>Move the <code>_validate_pyspark_datatype()</code> function from the <code>types</code> module to the <code>checks</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/ca2eb756dcc75e278cca908e5cfa7ef944797cb0">View</a></li>
+<li>Fix the type checking, particularly for the <code>datetime</code> module, and make it more robust (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/9c3504d94b93c356be056d2806949c21cfa87e05">View</a></li>
+<li>Fix typo (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/cb31d547a9a925960484e78458d5533d886fab6c">View</a></li>
+<li>Complete code coverage for the <code>datetime</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/6b8878e8b9086507c78cc88fdb00c21b557bc467">View</a></li>
+</ul>
+<h2 id="null_9">null<a class="headerlink" href="#null_9" title="Permanent link">🔗</a></h2>
+<p>🏷️ Release Tag: <code>v0.7.0</code><br>📅 Release Date: <code>2024-12-18</code></p>
+<ul>
+<li>Add <code>columns</code> module and Unit Tests (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/8876b39639aba5234df091a3a1df672509cba989">View</a></li>
+<li>Add docs for the <code>columns</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/903b28ae7fd0fcb77b2a7da8a3bb887c5e427a51">View</a></li>
+<li>Fix typos (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/81381c8debc37f302e1ea382d15886dfe34de086">View</a></li>
+<li>Add <code>warn_column_missing()</code> and <code>warn_columns_missing()</code> to the <code>checks</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/1754b90c72487e462c00f3fe07e61c71badddcf0">View</a></li>
+<li>Update all docstrings for the <code>columns</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/a543994daa836d4db8995126ba21b32d5c784b78">View</a></li>
+<li>Add <code>mermaid</code> diagram functionality to docs (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/0dc2bad5cc46805fc8c6b87d94fc51cdb8f9ac10">View</a></li>
+<li>Hide additional PyLint checks (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/7721381902de82afe27471a0b0b6107f93aa1c6c">View</a></li>
+<li>Fix bug (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/184653f884521f55cbc18cd125fcd2fcd5df9ea1">View</a></li>
+<li>Enhance docs fo the <code>columns</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/598200dbe8143f083469165d66807a249d8f8d9b">View</a></li>
+<li>Add unit tests for the <code>warn_column_missing()</code> and <code>warn_columns_missing()</code> functions (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/f64a7199cf87b87b9be873104f10d8b18be9e7a5">View</a></li>
+<li>Fix bug (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/9b064ecf36aa6f345460f78278361908caf4692d">View</a></li>
+<li>Fix code coverage of the <code>dimensions</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/1fcb4c330e840fc57eb17114c0366c65c02d0d5e">View</a></li>
+<li>Add check to ensure that the <code>CI</code> pipeline will always fail if the code coverage is less than 100% (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/22e206d2c324c4d453908e59c67ad61c68632ff7">View</a></li>
+<li>Add check to ensure that the <code>CI</code> pipeline will always fail if the code coverage is less than 99% (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/b30119bb201f3eaa6e53d6ae8e03f088e1ceb9f5">View</a></li>
+</ul>
+<h2 id="null_10">null<a class="headerlink" href="#null_10" title="Permanent link">🔗</a></h2>
+<p>🏷️ Release Tag: <code>v0.6.0</code><br>📅 Release Date: <code>2024-12-17</code></p>
+<ul>
+<li>Add <code>dimensions</code> module and Unit Tests (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/96cb8a9dcda5226fae394e93ca479b2529eac314">View</a></li>
+<li>Add docs for the <code>dimensions</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/2a3569924c6fc7cf972f2cc676e8a5098b1ed484">View</a></li>
+<li>Fix mixed content (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/b24e31c09a75d6b1138b66fe58b0ea9c879601ae">View</a></li>
+<li>Fix typo (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/9d85ee43c6909414b10feb392f488f7011c36c51">View</a></li>
+</ul>
+<h2 id="null_11">null<a class="headerlink" href="#null_11" title="Permanent link">🔗</a></h2>
+<p>🏷️ Release Tag: <code>v0.5.0</code><br>📅 Release Date: <code>2024-12-17</code></p>
+<ul>
+<li>Add step to the <code>CD</code> pipeline to delete the <code>.gitignore</code> file from the code coverage docs (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/dd6970a9d430ca909cc7a38a12f52d36aeb3702e">View</a></li>
+<li>Initial commit of <code>scale</code> module and Unit Tests (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/f0dddfbc7618b14bd79da43bb962120db65675ad">View</a></li>
+<li>Add docs for the <code>scale</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/a3b1c91c1143702e54d7e8cadf3101c353456119">View</a></li>
+<li>Tidy up the docs for the <code>scale</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/090ff9cfd624eeeb86bc8d34dd9b025fe953f91c">View</a></li>
+</ul>
+<h2 id="null_12">null<a class="headerlink" href="#null_12" title="Permanent link">🔗</a></h2>
+<p>🏷️ Release Tag: <code>v0.4.0</code><br>📅 Release Date: <code>2024-12-16</code></p>
+<ul>
+<li>Add <code>keys</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/b7dda4cbfd80b268bc41949ea8df8131d5e3bcf6">View</a></li>
+<li>Add Unit Tests for the <code>keys</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/ca7cebc673dff92558f761e136558c72b430b7ff">View</a></li>
+<li>Add docs for the <code>keys</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/b34aff0d10df67698e0af54b4daedb6670b96120">View</a></li>
+<li>Fix failing unit tests for the <code>keys</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/fc704e93ec421ce7c9ef93d6e4d8690b2f4021b4">View</a></li>
+<li>Tidy up docs for the <code>keys</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/533ecc1563ee7073b836b0bd7bf8a1504a9efec7">View</a></li>
+<li>Tidy up docs for the <code>types</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/3451e901ea26d421f8a42658093988fb680dde16">View</a></li>
+<li>Tidy up docs for the <code>checks</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/3cf7179189078e05fd9c2e6e54f2df9899bc6566">View</a></li>
+<li>Fix missing code coverage report (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/521c132676e77621bac72b75f55c8bf20b9176a2">View</a></li>
+<li>Fix bug with <code>CI</code> parallel processing config (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/dc958683da866db155cd5f27f2f433a5e1a4e822">View</a></li>
+<li>Add a step to the <code>CD</code> workflow to check that the package can be successfully installed after deployment (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/5fc64150e9c214bd8dd4d22553dbfdcdc8776a39">View</a></li>
+<li>Add a more robust way to install Jana on the different <code>os</code> distributions during <code>CI</code> and <code>CD</code> workflows (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/8d359401020641a98100ebd64a59dcf247956791">View</a></li>
+<li>Fix bug (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/25c5fe738b3dc8d9d7999cbbf5319d3021ef37df">View</a></li>
+<li>Fix <code>pip</code> commands in <code>CI</code> and <code>CD</code> workflows to be more generic across <code>os</code> platforms (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/7d79938565727098331fa5a56c78f086c340dc75">View</a></li>
+<li>Fix bug (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/cf5eb4a6b9173662b38713bf2f8a72c70e5c4786">View</a></li>
+<li>Add debugging for <code>.venv</code> directory setups (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/600964bbfbdb7ff94cbfa53dbfdf5a6aaed468e1">View</a></li>
+<li>Fix missing <code>poetry</code> install config (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/b635cb0b705a2172ea8ceff271771f1a42ae65ef">View</a></li>
+<li>Fix <code>HADOOP_HOME</code> config in Unit Tests setup (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/814022e5b1b46305a2f99b11d6892cde34fbf974">View</a></li>
+<li>Add more robust <code>.venv</code> dir checks in <code>CI</code> workflow (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/6f5dae5404186520e2bdc4b26f597b3f28a58a31">View</a></li>
+<li>Fix bug (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/71ee189c24ab8a50f9af9c528dfc0d33afb73956">View</a></li>
+<li>Fix bug with Unit Tests setup for different <code>os</code>'s (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/cf113ca1928683bebc11037d31e10d8c69d7eacd">View</a></li>
+<li>Change <code>CI</code> checks to only run on <code>ubuntu</code> and <code>macos</code> (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/b96a97e7851f8a066726e51a86649e50c95d968c">View</a></li>
+</ul>
+<h2 id="null_13">null<a class="headerlink" href="#null_13" title="Permanent link">🔗</a></h2>
+<p>🏷️ Release Tag: <code>v0.3.1</code><br>📅 Release Date: <code>2024-12-13</code></p>
+<ul>
+<li>Add <code>types</code> page (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/5ed203d01fa99f898f3b92aef26da638b59df2dc">View</a></li>
+<li>Fix styling (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/97cd58f10f4b96ce4fd1c03d53bffa150d63ebef">View</a></li>
+<li>Fix install scripts (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/374d988c91a32c2dbc6a93fce04223595307fda9">View</a></li>
+<li>Fix docstrings for <code>types</code> modules (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/5e23ba71da353e688ec2578f43decbfcbbb97612">View</a></li>
+<li>Fix PyTest errors (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/fb0c6ba097262d97559b4666c800bf3cd6dc64ba">View</a></li>
+</ul>
+<h2 id="null_14">null<a class="headerlink" href="#null_14" title="Permanent link">🔗</a></h2>
+<p>🏷️ Release Tag: <code>v0.3.0</code><br>📅 Release Date: <code>2024-12-13</code></p>
+<ul>
+<li>Add convenienve functions for the parameterised Unit Tests (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/07379ee5e7d5505877e9ec1a764a966614440ed7">View</a></li>
+<li>Add unit tests for the <code>types</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/48d2650b26f9064889d28ae9356bf1e1d66adadb">View</a></li>
+<li>Fix code coverage for the <code>types</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/0ef2ab39d92e3774ae97128e85977c3161fa384e">View</a></li>
+<li>Fix code coverage for <code>types</code> (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/d271a45401e697e6ca1def750ad128d62af29550">View</a></li>
+</ul>
+<h2 id="null_15">null<a class="headerlink" href="#null_15" title="Permanent link">🔗</a></h2>
+<p>🏷️ Release Tag: <code>v0.2.0</code><br>📅 Release Date: <code>2024-12-13</code></p>
+<ul>
+<li>Initial commit of all required files for the <code>checks</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/29376464b61eba5f396793c429a7d925d6e5f02d">View</a></li>
+<li>Enhance the internal <code>_columns_exists()</code>  check to return a more logical and understandable output (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/030b5e4781fb82993c0d8c5b256cee289b2d87fc">View</a></li>
+<li>Fix typos (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/c91371e3b0ba37016c33bec21ed1eebc1982ad20">View</a></li>
+<li>Refresh all docstrings for all functions in the <code>checks</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/6bb3cb60d6cf80a2c0bcfa96f9c2791aaa17670c">View</a></li>
+<li>Add the <code>checks</code> module to the docs site (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/28116563e3631a5184a2ad2f51aceab1aeecc755">View</a></li>
+<li>Update <code>CD</code> workflow (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/0b25bf5a908880dc10fcd13b82b59870e9dc92eb">View</a></li>
+<li>Fix aesthetics on the <code>Modules</code> page (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/675f9f9ac4e5a36ece87366c641da78bd22c732b">View</a></li>
+<li>Add new <code>Roadmap</code> page (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/5f4ec65c7b7ee5ce8425f5974c2c2962e5b6ddb8">View</a></li>
+<li>Fix <code>pylint</code> check (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/c5200005f653f884b015b78fa0da19a16921053c">View</a></li>
+</ul>
+<h2 id="null_16">null<a class="headerlink" href="#null_16" title="Permanent link">🔗</a></h2>
+<p>🏷️ Release Tag: <code>v0.1.0</code><br>📅 Release Date: <code>2024-12-11</code></p>
+<ul>
+<li>Turn on <code>mkdocs</code> check again during <code>pre-commit</code> processes (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/c0940049b65c105aa3051a34af649b2ff9843d03">View</a></li>
+<li>Add better docs and examples for the <code>io</code> module (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/62a8988cb9d9861082141d6c5626fe076cce74f8">View</a></li>
+<li>Fix <code>pylint</code> warnings (by <a href="mailto:44449504+chrimaho@users.noreply.github.com">Chris Mahoney</a>) <a href="https://github.com/data-science-extensions/toolbox-pyspark/-/commit/bb092b4c13e8f9f405c0596e96a1b96fa00541ac">View</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.indexes", "navigation.top", "navigation.instant", "search.highlight", "search.suggest", "toc.follow", "content.action.edit", "content.action.view", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.60a45f97.min.js"></script>
+      
+    
+  </body>
+</html>
