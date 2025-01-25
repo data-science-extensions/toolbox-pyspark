@@ -1,9 +1,28 @@
 # ============================================================================ #
 #                                                                              #
 #     Title: Info                                                              #
-#     Purpose: ...                                                             #
+#     Purpose: Provide utility functions for retrieving information from       #
+#              `pyspark` dataframes.                                           #
 #                                                                              #
 # ============================================================================ #
+
+
+# ---------------------------------------------------------------------------- #
+#                                                                              #
+#     Overview                                                              ####
+#                                                                              #
+# ---------------------------------------------------------------------------- #
+
+
+# ---------------------------------------------------------------------------- #
+#  Description                                                              ####
+# ---------------------------------------------------------------------------- #
+
+
+"""
+!!! note "Summary"
+    The `info` module is used to provide utility functions for retrieving information from `pyspark` dataframes.
+"""
 
 
 # ---------------------------------------------------------------------------- #
@@ -19,17 +38,18 @@
 
 
 # ## Python StdLib Imports ----
-from typing import Optional, Union
+from typing import Any, Optional, Union
 
 # ## Python Third Party Imports ----
 from numpy import ndarray as npArray
 from pandas import DataFrame as pdDataFrame
 from pyspark.sql import DataFrame as psDataFrame, types as T
-from toolbox_python.collection_types import str_list, str_tuple
+from toolbox_python.collection_types import str_list, str_collection
+from toolbox_python.checkers import is_type
 from typeguard import typechecked
 
 # ## Local First Party Imports ----
-from toolbox_pyspark.cleaning import convert_dataframe
+from toolbox_pyspark.checks import assert_column_exists
 from toolbox_pyspark.constants import (
     LITERAL_LIST_OBJECT_NAMES,
     LITERAL_NUMPY_ARRAY_NAMES,
