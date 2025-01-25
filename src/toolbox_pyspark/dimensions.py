@@ -109,28 +109,31 @@ def get_dims(
     ???+ example "Examples"
 
         ```{.py .python linenums="1" title="Set up"}
+        >>> # Imports
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
         >>> from toolbox_pyspark.dimensions import get_dims
+        >>>
+        >>> # Instantiate Spark
         >>> spark = SparkSession.builder.getOrCreate()
+        >>>
+        >>> # Create data
         >>> df = spark.createDataFrame(
         ...     pd.DataFrame({
         ...         'a': range(5000),
         ...         'b': range(5000),
         ...     })
         ... )
-        ```
-
-        ```{.py .python linenums="1" title="Check"}
+        >>>
+        >>> # Check
         >>> print(df.count())
         >>> print(len(df.columns))
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         5000
         ```
-
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         2
         ```
         </div>
@@ -217,10 +220,15 @@ def get_dims_of_tables(
     ???+ example "Examples"
 
         ```{.py .python linenums="1" title="Set up"}
+        >>> # Imports
         >>> import pandas as pd
         >>> from pyspark.sql import SparkSession
         >>> from toolbox_pyspark.dimensions import get_dims_of_tables, get_dims
+        >>>
+        >>> # Instantiate Spark
         >>> spark = SparkSession.builder.getOrCreate()
+        >>>
+        >>> # Create data
         >>> df1 = spark.createDataFrame(
         ...     pd.DataFrame({
         ...         'a': range(5000),
@@ -234,18 +242,16 @@ def get_dims_of_tables(
         ...         'c': range(10000),
         ...     })
         ... )
-        ```
-
-        ```{.py .python linenums="1" title="Check"}
+        >>>
+        >>> # Check
         >>> print(get_dims(df1))
         >>> print(get_dims(df1))
         ```
         <div class="result" markdown>
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         {"rows": "5000", "cols": "2"}
         ```
-
-        ```{.txt .text}
+        ```{.txt .text title="Terminal"}
         {"rows": "10000", "cols": "3"}
         ```
         </div>

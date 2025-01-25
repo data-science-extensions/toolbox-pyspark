@@ -20,6 +20,7 @@ There are 12 modules used in this package, which covers 41 functions
 | [`columns`][toolbox_pyspark.columns]         | The `columns` module is used to fetch columns from a given DataFrame using convenient syntax.
 | [`datetime`][toolbox_pyspark.datetime]       | The `datetime` module is used for fixing column names that contain datetime data, adding conversions to local datetimes, and for splitting a column in to their date and time components.
 | [`info`][toolbox_pyspark.info]               | The `info` module is used to provide utility functions for retrieving information from `pyspark` dataframes.
+| [`formatting`][toolbox_pyspark.formatting]   | The `formatting` module provides functions for formatting and displaying.
 | [`cleaning`][toolbox_pyspark.cleaning]       | The `cleaning` module is used to clean, fix, and fetch various aspects on a given DataFrame.
 | [`duplication`][toolbox_pyspark.duplication] | The `duplication` module is used for duplicating data from an existing `dataframe`, or unioning multiple `dataframe`'s together.
 | [`schema`][toolbox_pyspark.schema]           | The `schema` module is used for checking, validating, and viewing any schema differences between two different tables, either from in-memory variables, or pointing to locations on disk.
@@ -93,8 +94,13 @@ There are 12 modules used in this package, which covers 41 functions
 |                                              | [`split_datetime_column()`][toolbox_pyspark.datetime.split_datetime_column] |
 |                                              | [`split_datetime_columns()`][toolbox_pyspark.datetime.split_datetime_columns] |
 |                                              | |
-| [`info`][toolbox.info]                       | [`extract_column_values()`][toolbox_pyspark.info.extract_column_values] |
+| [`info`][toolbox_pyspark.info]               | [`extract_column_values()`][toolbox_pyspark.info.extract_column_values] |
 |                                              | [`get_distinct_values()`][toolbox_pyspark.info.get_distinct_values] |
+|                                              | |
+| [`formatting`][toolbox_pyspark.formatting]   | [`format_numbers()`][toolbox_pyspark.formatting.format_numbers] |
+|                                              | [`display_intermediary_table()`][toolbox_pyspark.formatting.display_intermediary_table] |
+|                                              | [`display_intermediary_schema()`][toolbox_pyspark.formatting.display_intermediary_schema] |
+|                                              | [`display_intermediary_columns()`][toolbox_pyspark.formatting.display_intermediary_columns] |
 |                                              | |
 | [`cleaning`][toolbox_pyspark.cleaning]       | [`create_empty_dataframe()`][toolbox_pyspark.cleaning.create_empty_dataframe] |
 |                                              | [`keep_first_record_by_columns()`][toolbox_pyspark.cleaning.keep_first_record_by_columns] |

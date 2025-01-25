@@ -60,6 +60,7 @@ nav:
       - Columns: code/columns.md
       - DateTime: code/datetime.md
       - Info: code/info.md
+      - Formatting: code/formatting.md
       - Cleaning: code/cleaning.md
       - Duplication: code/duplication.md
       - Schema: code/schema.md
