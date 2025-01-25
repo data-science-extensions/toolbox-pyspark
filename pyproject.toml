@@ -1,6 +1,6 @@
 [project]
 name = "toolbox-pyspark"
-version = "1.2.0"
+version = "1.2.1"
 description = "Helper files/functions/classes for generic PySpark processes"
 readme = "README.md"
 license = "MIT"
